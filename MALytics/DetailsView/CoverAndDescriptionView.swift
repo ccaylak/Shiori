@@ -1,20 +1,11 @@
-//
-//  AnimeCoverAndDescriptionView.swift
-//  MALytics
-//
-//  Created by Cem Caylak on 17.11.24.
-//
-
 import SwiftUI
 
-struct AnimeCoverAndDescriptionView: View {
+struct CoverAndDescriptionView: View {
     
     let title: String
     let imageUrl: String
     let rating: Double
     let episodes: Int
-    let mediaType: String
-    let year: String
     let description: String
 
     
@@ -56,13 +47,6 @@ struct AnimeCoverAndDescriptionView: View {
             .frame(maxWidth: .infinity)
             
             VStack (alignment: .leading) {
-                HStack {
-                    Text("\(mediaType.capitalized), \(year.prefix(4))")
-                }
-                .font(.subheadline)
-                .padding(.bottom, 3)
-                
-                .bold()
                 Text(description)
                     .lineLimit(10)
                     .font(.subheadline)
@@ -86,13 +70,13 @@ struct AnimeCoverAndDescriptionView: View {
                     .scrollBounceBehavior(.basedOnSize)
                 
                 }
-            }
+            }.frame(maxWidth: .infinity)
         }
     }
 }
 
 #Preview {
-    AnimeCoverAndDescriptionView(title: "Tokyo Ghoul", imageUrl: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg", rating: 10.0, episodes: 10, mediaType: "TV", year: "2024", description: """
+    CoverAndDescriptionView(title: "Tokyo Ghoul", imageUrl: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg", rating: 10.0, episodes: 10, description: """
 One year after the events at the Sanctuary, Subaru Natsuki trains hard to better face future challenges. The peaceful days come to an end when Emilia receives an invitation to a meeting in the Watergate City of Priestella from none other than Anastasia Hoshin, one of her rivals in the royal selection. Considering the meeting's significance and the potential dangers Emilia could face, Subaru and his friends accompany her.
 
 However, as Subaru reconnects with old associates and companions in Priestella, new formidable foes emerge. Driven by fanatical motivations and engaging in ruthless methods to achieve their ambitions, the new enemy targets Emilia and threaten the very existence of the city. Rallying his allies, Subaru must give his all once more to stop their and nefarious goals from becoming a concrete reality.

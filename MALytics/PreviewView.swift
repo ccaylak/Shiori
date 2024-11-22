@@ -13,7 +13,7 @@ struct AnimeView: View {
     var body: some View {
         HStack(spacing: 20) {
             AsyncImageView(imageUrl: image)
-            .frame(height: 100)
+                .frame(height: 100)
             .clipShape(RoundedRectangle(cornerRadius: 12))
             
             VStack(alignment: .leading, spacing: 5) {

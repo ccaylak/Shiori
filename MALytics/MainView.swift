@@ -2,54 +2,25 @@ import SwiftUI
 
 struct MainView: View {
     
-    @State private var selectedTab = 0
-    @AppStorage("appAppereance") private var appAppereance: String = "system"
+    @AppStorage("tab") private var initialTab = "search"
+    @AppStorage("appearance") private var appearance: String = "system"
     @AppStorage("accentColor") private var accentColor = "blue"
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $initialTab) {
             SearchView()
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }
-                .tag(0)
-            
-            SearchView()
-                .tabItem {
-                    Label("Profile", systemImage: "person.fill")
-                }
-                .tag(1)
-            
+                .tag("search")
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape")
                 }
-                .tag(2)
+                .tag("settings")
         }
-        .preferredColorScheme(colorScheme(from: appAppereance))
-        .accentColor(accentColor(from: accentColor))
-    }
-    
-    private func colorScheme(from appearance: String) -> ColorScheme? {
-        switch appearance {
-        case "dark":
-            return .dark
-        case "light":
-            return .light
-        default:
-            return nil // Systemvorgabe
-        }
-    }
-    
-    private func accentColor(from accent: String) -> Color {
-        switch accent {
-            case "blue":
-            return .blue
-        case "red":
-            return .red
-        default:
-            return .primary
-        }
+        .preferredColorScheme(ColorScheme.getByColorSchemeString(appearance))
+        .accentColor(Color.getByColorString(accentColor))
     }
 }
 
