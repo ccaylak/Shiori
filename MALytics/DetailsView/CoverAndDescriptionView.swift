@@ -7,7 +7,11 @@ struct CoverAndDescriptionView: View {
     let rating: Double
     let episodes: Int
     let description: String
-
+    let typeString: String
+    
+    private var type: MediaType {
+        MediaType(rawValue: typeString) ?? .unknown
+    }
     
     @State private var isDescriptionExpanded = false
     
@@ -15,32 +19,36 @@ struct CoverAndDescriptionView: View {
         HStack (alignment: .top, spacing: 10) {
             ZStack(alignment: .topTrailing) {
                 AsyncImageView(imageUrl: imageUrl)
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .cornerRadius(12)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .cornerRadius(12)
             }
             .overlay(alignment: .topTrailing) {
-                HStack {
-                    Text("\(rating.formatted())")
-                        .font(.title3)
-                        .bold()
-                        .foregroundStyle(.white)
-                    
-                    Image(systemName: "star.fill")
-                        .foregroundStyle(.white)
-                }
-                .padding(4)
-                .background(Material.ultraThin)
-                .cornerRadius(12)
-            }
-            .overlay(alignment: .bottomTrailing) {
-                Text("\(episodes) \(episodes==1 ? "episode" : "episodes")")
-                    .bold()
-                    .font(.title3)
+                if (rating != 0.0){
+                    HStack {
+                        Text("\(rating.formatted())")
+                            .font(.title3)
+                            .bold()
+                            .foregroundStyle(.white)
+                        
+                        Image(systemName: "star.fill")
+                            .foregroundStyle(.white)
+                    }
                     .padding(4)
-                    .foregroundStyle(.white)
                     .background(Material.ultraThin)
                     .cornerRadius(12)
+                }
+            }
+            .overlay(alignment: .bottomTrailing) {
+                if (formatTypeAndEpisodes(type: type, episodes: episodes) != nil) {
+                    Text(formatTypeAndEpisodes(type: type, episodes: episodes)!)
+                        .bold()
+                        .font(.title3)
+                        .padding(4)
+                        .foregroundStyle(.white)
+                        .background(Material.ultraThin)
+                        .cornerRadius(12)
+                }
                 
             }
             .cornerRadius(12)
@@ -51,7 +59,7 @@ struct CoverAndDescriptionView: View {
                     .lineLimit(10)
                     .font(.subheadline)
                     .truncationMode(.tail)
-                Button(isDescriptionExpanded ? "Collapse" : "Expand") {
+                Button(isDescriptionExpanded ? "Show less" : "Show more") {
                     isDescriptionExpanded.toggle()
                 }
                 .font(.caption)
@@ -67,11 +75,22 @@ struct CoverAndDescriptionView: View {
                         }
                     }
                     .padding()
-                    .scrollBounceBehavior(.basedOnSize)
-                
+                    
                 }
             }.frame(maxWidth: .infinity)
         }
+    }
+    
+    func formatTypeAndEpisodes(type: MediaType, episodes: Int) -> String? {
+        if (episodes > 1 && type == .movie) {
+            return "\(episodes) parts"
+        }
+        
+        if (episodes > 1 && type == .tv) {
+            return "\(episodes) episodes"
+        }
+
+        return nil
     }
 }
 
@@ -82,6 +101,5 @@ One year after the events at the Sanctuary, Subaru Natsuki trains hard to better
 However, as Subaru reconnects with old associates and companions in Priestella, new formidable foes emerge. Driven by fanatical motivations and engaging in ruthless methods to achieve their ambitions, the new enemy targets Emilia and threaten the very existence of the city. Rallying his allies, Subaru must give his all once more to stop their and nefarious goals from becoming a concrete reality.
 
 [Written by MAL Rewrite]
-"""
-)
+""", typeString: "tv")
 }

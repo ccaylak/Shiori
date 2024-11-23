@@ -9,19 +9,21 @@ struct StatisticsView: View {
     var body: some View {
         VStack(alignment: .center) {
             HStack (alignment: .center, spacing: 80){
-                VStack {
-                    Text("Score")
-                        .font(.caption)
-                        .bold()
-                    Text("\(rating.formatted())")
-                }
+                if(rating != 0.0){
+                    VStack {
+                        Text("Score")
+                            .font(.caption)
+                            .bold()
+                        Text("\(rating.formatted())")
+                    }}
                 
-                VStack {
-                    Text("Rank")
-                        .font(.caption)
-                        .bold()
-                    Text("\(rank)")
-                }
+                if(rank != 0){
+                    VStack {
+                        Text("Rank")
+                            .font(.caption)
+                            .bold()
+                        Text("\(rank)")
+                    }}
                 
                 VStack {
                     Text("Popularity")

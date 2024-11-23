@@ -1,15 +1,18 @@
 import Foundation
 import SwiftUI
 
-class AnimeController {
+class MyAnimeListAPIController {
     
     @AppStorage("result") private var result = 10
+    @AppStorage("rankingType") private var rankingType = RankingType.all
     
     private let baseURL = "https://api.myanimelist.net/v2/anime"
+    private let animeEndpoint = "/anime"
     private let rankingEndpoint = "/ranking"
+    private let mangeEndpoint = "/manga"
     private let apiKey = Config.apiKey
     
-    @AppStorage("rankingType") private var rankingType: String = "all"
+    private let previewFields = "id,title,main_picture,mean,num_episodes,media_type,start_date,status"
     
     func loadAnimeDetails(animeId: Int) async throws -> Anime {
         var components = URLComponents(string: baseURL + "/\(animeId)")!
@@ -30,9 +33,9 @@ class AnimeController {
     func loadAnimeRankings() async throws -> AnimeResponse {
         var components = URLComponents(string: baseURL + rankingEndpoint)!
         components.queryItems = [
-            URLQueryItem(name: "ranking_type", value: rankingType),
+            URLQueryItem(name: "ranking_type", value: rankingType.rawValue),
             URLQueryItem(name: "limit", value: String(result)),
-            URLQueryItem(name: "fields", value: "id,title,main_picture,mean,num_episodes,media_type,start_date")
+            URLQueryItem(name: "fields", value: previewFields)
         ]
 
         guard let url = components.url else {
@@ -59,7 +62,7 @@ class AnimeController {
         components.queryItems = [
             URLQueryItem(name: "limit", value: String(result)),
             URLQueryItem(name: "q", value: searchTerm),
-            URLQueryItem(name: "fields", value: "id,title,main_picture,mean,num_episodes,media_type,start_date")
+            URLQueryItem(name: "fields", value: previewFields)
         ]
 
         guard let url = components.url else {

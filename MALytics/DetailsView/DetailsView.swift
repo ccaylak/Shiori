@@ -6,7 +6,7 @@ struct DetailsView: View {
     @State var isDescriptionExpanded = false
     @State var showImages = false
     
-    let animeController = AnimeController()
+    let malController = MyAnimeListAPIController()
     
     var body: some View {
         NavigationStack {
@@ -17,20 +17,36 @@ struct DetailsView: View {
                         imageUrl: anime.images.large,
                         rating: anime.rating ?? 0.0,
                         episodes: anime.episodes ?? 0,
-                        description: anime.description ?? "LOL")
+                        description: anime.description ?? "LOL",
+                        typeString: anime.mediaType ?? ""
+                    )
                 }
                 Divider()
-                GeneralInformationView(mediaType: anime.mediaType ?? "", episodes: anime.episodes ?? 0, startDate: anime.startDate ?? "", endDate: anime.endDate ?? "", studios: anime.studios ?? [])
+                
+                GeneralInformationView(typeString: anime.mediaType ?? "", episodes: anime.episodes ?? 0, startDate: anime.startDate ?? "", endDate: anime.endDate ?? "", studios: anime.studios ?? [], statusString: anime.status ?? "")
                 Divider()
-                GenresView(genres: anime.genres ?? [])
-                Divider()
+                
+                if let genres = anime.genres, !genres.isEmpty {
+                    GenresView(genres: genres)
+                    Divider()
+                }
+                
                 StatisticsView(rating: anime.rating ?? 0.0, rank: anime.rank ?? 0, popularity: anime.popularity ?? 0)
                 Divider()
-                RelatedAnimesView(relatedAnimes: anime.relatedAnimes ?? [])
-                Divider()
-                RecommendationsView(recommendations: anime.recommendations ?? [])
-                Divider()
-                MoreImagesView(images: anime.moreImages ?? [])
+                
+                if let relatedAnimes = anime.relatedAnimes, !relatedAnimes.isEmpty {
+                    RelatedAnimesView(relatedAnimes: relatedAnimes)
+                    Divider()
+                }
+                
+                if let recommendations = anime.recommendations, !recommendations.isEmpty {
+                    RecommendationsView(recommendations: recommendations)
+                    Divider()
+                }
+                
+                if let moreImages = anime.moreImages, moreImages.count >= 3 {
+                    MoreImagesView(images: moreImages)
+                }
             }
             .scrollIndicators(.hidden)
             .navigationTitle(anime.title)
@@ -38,7 +54,7 @@ struct DetailsView: View {
             
         }.onAppear{
             Task {
-                anime = try await animeController.loadAnimeDetails(animeId: anime.id)
+                anime = try await malController.loadAnimeDetails(animeId: anime.id)
             }
         }
     }

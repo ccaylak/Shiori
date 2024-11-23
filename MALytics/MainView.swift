@@ -2,12 +2,12 @@ import SwiftUI
 
 struct MainView: View {
     
-    @AppStorage("tab") private var initialTab = "search"
-    @AppStorage("appearance") private var appearance: String = "system"
-    @AppStorage("accentColor") private var accentColor = "blue"
+    @State private var selectedTab = "search"
+    @AppStorage("appearance") private var appearance = Appearance.system
+    @AppStorage("accentColor") private var accentColor = AccentColor.blue
     
     var body: some View {
-        TabView(selection: $initialTab) {
+        TabView(selection: $selectedTab) {
             SearchView()
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
@@ -19,8 +19,8 @@ struct MainView: View {
                 }
                 .tag("settings")
         }
-        .preferredColorScheme(ColorScheme.getByColorSchemeString(appearance))
-        .accentColor(Color.getByColorString(accentColor))
+        .preferredColorScheme(ColorScheme.getByColorSchemeString(appearance.rawValue))
+        .accentColor(Color.getByColorString(accentColor.rawValue))
     }
 }
 

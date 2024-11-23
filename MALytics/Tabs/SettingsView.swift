@@ -1,51 +1,48 @@
 import SwiftUI
 
 struct SettingsView: View {
-    
-    @AppStorage("appearance") private var appearance = "system"
-    @AppStorage("accentColor") private var accentColor = "blue"
-    @AppStorage("result") private var result = 10
+    @AppStorage("appearance") private var appearance = Appearance.system
+    @AppStorage("accentColor") private var accentColor = AccentColor.blue
+    @AppStorage("result") private var resultsPerPage = 10
     
     private let appearanceOptions = ["system", "light", "dark"]
-    private let accentColorOptions = ["blue", "red", "orange", "pink", "purple"]
-    private let resultOptions = [10,20,50,100]
-    private let modeOptions = ["anime"]
+    private let resultOptions = [10, 20, 50, 100]
     
     var body: some View {
         NavigationStack {
             Form {
                 Section("General") {
                     Picker("Appearance", systemImage: "circle.lefthalf.filled", selection: $appearance) {
-                        ForEach(appearanceOptions, id: \.self) { appearance in
-                            Text(appearance.capitalized).tag(appearance)
+                        ForEach(Appearance.allCases, id: \.self) { appearance in
+                            Text(appearance.rawValue.capitalized).tag(appearance)
                         }
                     }
                     .pickerStyle(.navigationLink)
                     
                     Picker("Accent Color", systemImage: "circle.fill", selection: $accentColor) {
-                        ForEach(accentColorOptions, id: \.self) { accentColor in
+                        ForEach(AccentColor.allCases, id: \.self) { accentColor in
                             HStack {
                                 Image(systemName: "circle.fill")
                                     .resizable()
                                     .frame(width: 20, height: 20)
-                                    .foregroundStyle(Color.getByColorString(accentColor))
-                                Text(accentColor.capitalized)
+                                    .foregroundStyle(Color.getByColorString(accentColor.rawValue))
+                                Text(accentColor.rawValue.capitalized)
                             }.tag(accentColor)
                         }
                     }
                     .pickerStyle(.navigationLink)
                 }
                 Section("List") {
-                    Picker("Result set amount", systemImage: "list.bullet.rectangle", selection: $result) {
-                        ForEach(resultOptions, id: \.self) { result in
-                            Text(String(result)).tag(result)
+                    Picker("Results per page", systemImage: "list.bullet.rectangle", selection: $resultsPerPage) {
+                        ForEach(resultOptions, id: \.self) { resultOption in
+                            Text(String(resultOption)).tag(resultOption)
                         }
                     }
                 }
                 
                 Section ("Info") {
                     Link("GitHub-Repository", destination: URL(string: "https://github.com/ccaylak/MALytics")!)
-                        .foregroundColor(Color.getByColorString(accentColor))
+                        .tint(Color.getByColorString(accentColor.rawValue))
                 }
             }.navigationTitle("Settings")
         }
