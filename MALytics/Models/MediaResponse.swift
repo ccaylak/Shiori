@@ -1,15 +1,15 @@
 import Foundation
 
-struct AnimeResponse: Decodable {
+struct MediaResponse: Decodable {
     enum CodingKeys: String, CodingKey {
         case results = "data"
         case page = "paging"
     }
     
-    var results: [AnimeNode]
+    var results: [MediaNode]
     var page: Paging?
     
-    init(results: [AnimeNode], page: Paging?) {
+    init(results: [MediaNode], page: Paging?) {
         self.results = results
         self.page = page
     }

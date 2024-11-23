@@ -1,15 +1,15 @@
 import Foundation
 
-struct AnimeNode: Decodable, Hashable {
+struct MediaNode: Decodable, Hashable {
     enum CodingKeys: String, CodingKey {
         case node
         case relationType = "relation_type_formatted"
     }
     
-    let node: Anime
+    let node: Media
     let relationType: String?
     
-    init(node: Anime, relationType: String?) {
+    init(node: Media, relationType: String?) {
         self.node = node
         self.relationType = relationType
     }

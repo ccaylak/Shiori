@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RecommendationsView: View {
     
-    let recommendations: [AnimeNode]
+    let recommendations: [MediaNode]
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -11,7 +11,7 @@ struct RecommendationsView: View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(recommendations, id: \.node.id) { recommendation in
-                        NavigationLink(destination: DetailsView(anime: recommendation.node)) {
+                        NavigationLink(destination: DetailsView(media: recommendation.node)) {
                             AsyncImageView(imageUrl: recommendation.node.images.large)
                                 .aspectRatio(contentMode: .fit)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -28,5 +28,5 @@ struct RecommendationsView: View {
 }
 
 #Preview {
-    RecommendationsView(recommendations: [AnimeNode]())
+    RecommendationsView(recommendations: [MediaNode]())
 }

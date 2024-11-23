@@ -1,6 +1,6 @@
 import Foundation
 
-struct Anime: Decodable, Hashable {
+struct Media: Decodable, Hashable {
     enum CodingKeys: String, CodingKey {
         case id, title, genres, recommendations, status, studios, rank, popularity
         case images = "main_picture"
@@ -25,14 +25,14 @@ struct Anime: Decodable, Hashable {
     let genres: [Genre]?
     let startDate: String?
     let endDate: String?
-    let recommendations: [AnimeNode]?
+    let recommendations: [MediaNode]?
     let studios: [Studio]?
-    let relatedAnimes: [AnimeNode]?
+    let relatedAnimes: [MediaNode]?
     let rank: Int?
     let popularity: Int?
     let moreImages: [Images]?
     
-    init(id: Int, title: String, images: Images, description: String? = nil, rating: Double? = nil, status: String? = nil, genres: [Genre]? = nil, recommendations: [AnimeNode]? = nil, startDate: String? = nil, endDate: String? = nil, mediaType: String? = nil, episodes: Int? = nil, studios: [Studio]? = nil, relatedAnimes: [AnimeNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil) {
+    init(id: Int, title: String, images: Images, description: String? = nil, rating: Double? = nil, status: String? = nil, genres: [Genre]? = nil, recommendations: [MediaNode]? = nil, startDate: String? = nil, endDate: String? = nil, mediaType: String? = nil, episodes: Int? = nil, studios: [Studio]? = nil, relatedAnimes: [MediaNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil) {
         self.id = id
         self.title = title
         self.images = images

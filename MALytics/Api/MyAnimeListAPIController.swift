@@ -14,7 +14,7 @@ class MyAnimeListAPIController {
     
     private let previewFields = "id,title,main_picture,mean,num_episodes,media_type,start_date,status"
     
-    func loadAnimeDetails(animeId: Int) async throws -> Anime {
+    func loadAnimeDetails(animeId: Int) async throws -> Media {
         var components = URLComponents(string: baseURL + "/\(animeId)")!
 
         components.queryItems = [
@@ -30,7 +30,7 @@ class MyAnimeListAPIController {
         return try decodeAnime(data: data)
     }
     
-    func loadAnimeRankings() async throws -> AnimeResponse {
+    func loadAnimeRankings() async throws -> MediaResponse {
         var components = URLComponents(string: baseURL + rankingEndpoint)!
         components.queryItems = [
             URLQueryItem(name: "ranking_type", value: rankingType.rawValue),
@@ -47,7 +47,7 @@ class MyAnimeListAPIController {
         return try decodeAnimeResponse(data: data)
     }
     
-    func loadNextPage(_ nextPage: String) async throws -> AnimeResponse {
+    func loadNextPage(_ nextPage: String) async throws -> MediaResponse {
         guard let url = URL(string: nextPage) else {
                 throw URLError(.badURL)
             }
@@ -57,7 +57,7 @@ class MyAnimeListAPIController {
         return try decodeAnimeResponse(data: data)
     }
 
-    func loadAnimePreviews(searchTerm: String) async throws -> AnimeResponse {
+    func loadAnimePreviews(searchTerm: String) async throws -> MediaResponse {
         var components = URLComponents(string: baseURL)!
         components.queryItems = [
             URLQueryItem(name: "limit", value: String(result)),
@@ -87,13 +87,13 @@ class MyAnimeListAPIController {
         return data
     }
 
-    private func decodeAnimeResponse(data: Data) throws -> AnimeResponse {
+    private func decodeAnimeResponse(data: Data) throws -> MediaResponse {
         let decoder = JSONDecoder()
-        return try decoder.decode(AnimeResponse.self, from: data)
+        return try decoder.decode(MediaResponse.self, from: data)
     }
     
-    private func decodeAnime(data: Data) throws -> Anime {
+    private func decodeAnime(data: Data) throws -> Media {
         let decoder = JSONDecoder()
-        return try decoder.decode(Anime.self, from: data)
+        return try decoder.decode(Media.self, from: data)
     }
 }

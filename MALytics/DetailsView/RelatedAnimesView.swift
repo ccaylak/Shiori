@@ -1,8 +1,8 @@
 import SwiftUI
 
-struct RelatedAnimesView: View {
+struct RelatedMediaView: View {
     
-    let relatedAnimes: [AnimeNode]
+    let relatedMediaItems: [MediaNode]
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -10,11 +10,11 @@ struct RelatedAnimesView: View {
                 .font(.headline)
             ScrollView(.horizontal) {
                 HStack {
-                    ForEach(relatedAnimes, id: \.node.id) { relatedAnime in
-                        NavigationLink(destination: DetailsView(anime: relatedAnime.node)) {
+                    ForEach(relatedMediaItems, id: \.node.id) { relatedMedia in
+                        NavigationLink(destination: DetailsView(media: relatedMedia.node)) {
                             VStack(alignment: .center) {
-                                Text(relatedAnime.relationType ?? "")
-                                AsyncImageView(imageUrl: relatedAnime.node.images.large)
+                                Text(relatedMedia.relationType ?? "")
+                                AsyncImageView(imageUrl: relatedMedia.node.images.large)
                                     .aspectRatio(contentMode: .fit)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .cornerRadius(12)
@@ -31,5 +31,5 @@ struct RelatedAnimesView: View {
 }
 
 #Preview {
-    RelatedAnimesView(relatedAnimes: [AnimeNode]())
+    RelatedMediaView(relatedMediaItems: [MediaNode]())
 }

@@ -4,7 +4,7 @@ struct ListView: View {
     
     private let malController = MyAnimeListAPIController()
     
-    @State var animeResponse = AnimeResponse(results: [], page: AnimeResponse.Paging(next: ""))
+    @State var mediaResponse = MediaResponse(results: [], page: MediaResponse.Paging(next: ""))
     @State private var searchTerm = ""
     @State private var isLoading = false
     
@@ -15,21 +15,21 @@ struct ListView: View {
         
         ScrollView {
             LazyVStack(alignment: .leading) {
-                ForEach(animeResponse.results, id: \.node.id) { anime in
-                    NavigationLink(destination: DetailsView(anime: anime.node)) {
-                        AnimeView(title: anime.node.title, image: anime.node.images.large, episodes: anime.node.episodes ?? 0, releaseYear: String(anime.node.startDate?.prefix(4) ?? "Unknown"), rating: anime.node.rating ?? 0.0, typeString: anime.node.mediaType ?? "Unknown", statusString: anime.node.status ?? "Unknown")
+                ForEach(mediaResponse.results, id: \.node.id) { media in
+                    NavigationLink(destination: DetailsView(media: media.node)) {
+                        MediaView(title: media.node.title, image: media.node.images.large, episodes: media.node.episodes ?? 0, releaseYear: String(media.node.startDate?.prefix(4) ?? "Unknown"), rating: media.node.rating ?? 0.0, typeString: media.node.mediaType ?? "Unknown", statusString: media.node.status ?? "Unknown")
                     }
                 }
             }
-            if !animeResponse.results.isEmpty, let nextPage = animeResponse.page?.next, !nextPage.isEmpty {
+            if !mediaResponse.results.isEmpty, let nextPage = mediaResponse.page?.next, !nextPage.isEmpty {
                 Button(action: {
                     Task {
                         guard !isLoading else { return }
                         isLoading = true
                         do {
-                            let newAnimeResponse = try await malController.loadNextPage(nextPage)
-                            animeResponse.results.append(contentsOf: newAnimeResponse.results)
-                            animeResponse.page = newAnimeResponse.page
+                            let newMediaResponse = try await malController.loadNextPage(nextPage)
+                            mediaResponse.results.append(contentsOf: newMediaResponse.results)
+                            mediaResponse.page = newMediaResponse.page
                         } catch {
                             print("Fehler beim Laden der nächsten Seite: \(error.localizedDescription)")
                         }
@@ -55,17 +55,17 @@ struct ListView: View {
         .searchable(text: $searchTerm)
         .onSubmit(of: .search) {
             Task {
-                animeResponse = try await malController.loadAnimePreviews(searchTerm: searchTerm)
+                mediaResponse = try await malController.loadAnimePreviews(searchTerm: searchTerm)
             }
         }
         .onAppear {
             Task {
-                animeResponse = try await malController.loadAnimeRankings()
+                mediaResponse = try await malController.loadAnimeRankings()
             }
         }
         .onChange(of: rankingType) {
             Task {
-                animeResponse = try await malController.loadAnimeRankings()
+                mediaResponse = try await malController.loadAnimeRankings()
             }
         }
     }

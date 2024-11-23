@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct AnimeView: View {
+struct MediaView: View {
     
     let title: String
     let image: String
@@ -86,5 +86,5 @@ struct AnimeView: View {
 }
 
 #Preview {
-    AnimeView(title: "Tokyo Ghoul", image: "https://cdn.myanimelist.net/images/manga/3/145997l.jpg", episodes: 12, releaseYear: "2021", rating: 6.19, typeString: "tv", statusString: "finished_airing")
+    MediaView(title: "Tokyo Ghoul", image: "https://cdn.myanimelist.net/images/manga/3/145997l.jpg", episodes: 12, releaseYear: "2021", rating: 6.19, typeString: "tv", statusString: "finished_airing")
 }
