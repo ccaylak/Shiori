@@ -2,20 +2,32 @@ import SwiftUI
 
 struct MediaView: View {
     
+    @AppStorage("mediaType") private var mediaType = MediaType.manga
+    
     let title: String
     let image: String
-    let episodes: Int
     let releaseYear: String
-    let rating: Double
     let typeString: String
     let statusString: String
+    let episodes: Int
+    let numberOfVolumes: Int
+    let numberOfChapters: Int
+    let authors: [AuthorInfos]
     
-    private var type: MediaType {
-        MediaType(rawValue: typeString) ?? .unknown
+    private var animeType: AnimeType {
+        AnimeType(rawValue: typeString) ?? .unknown
     }
     
-    private var status: AiringStatus {
-        AiringStatus(rawValue: statusString) ?? .unknown
+    private var animeStatus: AnimeStatus {
+        AnimeStatus(rawValue: statusString) ?? .unknown
+    }
+    
+    private var mangaType: MangaType {
+        MangaType(rawValue: typeString) ?? .unknown
+    }
+    
+    private var mangaStatus: MangaStatus {
+        MangaStatus(rawValue: statusString) ?? .unknown
     }
     
     var body: some View {
@@ -25,17 +37,42 @@ struct MediaView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             
             VStack(alignment: .leading, spacing: 5) {
-                Text(title)
-                    .font(.headline)
-                    .foregroundColor(.primary)
+                if (mediaType == .anime) {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                }
+                if (mediaType == .manga) {
+                    
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    
+                }
                 
-                Text(formatTypeAndReleaseYear(type: type, releaseYear: releaseYear))
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                if(mediaType == .anime) {
+                    Text(formatTypeAndReleaseYear(type: animeType, releaseYear: releaseYear))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
                 
-                Text(formattedEpisodesWithStatus(episodes: episodes, status: status, type: type))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                if(mediaType == .manga) {
+                    Text(formatMangaAndReleaseYear(type: mangaType, releaseYear: releaseYear))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                
+                if (mediaType == .anime) {
+                    Text(formattedEpisodesWithStatus(episodes: episodes, status: animeStatus, type: animeType))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                if (mediaType == .manga) {
+                    Text(formattedChaptersWithStatus(chapters: numberOfChapters, status: mangaStatus, type: mangaType))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                
             }
             .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
             Image(systemName: "chevron.right")
@@ -51,7 +88,7 @@ struct MediaView: View {
         .padding(.horizontal)
     }
     
-    func formatTypeAndReleaseYear(type: MediaType, releaseYear: String) -> String {
+    func formatTypeAndReleaseYear(type: AnimeType, releaseYear: String) -> String {
         
         if(type == .unknown && releaseYear == "Unknown") {
             return ""
@@ -64,7 +101,11 @@ struct MediaView: View {
         return "\(type.displayName), \(releaseYear)"
     }
     
-    func formattedEpisodesWithStatus(episodes: Int, status: AiringStatus, type: MediaType) -> String {
+    func formatMangaAndReleaseYear(type: MangaType, releaseYear: String) -> String {
+        return "\(type.displayName), \(releaseYear)"
+    }
+    
+    func formattedEpisodesWithStatus(episodes: Int, status: AnimeStatus, type: AnimeType) -> String {
         if(episodes == 0 && (status == .notYetAired || status == .currentlyAiring)) {
             return status.displayName
         }
@@ -83,8 +124,37 @@ struct MediaView: View {
         
         return "\(episodes) episodes (\(status.displayName))"
     }
+    
+    func formattedChaptersWithStatus(chapters: Int, status: MangaStatus, type: MangaType) -> String {
+        if(status == .currentlyPublishing) {
+            return status.displayName
+        }
+        if (chapters == 0 && status == .finished) {
+            return status.displayName
+        }
+        return "\(chapters) chapters (\(status.displayName))"
+    }
 }
 
 #Preview {
-    MediaView(title: "Tokyo Ghoul", image: "https://cdn.myanimelist.net/images/manga/3/145997l.jpg", episodes: 12, releaseYear: "2021", rating: 6.19, typeString: "tv", statusString: "finished_airing")
+    MediaView(
+        title: "Tokyo Ghoul",
+        image: "https://cdn.myanimelist.net/images/manga/3/145997l.jpg",
+        releaseYear: "2021",
+        typeString: "tv",
+        statusString: "finished_airing",
+        episodes: 12,
+        numberOfVolumes: 100,
+        numberOfChapters: 700,
+        authors: [
+            AuthorInfos(
+                author: AuthorInfos.Author(
+                    id:1,
+                    firstName: "Sui",
+                    lastName: "Ishida"
+                ),
+                role: "Writer"
+            )
+        ]
+    )
 }

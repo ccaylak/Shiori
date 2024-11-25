@@ -1,6 +1,6 @@
 import Foundation
 
-enum RankingType: String, CaseIterable {
+enum AnimeSortType: String, CaseIterable {
         case all, airing, upcoming, tv, ova, movie, special, bypopularity, favorite
         
         var displayName: String {

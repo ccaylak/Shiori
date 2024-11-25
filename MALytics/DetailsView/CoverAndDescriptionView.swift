@@ -2,15 +2,21 @@ import SwiftUI
 
 struct CoverAndDescriptionView: View {
     
+    @AppStorage("mediaType") private var mediaType = MediaType.manga
+    
     let title: String
     let imageUrl: String
     let rating: Double
-    let episodes: Int
+    let mediaCount: Int
     let description: String
     let typeString: String
     
-    private var type: MediaType {
-        MediaType(rawValue: typeString) ?? .unknown
+    private var animeType: AnimeType {
+        AnimeType(rawValue: typeString) ?? .unknown
+    }
+    
+    private var mangaType: MangaType {
+        MangaType(rawValue: typeString) ?? .unknown
     }
     
     @State private var isDescriptionExpanded = false
@@ -40,8 +46,17 @@ struct CoverAndDescriptionView: View {
                 }
             }
             .overlay(alignment: .bottomTrailing) {
-                if (formatTypeAndEpisodes(type: type, episodes: episodes) != nil) {
-                    Text(formatTypeAndEpisodes(type: type, episodes: episodes)!)
+                if (formatTypeAndEpisodes(type: animeType, episodes: mediaCount) != nil && mediaType == .anime) {
+                    Text(formatTypeAndEpisodes(type: animeType, episodes: mediaCount)!)
+                        .bold()
+                        .font(.title3)
+                        .padding(4)
+                        .foregroundStyle(.white)
+                        .background(Material.ultraThin)
+                        .cornerRadius(12)
+                }
+                if (formatTypeAndChapters(type: mangaType, chapters: mediaCount) != nil  && mediaType == .manga) {
+                    Text(formatTypeAndChapters(type: mangaType, chapters: mediaCount)!)
                         .bold()
                         .font(.title3)
                         .padding(4)
@@ -81,7 +96,7 @@ struct CoverAndDescriptionView: View {
         }
     }
     
-    func formatTypeAndEpisodes(type: MediaType, episodes: Int) -> String? {
+    func formatTypeAndEpisodes(type: AnimeType, episodes: Int) -> String? {
         if (episodes > 1 && type == .movie) {
             return "\(episodes) parts"
         }
@@ -92,14 +107,29 @@ struct CoverAndDescriptionView: View {
 
         return nil
     }
+    
+    func formatTypeAndChapters(type: MangaType, chapters: Int) -> String? {
+        if (chapters > 0) {
+            return "\(chapters) chapters"
+        }
+        
+        return nil
+    }
 }
 
 #Preview {
-    CoverAndDescriptionView(title: "Tokyo Ghoul", imageUrl: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg", rating: 10.0, episodes: 10, description: """
-One year after the events at the Sanctuary, Subaru Natsuki trains hard to better face future challenges. The peaceful days come to an end when Emilia receives an invitation to a meeting in the Watergate City of Priestella from none other than Anastasia Hoshin, one of her rivals in the royal selection. Considering the meeting's significance and the potential dangers Emilia could face, Subaru and his friends accompany her.
+    CoverAndDescriptionView(
+        title: "Tokyo Ghoul",
+        imageUrl: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg",
+        rating: 10.0,
+        mediaCount: 10,
+        description: """
+        One year after the events at the Sanctuary, Subaru Natsuki trains hard to better face future challenges. The peaceful days come to an end when Emilia receives an invitation to a meeting in the Watergate City of Priestella from none other than Anastasia Hoshin, one of her rivals in the royal selection. Considering the meeting's significance and the potential dangers Emilia could face, Subaru and his friends accompany her.
 
-However, as Subaru reconnects with old associates and companions in Priestella, new formidable foes emerge. Driven by fanatical motivations and engaging in ruthless methods to achieve their ambitions, the new enemy targets Emilia and threaten the very existence of the city. Rallying his allies, Subaru must give his all once more to stop their and nefarious goals from becoming a concrete reality.
+        However, as Subaru reconnects with old associates and companions in Priestella, new formidable foes emerge. Driven by fanatical motivations and engaging in ruthless methods to achieve their ambitions, the new enemy targets Emilia and threaten the very existence of the city. Rallying his allies, Subaru must give his all once more to stop their and nefarious goals from becoming a concrete reality.
 
-[Written by MAL Rewrite]
-""", typeString: "tv")
+        [Written by MAL Rewrite]
+""",
+        typeString: "tv"
+    )
 }

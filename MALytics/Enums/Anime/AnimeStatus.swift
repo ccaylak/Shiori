@@ -1,6 +1,6 @@
 import Foundation
 
-enum AiringStatus: String {
+enum AnimeStatus: String {
     case finishedAiring = "finished_airing"
     case currentlyAiring = "currently_airing"
     case notYetAired = "not_yet_aired"
