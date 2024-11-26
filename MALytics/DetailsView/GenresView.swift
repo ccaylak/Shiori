@@ -5,24 +5,26 @@ struct GenresView: View {
     let genres: [Genre]
     
     var body: some View {
-        LazyVStack(alignment: .leading) {
-                    Text("Genres")
-                .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    ScrollView(.horizontal) {
-                        LazyHStack(spacing: 10) {
-                            ForEach(genres, id: \.id) { genre in
-                                Text(genre.name)
-                                    .font(.caption)
-                                    .padding(9)
-                                    .background(Color.gray.opacity(0.15))
-                                    .cornerRadius(12)
-                                    .foregroundColor(.primary)
-                            }
+        if !genres.isEmpty {
+            VStack(alignment: .leading) {
+                Text("Genres")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                
+                ScrollView(.horizontal) {
+                    LazyHStack(spacing: 10) {
+                        ForEach(genres, id: \.id) { genre in
+                            Text(genre.name)
+                                .font(.caption)
+                                .padding(9)
+                                .background(Color.gray.opacity(0.15))
+                                .cornerRadius(12)
+                                .foregroundColor(.primary)
                         }
-                    }.scrollIndicators(.hidden)
-                }
+                    }
+                }.scrollIndicators(.hidden)
+            }
+        }
     }
 }
 

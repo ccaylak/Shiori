@@ -24,12 +24,9 @@ struct ListView: View {
                             title: media.node.title,
                             image: media.node.images.large,
                             releaseYear: String(media.node.startDate?.prefix(4) ?? "Unknown"),
-                            typeString: media.node.type ?? "Unknown",
-                            statusString: media.node.status ?? "Unknown",
-                            episodes: media.node.episodes ?? 0,
-                            numberOfVolumes: media.node.numberOfVolumes ?? 0,
-                            numberOfChapters: media.node.numberOfChapters ?? 0,
-                            authors: media.node.authors ?? []
+                            type: media.node.type ?? "Unknown",
+                            status: media.node.status ?? "Unknown",
+                            mediaCount: media.node.episodes ?? 0
                         )
                     }
                 }
@@ -44,7 +41,7 @@ struct ListView: View {
                             mediaResponse.results.append(contentsOf: newMediaResponse.results)
                             mediaResponse.page = newMediaResponse.page
                         } catch {
-                            print("Fehler beim Laden der nächsten Seite: \(error.localizedDescription)")
+                            print("Failed to load next page of results: \(error.localizedDescription)")
                         }
                         isLoading = false
                     }
@@ -68,45 +65,54 @@ struct ListView: View {
         .searchable(text: $searchTerm)
         .onSubmit(of: .search) {
             Task {
-                if(mediaType == .anime) {
-                    mediaResponse = try await malController.loadAnimePreviews(searchTerm: searchTerm)
-                }
-                    
-                if (mediaType == .manga) {
-                    mediaResponse = try await malController.loadMangaPreviews(searchTerm: searchTerm)
-                }
-                    
+                await loadPreviews(for: searchTerm)
             }
         }
         .onAppear {
             Task {
-                if (mediaType == .anime) {
-                    mediaResponse = try await malController.loadAnimeRankings()
-                }
-                if (mediaType == .manga) {
-                        mediaResponse = try await malController.loadMangaRankings()
-                }
+                await loadRankings()
             }
         }
         .onChange(of: animeRankingType) {
             Task {
-                mediaResponse = try await malController.loadAnimeRankings()
+                await loadRankings()
             }
         }
         .onChange(of: mangaRankingType) {
             Task {
-                mediaResponse = try await malController.loadMangaRankings()
+                await loadRankings()
             }
         }
         .onChange(of: mediaType) {
             Task {
-                if (mediaType == .anime){
-                    mediaResponse = try await malController.loadAnimeRankings()
-                }
-                if (mediaType == .manga){
-                    mediaResponse = try await malController.loadMangaRankings()
-                }
+                await loadRankings()
             }
+        }
+    }
+    
+    private func loadRankings() async {
+        do {
+            switch mediaType {
+            case .anime:
+                mediaResponse = try await malController.loadAnimeRankings()
+            case .manga:
+                mediaResponse = try await malController.loadMangaRankings()
+            }
+        } catch {
+            print("Loading rankings failed: \(error.localizedDescription)")
+        }
+    }
+    
+    private func loadPreviews(for searchTerm: String) async {
+        do {
+            switch mediaType {
+            case .anime:
+                mediaResponse = try await malController.loadAnimePreviews(searchTerm: searchTerm)
+            case .manga:
+                mediaResponse = try await malController.loadMangaPreviews(searchTerm: searchTerm)
+            }
+        } catch {
+            print("Fehler beim Laden der Previews: \(error.localizedDescription)")
         }
     }
 }
