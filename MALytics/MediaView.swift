@@ -42,6 +42,7 @@ struct MediaView: View {
                 Text(title)
                     .lineLimit(3)
                     .font(.headline)
+                    .multilineTextAlignment(.leading)
                     .foregroundColor(.primary)
                 
                 Text(formattedDetails(year: releaseYear))

@@ -65,10 +65,10 @@ struct DetailsView: View {
                     MoreImagesView(images: moreImages)
                 }
             }
+            .scrollClipDisabled()
             .scrollIndicators(.hidden)
             .navigationTitle(media.title)
             .padding(.horizontal)
-            
         }
         .onAppear{
             Task {

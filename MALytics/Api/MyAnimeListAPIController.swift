@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import KeychainSwift
 
 class MyAnimeListAPIController {
     
@@ -9,6 +10,7 @@ class MyAnimeListAPIController {
     
     private let baseURL = "https://api.myanimelist.net/v2"
     private let apiKey = Config.apiKey
+    private let keychain = KeychainSwift()
     
     private let animePreviewFields: [ApiFields] = [.id, .title, .mainPicture, .numEpisodes, .mediaType, .startDate, .status]
     private var animeFields: [ApiFields] = [.numEpisodes, .mediaType, .startDate, .status, .mean, .synopsis, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .pictures]
@@ -31,6 +33,53 @@ class MyAnimeListAPIController {
         let request = createRequest(url: url)
         let data = try await fetchData(request: request)
         return try decodeMediaResponse(data: data)
+    }
+    
+    func loadMangaStatistics (status: String) async throws -> Int {
+        var components = URLComponents(string: "https://api.myanimelist.net/v2/users/@me/mangalist")!
+        components.queryItems = [
+            URLQueryItem(name: "status", value: status)
+        ]
+        
+        guard let url = components.url else {
+            throw URLError(.badURL)
+        }
+        
+        let request = createRequest(url: url)
+        let data = try await fetchData(request: request)
+        let decoder = JSONDecoder()
+        
+            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let dataArray = json["data"] as? [[String: Any]] {
+                return dataArray.count
+            }
+        throw NSError(domain: "InvalidResponse", code: -1, userInfo: nil)
+    }
+    
+    func loadProfileDetails() async throws -> ProfileDetails {
+        var components = URLComponents(string: "https://api.myanimelist.net/v2/users/@me")!
+        components.queryItems = [
+            URLQueryItem(name: "fields", value: "id,name,picture,gender,birthday,location,joined_at,time_zone,anime_statistics,manga_statistics")
+        ]
+        
+        guard let url = components.url else {
+            throw URLError(.badURL)
+        }
+        
+        let request = createRequest(url: url)
+        let data = try await fetchData(request: request)
+        if let jsonString = String(data: data, encoding: .utf8) {
+                print(jsonString) // Ausgabe des JSON als String
+            } else {
+                print("Die Daten konnten nicht in einen String umgewandelt werden.")
+            }
+    
+        return try decodeProfileDetails(data: data)
+    }
+    
+    private func decodeProfileDetails(data: Data) throws -> ProfileDetails {
+        let decoder = JSONDecoder()
+        return try decoder.decode(ProfileDetails.self, from: data)
     }
     
     func loadAnimeDetails(animeId: Int) async throws -> Media {
@@ -130,9 +179,16 @@ class MyAnimeListAPIController {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(apiKey, forHTTPHeaderField: "X-MAL-CLIENT-ID")
+        
+        if let accessToken = keychain.get("accessToken"), !accessToken.isEmpty {
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        } else {
+            request.setValue(apiKey, forHTTPHeaderField: "X-MAL-CLIENT-ID")
+        }
+        
         return request
     }
+    
     
     private func fetchData(request: URLRequest) async throws -> Data {
         let (data, _) = try await URLSession.shared.data(for: request)

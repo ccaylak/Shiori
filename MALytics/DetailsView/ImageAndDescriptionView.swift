@@ -25,6 +25,7 @@ struct CoverAndDescriptionView: View {
                 Text(description)
                     .lineLimit(11)
                     .font(.subheadline)
+                    .multilineTextAlignment(.leading)
                     .truncationMode(.tail)
                 Button(isDescriptionExpanded ? "Show less" : "Show more") {
                     isDescriptionExpanded.toggle()
@@ -66,6 +67,7 @@ struct CoverImage: View {
             AsyncImageView(imageUrl: imageUrl)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .cornerRadius(12)
+                .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
         }
         .overlay(alignment: .topTrailing) {
             RatingBadge(rating: rating)

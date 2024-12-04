@@ -16,12 +16,14 @@ struct RecommendationsView: View {
                                 .aspectRatio(contentMode: .fit)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .cornerRadius(12)
+                                .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
                         }
                         
                     }
                 }
                 .frame(height: 150)
             }
+            .scrollClipDisabled()
             .scrollIndicators(.hidden)
         }
     }

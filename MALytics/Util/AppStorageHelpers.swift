@@ -18,6 +18,14 @@ extension Color {
             return .blue
         }
     }
+    
+    static func getByRGB(_ r: Double, _ g: Double, _ b: Double) -> Color {
+        return Color(
+            red: r / 255.0,
+            green: g / 255.0,
+            blue: b / 255.0
+        )
+    }
 }
 
 extension ColorScheme {

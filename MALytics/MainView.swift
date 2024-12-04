@@ -18,6 +18,11 @@ struct MainView: View {
                     Label("Settings", systemImage: "gearshape")
                 }
                 .tag("settings")
+            LoginView()
+                .tabItem {
+                    Label("Profile", systemImage: "person")
+                }
+                .tag("login")
         }
         .preferredColorScheme(ColorScheme.getByColorSchemeString(appearance.rawValue))
         .accentColor(Color.getByColorString(accentColor.rawValue))
