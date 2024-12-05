@@ -43,6 +43,11 @@ struct SettingsView: View {
                 Section ("Info") {
                     Link("GitHub-Repository", destination: URL(string: "https://github.com/ccaylak/MALytics")!)
                         .tint(Color.getByColorString(accentColor.rawValue))
+                    
+                    ShareLink(item: URL(string: "https://www.toggo.de")!) {
+                        Text("Share TestFlight invite")
+                    }
+                    
                 }
             }.navigationTitle("Settings")
         }

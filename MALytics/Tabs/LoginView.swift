@@ -17,7 +17,7 @@ struct LoginView: View {
     @State private var mangasOnHold: Int?
     @State private var mangasPlanToRead: Int?
     
-    private var malController = MyAnimeListAPIController()
+    private var profileController = ProfileController()
     
     let keychain = KeychainSwift()
     
@@ -79,6 +79,7 @@ struct LoginView: View {
                             }
                         }
                     }
+                    .padding(.horizontal)
                     Form {
                         Section ("Anime statistics") {
                             StatisticsRow(title: "Completed", color: Color.getByRGB(49, 65, 114), value: profileDetails?.animeStatistics?.completed ?? 0)
@@ -97,57 +98,56 @@ struct LoginView: View {
                     }
                     .onAppear {
                         Task {
-                            profileDetails = try await malController.loadProfileDetails()
-                            mangasCompleted = try await malController.loadMangaStatistics(status: "completed")
-                            mangasReading = try await malController.loadMangaStatistics(status: "reading")
-                            mangasDropped = try await malController.loadMangaStatistics(status: "dropped")
-                            mangasOnHold = try await malController.loadMangaStatistics(status: "on_hold")
-                            mangasPlanToRead = try await malController.loadMangaStatistics(status: "plan_to_read")
+                            profileDetails = try await profileController.fetchUserProfile()
+                            mangasCompleted = try await profileController.fetchMangaStatistics(status: "completed")
+                            mangasReading = try await profileController.fetchMangaStatistics(status: "reading")
+                            mangasDropped = try await profileController.fetchMangaStatistics(status: "dropped")
+                            mangasOnHold = try await profileController.fetchMangaStatistics(status: "on_hold")
+                            mangasPlanToRead = try await profileController.fetchMangaStatistics(status: "plan_to_read")
                             
                         }
                     }
-                    Button("Logout") {
-                        isSignedIn = false
+                }
+                
+                if !isSignedIn {
+                    Button(action: {
+                        Task {
+                            do {
+                                let urlWithToken = try await webAuthenticationSession.authenticate(using: generateLoginUrl()!, callbackURLScheme: "yourapp", preferredBrowserSession: .shared)
+                                await signIn(using: urlWithToken)
+                            } catch {
+                                print("Authentication failed: \(error)")
+                            }
+                        }
+                    }) {
+                        Text("Login with MyAnimeList")
+                            .font(.headline)
                     }
                     .buttonStyle(.borderedProminent)
                 }
             }
-            .navigationTitle("MyAnimeList Account")
             .toolbar {
-                if(isSignedIn) {
-                    ToolbarItem(placement: .primaryAction) {
-                        ShareLink(
-                            item: URL(string: "https://myanimelist.net/profile/\(profileDetails?.name)")!,
-                            preview: SharePreview("Share profile", image: Image(systemName: "square.and.arrow.up"))
-                        ) {
+                ToolbarItem(placement: .primaryAction) {
+                    if isSignedIn, let profileName = profileDetails?.name,
+                       let url = URL(string: "https://myanimelist.net/profile/\(profileName)") {
+                        ShareLink(item: url) {
                             Label("Share profile", systemImage: "square.and.arrow.up")
                         }
                     }
                 }
-                ToolbarItem(placement: .bottomBar) {
-                    if !isSignedIn {
-                        Button(action: {
-                            Task {
-                                do {
-                                    let urlWithToken = try await webAuthenticationSession.authenticate(using: generateLoginUrl()!, callbackURLScheme: "yourapp", preferredBrowserSession: .shared)
-                                    await signIn(using: urlWithToken)
-                                } catch {
-                                    print("Authentication failed: \(error)")
-                                }
-                            }
-                        }) {
-                            Text("Login with MyAnimeList")
-                                .font(.headline)
-                        }
-                        .buttonStyle(.borderedProminent)
+                ToolbarItem(placement: .primaryAction) {
+                    NavigationLink(destination: SettingsView()) {
+                        Label("Go to Settings", systemImage: "gearshape.fill")
                     }
-                    else {
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if isSignedIn {
                         Button(action: {
-                            keychain.delete("accessToken")
+                            // Aktion für Logout
+                            isSignedIn = false
                         }) {
-                            Label("Logout", image: "rectangle.portrait.and.arrow.forward")
+                            Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
                         }
-                        .buttonStyle(.borderedProminent)
                     }
                 }
             }

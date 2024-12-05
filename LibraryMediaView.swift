@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MediaView: View {
+struct LibraryMediaView: View {
     
     @AppStorage("appearance") private var appearance = Appearance.light
     
@@ -8,18 +8,9 @@ struct MediaView: View {
     let image: String
     let releaseYear: String
     let type: String
-    let status: String
-    let mediaCount: Int
-    
-    var statusType: Any? {
-        if let mangaStatus = MangaStatus(rawValue: status) {
-            return mangaStatus
-        } else if let animeStatus = AnimeStatus(rawValue: status) {
-            return animeStatus
-        }
-        
-        return nil
-    }
+    let progressStatus: String
+    let completedUnits: Int
+    let totalUnits: Int
     
     var mediaType: Any? {
         if let mangaType = MangaType(rawValue: type) {
@@ -49,14 +40,27 @@ struct MediaView: View {
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
+                Text((progressStatus=="All") ? "" : progressStatus)
+                Spacer()
                 
-                Text(formattedOtherDetails(year: releaseYear))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                
+                let safeTotalUnits = max(totalUnits, 1)
+                let safeCompletedUnits = min(max(completedUnits, 1), safeTotalUnits)
+                
+                Gauge(value: Double(safeCompletedUnits), in: 1...Double(safeTotalUnits)) {
+                } currentValueLabel: {
+                    Text("\(Int(safeCompletedUnits))")
+                } minimumValueLabel: {
+                    Text("1")
+                        .foregroundColor(Color.green)
+                } maximumValueLabel: {
+                    Text("\(safeTotalUnits)")
+                        .foregroundColor(Color.red)
+                }
+                .gaugeStyle(.accessoryLinear)
+                
             }
             .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
-            Image(systemName: "chevron.right")
-                .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
@@ -66,7 +70,6 @@ struct MediaView: View {
                 .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
         )
     }
-    
     func formattedDetails(year: String) -> String {
         var formattedResult = ""
         if mediaType is MangaType{
@@ -84,52 +87,8 @@ struct MediaView: View {
     func formattedMangaDetails(type: MangaType, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
-    
-    func formattedOtherDetails(year: String) -> String {
-        var formattedResult = ""
-        if mediaType is MangaType && statusType is MangaStatus{
-            formattedResult = formattedOtherMangaDetails(chapters: mediaCount, status: statusType as! MangaStatus, type: mediaType as! MangaType)
-        } else if mediaType is AnimeType && statusType is AnimeStatus {
-            formattedResult = formattedOtherAnimeDetails(episodes: mediaCount, status: statusType as! AnimeStatus, type: mediaType as! AnimeType)
-        }
-        return formattedResult
-    }
-    
-    func formattedOtherAnimeDetails(episodes: Int, status: AnimeStatus, type: AnimeType) -> String {
-        
-        if episodes == 0 && (status == .notYetAired || status == .currentlyAiring) {
-            return status.displayName
-        }
-
-        if type == .movie {
-            return episodes > 1 ? "\(episodes) parts" : ""
-        }
-
-        if type == .tvSpecial || type == .special {
-            return episodes > 1 ? "\(episodes) episodes" : ""
-        }
-        
-        return "\(episodes) episodes (\(status.displayName))"
-    }
-    
-    func formattedOtherMangaDetails(chapters: Int, status: MangaStatus, type: MangaType) -> String {
-        if(status == .currentlyPublishing) {
-            return status.displayName
-        }
-        if (chapters == 0 && status == .finished) {
-            return status.displayName
-        }
-        return "\(chapters) chapters (\(status.displayName))"
-    }
 }
 
 #Preview {
-    MediaView(
-        title: "Tokyo Ghoul",
-        image: "https://cdn.myanimelist.net/images/manga/3/145997l.jpg",
-        releaseYear: "2021",
-        type: "tv",
-        status: "finished_airing",
-        mediaCount: 12
-    )
+    LibraryMediaView(title: "Tokyo Ghoul", image: "test", releaseYear: "2020-01-01", type: "manga", progressStatus: "Reading", completedUnits: 5, totalUnits: 10)
 }

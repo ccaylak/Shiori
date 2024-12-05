@@ -13,11 +13,11 @@ struct MainView: View {
                     Label("Search", systemImage: "magnifyingglass")
                 }
                 .tag("search")
-            SettingsView()
+            LibraryView()
                 .tabItem {
-                    Label("Settings", systemImage: "gearshape")
+                    Label("Library", systemImage: "book")
                 }
-                .tag("settings")
+                .tag("library")
             LoginView()
                 .tabItem {
                     Label("Profile", systemImage: "person")

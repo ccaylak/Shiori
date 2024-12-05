@@ -7,7 +7,8 @@ struct DetailsView: View {
     
     @AppStorage("mediaType") private var mediaType = MediaType.manga
     
-    let malController = MyAnimeListAPIController()
+    let animeController = AnimeController()
+    let mangaController = MangaController()
     
     var body: some View {
         NavigationStack {
@@ -74,9 +75,9 @@ struct DetailsView: View {
             Task {
                 switch mediaType {
                 case .anime:
-                    media = try await malController.loadAnimeDetails(animeId: media.id)
+                    media = try await animeController.fetchAnimeDetails(animeId: media.id)
                 case .manga:
-                    media = try await malController.loadMangaDetails(mangaId: media.id)
+                    media = try await mangaController.fetchMangaDetails(mangaId: media.id)
                 }
             }
         }

@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37EA6182CFFC19700CD994E /* KeychainSwift */; };
+		F37EA6922D01A6CE00CD994E /* LibraryMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37EA6912D01A6CE00CD994E /* LibraryMediaView.swift */; };
 		F3DE62ED2CF140BC00CD77EF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F3DE62EC2CF140BC00CD77EF /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F365CCE32CE74B3F0027F040 /* MALytics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MALytics.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F37EA6912D01A6CE00CD994E /* LibraryMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMediaView.swift; sourceTree = "<group>"; };
 		F3DE62EC2CF140BC00CD77EF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -52,6 +54,7 @@
 		F365CCDA2CE74B3F0027F040 = {
 			isa = PBXGroup;
 			children = (
+				F37EA6912D01A6CE00CD994E /* LibraryMediaView.swift */,
 				F3DE62EC2CF140BC00CD77EF /* README.md */,
 				F365CCE52CE74B3F0027F040 /* MALytics */,
 				F365CCE42CE74B3F0027F040 /* Products */,
@@ -145,6 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F37EA6922D01A6CE00CD994E /* LibraryMediaView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

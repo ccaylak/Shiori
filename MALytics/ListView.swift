@@ -2,7 +2,9 @@ import SwiftUI
 
 struct ListView: View {
     
-    private let malController = MyAnimeListAPIController()
+    private let mangaController = MangaController()
+    private let animeController = AnimeController()
+    private let profileController = ProfileController()
     
     @State var mediaResponse = MediaResponse(results: [], page: MediaResponse.Paging(next: ""))
     @State private var searchTerm = ""
@@ -28,6 +30,7 @@ struct ListView: View {
                             status: media.node.status ?? "Unknown",
                             mediaCount: media.node.episodes ?? 0
                         )
+                        .padding(.horizontal)
                     }
                 }
             }
@@ -37,7 +40,7 @@ struct ListView: View {
                         guard !isLoading else { return }
                         isLoading = true
                         do {
-                            let newMediaResponse = try await malController.loadNextPage(nextPage)
+                            let newMediaResponse = try await profileController.loadNextPage(nextPage)
                             mediaResponse.results.append(contentsOf: newMediaResponse.results)
                             mediaResponse.page = newMediaResponse.page
                         } catch {
@@ -62,6 +65,7 @@ struct ListView: View {
                 .padding()
             }
         }
+        .scrollIndicators(.automatic)
         .searchable(text: $searchTerm)
         .onSubmit(of: .search) {
             Task {
@@ -94,9 +98,9 @@ struct ListView: View {
         do {
             switch mediaType {
             case .anime:
-                mediaResponse = try await malController.loadAnimeRankings()
+                mediaResponse = try await animeController.fetchAnimeRankings()
             case .manga:
-                mediaResponse = try await malController.loadMangaRankings()
+                mediaResponse = try await mangaController.fetchMangaRankings()
             }
         } catch {
             print("Loading rankings failed: \(error.localizedDescription)")
@@ -107,9 +111,9 @@ struct ListView: View {
         do {
             switch mediaType {
             case .anime:
-                mediaResponse = try await malController.loadAnimePreviews(searchTerm: searchTerm)
+                mediaResponse = try await animeController.fetchAnimePreviews(searchTerm: searchTerm)
             case .manga:
-                mediaResponse = try await malController.loadMangaPreviews(searchTerm: searchTerm)
+                mediaResponse = try await mangaController.fetchMangaPreviews(searchTerm: searchTerm)
             }
         } catch {
             print("Fehler beim Laden der Previews: \(error.localizedDescription)")
