@@ -1,65 +1,90 @@
 # MALytics
 
-A free and modern anime/manga application for iOS, powered by the MyAnimeList.net API.  
+A free and modern anime/manga application for iOS, powered by the MyAnimeList.net API.
 
 ## About the App
 
-**MALytics** is a streamlined and visually clean reimagining of [MyAnimeList.net](https://myanimelist.net) for iOS. The app is designed to deliver a native iOS experience with a simpler and more intuitive interface.
+**MALytics** is a streamlined and visually clean reimagining of [MyAnimeList.net](https://myanimelist.net) for iOS. The app delivers a native iOS experience with a simplified and intuitive interface, designed for anime and manga enthusiasts.
 
 ## Features & Roadmap
 
-### Version 1.0 (Initial Release)
+### Version 1.0 (Core Functionality)
 
 #### Main Views:
 - **Settings View**  
-  Tailor the app to your preferences:  
-  - Choose between system, dark, and light themes.  
-  - Customize accent colors.  
-  - Set the number of search results displayed per query.  
+  Customize the app to suit your preferences:  
+  - [x] Toggle between system, dark, and light themes.  
+  - [x] Choose custom accent colors.  
+  - [x] Define the number of search results displayed per query.  
 
 - **Search View**  
-  Effortlessly discover anime and manga:  
-  - Switch between anime and manga search modes.  
-  - Filter and sort search results by parameters such as popularity or favorites.  
-  - Load more results with a button press when reaching the end of the list.  
-  - Access detailed information for selected titles.  
+  Discover anime and manga with ease:  
+  - [x] Switch between anime and manga search modes.  
+  - [x] Filter and sort results by popularity, favorites, and other parameters.  
+  - [x] Load additional results with a single button.  
+  - [x] View detailed information for selected titles.  
 
 #### Detailed Views:
-- **Details Page for Anime/Manga**  
-  Dive deep into the specifics of a title:  
-  - View the cover image and description.  
-  - Explore essential details, including:  
+- **Anime/Manga Details Page**  
+  Access in-depth information about any title:  
+  - [x] Cover image and description.  
+  - [x] Key details, including:  
     - Media type (e.g., TV, Movie, Manga).  
     - Number of episodes or chapters.  
     - Animation studio or publisher.  
-    - Release dates and runtime details.  
-  - Browse genres for easy categorization.  
-  - Review key statistics, such as:  
+    - Release dates and runtime.  
+  - [x] Genres for easy categorization.  
+  - [x] Statistics, such as:  
     - Average user score.  
     - Popularity ranking.  
     - Overall rank.  
-  - Discover related content, such as:  
+  - [x] Related content:  
     - Alternative versions, side stories, prequels, and sequels.  
-  - Browse user-generated recommendations.  
-  - View a gallery of additional images with a scrollable interface.  
+  - [x] User-generated recommendations.  
+  - [x] Additional images in a scrollable gallery.  
+    - [ ] Optimize gallery functionality.
 
 ---
 
-## Future Plans
+### Version 2.0 (User Profiles)
 
-- **User Login**  
-  Add account-based features, such as managing custom lists, writing reviews, and rating titles.  
-- **Additional Data Sources**  
-  Integrate AniList as an alternative source for users who prefer its platform.  
+#### Main Views:
+- **Login View**  
+  Seamlessly integrate MyAnimeList accounts:  
+  - [x] Login functionality.  
+  - [ ] Logout functionality.  
+  - [ ] Automatic session refresh.  
+
+- **Library View**  
+  Manage your anime and manga library efficiently:  
+  - [ ] Toggle between anime and manga libraries.  
+  - [ ] Update scores, episodes, or chapters directly.  
+  - [x] Delete entire entries.
+
+#### Search View:
+- **Anime/Manga Details Page**  
+  Enhanced functionality:  
+  - [ ] Add anime or manga directly to your library.
+
+---
+
+### Future Plans
+
+- **Beta Testing:**  
+  Launch a beta test via TestFlight.  
+- **Jikan API Integration:**  
+  Add support for additional data not covered by the MAL API.  
+- **Alternative Data Sources:**  
+  Integrate AniList for users who prefer its platform.
 
 ---
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).  
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
 ## Final Notes
 
-This app is not officially affiliated with MyAnimeList.net. It uses their publicly available API to provide data and functionality.
+This app is not officially affiliated with MyAnimeList.net. It leverages their publicly available API to provide data and functionality.
