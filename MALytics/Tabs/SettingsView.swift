@@ -5,7 +5,6 @@ struct SettingsView: View {
     @AppStorage("accentColor") private var accentColor = AccentColor.blue
     @AppStorage("result") private var resultsPerPage = 10
     
-    private let appearanceOptions = ["system", "light", "dark"]
     private let resultOptions = [10, 20, 50, 100]
     
     var body: some View {

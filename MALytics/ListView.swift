@@ -11,6 +11,7 @@ struct ListView: View {
     @State private var isLoading = false
     
     @AppStorage("mediaType") private var mediaType = MediaType.manga
+    @AppStorage("result") private var result = 10
     @AppStorage("accentColor") private var accentColor = AccentColor.blue
     
     @AppStorage("animeRankingType") private var animeRankingType = AnimeSortType.all
@@ -98,9 +99,9 @@ struct ListView: View {
         do {
             switch mediaType {
             case .anime:
-                mediaResponse = try await animeController.fetchAnimeRankings()
+                mediaResponse = try await animeController.fetchAnimeRankings(result: result, by: animeRankingType)
             case .manga:
-                mediaResponse = try await mangaController.fetchMangaRankings()
+                mediaResponse = try await mangaController.fetchMangaRankings(result: result, by: mangaRankingType)
             }
         } catch {
             print("Loading rankings failed: \(error.localizedDescription)")
@@ -111,9 +112,9 @@ struct ListView: View {
         do {
             switch mediaType {
             case .anime:
-                mediaResponse = try await animeController.fetchAnimePreviews(searchTerm: searchTerm)
+                mediaResponse = try await animeController.fetchAnimePreviews(searchTerm: searchTerm, result: result)
             case .manga:
-                mediaResponse = try await mangaController.fetchMangaPreviews(searchTerm: searchTerm)
+                mediaResponse = try await mangaController.fetchMangaPreviews(searchTerm: searchTerm, result: result)
             }
         } catch {
             print("Fehler beim Laden der Previews: \(error.localizedDescription)")

@@ -3,22 +3,24 @@ import SwiftUI
 struct LibraryView: View {
     
     @State private var mangaProgressSelection = MangaProgressStatus.all
+    @State private var animeProgressSelection = AnimeProgressStatus.all
     
     @AppStorage("mediaType") private var mediaType = MediaType.manga
     
-    @State private var mangaLibraryStatus = MangaLibraryStatus(data: [])
+    @State private var libraryResponse = LibraryResponse(data: [])
     
     @State private var selectedMedia: MediaNode?
     
-    @State private var status = MangaProgressStatus.reading
+    @State private var mangaStatus = MangaProgressStatus.reading
+    @State private var animeStatus = AnimeProgressStatus.watching
+    
     @State private var score: Int = 1
-    @State private var progress: Int = 1
+    @State private var progress: Int = 0
+    @State private var endChapters: Int = 0
     
     @State private var showAlert = false
     
-    @Environment(\.dismiss) private var dismiss
-    
-    private var profileController = ProfileController()
+    private let profileController = ProfileController()
     
     var body: some View {
         NavigationStack {
@@ -27,22 +29,18 @@ struct LibraryView: View {
                     if (mediaType == .manga) {
                         Picker("Filter by", selection: $mangaProgressSelection) {
                             ForEach(MangaProgressStatus.allCases, id: \.self) { mangaSelection in
-                                Text(mangaSelection.displayName)
+                                Text(mangaSelection.displayName).tag(mangaSelection.rawValue)
                             }
                         }
-                        .onAppear {
-                            Task {
-                                mangaLibraryStatus = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
-                            }
-                        }
+                        .pickerStyle(.menu)
                         .onChange(of: mangaProgressSelection) {
                             Task {
-                                mangaLibraryStatus = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                                libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
                             }
                         }
                         .pickerStyle(.segmented)
                         
-                        ForEach(mangaLibraryStatus.data, id: \.self) { manga in
+                        ForEach(libraryResponse.data, id: \.self) { manga in
                             Button(action: {
                                 selectedMedia = manga
                             }) {
@@ -51,9 +49,43 @@ struct LibraryView: View {
                                     image: manga.node.images.large,
                                     releaseYear: String(manga.node.startDate?.prefix(4) ?? "Unknown"),
                                     type: manga.node.type ?? "Unknown",
-                                    progressStatus: mangaProgressSelection.displayName,
+                                    status: manga.node.status ?? "",
+                                    rating: manga.listStatus?.rating ?? 0,
+                                    progressStatus: manga.listStatus?.status ?? "",
                                     completedUnits: manga.listStatus?.readChapters ?? 0,
                                     totalUnits: manga.node.numberOfChapters ?? 0
+                                )
+                            }
+                        }
+                    }
+                    if (mediaType == .anime) {
+                        Picker("Filter by", selection: $animeProgressSelection) {
+                            ForEach(AnimeProgressStatus.allCases, id: \.self) { animeSelection in
+                                Text(animeSelection.displayName).tag(animeSelection.rawValue)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .onChange(of: animeProgressSelection) {
+                            Task {
+                                libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        
+                        ForEach(libraryResponse.data, id: \.self) { anime in
+                            Button(action: {
+                                selectedMedia = anime
+                            }) {
+                                LibraryMediaView(
+                                    title: anime.node.title,
+                                    image: anime.node.images.large,
+                                    releaseYear: String(anime.node.startDate?.prefix(4) ?? "Unknown"),
+                                    type: anime.node.type ?? "Unknown",
+                                    status: anime.node.status ?? "",
+                                    rating: anime.listStatus?.rating ?? 0,
+                                    progressStatus: anime.listStatus?.status ?? "",
+                                    completedUnits: anime.listStatus?.watchedEpisodes ?? 0,
+                                    totalUnits: anime.node.episodes ?? 0
                                 )
                             }
                         }
@@ -74,65 +106,111 @@ struct LibraryView: View {
             .navigationTitle("Library")
             .padding()
             .sheet(item: $selectedMedia) { media in
-                NavigationView {
-                    VStack(alignment: .leading, spacing: 20) {
-                        HStack{
-                            AsyncImageView(imageUrl: media.node.images.large)
-                                .frame(height: 180)
-                                .cornerRadius(12)
-                            
-                            VStack(alignment: .leading, spacing: 10) {
-                                Section(header: Text("Status").font(.subheadline).bold()) {
-                                    Picker("Status", selection: $status) {
-                                        ForEach(MangaProgressStatus.allCases, id: \.self) { mangaSelection in
-                                            Text(mangaSelection.displayName)
-                                        }
-                                    }
-                                }
-
-                                Section(header: Text("Rating").font(.subheadline).bold()) {
-                                    Picker("Rating", selection: $score) {
-                                        ForEach(1...10, id: \.self) { rating in
-                                            Text("\(rating)")
-                                        }
-                                    }
-                                    .pickerStyle(.wheel)
-                                }
-
-                                Section(header: Text("Chapters").font(.subheadline).bold()) {
-                                    Picker("Chapters", selection: $progress) {
-                                        ForEach(1...10, id: \.self) { chapter in
-                                            Text("\(chapter)")
-                                        }
-                                    }
-                                    .pickerStyle(.wheel)
-                                }
-                            }.padding(.horizontal)
+                NavigationStack {
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Text(media.node.type ?? "")
+                                .font(.subheadline)
+                                .bold()
+                            Text(media.node.title)
+                                .font(.subheadline)
                         }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        
+                        HStack(alignment: .top) {
+                            AsyncImageView(imageUrl: media.node.images.large)
+                                .frame(maxHeight: 180)
+                                .cornerRadius(12)
+
+                            List {
+                                if (mediaType == .manga){
+                                    Picker("Status", selection: $mangaStatus) {
+                                        ForEach([MangaProgressStatus.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
+                                            Text(mangaSelection.displayName).tag(mangaSelection)
+                                        }
+                                    }
+                                }
+                                
+                                if (mediaType == .anime){
+                                    Picker("Status", selection: $animeStatus) {
+                                        ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
+                                            Text(animeSelection.displayName).tag(animeSelection)
+                                        }
+                                    }
+                                }
+
+                                Picker((mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
+                                    let chapterRange = endChapters > 0 ? 0...endChapters : 0...1000
+                                    ForEach(chapterRange, id: \.self) { chapter in
+                                        Text("\(chapter)").tag(chapter)
+                                    }
+                                }
+
+                                Picker("Rating", selection: $score) {
+                                    ForEach(0...10, id: \.self) { rating in
+                                        if let ratingValue = RatingValues(rawValue: rating) {
+                                            Text(ratingValue.displayName).tag(rating)
+                                        } else {
+                                            Text("Unknown")
+                                        }
+                                    }
+                                }
+
+                            }
+                            .listStyle(.plain)
+                            .scrollContentBackground(.hidden)
+                            .scrollBounceBehavior(.basedOnSize)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal)
+
                     }
-                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    )
+                    .padding(.horizontal)
+                    .frame(maxHeight: .infinity, alignment: .top)
                     .toolbar {
                         ToolbarItem(placement: .primaryAction) {
                             Button("Save") {
-                                dismiss()
+                                Task {
+                                    if (mediaType == .manga) {
+                                        try await profileController.saveMangaProgress(mangaId: media.node.id, status: mangaStatus.rawValue, score: score, chapters: progress)
+                                        libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                                        selectedMedia = nil
+                                    }
+                                    if (mediaType == .anime) {
+                                        try await profileController.saveAnimeProgress(animeId: media.node.id, status: animeStatus.rawValue, score: score, episodes: progress)
+                                        libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                                        selectedMedia = nil
+                                    }
+                                }
                             }
                         }
                         ToolbarItem(placement: .principal) {
-                            Text("Edit Entry")
-                                .font(.headline)
+                            Text("Edit")
                         }
                         ToolbarItem(placement: .cancellationAction) {
                             Button(action: {
                                 showAlert = true
                             }) {
                                 Label("Delete", systemImage: "trash")
-                                    .foregroundColor(.red)
+                                            .symbolRenderingMode(.palette)
+                                            .foregroundColor(.red)
                             }
                             .alert("Delete library entry", isPresented: $showAlert) {
                                 Button("Delete", role: .destructive) {
                                     Task {
-                                        try await profileController.deleteMangaListItem(mangaId: media.node.id)
-                                        mangaLibraryStatus = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                                        if(mediaType == .manga) {
+                                            try await profileController.deleteMangaListItem(mangaId: media.node.id)
+                                            libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                                        }
+                                        if(mediaType == .anime) {
+                                            try await profileController.deleteAnimeListItem(animeId: media.node.id)
+                                            libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue)
+                                        }
                                         showAlert = false
                                         selectedMedia = nil
                                     }
@@ -143,17 +221,45 @@ struct LibraryView: View {
                             }
                         }
                     }
-                    .presentationDetents([.medium, .large])
+                    .navigationBarTitleDisplayMode(.inline)
+                    .presentationDetents([.fraction(0.5)])
                     .presentationBackgroundInteraction(.disabled)
                     .presentationBackground(.regularMaterial)
                 }
             }
-
-            .onChange(of: selectedMedia) {
+        }
+        .onAppear {
+            Task {
+                if (mediaType == .manga) {
+                    libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                }
+                if (mediaType == .anime) {
+                    libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue)
+                }
+            }
+        }
+        .onChange(of: selectedMedia) {
+            if (mediaType == .manga) {
                 score = selectedMedia?.listStatus?.rating ?? 0
-                progress = selectedMedia?.listStatus?.rating ?? 0
-                status = MangaProgressStatus(rawValue: selectedMedia?.listStatus?.status ?? "") ?? MangaProgressStatus.reading
-        
+                progress = selectedMedia?.listStatus?.readChapters ?? 0
+                endChapters = selectedMedia?.node.numberOfChapters ?? 0
+                mangaStatus = MangaProgressStatus(rawValue: selectedMedia?.listStatus?.status ?? "") ?? .reading
+            }
+            if (mediaType == .anime) {
+                score = selectedMedia?.listStatus?.rating ?? 0
+                progress = selectedMedia?.listStatus?.watchedEpisodes ?? 0
+                endChapters = selectedMedia?.node.episodes ?? 0
+                animeStatus = AnimeProgressStatus(rawValue: selectedMedia?.listStatus?.status ?? "") ?? .watching
+            }
+        }
+        .onChange(of: mediaType) {
+            Task {
+                if (mediaType == .manga) {
+                    libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                }
+                if (mediaType == .anime) {
+                    libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue)
+                }
             }
         }
     }

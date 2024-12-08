@@ -1,8 +1,22 @@
-//
-//  AnimeProgressStatus.swift
-//  MALytics
-//
-//  Created by Cem Caylak on 05.12.24.
-//
-
 import Foundation
+
+enum AnimeProgressStatus: String, CaseIterable {
+    case all = "all"
+    case completed = "completed"
+    case watching = "watching"
+    case onHold = "on_hold"
+    case dropped = "dropped"
+    case planToWatch = "plan_to_watch"
+    
+    
+    var displayName: String {
+        switch self {
+        case .all: return "All"
+        case .watching: return "Watching"
+        case .completed: return "Completed"
+        case .onHold: return "On Hold"
+        case .dropped: return "Dropped"
+        case .planToWatch: return "Plan To Watch"
+        }
+    }
+}

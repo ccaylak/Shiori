@@ -7,7 +7,7 @@ struct LoginView: View {
     @Environment(\.webAuthenticationSession) private var webAuthenticationSession
     @State private var code: String = ""
     @State private var codeChallenge: String = ""
-    @State private var isSignedIn: Bool = false
+    @State private var isAuthenticated: String = "0"
     
     @State private var profileDetails: ProfileDetails?
     
@@ -24,9 +24,8 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             VStack (alignment: .leading) {
-                
-                if isSignedIn {
-                    HStack(alignment: .top, spacing: 12) {
+                if isAuthenticated != "0" {
+                    HStack(alignment: .center, spacing: 12) {
                         AsyncImageView(imageUrl: profileDetails?.profilePicture ?? "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg")
                             .scaledToFill()
                             .frame(width: 80, height: 80)
@@ -38,63 +37,79 @@ struct LoginView: View {
                             .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
                         
                         VStack(alignment: .leading, spacing: 6) {
-                            Text(profileDetails?.name ?? "Unknown name")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            
-                            HStack {
-                                Text("Birthdate:")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                Text(profileDetails?.birthDate ?? "Unknown birthdate")
-                                    .font(.subheadline)
+                            if let name = profileDetails?.name {
+                                Text(name)
+                                    .font(.headline)
                                     .foregroundColor(.primary)
                             }
                             
-                            HStack {
-                                Text("Gender:")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                Text(profileDetails?.gender ?? "Unknown gender")
-                                    .font(.subheadline)
-                                    .foregroundColor(.primary)
+                            if let birthDate = profileDetails?.birthDate {
+                                HStack {
+                                    Text("Birthdate:")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    Text(String.formatDateStringWithLocale(birthDate, fromFormat: "yyyy-MM-dd")!)
+                                        .font(.subheadline)
+                                        .foregroundColor(.primary)
+                                }
                             }
                             
-                            HStack {
-                                Text("Join Date:")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                Text(profileDetails?.joinDate ?? "Unknown join date")
-                                    .font(.subheadline)
-                                    .foregroundColor(.primary)
+                            if let gender = profileDetails?.gender {
+                                HStack {
+                                    Text("Gender:")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    Text(gender.capitalized)
+                                        .font(.subheadline)
+                                        .foregroundColor(.primary)
+                                }
                             }
                             
-                            HStack {
-                                Text("Location:")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                Text(profileDetails?.location ?? "Unknown location")
-                                    .font(.subheadline)
-                                    .foregroundColor(.primary)
+                            if let joinDate = profileDetails?.joinDate {
+                                HStack {
+                                    Text("Join Date:")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    Text(String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ")!)
+                                        .font(.subheadline)
+                                        .foregroundColor(.primary)
+                                }
+                            }
+                            
+                            if let location = profileDetails?.location {
+                                HStack {
+                                    Text("Location:")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    Text(location)
+                                        .font(.subheadline)
+                                        .foregroundColor(.primary)
+                                }
                             }
                         }
                     }
                     .padding(.horizontal)
                     Form {
-                        Section ("Anime statistics") {
-                            StatisticsRow(title: "Completed", color: Color.getByRGB(49, 65, 114), value: profileDetails?.animeStatistics?.completed ?? 0)
-                            StatisticsRow(title: "Watching", color: Color.getByRGB(74, 131, 74), value: profileDetails?.animeStatistics?.watching ?? 0)
-                            StatisticsRow(title: "On hold", color: Color.getByRGB(195, 164, 63), value: profileDetails?.animeStatistics?.onHold ?? 0)
-                            StatisticsRow(title: "Dropped", color: Color.getByRGB(121, 53, 51), value: profileDetails?.animeStatistics?.dropped ?? 0)
-                            StatisticsRow(title: "Plan to watch", color: Color.getByRGB(116, 116, 116), value: profileDetails?.animeStatistics?.planToWatch ?? 0)
-                        }
-                        Section ("Manga statistics") {
-                            StatisticsRow(title: "Completed", color: Color.getByRGB(49, 65, 114), value: mangasCompleted ?? 0)
-                            StatisticsRow(title: "Reading", color: Color.getByRGB(74, 131, 74), value: mangasReading ?? 0)
-                            StatisticsRow(title: "On hold", color: Color.getByRGB(195, 164, 63), value: mangasOnHold ?? 0)
-                            StatisticsRow(title: "Dropped", color: Color.getByRGB(121, 53, 51), value: mangasDropped ?? 0)
-                            StatisticsRow(title: "Planned to read", color: Color.getByRGB(116, 116, 116), value: mangasPlanToRead ?? 0)
-                        }
+                        let animeStatistics = [
+                            Statistics(title: "Completed", value: profileDetails?.animeStatistics?.completed ?? 0),
+                            Statistics(title: "Watching", value: profileDetails?.animeStatistics?.watching ?? 0),
+                            Statistics(title: "On hold", value: profileDetails?.animeStatistics?.onHold ?? 0),
+                            Statistics(title: "Dropped", value: profileDetails?.animeStatistics?.dropped ?? 0),
+                            Statistics(title: "Plan to watch", value: profileDetails?.animeStatistics?.planToWatch ?? 0),
+                        ]
+                        
+                        UserStatistics(title: "Anime statistics", statisticsValues: animeStatistics)
+                        
+                        let mangaStatistics = [
+                            Statistics(title: "Completed", value: mangasCompleted ?? 0),
+                            Statistics(title: "Reading", value: mangasReading ?? 0),
+                            Statistics(title: "On hold", value: mangasOnHold ?? 0),
+                            Statistics(title: "Dropped", value: mangasDropped ?? 0),
+                            Statistics(title: "Planned to read", value: mangasPlanToRead ?? 0),
+                        ]
+                        
+                        UserStatistics(title: "Manga statistics", statisticsValues: mangaStatistics)
+
                     }
                     .onAppear {
                         Task {
@@ -109,7 +124,7 @@ struct LoginView: View {
                     }
                 }
                 
-                if !isSignedIn {
+                if isAuthenticated == "0" {
                     Button(action: {
                         Task {
                             do {
@@ -126,9 +141,10 @@ struct LoginView: View {
                     .buttonStyle(.borderedProminent)
                 }
             }
+            .navigationTitle("Login")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    if isSignedIn, let profileName = profileDetails?.name,
+                    if isAuthenticated != "0", let profileName = profileDetails?.name,
                        let url = URL(string: "https://myanimelist.net/profile/\(profileName)") {
                         ShareLink(item: url) {
                             Label("Share profile", systemImage: "square.and.arrow.up")
@@ -141,10 +157,10 @@ struct LoginView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    if isSignedIn {
+                    if isAuthenticated != "0" {
                         Button(action: {
-                            // Aktion für Logout
-                            isSignedIn = false
+                            keychain.delete("accessToken")
+                            isAuthenticated = "0"
                         }) {
                             Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
                         }
@@ -152,28 +168,44 @@ struct LoginView: View {
                 }
             }
         }
+        .onAppear {
+            isAuthenticated = keychain.get("accessToken") ?? "0"
+        }
     }
     
-    struct StatisticsRow: View {
+    struct Statistics {
         let title: String
-        let color: Color
         let value: Int
+    }
+    
+    struct UserStatistics: View {
+        let title: String
+        
+        let statisticsValues: [Statistics]
         
         var body: some View {
-            HStack {
-                Text(title)
-                    .foregroundColor(.primary)
-                Spacer()
-                Text("\(value)")
-                    .foregroundColor(.white)
-                    .padding(5)
-                    .background(
-                        Circle()
-                            .fill(color)
-                    )
+            Section(title) {
+                ForEach(statisticsValues, id: \.title) { stat in
+                    StatisticsRow(title: stat.title, value: stat.value)
+                }
             }
         }
         
+        struct StatisticsRow: View {
+            let title: String
+            let value: Int
+            
+            var body: some View {
+                HStack {
+                    Text(title)
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Text("\(value)")
+                        .foregroundColor(.white)
+                }
+            }
+        }
+
     }
     
     func signIn(using url: URL) async {
@@ -206,7 +238,7 @@ struct LoginView: View {
             let accessTokenData = Data(accessToken.utf8)
             
             keychain.set(accessTokenData, forKey: "accessToken")
-            isSignedIn = true
+            isAuthenticated = keychain.get("accessToken")!
         } catch {
             print("Error during sign-in: \(error)")
         }
@@ -255,7 +287,6 @@ struct LoginView: View {
         return url
     }
 }
-
 
 #Preview {
     LoginView()

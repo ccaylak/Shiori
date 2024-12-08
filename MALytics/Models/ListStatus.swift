@@ -4,20 +4,20 @@ struct ListStatus: Decodable, Hashable {
     enum CodingKeys: String, CodingKey {
         case status
         case rating = "score"
-        case readVolumes = "num_volumes_read"
+        case watchedEpisodes = "num_episodes_watched"
         case readChapters = "num_chapters_read"
         
     }
     
     let status: String?
     let rating: Int?
-    let readVolumes: Int?
+    let watchedEpisodes: Int?
     let readChapters: Int?
     
-    init(status: String? = nil, rating: Int? = nil, readVolumes: Int? = nil, readChapters: Int? = nil) {
+    init(status: String? = nil, rating: Int? = nil, watchedEpisodes: Int? = nil, readChapters: Int? = nil) {
         self.status = status
         self.rating = rating
-        self.readVolumes = readVolumes
+        self.watchedEpisodes = watchedEpisodes
         self.readChapters = readChapters
     }
 }

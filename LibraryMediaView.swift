@@ -8,6 +8,8 @@ struct LibraryMediaView: View {
     let image: String
     let releaseYear: String
     let type: String
+    let status: String
+    let rating: Int
     let progressStatus: String
     let completedUnits: Int
     let totalUnits: Int
@@ -17,6 +19,16 @@ struct LibraryMediaView: View {
             return mangaType
         } else if let animeType = AnimeType(rawValue: type) {
             return animeType
+        }
+        
+        return nil
+    }
+    
+    var statusType: Any? {
+        if let mangaStatus = MangaStatus(rawValue: status) {
+            return mangaStatus
+        } else if let animeStatus = AnimeStatus(rawValue: status) {
+            return animeStatus
         }
         
         return nil
@@ -36,26 +48,37 @@ struct LibraryMediaView: View {
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.primary)
                 
-                Text(formattedDetails(year: releaseYear))
+                Text("\(formattedDetails(year: releaseYear)) (\(statusTypeAsString()))")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
-                Text((progressStatus=="All") ? "" : progressStatus)
-                Spacer()
+                
+                HStack(alignment: .center, spacing: 8) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "star.fill")
+                            .foregroundColor(.yellow)
+                            .font(.system(size: 14, weight: .bold))
+                        Text("\(rating)")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white)
+                    }
+                    
+                    Text("(\(progressStatus))")
+                        .font(.system(size: 12, weight: .light))
+                        .foregroundColor(.gray)
+                }
+                .padding(.vertical, 4)
                 
                 
-                let safeTotalUnits = max(totalUnits, 1)
-                let safeCompletedUnits = min(max(completedUnits, 1), safeTotalUnits)
+                let clampedCompletedUnits = min(max(Double(completedUnits), 1), Double(totalUnits > 0 ? totalUnits : 1))
                 
-                Gauge(value: Double(safeCompletedUnits), in: 1...Double(safeTotalUnits)) {
+                Gauge(value: clampedCompletedUnits, in: 1...Double(totalUnits > 0 ? totalUnits : 1)) {
                 } currentValueLabel: {
-                    Text("\(Int(safeCompletedUnits))")
+                    Text("\(completedUnits)")
                 } minimumValueLabel: {
                     Text("1")
-                        .foregroundColor(Color.green)
                 } maximumValueLabel: {
-                    Text("\(safeTotalUnits)")
-                        .foregroundColor(Color.red)
+                    Text(totalUnits == 0 ? "?" : "\(totalUnits)")
                 }
                 .gaugeStyle(.accessoryLinear)
                 
@@ -70,9 +93,10 @@ struct LibraryMediaView: View {
                 .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
         )
     }
+    
     func formattedDetails(year: String) -> String {
         var formattedResult = ""
-        if mediaType is MangaType{
+        if mediaType is MangaType {
             formattedResult = formattedMangaDetails(type: mediaType as! MangaType, year: year)
         } else if mediaType is AnimeType {
             formattedResult = formattedAnimeDetails(type: mediaType as! AnimeType, year: year)
@@ -87,8 +111,29 @@ struct LibraryMediaView: View {
     func formattedMangaDetails(type: MangaType, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
+    
+    func statusTypeAsString() -> String {
+        
+        if (statusType is MangaStatus) {
+            return (statusType as! MangaStatus).displayName
+        }
+        if (statusType is AnimeStatus) {
+            return (statusType as! AnimeStatus).displayName
+        }
+        return "Penis"
+    }
 }
 
 #Preview {
-    LibraryMediaView(title: "Tokyo Ghoul", image: "test", releaseYear: "2020-01-01", type: "manga", progressStatus: "Reading", completedUnits: 5, totalUnits: 10)
+    LibraryMediaView(
+        title: "Tokyo Ghoul",
+        image: "test",
+        releaseYear: "2020-01-01",
+        type: "manga",
+        status: "on_hiatus",
+        rating: 4,
+        progressStatus: "reading",
+        completedUnits: 5,
+        totalUnits: 0
+    )
 }

@@ -4,7 +4,7 @@ struct CoverAndDescriptionView: View {
     
     let title: String
     let imageUrl: String
-    let rating: Double
+    let score: Double
     let mediaCount: Int
     let description: String
     let type: String
@@ -16,7 +16,7 @@ struct CoverAndDescriptionView: View {
         HStack (alignment: .top, spacing: 10) {
             CoverImage(
                 imageUrl: imageUrl,
-                rating: rating,
+                score: score,
                 type: type,
                 mediaType: mediaType,
                 mediaCount: mediaCount
@@ -57,7 +57,7 @@ struct CoverAndDescriptionView: View {
 struct CoverImage: View {
     
     let imageUrl: String
-    let rating: Double
+    let score: Double
     let type: String
     let mediaType: MediaType
     let mediaCount: Int
@@ -70,7 +70,7 @@ struct CoverImage: View {
                 .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
         }
         .overlay(alignment: .topTrailing) {
-            RatingBadge(rating: rating)
+            ScoreBadge(score: score)
         }
         .overlay(alignment: .bottomTrailing) {
             MediaInfoText(mediaCount: mediaCount, type: type, mediaType: mediaType)
@@ -79,14 +79,14 @@ struct CoverImage: View {
     }
 }
 
-struct RatingBadge: View {
+struct ScoreBadge: View {
     
-    let rating: Double
+    let score: Double
     
     var body: some View {
-        if (rating >= 0.0 && rating <= 10.0){
+        if (score >= 0 && score <= 10){
             HStack {
-                Text("\(rating.formatted())")
+                Text("\(score.formatted())")
                     .font(.title3)
                     .bold()
                     .foregroundStyle(.white)
@@ -142,7 +142,7 @@ struct MediaInfoText: View {
     CoverAndDescriptionView(
         title: "Tokyo Ghoul",
         imageUrl: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg",
-        rating: 10.0,
+        score: 10.0,
         mediaCount: 10,
         description:
 """

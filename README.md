@@ -52,19 +52,19 @@ A free and modern anime/manga application for iOS, powered by the MyAnimeList.ne
 - **Login View**  
   Seamlessly integrate MyAnimeList accounts:  
   - [x] Login functionality.  
-  - [ ] Logout functionality.  
+  - [x] Logout functionality.  
   - [ ] Automatic session refresh.  
 
 - **Library View**  
   Manage your anime and manga library efficiently:  
-  - [ ] Toggle between anime and manga libraries.  
-  - [ ] Update scores, episodes, or chapters directly.  
+  - [x] Toggle between anime and manga libraries.  
+  - [x] Update scores, episodes, or chapters directly.  
   - [x] Delete entire entries.
 
 #### Search View:
 - **Anime/Manga Details Page**  
   Enhanced functionality:  
-  - [ ] Add anime or manga directly to your library.
+  - [x] Add anime or manga directly to your library.
 
 ---
 

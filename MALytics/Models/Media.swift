@@ -6,7 +6,7 @@ struct Media: Decodable, Hashable {
         case images = "main_picture"
         case type = "media_type"
         case description = "synopsis"
-        case rating = "mean"
+        case score = "mean"
         case episodes = "num_episodes"
         case startDate = "start_date"
         case endDate = "end_date"
@@ -15,6 +15,7 @@ struct Media: Decodable, Hashable {
         case moreImages = "pictures"
         case numberOfVolumes = "num_volumes"
         case numberOfChapters = "num_chapters"
+        case listStatus = "my_list_status"
     }
     
     // Notiz für mich selbst, aus irgendwelchen Gründen müssen bestimmte Felder Optional sein auch wenn ich die beim Request definiere
@@ -35,7 +36,7 @@ struct Media: Decodable, Hashable {
     
     // Optionale Felder für DetailsView
     let description: String?
-    let rating: Double?
+    let score: Double?
     let genres: [Genre]?
     let endDate: String?
     let recommendations: [MediaNode]?
@@ -45,8 +46,9 @@ struct Media: Decodable, Hashable {
     let rank: Int?
     let popularity: Int?
     let moreImages: [Images]?
+    let listStatus: ListStatus?
     
-    init(id: Int, title: String, images: Images, startDate: String? = nil, type: String? = nil, status: String? = nil, episodes: Int? = nil, numberOfVolumes: Int? = nil, numberOfChapters: Int? = nil, authors: [AuthorInfos]? = nil, description: String? = nil, rating: Double? = nil, genres: [Genre]? = nil, endDate: String? = nil, recommendations: [MediaNode]? = nil, studios: [Studio]? = nil, relatedAnimes: [MediaNode]? = nil, relatedMangas: [MediaNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil) {
+    init(id: Int, title: String, images: Images, startDate: String? = nil, type: String? = nil, status: String? = nil, episodes: Int? = nil, numberOfVolumes: Int? = nil, numberOfChapters: Int? = nil, authors: [AuthorInfos]? = nil, description: String? = nil, score: Double? = nil, genres: [Genre]? = nil, endDate: String? = nil, recommendations: [MediaNode]? = nil, studios: [Studio]? = nil, relatedAnimes: [MediaNode]? = nil, relatedMangas: [MediaNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil, listStatus: ListStatus? = nil) {
         self.id = id
         self.title = title
         self.images = images
@@ -58,7 +60,7 @@ struct Media: Decodable, Hashable {
         self.numberOfChapters = numberOfChapters
         self.authors = authors
         self.description = description
-        self.rating = rating
+        self.score = score
         self.genres = genres
         self.endDate = endDate
         self.recommendations = recommendations
@@ -68,5 +70,6 @@ struct Media: Decodable, Hashable {
         self.rank = rank
         self.popularity = popularity
         self.moreImages = moreImages
+        self.listStatus = listStatus
     }
 }

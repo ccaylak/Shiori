@@ -1,6 +1,6 @@
 import Foundation
 
-struct MangaLibraryStatus: Decodable {
+struct LibraryResponse: Decodable {
     
     var data: [MediaNode]
     

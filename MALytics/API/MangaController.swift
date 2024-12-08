@@ -6,21 +6,15 @@ import KeychainSwift
 
 class MangaController {
     
-    @AppStorage("result") private var result = 10
-    @AppStorage("mangaRankingType") private var mangaRankingType = MangaSortType.all
-    
     private let baseURL = "https://api.myanimelist.net/v2"
     private let apiKey = Config.apiKey
     private let keychain = KeychainSwift()
-    
-    private let mangaPreviewFields: [ApiFields] = [.id, .title, .mainPicture, .numChapters, .numVolumes, .mediaType, .startDate, .status]
-    private let mangaFields: [ApiFields] = [.authors, .numChapters, .numVolumes, .mediaType, .startDate, .status,.endDate, .synopsis, .mean, .rank, .popularity, .genres, .mediaType, .pictures, .recommendations, .relatedManga]
     
     func fetchMangaDetails(mangaId: Int) async throws -> Media {
         var components = URLComponents(string: "\(baseURL)/manga/\(mangaId)")!
         
         components.queryItems = [
-            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: mangaFields))
+            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: [.authors, .numChapters, .numVolumes, .mediaType, .startDate, .status,.endDate, .synopsis, .mean, .rank, .popularity, .genres, .mediaType, .pictures, .recommendations, .relatedManga, .myListStatus]))
         ]
         
         guard let url = components.url else {
@@ -32,12 +26,12 @@ class MangaController {
         return try JSONDecoder().decode(Media.self, from: data)
     }
     
-    func fetchMangaPreviews(searchTerm: String) async throws -> MediaResponse {
+    func fetchMangaPreviews(searchTerm: String, result: Int) async throws -> MediaResponse {
         var components = URLComponents(string: "\(baseURL)/manga")!
         components.queryItems = [
             URLQueryItem(name: "q", value: searchTerm),
             URLQueryItem(name: "limit", value: "\(result)"),
-            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: mangaPreviewFields))
+            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .numChapters, .numVolumes, .mediaType, .startDate, .status]))
         ]
         
         guard let url = components.url else {
@@ -49,12 +43,12 @@ class MangaController {
         return try JSONDecoder().decode(MediaResponse.self, from: data)
     }
     
-    func fetchMangaRankings() async throws -> MediaResponse {
+    func fetchMangaRankings(result: Int, by: MangaSortType) async throws -> MediaResponse {
         var components = URLComponents(string: "\(baseURL)/manga/ranking")!
         components.queryItems = [
-            URLQueryItem(name: "ranking_type", value: mangaRankingType.rawValue),
+            URLQueryItem(name: "ranking_type", value: by.rawValue),
             URLQueryItem(name: "limit", value: "\(result)"),
-            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: mangaPreviewFields))
+            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .numChapters, .numVolumes, .mediaType, .startDate, .status]))
         ]
         
         guard let url = components.url else {
