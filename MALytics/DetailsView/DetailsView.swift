@@ -48,6 +48,17 @@ struct DetailsView: View {
                     }
                 }
                 Divider()
+                RatingView(
+                    rating: media.getListStatus.getRating,
+                    status: media.getListStatus.getStatus,
+                    progress: (mediaType == .manga) ? media.getListStatus.getReadChapters : media.getListStatus.getWatchedEpisodes,
+                    total: (mediaType == .manga)
+                    ? String(media.getChapters)
+                    : String(media.getEpisodes),
+                    mediaType: mediaType.rawValue,
+                    loggedIn: keychain.get("accessToken") != "0"
+                )
+                Divider()
                 GeneralInformationView(
                     type: media.type ?? "Unknown",
                     episodes: media.episodes ?? 0,

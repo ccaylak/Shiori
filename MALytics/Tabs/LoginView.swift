@@ -23,7 +23,7 @@ struct LoginView: View {
     
     var body: some View {
         NavigationView {
-            VStack (alignment: .leading) {
+            VStack (alignment: .leading, spacing: 30) {
                 if isAuthenticated != "0" {
                     HStack(alignment: .center, spacing: 12) {
                         AsyncImageView(imageUrl: profileDetails?.profilePicture ?? "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg")
@@ -125,23 +125,47 @@ struct LoginView: View {
                 }
                 
                 if isAuthenticated == "0" {
-                    Button(action: {
-                        Task {
-                            do {
-                                let urlWithToken = try await webAuthenticationSession.authenticate(using: generateLoginUrl()!, callbackURLScheme: "yourapp", preferredBrowserSession: .shared)
-                                await signIn(using: urlWithToken)
-                            } catch {
-                                print("Authentication failed: \(error)")
-                            }
+                    VStack(spacing: 20) {
+                        // Info GroupBox
+                        GroupBox {
+                            Text("Log in with your MyAnimeList account to track your Anime and Manga progress, rate titles, and access personalized features.")
+                                .font(.body)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.leading)
+                        } label: {
+                            Label("Info", systemImage: "info.circle")
+                                .font(.headline)
                         }
-                    }) {
-                        Text("Login with MyAnimeList")
-                            .font(.headline)
+                        
+                        // Login Button
+                        Button(action: {
+                            Task {
+                                do {
+                                    let urlWithToken = try await webAuthenticationSession.authenticate(using: generateLoginUrl()!, callbackURLScheme: "yourapp", preferredBrowserSession: .shared)
+                                    await signIn(using: urlWithToken)
+                                } catch {
+                                    print("Authentication failed: \(error)")
+                                }
+                            }
+                        }) {
+                            Text("Log in with MyAnimeList")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        
+                        Text("To use these features, you can create an account at MyAnimeList.net.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .padding()
                 }
             }
-            .navigationTitle("Login")
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .navigationTitle((isAuthenticated != "0") ? "" : "Login")
+            .navigationBarTitleDisplayMode((isAuthenticated != "0") ? .inline : .large)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     if isAuthenticated != "0", let profileName = profileDetails?.name,
