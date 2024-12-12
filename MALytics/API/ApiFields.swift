@@ -19,6 +19,7 @@ enum ApiFields: String {
     case pictures = "pictures"
     case recommendations = "recommendations"
     case myListStatus = "my_list_status"
+    case users = "num_scoring_users"
     
     // anime related
     case numEpisodes = "num_episodes"

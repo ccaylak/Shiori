@@ -29,7 +29,7 @@ struct ListView: View {
                             releaseYear: String(media.node.startDate?.prefix(4) ?? "Unknown"),
                             type: media.node.type ?? "Unknown",
                             status: media.node.status ?? "Unknown",
-                            mediaCount: media.node.episodes ?? 0
+                            mediaCount: (mediaType == .anime) ? (media.node.episodes ?? 0) : (media.node.numberOfChapters ?? 0)
                         )
                         .padding(.horizontal)
                     }

@@ -44,15 +44,15 @@ class AnimeController {
     
     func fetchAnimeDetails(animeId: Int) async throws -> Media {
         var components = URLComponents(string: "\(baseURL)/\(animeId)")!
-        
+
         components.queryItems = [
-            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: [.numEpisodes, .mediaType, .startDate, .status, .mean, .synopsis, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .pictures, .myListStatus]))
+            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: [.numEpisodes, .mediaType, .startDate, .status, .mean, .synopsis, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .pictures, .myListStatus, .users]))
         ]
-        
+
         guard let url = components.url else {
             throw URLError(.badURL)
         }
-        
+
         let request = buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         return try JSONDecoder().decode(Media.self, from: data)

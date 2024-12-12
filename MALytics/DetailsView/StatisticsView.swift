@@ -5,16 +5,18 @@ struct StatisticsView: View {
     let score: Double
     let rank: Int
     let popularity: Int
+    let users: Int
     
     var body: some View {
         VStack(alignment: .center) {
+            Text("Statistics by \(users) users")
             HStack (alignment: .center, spacing: 80){
                 if(score != 0.0){
                     VStack {
                         Text("Score")
                             .font(.caption)
                             .bold()
-                        Text("\(score.formatted())")
+                        Label("\(score.formatted())", systemImage: "star.fill")
                     }}
                 
                 if(rank != 0){
@@ -22,14 +24,14 @@ struct StatisticsView: View {
                         Text("Rank")
                             .font(.caption)
                             .bold()
-                        Text("\(rank)")
+                        Label("\(rank)", systemImage: "number")
                     }}
                 
                 VStack {
                     Text("Popularity")
                         .font(.caption)
                         .bold()
-                    Text("\(popularity)")
+                    Label("\(popularity)", systemImage: "chart.line.uptrend.xyaxis")
                 }
             }
         }
@@ -38,5 +40,10 @@ struct StatisticsView: View {
 }
 
 #Preview {
-    StatisticsView(score: 8.0, rank: 1, popularity: 1000)
+    StatisticsView(
+        score: 8.0,
+        rank: 1,
+        popularity: 1000,
+        users: 10000
+    )
 }

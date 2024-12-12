@@ -14,7 +14,7 @@ class MangaController {
         var components = URLComponents(string: "\(baseURL)/manga/\(mangaId)")!
         
         components.queryItems = [
-            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: [.authors, .numChapters, .numVolumes, .mediaType, .startDate, .status,.endDate, .synopsis, .mean, .rank, .popularity, .genres, .mediaType, .pictures, .recommendations, .relatedManga, .myListStatus]))
+            URLQueryItem(name: "fields", value: ApiFields.fieldsHeader(for: [.authors, .numChapters, .numVolumes, .mediaType, .startDate, .status,.endDate, .synopsis, .mean, .rank, .popularity, .genres, .mediaType, .pictures, .recommendations, .relatedManga, .myListStatus, .users]))
         ]
         
         guard let url = components.url else {

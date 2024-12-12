@@ -16,9 +16,8 @@ struct Media: Decodable, Hashable {
         case numberOfVolumes = "num_volumes"
         case numberOfChapters = "num_chapters"
         case listStatus = "my_list_status"
+        case users = "num_scoring_users"
     }
-    
-    // Notiz für mich selbst, aus irgendwelchen Gründen müssen bestimmte Felder Optional sein auch wenn ich die beim Request definiere
     
     // Pflichtfelder
     let id: Int
@@ -33,6 +32,7 @@ struct Media: Decodable, Hashable {
     let numberOfVolumes: Int?
     let numberOfChapters: Int?
     let authors: [AuthorInfos]?
+    let users: Int?
     
     // Optionale Felder für DetailsView
     let description: String?
@@ -48,7 +48,7 @@ struct Media: Decodable, Hashable {
     let moreImages: [Images]?
     let listStatus: ListStatus?
     
-    init(id: Int, title: String, images: Images, startDate: String? = nil, type: String? = nil, status: String? = nil, episodes: Int? = nil, numberOfVolumes: Int? = nil, numberOfChapters: Int? = nil, authors: [AuthorInfos]? = nil, description: String? = nil, score: Double? = nil, genres: [Genre]? = nil, endDate: String? = nil, recommendations: [MediaNode]? = nil, studios: [Studio]? = nil, relatedAnimes: [MediaNode]? = nil, relatedMangas: [MediaNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil, listStatus: ListStatus? = nil) {
+    init(id: Int, title: String, images: Images, startDate: String? = nil, type: String? = nil, status: String? = nil, episodes: Int? = nil, numberOfVolumes: Int? = nil, numberOfChapters: Int? = nil, authors: [AuthorInfos]? = nil, description: String? = nil, score: Double? = nil, genres: [Genre]? = nil, endDate: String? = nil, recommendations: [MediaNode]? = nil, studios: [Studio]? = nil, relatedAnimes: [MediaNode]? = nil, relatedMangas: [MediaNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil, listStatus: ListStatus? = nil, users: Int? = nil) {
         self.id = id
         self.title = title
         self.images = images
@@ -71,5 +71,6 @@ struct Media: Decodable, Hashable {
         self.popularity = popularity
         self.moreImages = moreImages
         self.listStatus = listStatus
+        self.users = users
     }
 }
