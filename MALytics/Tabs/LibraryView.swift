@@ -2,8 +2,11 @@ import SwiftUI
 
 struct LibraryView: View {
     
-    @State private var mangaProgressSelection = MangaProgressStatus.all
-    @State private var animeProgressSelection = AnimeProgressStatus.all
+    @State private var mangaProgressSelection = MangaProgressStatus.completed
+    @State private var libraryMangaSort = LibraryMangaSort.score
+    
+    @State private var animeProgressSelection = AnimeProgressStatus.completed
+    @State private var libraryAnimeSort = LibraryAnimeSort.score
     
     @AppStorage("mediaType") private var mediaType = MediaType.manga
     
@@ -19,6 +22,8 @@ struct LibraryView: View {
     @State private var endChapters: Int = 0
     
     @State private var showAlert = false
+    
+    @State private var searchTerm = ""
     
     private let profileController = ProfileController()
     
@@ -93,17 +98,53 @@ struct LibraryView: View {
                 }
             }
             .scrollClipDisabled()
+            .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always)) {}
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Menu("Selection") {
-                        Picker("Manga or Anime", selection: $mediaType) {
-                            Label("Manga", systemImage: "book").tag(MediaType.manga)
-                            Label("Anime", systemImage: "tv").tag(MediaType.anime)
+                    Menu {
+                        Text("Select media")
+                        Picker("Manga oder Anime", selection: $mediaType) {
+                            Label("Manga", systemImage: "book")
+                                .tag(MediaType.manga)
+                            Label("Anime", systemImage: "tv")
+                                .tag(MediaType.anime)
                         }
+                    } label: {
+                        Label("Media selection", systemImage: "sparkles")
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Menu {
+                        if (mediaType == .anime) {
+                            Picker("Filter by", selection: $animeProgressSelection) {
+                                ForEach(AnimeProgressStatus.allCases, id: \.self) { animeSelection in
+                                    Text(animeSelection.displayName).tag(animeSelection.rawValue)
+                                }
+                            }
+                            Picker("Sort by", selection: $libraryAnimeSort) {
+                                ForEach(LibraryAnimeSort.allCases, id: \.self) { sortSelection in
+                                    Text(sortSelection.displayName).tag(sortSelection.rawValue)
+                                }
+                            }
+                        } else {
+                            Picker("Filter by", selection: $mangaProgressSelection) {
+                                ForEach(MangaProgressStatus.allCases, id: \.self) { mangaSelection in
+                                    Text(mangaSelection.displayName).tag(mangaSelection.rawValue)
+                                }
+                            }
+                            Picker("Sort by", selection: $libraryMangaSort) {
+                                ForEach(LibraryMangaSort.allCases, id: \.self) { sortSelection in
+                                    Text(sortSelection.displayName).tag(sortSelection.rawValue)
+                                }
+                            }
+                        }
+                    } label: {
+                        Label("Sorting options", systemImage: "arrow.up.arrow.down")
                     }
                 }
             }
-            .navigationTitle("Library")
+            .navigationTitle("\(mediaType.rawValue.capitalized) Library")
+            .navigationBarTitleDisplayMode(.inline)
             .padding()
             .sheet(item: $selectedMedia) { media in
                 NavigationStack {
@@ -178,12 +219,12 @@ struct LibraryView: View {
                                 Task {
                                     if (mediaType == .manga) {
                                         try await profileController.saveMangaProgress(mangaId: media.node.id, status: mangaStatus.rawValue, score: score, chapters: progress)
-                                        libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                                        libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue, sortOrder: libraryMangaSort.rawValue)
                                         selectedMedia = nil
                                     }
                                     if (mediaType == .anime) {
                                         try await profileController.saveAnimeProgress(animeId: media.node.id, status: animeStatus.rawValue, score: score, episodes: progress)
-                                        libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                                        libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue, sortOrder: libraryAnimeSort.rawValue)
                                         selectedMedia = nil
                                     }
                                 }
@@ -205,11 +246,11 @@ struct LibraryView: View {
                                     Task {
                                         if(mediaType == .manga) {
                                             try await profileController.deleteMangaListItem(mangaId: media.node.id)
-                                            libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                                            libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue, sortOrder: libraryMangaSort.rawValue)
                                         }
                                         if(mediaType == .anime) {
                                             try await profileController.deleteAnimeListItem(animeId: media.node.id)
-                                            libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue)
+                                            libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue, sortOrder: libraryAnimeSort.rawValue)
                                         }
                                         showAlert = false
                                         selectedMedia = nil
@@ -231,11 +272,31 @@ struct LibraryView: View {
         .onAppear {
             Task {
                 if (mediaType == .manga) {
-                    libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                    libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue, sortOrder: libraryMangaSort.rawValue)
                 }
                 if (mediaType == .anime) {
-                    libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue)
+                    libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue, sortOrder: libraryAnimeSort.rawValue)
                 }
+            }
+        }
+        .onChange(of: mangaProgressSelection) {
+            Task {
+                libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue, sortOrder: libraryMangaSort.rawValue)
+            }
+        }
+        .onChange(of: animeProgressSelection) {
+            Task {
+                libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue, sortOrder: libraryAnimeSort.rawValue)
+            }
+        }
+        .onChange(of: libraryMangaSort) {
+            Task {
+                libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue, sortOrder: libraryMangaSort.rawValue)
+            }
+        }
+        .onChange(of: libraryAnimeSort) {
+            Task {
+                libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue, sortOrder: libraryAnimeSort.rawValue)
             }
         }
         .onChange(of: selectedMedia) {
@@ -255,10 +316,10 @@ struct LibraryView: View {
         .onChange(of: mediaType) {
             Task {
                 if (mediaType == .manga) {
-                    libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
+                    libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue, sortOrder: libraryMangaSort.rawValue)
                 }
                 if (mediaType == .anime) {
-                    libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue)
+                    libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue, sortOrder: libraryAnimeSort.rawValue)
                 }
             }
         }

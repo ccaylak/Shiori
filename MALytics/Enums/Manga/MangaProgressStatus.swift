@@ -1,7 +1,6 @@
 import Foundation
 
 enum MangaProgressStatus: String, CaseIterable {
-    case all = "all"
     case completed = "completed"
     case reading = "reading"
     case onHold = "on_hold"
@@ -11,7 +10,6 @@ enum MangaProgressStatus: String, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .all: return "All"
         case .reading: return "Reading"
         case .completed: return "Completed"
         case .onHold: return "On Hold"

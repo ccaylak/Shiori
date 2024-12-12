@@ -61,23 +61,15 @@ class ProfileController {
         let (data, _) = try await URLSession.shared.data(for: request)
     }
     
-    func fetchAnimeLibrary(status: String) async throws -> LibraryResponse {
+    func fetchAnimeLibrary(status: String, sortOrder: String) async throws -> LibraryResponse {
         var components = URLComponents(string: "\(baseURL)/users/@me/animelist")!
         
-        if (status != "all") {
             components.queryItems = [
                 URLQueryItem(name: "status", value: status),
-                URLQueryItem(name: "sort", value: "list_updated_at"),
+                URLQueryItem(name: "sort", value: sortOrder),
                 URLQueryItem(name:"fields", value: ApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .startDate, .mediaType, .listStatus, .numEpisodes, .status])),
                 URLQueryItem(name:"limit", value: "1000")
             ]
-        } else {
-            components.queryItems = [
-                URLQueryItem(name: "sort", value: "list_updated_at"),
-                URLQueryItem(name:"fields", value: ApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .startDate, .mediaType, .listStatus, .numEpisodes, .status])),
-                URLQueryItem(name:"limit", value: "1000")
-            ]
-        }
         
         guard let url = components.url else {
             throw URLError(.badURL)
@@ -89,23 +81,15 @@ class ProfileController {
         return try JSONDecoder().decode(LibraryResponse.self, from: data)
     }
     
-    func fetchMangaLibrary(status: String) async throws -> LibraryResponse {
+    func fetchMangaLibrary(status: String, sortOrder: String) async throws -> LibraryResponse {
         var components = URLComponents(string: "\(baseURL)/users/@me/mangalist")!
         
-        if (status != "all") {
             components.queryItems = [
                 URLQueryItem(name: "status", value: status),
-                URLQueryItem(name: "sort", value: "list_updated_at"),
+                URLQueryItem(name: "sort", value: sortOrder),
                 URLQueryItem(name:"fields", value: ApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .startDate, .mediaType, .listStatus, .numVolumes, .numChapters, .status])),
                 URLQueryItem(name:"limit", value: "1000")
             ]
-        } else {
-            components.queryItems = [
-                URLQueryItem(name: "sort", value: "list_updated_at"),
-                URLQueryItem(name:"fields", value: ApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .startDate, .mediaType, .listStatus, .numVolumes, .numChapters, .status])),
-                URLQueryItem(name:"limit", value: "1000")
-            ]
-        }
         
         guard let url = components.url else {
             throw URLError(.badURL)

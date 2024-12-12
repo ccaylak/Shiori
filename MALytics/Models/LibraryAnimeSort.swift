@@ -1,22 +1,18 @@
 import Foundation
 
-enum LibrarySort: String, CaseIterable {
-    case all = "all"
-    case completed = "completed"
-    case reading = "reading"
-    case onHold = "on_hold"
-    case dropped = "dropped"
-    case planToRead = "plan_to_read"
+enum LibraryAnimeSort: String, CaseIterable {
     
+    case score = "list_score"
+    case lastUpdated = "list_updated_at"
+    case title = "anime_title"
+    case startDate = "anime_start_date"
     
     var displayName: String {
         switch self {
-        case .all: return "All"
-        case .reading: return "Reading"
-        case .completed: return "Completed"
-        case .onHold: return "On Hold"
-        case .dropped: return "Dropped"
-        case .planToRead: return "Plan To Read"
+            case .score: return "Score"
+            case .lastUpdated: return "Last updated"
+            case .title: return "Anime title"
+            case .startDate: return "Anime start date"
         }
     }
 }
