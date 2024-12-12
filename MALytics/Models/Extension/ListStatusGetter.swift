@@ -1,8 +1,19 @@
-//
-//  ListStatusGetter.swift
-//  MALytics
-//
-//  Created by Cem Caylak on 12.12.24.
-//
-
 import Foundation
+
+extension ListStatus {
+    var getStatus: String {
+        status ?? "Unknown"
+    }
+    
+    var getRating: Int {
+        rating ?? 0
+    }
+    
+    var getWatchedEpisodes: Int {
+        watchedEpisodes ?? 0
+    }
+    
+    var getReadChapters: Int {
+        readChapters ?? 0
+    }
+}
