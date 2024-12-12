@@ -6,10 +6,13 @@ struct SearchView: View {
     @AppStorage("animeRankingType") private var animeRankingType = AnimeSortType.all
     @AppStorage("mangaRankingType") private var mangaRankingType = MangaSortType.all
     
+    @State private var isOn = false
+    
     var body: some View {
         NavigationStack {
-            VStack {
-                ListView()
+            ScrollView {
+                ResultView()
+                    .scrollIndicators(.visible)
             }
             .navigationTitle(mediaType.rawValue.capitalized)
             .toolbar {
@@ -21,23 +24,32 @@ struct SearchView: View {
     
     private var selectionMenu: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Menu("Selection") {
-                Picker("Manga or Anime", selection: $mediaType) {
-                    Label("Manga", systemImage: "book").tag(MediaType.manga)
-                    Label("Anime", systemImage: "tv").tag(MediaType.anime)
+            Menu {
+                Text("Select media")
+                Picker("Manga oder Anime", selection: $mediaType) {
+                    Label("Manga", systemImage: "book")
+                        .tag(MediaType.manga)
+                    Label("Anime", systemImage: "tv")
+                        .tag(MediaType.anime)
                 }
+            } label: {
+                Label("Media selection", systemImage: "sparkles")
             }
         }
     }
+
     
     private var sortMenu: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            Menu("Sort by") {
+            Menu {
+                Text("Sort by")
                 if mediaType == .anime {
                     animeSortPicker
                 } else {
                     mangaSortPicker
                 }
+            } label: {
+                Label("Sorting method", systemImage: "arrow.up.arrow.down")
             }
         }
     }
