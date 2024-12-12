@@ -60,7 +60,7 @@ struct LibraryMediaView: View {
                             .font(.system(size: 14, weight: .bold))
                         Text("\(rating)")
                             .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.white)
+                            .foregroundColor(.primary)
                     }
                     
                     Text("(\(progressStatus))")

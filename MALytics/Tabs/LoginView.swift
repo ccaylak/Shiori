@@ -201,7 +201,7 @@ struct LoginView: View {
                         .foregroundColor(.primary)
                     Spacer()
                     Text("\(value)")
-                        .foregroundColor(.white)
+                        .foregroundColor(.primary)
                 }
             }
         }
