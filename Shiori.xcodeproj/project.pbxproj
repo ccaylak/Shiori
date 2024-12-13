@@ -7,34 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F33F4D912D0849DF00BCFDD1 /* TokenHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33F4D902D0849DF00BCFDD1 /* TokenHandler.swift */; };
 		F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37EA6182CFFC19700CD994E /* KeychainSwift */; };
 		F37EA6922D01A6CE00CD994E /* LibraryMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37EA6912D01A6CE00CD994E /* LibraryMediaView.swift */; };
 		F3DE62ED2CF140BC00CD77EF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F3DE62EC2CF140BC00CD77EF /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F365CCE32CE74B3F0027F040 /* MALytics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MALytics.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F33F4D902D0849DF00BCFDD1 /* TokenHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenHandler.swift; sourceTree = "<group>"; };
+		F365CCE32CE74B3F0027F040 /* Shiori.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shiori.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F37EA6912D01A6CE00CD994E /* LibraryMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMediaView.swift; sourceTree = "<group>"; };
 		F3DE62EC2CF140BC00CD77EF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F305E85E2CF798CA00273382 /* Exceptions for "MALytics" folder in "MALytics" target */ = {
+		F3A786442D0CBB5E00C701BF /* Exceptions for "Shiori" folder in "Shiori" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = F365CCE22CE74B3F0027F040 /* MALytics */;
+			target = F365CCE22CE74B3F0027F040 /* Shiori */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F365CCE52CE74B3F0027F040 /* MALytics */ = {
+		F365CCE52CE74B3F0027F040 /* Shiori */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				F305E85E2CF798CA00273382 /* Exceptions for "MALytics" folder in "MALytics" target */,
+				F3A786442D0CBB5E00C701BF /* Exceptions for "Shiori" folder in "Shiori" target */,
 			);
-			path = MALytics;
+			path = Shiori;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -54,9 +56,10 @@
 		F365CCDA2CE74B3F0027F040 = {
 			isa = PBXGroup;
 			children = (
+				F33F4D902D0849DF00BCFDD1 /* TokenHandler.swift */,
 				F37EA6912D01A6CE00CD994E /* LibraryMediaView.swift */,
 				F3DE62EC2CF140BC00CD77EF /* README.md */,
-				F365CCE52CE74B3F0027F040 /* MALytics */,
+				F365CCE52CE74B3F0027F040 /* Shiori */,
 				F365CCE42CE74B3F0027F040 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -64,7 +67,7 @@
 		F365CCE42CE74B3F0027F040 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F365CCE32CE74B3F0027F040 /* MALytics.app */,
+				F365CCE32CE74B3F0027F040 /* Shiori.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -72,9 +75,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F365CCE22CE74B3F0027F040 /* MALytics */ = {
+		F365CCE22CE74B3F0027F040 /* Shiori */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F365CCF12CE74B400027F040 /* Build configuration list for PBXNativeTarget "MALytics" */;
+			buildConfigurationList = F365CCF12CE74B400027F040 /* Build configuration list for PBXNativeTarget "Shiori" */;
 			buildPhases = (
 				F365CCDF2CE74B3F0027F040 /* Sources */,
 				F365CCE02CE74B3F0027F040 /* Frameworks */,
@@ -85,14 +88,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F365CCE52CE74B3F0027F040 /* MALytics */,
+				F365CCE52CE74B3F0027F040 /* Shiori */,
 			);
-			name = MALytics;
+			name = Shiori;
 			packageProductDependencies = (
 				F37EA6182CFFC19700CD994E /* KeychainSwift */,
 			);
 			productName = MALytics;
-			productReference = F365CCE32CE74B3F0027F040 /* MALytics.app */;
+			productReference = F365CCE32CE74B3F0027F040 /* Shiori.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -110,7 +113,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F365CCDE2CE74B3F0027F040 /* Build configuration list for PBXProject "MALytics" */;
+			buildConfigurationList = F365CCDE2CE74B3F0027F040 /* Build configuration list for PBXProject "Shiori" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -127,7 +130,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F365CCE22CE74B3F0027F040 /* MALytics */,
+				F365CCE22CE74B3F0027F040 /* Shiori */,
 			);
 		};
 /* End PBXProject section */
@@ -148,6 +151,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F33F4D912D0849DF00BCFDD1 /* TokenHandler.swift in Sources */,
 				F37EA6922D01A6CE00CD994E /* LibraryMediaView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -207,6 +211,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -264,6 +269,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -282,11 +288,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MALytics/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Shiori/Preview Content\"";
 				DEVELOPMENT_TEAM = C7TA25UUL6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MALytics/Info.plist;
+				INFOPLIST_FILE = Shiori/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Shiori;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -300,7 +307,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.MALytics;
+				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.Shiori;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -321,11 +328,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MALytics/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Shiori/Preview Content\"";
 				DEVELOPMENT_TEAM = C7TA25UUL6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MALytics/Info.plist;
+				INFOPLIST_FILE = Shiori/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Shiori;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -339,7 +347,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.MALytics;
+				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.Shiori;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -355,7 +363,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F365CCDE2CE74B3F0027F040 /* Build configuration list for PBXProject "MALytics" */ = {
+		F365CCDE2CE74B3F0027F040 /* Build configuration list for PBXProject "Shiori" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F365CCEF2CE74B400027F040 /* Debug */,
@@ -364,7 +372,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F365CCF12CE74B400027F040 /* Build configuration list for PBXNativeTarget "MALytics" */ = {
+		F365CCF12CE74B400027F040 /* Build configuration list for PBXNativeTarget "Shiori" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F365CCF22CE74B400027F040 /* Debug */,

@@ -29,13 +29,27 @@ struct LibraryView: View {
     private let profileController = ProfileController()
     private let keychain = KeychainSwift()
     
+    private var filteredLibraryData: [MediaNode] {
+        if searchTerm.isEmpty {
+            return libraryResponse.data
+        } else {
+            return libraryResponse.data.filter { media in
+                media.node.title.localizedCaseInsensitiveContains(searchTerm)
+            }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVStack {
                     if(keychain.get("accessToken") ?? "0" != "0") {
                         if (mediaType == .manga) {
-                            ForEach(libraryResponse.data, id: \.self) { manga in
+                                Text("\(mangaProgressSelection.rawValue.capitalized) (\(filteredLibraryData.count))")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            ForEach(filteredLibraryData, id: \.self) { manga in
                                 Button(action: {
                                     selectedMedia = manga
                                 }) {
@@ -44,9 +58,7 @@ struct LibraryView: View {
                                         image: manga.node.images.large,
                                         releaseYear: manga.node.getReleaseYear,
                                         type: manga.node.getType,
-                                        status: manga.node.getStatus,
                                         rating: manga.getListStatus.getRating,
-                                        progressStatus: manga.getListStatus.getStatus,
                                         completedUnits: manga.getListStatus.getReadChapters,
                                         totalUnits: manga.node.getChapters
                                     )
@@ -54,7 +66,10 @@ struct LibraryView: View {
                             }
                         }
                         if (mediaType == .anime) {
-                            ForEach(libraryResponse.data, id: \.self) { anime in
+                            Text(animeProgressSelection.rawValue)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            ForEach(filteredLibraryData, id: \.self) { anime in
                                 Button(action: {
                                     selectedMedia = anime
                                 }) {
@@ -63,14 +78,15 @@ struct LibraryView: View {
                                         image: anime.node.images.large,
                                         releaseYear: anime.node.getReleaseYear,
                                         type: anime.node.getType,
-                                        status: anime.node.getStatus,
                                         rating: anime.getListStatus.getRating,
-                                        progressStatus: anime.getListStatus.getStatus,
                                         completedUnits: anime.getListStatus.getWatchedEpisodes,
                                         totalUnits: anime.node.getEpisodes
                                     )
                                 }
                             }
+                        }
+                        if (filteredLibraryData.isEmpty) {
+                            ContentUnavailableView.search
                         }
                     }
                     else {
@@ -87,7 +103,7 @@ struct LibraryView: View {
                 }
             }
             .scrollClipDisabled()
-            .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always)) {}
+            .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Menu {
@@ -152,7 +168,7 @@ struct LibraryView: View {
                             AsyncImageView(imageUrl: media.node.images.large)
                                 .frame(maxHeight: 180)
                                 .cornerRadius(12)
-
+                            
                             List {
                                 if (mediaType == .manga){
                                     Picker("Status", selection: $mangaStatus) {
@@ -169,14 +185,14 @@ struct LibraryView: View {
                                         }
                                     }
                                 }
-
+                                
                                 Picker((mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
                                     let chapterRange = endChapters > 0 ? 0...endChapters : 0...1000
                                     ForEach(chapterRange, id: \.self) { chapter in
                                         Text("\(chapter)").tag(chapter)
                                     }
                                 }
-
+                                
                                 Picker("Rating", selection: $score) {
                                     ForEach(0...10, id: \.self) { rating in
                                         if let ratingValue = RatingValues(rawValue: rating) {
@@ -186,7 +202,7 @@ struct LibraryView: View {
                                         }
                                     }
                                 }
-
+                                
                             }
                             .listStyle(.plain)
                             .scrollContentBackground(.hidden)
@@ -194,7 +210,7 @@ struct LibraryView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal)
-
+                        
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -227,8 +243,8 @@ struct LibraryView: View {
                                 showAlert = true
                             }) {
                                 Label("Delete", systemImage: "trash")
-                                            .symbolRenderingMode(.palette)
-                                            .foregroundColor(.red)
+                                    .symbolRenderingMode(.palette)
+                                    .foregroundColor(.red)
                             }
                             .alert("Delete library entry", isPresented: $showAlert) {
                                 Button("Delete", role: .destructive) {

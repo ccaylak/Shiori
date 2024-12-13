@@ -111,6 +111,19 @@ struct DetailsView: View {
                         
                 }
             }
+            ToolbarItem(placement: .confirmationAction) {
+                let escapedTitle = media.title.replacingOccurrences(of: " ", with: "_")
+                
+                if let url = URL(string: "https://myanimelist.net/\(mediaType.rawValue)/\(media.id)/\(escapedTitle)") {
+                    ShareLink(item: url) {
+                        Label("Share \(mediaType.rawValue.capitalized)", systemImage: "square.and.arrow.up")
+                    }
+                } else {
+                    Text("Invalid URL") // Optional: Fehlerhandling anzeigen
+                }
+            }
+
+
         }
         .sheet(isPresented: $isSheetPresented) {
             if (keychain.get("accessToken") ?? "0" != "0") {

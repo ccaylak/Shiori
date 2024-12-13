@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct MALyticsApp: App {
+struct ShioriApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
