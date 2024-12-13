@@ -13,7 +13,7 @@ struct RelatedMediaView: View {
                     ForEach(relatedMediaItems, id: \.node.id) { relatedMedia in
                         NavigationLink(destination: DetailsView(media: relatedMedia.node)) {
                             VStack(alignment: .center) {
-                                Text(relatedMedia.relationType ?? "")
+                                Text(relatedMedia.getRelationType)
                                 AsyncImageView(imageUrl: relatedMedia.node.images.large)
                                     .aspectRatio(contentMode: .fit)
                                     .frame(maxWidth: .infinity, alignment: .leading)

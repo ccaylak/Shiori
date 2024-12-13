@@ -1,4 +1,5 @@
 import SwiftUI
+import KeychainSwift
 
 struct LibraryView: View {
     
@@ -26,73 +27,61 @@ struct LibraryView: View {
     @State private var searchTerm = ""
     
     private let profileController = ProfileController()
+    private let keychain = KeychainSwift()
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVStack {
-                    if (mediaType == .manga) {
-                        Picker("Filter by", selection: $mangaProgressSelection) {
-                            ForEach(MangaProgressStatus.allCases, id: \.self) { mangaSelection in
-                                Text(mangaSelection.displayName).tag(mangaSelection.rawValue)
+                    if(keychain.get("accessToken") ?? "0" != "0") {
+                        if (mediaType == .manga) {
+                            ForEach(libraryResponse.data, id: \.self) { manga in
+                                Button(action: {
+                                    selectedMedia = manga
+                                }) {
+                                    LibraryMediaView(
+                                        title: manga.node.title,
+                                        image: manga.node.images.large,
+                                        releaseYear: manga.node.getReleaseYear,
+                                        type: manga.node.getType,
+                                        status: manga.node.getStatus,
+                                        rating: manga.getListStatus.getRating,
+                                        progressStatus: manga.getListStatus.getStatus,
+                                        completedUnits: manga.getListStatus.getReadChapters,
+                                        totalUnits: manga.node.getChapters
+                                    )
+                                }
                             }
                         }
-                        .pickerStyle(.menu)
-                        .onChange(of: mangaProgressSelection) {
-                            Task {
-                                libraryResponse = try await profileController.fetchMangaLibrary(status: mangaProgressSelection.rawValue)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        
-                        ForEach(libraryResponse.data, id: \.self) { manga in
-                            Button(action: {
-                                selectedMedia = manga
-                            }) {
-                                LibraryMediaView(
-                                    title: manga.node.title,
-                                    image: manga.node.images.large,
-                                    releaseYear: String(manga.node.startDate?.prefix(4) ?? "Unknown"),
-                                    type: manga.node.type ?? "Unknown",
-                                    status: manga.node.status ?? "",
-                                    rating: manga.listStatus?.rating ?? 0,
-                                    progressStatus: manga.listStatus?.status ?? "",
-                                    completedUnits: manga.listStatus?.readChapters ?? 0,
-                                    totalUnits: manga.node.numberOfChapters ?? 0
-                                )
+                        if (mediaType == .anime) {
+                            ForEach(libraryResponse.data, id: \.self) { anime in
+                                Button(action: {
+                                    selectedMedia = anime
+                                }) {
+                                    LibraryMediaView(
+                                        title: anime.node.title,
+                                        image: anime.node.images.large,
+                                        releaseYear: anime.node.getReleaseYear,
+                                        type: anime.node.getType,
+                                        status: anime.node.getStatus,
+                                        rating: anime.getListStatus.getRating,
+                                        progressStatus: anime.getListStatus.getStatus,
+                                        completedUnits: anime.getListStatus.getWatchedEpisodes,
+                                        totalUnits: anime.node.getEpisodes
+                                    )
+                                }
                             }
                         }
                     }
-                    if (mediaType == .anime) {
-                        Picker("Filter by", selection: $animeProgressSelection) {
-                            ForEach(AnimeProgressStatus.allCases, id: \.self) { animeSelection in
-                                Text(animeSelection.displayName).tag(animeSelection.rawValue)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        .onChange(of: animeProgressSelection) {
-                            Task {
-                                libraryResponse = try await profileController.fetchAnimeLibrary(status: animeProgressSelection.rawValue)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        
-                        ForEach(libraryResponse.data, id: \.self) { anime in
-                            Button(action: {
-                                selectedMedia = anime
-                            }) {
-                                LibraryMediaView(
-                                    title: anime.node.title,
-                                    image: anime.node.images.large,
-                                    releaseYear: String(anime.node.startDate?.prefix(4) ?? "Unknown"),
-                                    type: anime.node.type ?? "Unknown",
-                                    status: anime.node.status ?? "",
-                                    rating: anime.listStatus?.rating ?? 0,
-                                    progressStatus: anime.listStatus?.status ?? "",
-                                    completedUnits: anime.listStatus?.watchedEpisodes ?? 0,
-                                    totalUnits: anime.node.episodes ?? 0
-                                )
-                            }
+                    else {
+                        GroupBox {
+                            Text("Log in with your MyAnimeList account to be able to edit your library.")
+                                .font(.body)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.leading)
+                        } label: {
+                            Label("Info", systemImage: "info.circle")
+                                .font(.headline)
                         }
                     }
                 }
@@ -150,7 +139,7 @@ struct LibraryView: View {
                 NavigationStack {
                     VStack(alignment: .leading, spacing: 10) {
                         HStack {
-                            Text(media.node.type ?? "")
+                            Text(media.node.getType)
                                 .font(.subheadline)
                                 .bold()
                             Text(media.node.title)

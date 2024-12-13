@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ListView: View {
+struct ResultView: View {
     
     private let mangaController = MangaController()
     private let animeController = AnimeController()
@@ -26,10 +26,10 @@ struct ListView: View {
                         MediaView(
                             title: media.node.title,
                             image: media.node.images.large,
-                            releaseYear: String(media.node.startDate?.prefix(4) ?? "Unknown"),
-                            type: media.node.type ?? "Unknown",
-                            status: media.node.status ?? "Unknown",
-                            mediaCount: (mediaType == .anime) ? (media.node.episodes ?? 0) : (media.node.numberOfChapters ?? 0)
+                            releaseYear: media.node.getReleaseYear,
+                            type: media.node.getType,
+                            status: media.node.getStatus,
+                            mediaCount: (mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters)
                         )
                         .padding(.horizontal)
                     }
@@ -67,7 +67,7 @@ struct ListView: View {
             }
         }
         .scrollIndicators(.automatic)
-        .searchable(text: $searchTerm)
+        .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))
         .onSubmit(of: .search) {
             Task {
                 await loadPreviews(for: searchTerm)
@@ -123,5 +123,5 @@ struct ListView: View {
 }
 
 #Preview {
-    ListView()
+    ResultView()
 }

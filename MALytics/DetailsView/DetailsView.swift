@@ -1,4 +1,5 @@
 import SwiftUI
+import KeychainSwift
 
 struct DetailsView: View {
     
@@ -20,6 +21,7 @@ struct DetailsView: View {
     let animeController = AnimeController()
     let mangaController = MangaController()
     let profileController = ProfileController()
+    let keychain = KeychainSwift()
     
     var body: some View {
         NavigationStack {
@@ -28,24 +30,12 @@ struct DetailsView: View {
                     CoverAndDescriptionView(
                         title: media.title,
                         imageUrl: media.images.large,
-                        score: media.score ?? 0.0,
-                        mediaCount: media.numberOfChapters ?? 0,
-                        description: media.description ?? "Unknown",
-                        type: media.type ?? "Unknown",
+                        score: media.getScore,
+                        mediaCount: media.getChapters,
+                        description: media.getDescription,
+                        type: media.getType,
                         mediaType: mediaType
                     )
-                }
-                Divider()
-                Text("Your ratings").font(.subheadline)
-                if (media.listStatus == nil) {
-                    Text("Not rated yet")
-                }
-                if(media.listStatus != nil) {
-                    HStack(alignment: .top) {
-                        Text("Rating: \(media.listStatus?.rating ?? 0)")
-                        Text("Status: \(media.listStatus?.status ?? "") ")
-                        Text("Progress: \(media.listStatus?.readChapters ?? 0)")
-                    }
                 }
                 Divider()
                 RatingView(
@@ -60,24 +50,29 @@ struct DetailsView: View {
                 )
                 Divider()
                 GeneralInformationView(
-                    type: media.type ?? "Unknown",
-                    episodes: media.episodes ?? 0,
-                    numberOfChapters: nil,
-                    numberOfVolumes: nil,
-                    startDate: media.startDate ?? "Unknown",
-                    endDate: media.endDate ?? "",
-                    studios: media.studios ?? [],
-                    authorInfos: [],
-                    status: media.status ?? "Unknown"
+                    type: media.getType,
+                    episodes: media.getEpisodes,
+                    numberOfChapters: media.getChapters,
+                    numberOfVolumes: media.getVolumes,
+                    startDate: media.getStartDate,
+                    endDate: media.getEndDate,
+                    studios: media.getStudios,
+                    authorInfos: media.getAuthors,
+                    status: media.getStatus
                 )
                 
                 Divider()
                 
-                GenresView(genres: media.genres ?? [])
+                GenresView(genres: media.getGenres)
                 
                 Divider()
                 
-                StatisticsView(score: media.score ?? 0.0, rank: media.rank ?? 0, popularity: media.popularity ?? 0)
+                StatisticsView(
+                    score: media.getScore,
+                    rank: media.getRank,
+                    popularity: media.getPopularity,
+                    users: media.getUsers
+                )
                 Divider()
                 
                 if let relatedAnimes = media.relatedAnimes, !relatedAnimes.isEmpty && mediaType == .anime {
@@ -100,7 +95,6 @@ struct DetailsView: View {
                 }
             }
             .scrollClipDisabled()
-            .scrollIndicators(.hidden)
             .navigationTitle(media.title)
             .padding(.horizontal)
         }
@@ -109,128 +103,150 @@ struct DetailsView: View {
                 Button(action: {
                     isSheetPresented = true
                 }) {
-                    Image(systemName: "star")
+                    if (media.listStatus == nil) {
+                        Image(systemName: "star")
+                    } else {
+                        Image(systemName: "star.fill")
+                    }
+                        
                 }
             }
         }
         .sheet(isPresented: $isSheetPresented) {
-            NavigationStack {
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        Text(media.type ?? "")
-                            .font(.subheadline)
-                            .bold()
-                        Text(media.title)
-                            .font(.subheadline)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    
-                    HStack(alignment: .top) {
-                        AsyncImageView(imageUrl: media.images.large)
-                            .frame(maxHeight: 180)
-                            .cornerRadius(12)
-
-                        List {
-                            if (mediaType == .manga){
-                                Picker("Status", selection: $mangaStatus) {
-                                    ForEach([MangaProgressStatus.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
-                                        Text(mangaSelection.displayName).tag(mangaSelection)
-                                    }
-                                }
-                            }
+            if (keychain.get("accessToken") ?? "0" != "0") {
+                NavigationStack {
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Text(media.getType)
+                                .font(.subheadline)
+                                .bold()
+                            Text(media.title)
+                                .font(.subheadline)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        
+                        HStack(alignment: .top) {
+                            AsyncImageView(imageUrl: media.images.large)
+                                .frame(maxHeight: 180)
+                                .cornerRadius(12)
                             
-                            if (mediaType == .anime){
-                                Picker("Status", selection: $animeStatus) {
-                                    ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
-                                        Text(animeSelection.displayName).tag(animeSelection)
+                            List {
+                                if (mediaType == .manga){
+                                    Picker("Status", selection: $mangaStatus) {
+                                        ForEach([MangaProgressStatus.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
+                                            Text(mangaSelection.displayName).tag(mangaSelection)
+                                        }
                                     }
                                 }
-                            }
-
-                            Picker((mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
-                                let chapterRange = endChapters > 0 ? 0...endChapters : 0...1000
-                                ForEach(chapterRange, id: \.self) { chapter in
-                                    Text("\(chapter)").tag(chapter)
-                                }
-                            }
-
-                            Picker("Rating", selection: $score) {
-                                ForEach(0...10, id: \.self) { rating in
-                                    if let ratingValue = RatingValues(rawValue: rating) {
-                                        Text(ratingValue.displayName).tag(rating)
-                                    } else {
-                                        Text("Unknown")
+                                
+                                if (mediaType == .anime){
+                                    Picker("Status", selection: $animeStatus) {
+                                        ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
+                                            Text(animeSelection.displayName).tag(animeSelection)
+                                        }
                                     }
                                 }
+                                
+                                Picker((mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
+                                    let chapterRange = endChapters > 0 ? 0...endChapters : 0...1000
+                                    ForEach(chapterRange, id: \.self) { chapter in
+                                        Text("\(chapter)").tag(chapter)
+                                    }
+                                }
+                                
+                                Picker("Rating", selection: $score) {
+                                    ForEach(0...10, id: \.self) { rating in
+                                        if let ratingValue = RatingValues(rawValue: rating) {
+                                            Text(ratingValue.displayName).tag(rating)
+                                        } else {
+                                            Text("Unknown")
+                                        }
+                                    }
+                                }
+                                
                             }
-
+                            .listStyle(.plain)
+                            .scrollContentBackground(.hidden)
+                            .scrollBounceBehavior(.basedOnSize)
                         }
-                        .listStyle(.plain)
-                        .scrollContentBackground(.hidden)
-                        .scrollBounceBehavior(.basedOnSize)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal)
+                        
                     }
-                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    )
                     .padding(.horizontal)
-
-                }
-                .background(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(.ultraThinMaterial)
-                )
-                .padding(.horizontal)
-                .frame(maxHeight: .infinity, alignment: .top)
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Save") {
-                            Task {
-                                if (mediaType == .manga) {
-                                    try await profileController.saveMangaProgress(mangaId: media.id, status: mangaStatus.rawValue, score: score, chapters: progress)
-                                    media = try await mangaController.fetchMangaDetails(mangaId: media.id)
-                                    isSheetPresented = false
-                                }
-                                if (mediaType == .anime) {
-                                    try await profileController.saveAnimeProgress(animeId: media.id, status: animeStatus.rawValue, score: score, episodes: progress)
-                                    media = try await animeController.fetchAnimeDetails(animeId: media.id)
-                                    isSheetPresented = false
-                                }
-                            }
-                        }
-                    }
-                    ToolbarItem(placement: .principal) {
-                        Text("Edit")
-                    }
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(action: {
-                            showAlert = true
-                        }) {
-                            Label("Delete", systemImage: "trash")
-                                        .symbolRenderingMode(.palette)
-                                        .foregroundColor(.red)
-                        }
-                        .alert("Delete library entry", isPresented: $showAlert) {
-                            Button("Delete", role: .destructive) {
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .toolbar {
+                        ToolbarItem(placement: .primaryAction) {
+                            Button("Save") {
                                 Task {
-                                    if(mediaType == .manga) {
-                                        try await profileController.deleteMangaListItem(mangaId: media.id)
+                                    if (mediaType == .manga) {
+                                        try await profileController.saveMangaProgress(mangaId: media.id, status: mangaStatus.rawValue, score: score, chapters: progress)
                                         media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                                        isSheetPresented = false
                                     }
-                                    if(mediaType == .anime) {
-                                        try await profileController.deleteAnimeListItem(animeId: media.id)
+                                    if (mediaType == .anime) {
+                                        try await profileController.saveAnimeProgress(animeId: media.id, status: animeStatus.rawValue, score: score, episodes: progress)
                                         media = try await animeController.fetchAnimeDetails(animeId: media.id)
-                                         }
-                                    showAlert = false
-                                    isSheetPresented = false
+                                        isSheetPresented = false
+                                    }
                                 }
                             }
-                            Button("Cancel", role: .cancel) {}
-                        } message: {
-                            Text("Are you sure you want to delete \(media.title) from your library?")
+                        }
+                        ToolbarItem(placement: .principal) {
+                            Text("Edit")
+                        }
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button(action: {
+                                showAlert = true
+                            }) {
+                                Label("Delete", systemImage: "trash")
+                                    .symbolRenderingMode(.palette)
+                                    .foregroundColor(.red)
+                            }
+                            .alert("Delete library entry", isPresented: $showAlert) {
+                                Button("Delete", role: .destructive) {
+                                    Task {
+                                        if(mediaType == .manga) {
+                                            try await profileController.deleteMangaListItem(mangaId: media.id)
+                                            media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                                        }
+                                        if(mediaType == .anime) {
+                                            try await profileController.deleteAnimeListItem(animeId: media.id)
+                                            media = try await animeController.fetchAnimeDetails(animeId: media.id)
+                                        }
+                                        showAlert = false
+                                        isSheetPresented = false
+                                    }
+                                }
+                                Button("Cancel", role: .cancel) {}
+                            } message: {
+                                Text("Are you sure you want to delete \(media.title) from your library?")
+                            }
                         }
                     }
+                    .navigationBarTitleDisplayMode(.inline)
+                    .presentationDetents([.fraction(0.5)])
+                    .presentationBackgroundInteraction(.disabled)
+                    .presentationBackground(.regularMaterial)
+                }
+            }
+            else {
+                GroupBox {
+                    Text("Log in with your MyAnimeList account to be able to edit \(media.title)'s progress, rating and progress status.")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                } label: {
+                    Label("Info", systemImage: "info.circle")
+                        .font(.headline)
                 }
                 .navigationBarTitleDisplayMode(.inline)
-                .presentationDetents([.fraction(0.5)])
+                .presentationDetents([.fraction(0.2)])
                 .presentationBackgroundInteraction(.disabled)
                 .presentationBackground(.regularMaterial)
             }
@@ -239,6 +255,7 @@ struct DetailsView: View {
             Task {
                 if (mediaType == .anime){
                     media = try await animeController.fetchAnimeDetails(animeId: media.id)
+                    print(media)
                 }
                 
                 if(mediaType == .manga) {
@@ -274,7 +291,8 @@ struct DetailsView: View {
                     ),
                     role: "Writer"
                 )
-            ]
+            ],
+            users: 10
         )
     )
 }

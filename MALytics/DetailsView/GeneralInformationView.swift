@@ -42,6 +42,7 @@ struct GeneralInformationView: View {
                 Text(formattedRelease(startDate: startDate, endDate: endDate))
                     .font(.body)
                 
+                Spacer()
                 if (!studios.isEmpty && authorInfos.isEmpty) {
                     HStack(spacing: 5) {
                         Text("Made by")
@@ -53,14 +54,12 @@ struct GeneralInformationView: View {
                 }
                 
                 if(!authorInfos.isEmpty && studios.isEmpty) {
-                    Spacer()
+                    
+                    Text("By")
+                        .bold()
                     VStack (alignment: .leading) {
                         ForEach(authorInfos, id: \.self) { authorElement in
-                            HStack() {
-                                Text(authorElement.author?.firstName ?? "")
-                                Text(authorElement.author?.lastName ?? "")
-                                Text(authorElement.role)
-                            }
+                            Text(authorElement.getAuthor)
                         }
                     }
                 }
