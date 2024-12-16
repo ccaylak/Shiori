@@ -18,7 +18,6 @@ struct ResultView: View {
     @AppStorage("mangaRankingType") private var mangaRankingType = MangaSortType.all
     
     var body: some View {
-        
         ScrollView {
             LazyVStack(alignment: .leading) {
                 ForEach(mediaResponse.results, id: \.node.id) { media in
@@ -31,40 +30,39 @@ struct ResultView: View {
                             status: media.node.getStatus,
                             mediaCount: (mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters)
                         )
-                        .padding(.horizontal)
                     }
                 }
-            }
-            if !mediaResponse.results.isEmpty, let nextPage = mediaResponse.page?.next, !nextPage.isEmpty {
-                Button(action: {
-                    Task {
-                        guard !isLoading else { return }
-                        isLoading = true
-                        do {
-                            let newMediaResponse = try await profileController.loadNextPage(nextPage)
-                            mediaResponse.results.append(contentsOf: newMediaResponse.results)
-                            mediaResponse.page = newMediaResponse.page
-                        } catch {
-                            print("Failed to load next page of results: \(error.localizedDescription)")
+                if !mediaResponse.results.isEmpty, let nextPage = mediaResponse.page?.next, !nextPage.isEmpty {
+                    Button(action: {
+                        Task {
+                            guard !isLoading else { return }
+                            isLoading = true
+                            do {
+                                let newMediaResponse = try await profileController.loadNextPage(nextPage)
+                                mediaResponse.results.append(contentsOf: newMediaResponse.results)
+                                mediaResponse.page = newMediaResponse.page
+                            } catch {
+                                print("Failed to load next page of results: \(error.localizedDescription)")
+                            }
+                            isLoading = false
                         }
-                        isLoading = false
-                    }
-                }) {
-                    if isLoading {
-                        ProgressView()
-                            .frame(width: 370, height: 50)
-                            .background(Color.getByColorString(accentColor.rawValue))
-                            .cornerRadius(10)
-                    } else {
-                        Text("Load more")
-                            .frame(width: 370, height: 50)
-                            .background(Color.getByColorString(accentColor.rawValue))
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                    }) {
+                        if isLoading {
+                            ProgressView()
+                                .frame(width: 370, height: 50)
+                                .background(Color.getByColorString(accentColor.rawValue))
+                                .cornerRadius(10)
+                        } else {
+                            Text("Load more")
+                                .frame(width: 370, height: 50)
+                                .background(Color.getByColorString(accentColor.rawValue))
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
                     }
                 }
-                .padding()
             }
+            .padding(.horizontal)
         }
         .scrollIndicators(.automatic)
         .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))

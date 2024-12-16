@@ -1,5 +1,4 @@
 import SwiftUI
-import KeychainSwift
 import AuthenticationServices
 
 struct LoginView: View {
@@ -7,7 +6,6 @@ struct LoginView: View {
     @Environment(\.webAuthenticationSession) private var webAuthenticationSession
     @State private var code: String = ""
     @State private var codeChallenge: String = ""
-    @State private var isAuthenticated: String = "0"
     
     @State private var profileDetails: ProfileDetails?
     
@@ -19,12 +17,12 @@ struct LoginView: View {
     
     private var profileController = ProfileController()
     
-    let keychain = KeychainSwift()
+    @StateObject private var tokenHandler: TokenHandler = .shared
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack (alignment: .leading, spacing: 30) {
-                if isAuthenticated != "0" {
+                if tokenHandler.isAuthenticated {
                     HStack(alignment: .center, spacing: 12) {
                         AsyncImageView(imageUrl: profileDetails?.profilePicture ?? "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg")
                             .scaledToFill()
@@ -124,9 +122,8 @@ struct LoginView: View {
                     }
                 }
                 
-                if isAuthenticated == "0" {
+                if !tokenHandler.isAuthenticated {
                     VStack(spacing: 20) {
-                        // Info GroupBox
                         GroupBox {
                             Text("Log in with your MyAnimeList account to track your Anime and Manga progress, rate titles, and access personalized features.")
                                 .font(.body)
@@ -137,7 +134,6 @@ struct LoginView: View {
                                 .font(.headline)
                         }
                         
-                        // Login Button
                         Button(action: {
                             Task {
                                 do {
@@ -164,11 +160,11 @@ struct LoginView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .navigationTitle((isAuthenticated != "0") ? "" : "Login")
-            .navigationBarTitleDisplayMode((isAuthenticated != "0") ? .inline : .large)
+            .navigationTitle(tokenHandler.isAuthenticated ? "" : "Login")
+            .navigationBarTitleDisplayMode(tokenHandler.isAuthenticated ? .inline : .large)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    if isAuthenticated != "0", let profileName = profileDetails?.name,
+                    if tokenHandler.isAuthenticated, let profileName = profileDetails?.name,
                        let url = URL(string: "https://myanimelist.net/profile/\(profileName)") {
                         ShareLink(item: url) {
                             Label("Share profile", systemImage: "square.and.arrow.up")
@@ -181,19 +177,15 @@ struct LoginView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    if isAuthenticated != "0" {
+                    if tokenHandler.isAuthenticated {
                         Button(action: {
-                            keychain.delete("accessToken")
-                            isAuthenticated = "0"
+                            tokenHandler.revokeToken()
                         }) {
                             Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
                         }
                     }
                 }
             }
-        }
-        .onAppear {
-            isAuthenticated = keychain.get("accessToken") ?? "0"
         }
     }
     
@@ -261,8 +253,7 @@ struct LoginView: View {
             let accessToken = content.accessToken
             let accessTokenData = Data(accessToken.utf8)
             
-            keychain.set(accessTokenData, forKey: "accessToken")
-            isAuthenticated = keychain.get("accessToken")!
+            tokenHandler.setToken(accessTokenData)
         } catch {
             print("Error during sign-in: \(error)")
         }

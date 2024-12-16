@@ -45,20 +45,69 @@ class ProfileController {
 
     
     func saveAnimeProgress(animeId: Int, status: String, score: Int, episodes: Int) async throws {
-        var components = URLComponents(string: "\(baseURL)/anime/\(animeId)/my_list_status")!
+        let url = URL(string: "\(baseURL)/anime/\(animeId)/my_list_status")!
         
-        components.queryItems = [
-            URLQueryItem(name: "status", value: "\(status)"),
-            URLQueryItem(name: "score", value: "\(score)"),
-            URLQueryItem(name: "num_watched_episodes", value: "\(episodes)")
+        let parameters: [String: String] = [
+            "status": status,
+            "score": "\(score)",
+            "num_watched_episodes": "\(episodes)"
         ]
+        let formBody = parameters.map { "\($0.key)=\($0.value)" }
+                                 .joined(separator: "&")
         
-        guard let url = components.url else {
+        var request = buildRequest(url: url, httpMethod: "PUT")
+        request.httpBody = formBody.data(using: .utf8)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        _ = try await URLSession.shared.data(for: request)
+    }
+    
+    func addAnimeToWatchList(animeId: Int, status: String) async throws {
+        let urlComponents = URLComponents(string: "\(baseURL)/anime/\(animeId)/my_list_status")
+        guard let url = urlComponents?.url else {
             throw URLError(.badURL)
         }
-        
-        let request = buildRequest(url: url, httpMethod: "PUT")
-        let (data, _) = try await URLSession.shared.data(for: request)
+
+        let parameters = ["status": status]
+        let bodyData = parameters
+            .map { "\($0.key)=\($0.value)" }
+            .joined(separator: "&")
+            .data(using: .utf8)
+
+        guard let bodyData else {
+            print("Failed to encode body string")
+            throw URLError(.cannotDecodeRawData)
+        }
+
+        var request = buildRequest(url: url, httpMethod: "PUT")
+        request.httpBody = bodyData
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        _ = try await URLSession.shared.data(for: request)
+    }
+    
+    func addMangaToReadingList(mangaId: Int, status: String) async throws {
+        let urlComponents = URLComponents(string: "\(baseURL)/manga/\(mangaId)/my_list_status")
+        guard let url = urlComponents?.url else {
+            throw URLError(.badURL)
+        }
+
+        let parameters = ["status": status]
+        let bodyData = parameters
+            .map { "\($0.key)=\($0.value)" }
+            .joined(separator: "&")
+            .data(using: .utf8)
+
+        guard let bodyData else {
+            print("Failed to encode body string")
+            throw URLError(.cannotDecodeRawData)
+        }
+
+        var request = buildRequest(url: url, httpMethod: "PUT")
+        request.httpBody = bodyData
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        _ = try await URLSession.shared.data(for: request)
     }
     
     func fetchAnimeLibrary(status: String, sortOrder: String) async throws -> LibraryResponse {
@@ -120,7 +169,7 @@ class ProfileController {
         }
         
         let request = buildRequest(url: url, httpMethod: "DELETE")
-        let (_, response) = try await URLSession.shared.data(for: request)
+        let (_, _) = try await URLSession.shared.data(for: request)
     }
 
     

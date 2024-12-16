@@ -8,9 +8,15 @@ struct StatisticsView: View {
     let users: Int
     
     var body: some View {
-        VStack(alignment: .center) {
-            Text("Statistics by \(users) users")
-            HStack (alignment: .center, spacing: 80){
+        VStack(alignment: .center, spacing: 15) {
+            Text("Statistics by ")
+                .font(.caption)
+            +
+            Text("\(users) users")
+                .font(.caption)
+                .bold()
+            
+            HStack (alignment: .center){
                 if(score != 0.0){
                     VStack {
                         Text("Score")
@@ -18,7 +24,7 @@ struct StatisticsView: View {
                             .bold()
                         Label("\(score.formatted())", systemImage: "star.fill")
                     }}
-                
+                Spacer()
                 if(rank != 0){
                     VStack {
                         Text("Rank")
@@ -26,7 +32,7 @@ struct StatisticsView: View {
                             .bold()
                         Label("\(rank)", systemImage: "number")
                     }}
-                
+                Spacer()
                 VStack {
                     Text("Popularity")
                         .font(.caption)
@@ -35,7 +41,9 @@ struct StatisticsView: View {
                 }
             }
         }
-        .padding(.vertical, 5)
+        .padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
+        .background(Color.gray)
+        .cornerRadius(12)
     }
 }
 

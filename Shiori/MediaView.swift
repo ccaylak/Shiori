@@ -3,6 +3,7 @@ import SwiftUI
 struct MediaView: View {
     
     @AppStorage("appearance") private var appearance = Appearance.light
+    @Environment(\.colorScheme) private var colorScheme
     
     let title: String
     let image: String
@@ -30,6 +31,13 @@ struct MediaView: View {
         
         return nil
     }
+    
+    private var isDarkMode: Bool {
+            if appearance == .system {
+                return colorScheme == .dark
+            }
+            return appearance == .dark
+        }
     
     var body: some View {
         HStack(spacing: 20) {
@@ -62,7 +70,7 @@ struct MediaView: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill((appearance == .dark) ? Color.gray.opacity(0.15) : Color(.systemBackground))
+                .fill(isDarkMode ? Color.gray.opacity(0.15) : Color(.systemBackground))
                 .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
         )
     }

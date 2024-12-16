@@ -10,15 +10,12 @@ struct SearchView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                ResultView()
-                    .scrollIndicators(.visible)
-            }
-            .navigationTitle(mediaType.rawValue.capitalized)
-            .toolbar {
-                selectionMenu
-                sortMenu
-            }
+            ResultView()
+                .navigationTitle(mediaType.rawValue.capitalized)
+                .toolbar {
+                    selectionMenu
+                    sortMenu
+                }
         }
     }
     
@@ -37,7 +34,7 @@ struct SearchView: View {
             }
         }
     }
-
+    
     
     private var sortMenu: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {

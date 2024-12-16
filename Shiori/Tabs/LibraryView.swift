@@ -1,5 +1,4 @@
 import SwiftUI
-import KeychainSwift
 
 struct LibraryView: View {
     
@@ -27,7 +26,8 @@ struct LibraryView: View {
     @State private var searchTerm = ""
     
     private let profileController = ProfileController()
-    private let keychain = KeychainSwift()
+    
+    @ObservedObject private var tokenHandler: TokenHandler = .shared
     
     private var filteredLibraryData: [MediaNode] {
         if searchTerm.isEmpty {
@@ -43,12 +43,12 @@ struct LibraryView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack {
-                    if(keychain.get("accessToken") ?? "0" != "0") {
+                    if(tokenHandler.isAuthenticated) {
+                        Text("\(mangaProgressSelection.rawValue.capitalized) (\(filteredLibraryData.count))")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                         if (mediaType == .manga) {
-                                Text("\(mangaProgressSelection.rawValue.capitalized) (\(filteredLibraryData.count))")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
                             ForEach(filteredLibraryData, id: \.self) { manga in
                                 Button(action: {
                                     selectedMedia = manga
@@ -66,9 +66,10 @@ struct LibraryView: View {
                             }
                         }
                         if (mediaType == .anime) {
-                            Text(animeProgressSelection.rawValue)
+                            Text("\(animeProgressSelection.rawValue.capitalized) (\(filteredLibraryData.count))")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
                             ForEach(filteredLibraryData, id: \.self) { anime in
                                 Button(action: {
                                     selectedMedia = anime
@@ -102,6 +103,7 @@ struct LibraryView: View {
                     }
                 }
             }
+            .scrollIndicators(.hidden)
             .scrollClipDisabled()
             .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))
             .toolbar {
@@ -164,58 +166,50 @@ struct LibraryView: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         
-                        HStack(alignment: .top) {
-                            AsyncImageView(imageUrl: media.node.images.large)
-                                .frame(maxHeight: 180)
-                                .cornerRadius(12)
-                            
-                            List {
-                                if (mediaType == .manga){
-                                    Picker("Status", selection: $mangaStatus) {
-                                        ForEach([MangaProgressStatus.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
-                                            Text(mangaSelection.displayName).tag(mangaSelection)
-                                        }
-                                    }
-                                }
-                                
-                                if (mediaType == .anime){
-                                    Picker("Status", selection: $animeStatus) {
-                                        ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
-                                            Text(animeSelection.displayName).tag(animeSelection)
-                                        }
-                                    }
-                                }
-                                
-                                Picker((mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
-                                    let chapterRange = endChapters > 0 ? 0...endChapters : 0...1000
-                                    ForEach(chapterRange, id: \.self) { chapter in
-                                        Text("\(chapter)").tag(chapter)
-                                    }
-                                }
-                                
-                                Picker("Rating", selection: $score) {
-                                    ForEach(0...10, id: \.self) { rating in
-                                        if let ratingValue = RatingValues(rawValue: rating) {
-                                            Text(ratingValue.displayName).tag(rating)
-                                        } else {
-                                            Text("Unknown")
-                                        }
-                                    }
-                                }
-                                
-                            }
-                            .listStyle(.plain)
-                            .scrollContentBackground(.hidden)
-                            .scrollBounceBehavior(.basedOnSize)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal)
                         
+                        AsyncImageView(imageUrl: media.node.images.large)
+                            .cornerRadius(12)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        
+                        
+                        List {
+                            if (mediaType == .manga){
+                                Picker("Status", selection: $mangaStatus) {
+                                    ForEach([MangaProgressStatus.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
+                                        Text(mangaSelection.displayName).tag(mangaSelection)
+                                    }
+                                }
+                            }
+                            
+                            if (mediaType == .anime){
+                                Picker("Status", selection: $animeStatus) {
+                                    ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
+                                        Text(animeSelection.displayName).tag(animeSelection)
+                                    }
+                                }
+                            }
+                            
+                            Picker((mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
+                                let chapterRange = endChapters > 0 ? 0...endChapters : 0...1000
+                                ForEach(chapterRange, id: \.self) { chapter in
+                                    Text("\(chapter)").tag(chapter)
+                                }
+                            }
+                            
+                            Picker("Rating", selection: $score) {
+                                ForEach(0...10, id: \.self) { rating in
+                                    if let ratingValue = RatingValues(rawValue: rating) {
+                                        Text(ratingValue.displayName).tag(rating)
+                                    } else {
+                                        Text("Unknown")
+                                    }
+                                }
+                            }
+                            
+                        }
+                        .scrollContentBackground(.hidden)
+                        .scrollBounceBehavior(.basedOnSize)
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                    )
                     .padding(.horizontal)
                     .frame(maxHeight: .infinity, alignment: .top)
                     .toolbar {
@@ -268,7 +262,7 @@ struct LibraryView: View {
                         }
                     }
                     .navigationBarTitleDisplayMode(.inline)
-                    .presentationDetents([.fraction(0.5)])
+                    .presentationDetents([.fraction(0.8)])
                     .presentationBackgroundInteraction(.disabled)
                     .presentationBackground(.regularMaterial)
                 }

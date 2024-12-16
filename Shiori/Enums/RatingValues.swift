@@ -15,7 +15,7 @@ enum RatingValues: Int, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .zero : return "No selection"
+        case .zero : return "Not rated yet"
         case .one: return "1 (Appalling)"
         case .two: return "2 (Horrible)"
         case .three: return "3 (Very bad)"

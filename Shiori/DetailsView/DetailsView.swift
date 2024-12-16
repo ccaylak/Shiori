@@ -1,5 +1,4 @@
 import SwiftUI
-import KeychainSwift
 
 struct DetailsView: View {
     
@@ -8,20 +7,22 @@ struct DetailsView: View {
     @State private var isSheetPresented = false
     
     @AppStorage("mediaType") private var mediaType = MediaType.manga
+    @AppStorage("accentColor") private var accentColor = AccentColor.blue
     
     @State private var mangaStatus = MangaProgressStatus.planToRead
     @State private var animeStatus = AnimeProgressStatus.planToWatch
     
-    @State private var score: Int = 0
+    @State private var rating: Int = 0
     @State private var progress: Int = 0
-    @State private var endChapters: Int = 0
+    @State private var end: Int = 0
     
     @State private var showAlert = false
+    
+    @StateObject private var tokenHandler: TokenHandler = .shared
     
     let animeController = AnimeController()
     let mangaController = MangaController()
     let profileController = ProfileController()
-    let keychain = KeychainSwift()
     
     var body: some View {
         NavigationStack {
@@ -37,18 +38,76 @@ struct DetailsView: View {
                         mediaType: mediaType
                     )
                 }
+                Group {
+                    if tokenHandler.isAuthenticated {
+                        VStack(alignment: .center, spacing: 15) {
+                            Text("Your statistics")
+                                .font(.subheadline)
+                                .bold()
+                            
+                            HStack(alignment: .center) {
+                                if !media.getListStatus.getStatus.isEmpty {
+                                    VStack {
+                                        Text("Rating")
+                                            .font(.caption)
+                                            .bold()
+                                        Label("\(media.getListStatus.getRating)", systemImage: "star.fill")
+                                            .accentColor(.primary)
+                                    }
+                                    Spacer()
+                                    VStack {
+                                        Text("Status")
+                                            .font(.caption)
+                                            .bold()
+                                        Label(media.getListStatus.getStatus, systemImage: progressIcon(status: media.getListStatus.getStatus))
+                                            .accentColor(.primary)
+                                    }
+                                    Spacer()
+                                    VStack {
+                                        Text(mediaType == .anime ? "Episodes" : "Chapters")
+                                            .font(.caption)
+                                            .bold()
+                                        Label(mediaType == .anime
+                                              ? "\(media.getListStatus.getWatchedEpisodes)/\(media.getEpisodes)"
+                                              : "\(media.getListStatus.getReadChapters)/\(media.getChapters)", systemImage: mediaType == .anime ? "tv.fill" : "book.pages")
+                                        .accentColor(.primary)
+                                    }
+                                } else {
+                                    Button("Add to \(mediaType == .anime ? "Watch" : "Reading") list") {
+                                        Task {
+                                            if (mediaType == .anime) {
+                                                try await profileController.addAnimeToWatchList(animeId: media.id, status: AnimeProgressStatus.planToWatch.rawValue)
+                                                media = try await animeController.fetchAnimeDetails(animeId: media.id)
+                                            }
+                                            if (mediaType == .manga) {
+                                                try await profileController.addMangaToReadingList(mangaId: media.id, status: MangaProgressStatus.planToRead.rawValue)
+                                                media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                                            }
+                                        }
+                                    }
+                                    .buttonStyle(.bordered)
+                                }
+                            }
+                        }
+                        .padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
+                        .background(Color.getByColorString(accentColor.rawValue).opacity(0.3))
+                        .cornerRadius(12)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        GroupBox {
+                            Text("Log in with your MyAnimeList account to see your \(mediaType.rawValue) progress, rating, and status.")
+                                .font(.body)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.leading)
+                        } label: {
+                            Label("Info", systemImage: "info.circle")
+                                .font(.headline)
+                        }
+                    }
+                }
+                
                 Divider()
-                RatingView(
-                    rating: media.getListStatus.getRating,
-                    status: media.getListStatus.getStatus,
-                    progress: (mediaType == .manga) ? media.getListStatus.getReadChapters : media.getListStatus.getWatchedEpisodes,
-                    total: (mediaType == .manga)
-                    ? String(media.getChapters)
-                    : String(media.getEpisodes),
-                    mediaType: mediaType.rawValue,
-                    loggedIn: keychain.get("accessToken") != "0"
-                )
-                Divider()
+                
                 GeneralInformationView(
                     type: media.getType,
                     episodes: media.getEpisodes,
@@ -94,187 +153,179 @@ struct DetailsView: View {
                     MoreImagesView(images: moreImages)
                 }
             }
+            .scrollIndicators(.hidden)
             .scrollClipDisabled()
             .navigationTitle(media.title)
             .padding(.horizontal)
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    isSheetPresented = true
-                }) {
-                    if (media.listStatus == nil) {
-                        Image(systemName: "star")
-                    } else {
-                        Image(systemName: "star.fill")
-                    }
-                        
-                }
-            }
-            ToolbarItem(placement: .confirmationAction) {
-                let escapedTitle = media.title.replacingOccurrences(of: " ", with: "_")
-                
-                if let url = URL(string: "https://myanimelist.net/\(mediaType.rawValue)/\(media.id)/\(escapedTitle)") {
-                    ShareLink(item: url) {
-                        Label("Share \(mediaType.rawValue.capitalized)", systemImage: "square.and.arrow.up")
-                    }
-                } else {
-                    Text("Invalid URL") // Optional: Fehlerhandling anzeigen
-                }
-            }
-
-
-        }
-        .sheet(isPresented: $isSheetPresented) {
-            if (keychain.get("accessToken") ?? "0" != "0") {
-                NavigationStack {
-                    VStack(alignment: .leading, spacing: 10) {
-                        HStack {
-                            Text(media.getType)
-                                .font(.subheadline)
-                                .bold()
-                            Text(media.title)
-                                .font(.subheadline)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        
-                        HStack(alignment: .top) {
-                            AsyncImageView(imageUrl: media.images.large)
-                                .frame(maxHeight: 180)
-                                .cornerRadius(12)
-                            
-                            List {
-                                if (mediaType == .manga){
-                                    Picker("Status", selection: $mangaStatus) {
-                                        ForEach([MangaProgressStatus.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
-                                            Text(mangaSelection.displayName).tag(mangaSelection)
-                                        }
-                                    }
-                                }
-                                
-                                if (mediaType == .anime){
-                                    Picker("Status", selection: $animeStatus) {
-                                        ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
-                                            Text(animeSelection.displayName).tag(animeSelection)
-                                        }
-                                    }
-                                }
-                                
-                                Picker((mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
-                                    let chapterRange = endChapters > 0 ? 0...endChapters : 0...1000
-                                    ForEach(chapterRange, id: \.self) { chapter in
-                                        Text("\(chapter)").tag(chapter)
-                                    }
-                                }
-                                
-                                Picker("Rating", selection: $score) {
-                                    ForEach(0...10, id: \.self) { rating in
-                                        if let ratingValue = RatingValues(rawValue: rating) {
-                                            Text(ratingValue.displayName).tag(rating)
-                                        } else {
-                                            Text("Unknown")
-                                        }
-                                    }
-                                }
-                                
-                            }
-                            .listStyle(.plain)
-                            .scrollContentBackground(.hidden)
-                            .scrollBounceBehavior(.basedOnSize)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal)
-                        
-                    }
-                    .background(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                    )
-                    .padding(.horizontal)
-                    .frame(maxHeight: .infinity, alignment: .top)
-                    .toolbar {
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Save") {
-                                Task {
-                                    if (mediaType == .manga) {
-                                        try await profileController.saveMangaProgress(mangaId: media.id, status: mangaStatus.rawValue, score: score, chapters: progress)
-                                        media = try await mangaController.fetchMangaDetails(mangaId: media.id)
-                                        isSheetPresented = false
-                                    }
-                                    if (mediaType == .anime) {
-                                        try await profileController.saveAnimeProgress(animeId: media.id, status: animeStatus.rawValue, score: score, episodes: progress)
-                                        media = try await animeController.fetchAnimeDetails(animeId: media.id)
-                                        isSheetPresented = false
-                                    }
-                                }
-                            }
-                        }
-                        ToolbarItem(placement: .principal) {
+            .toolbar {
+                if (!media.getListStatus.getStatus.isEmpty) {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            isSheetPresented = true
+                        }) {
                             Text("Edit")
                         }
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button(action: {
-                                showAlert = true
-                            }) {
-                                Label("Delete", systemImage: "trash")
-                                    .symbolRenderingMode(.palette)
-                                    .foregroundColor(.red)
-                            }
-                            .alert("Delete library entry", isPresented: $showAlert) {
-                                Button("Delete", role: .destructive) {
-                                    Task {
-                                        if(mediaType == .manga) {
-                                            try await profileController.deleteMangaListItem(mangaId: media.id)
-                                            media = try await mangaController.fetchMangaDetails(mangaId: media.id)
-                                        }
-                                        if(mediaType == .anime) {
-                                            try await profileController.deleteAnimeListItem(animeId: media.id)
-                                            media = try await animeController.fetchAnimeDetails(animeId: media.id)
-                                        }
-                                        showAlert = false
-                                        isSheetPresented = false
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    let escapedTitle = media.title.replacingOccurrences(of: " ", with: "_")
+                    
+                    if let url = URL(string: "https://myanimelist.net/\(mediaType.rawValue)/\(media.id)/\(escapedTitle)") {
+                        ShareLink(item: url) {
+                            Label("Share \(mediaType.rawValue.capitalized)", systemImage: "square.and.arrow.up")
+                        }
+                    } else {
+                        Text("Invalid URL")
+                    }
+                }
+                
+                
+            }
+            .sheet(isPresented: $isSheetPresented) {
+                if (tokenHandler.isAuthenticated) {
+                    NavigationStack {
+                        List {
+                            if (mediaType == .manga) {
+                                Picker("Status", selection: $mangaStatus) {
+                                    ForEach(MangaProgressStatus.allCases, id: \.self) { mangaSelection in
+                                        Text(mangaSelection.displayName).tag(mangaSelection)
                                     }
                                 }
-                                Button("Cancel", role: .cancel) {}
-                            } message: {
-                                Text("Are you sure you want to delete \(media.title) from your library?")
+                            }
+                            
+                            if (mediaType == .anime){
+                                Picker("Status", selection: $animeStatus) {
+                                    ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
+                                        Text(animeSelection.displayName).tag(animeSelection)
+                                    }
+                                }
+                            }
+                            
+                            Picker((mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
+                                let chapterRange = end > 0 ? 0...end : 0...1000
+                                ForEach(chapterRange, id: \.self) { chapter in
+                                    Text("\(chapter)").tag(chapter)
+                                }
+                            }
+                            
+                            Picker("Rating", selection: $rating) {
+                                ForEach(0...10, id: \.self) { rating in
+                                    if let ratingValue = RatingValues(rawValue: rating) {
+                                        Text(ratingValue.displayName).tag(rating)
+                                    } else {
+                                        Text("Unknown")
+                                    }
+                                }
+                            }
+                            
+                        }
+                        .scrollContentBackground(.hidden)
+                        .scrollBounceBehavior(.basedOnSize)
+                        .toolbar {
+                            ToolbarItem(placement: .primaryAction) {
+                                Button("Save") {
+                                    Task {
+                                        if (mediaType == .manga) {
+                                            try await profileController.saveMangaProgress(mangaId: media.id, status: mangaStatus.rawValue, score: rating, chapters: progress)
+                                            media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                                            isSheetPresented = false
+                                        }
+                                        if (mediaType == .anime) {
+                                            try await profileController.saveAnimeProgress(animeId: media.id, status: animeStatus.rawValue, score: rating, episodes: progress)
+                                            media = try await animeController.fetchAnimeDetails(animeId: media.id)
+                                            isSheetPresented = false
+                                        }
+                                    }
+                                }
+                            }
+                            ToolbarItem(placement: .principal) {
+                                Text(mediaType == .manga ? "Edit Reading Progress" : "Edit Watch Progress")
+                            }
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button(action: {
+                                    showAlert = true
+                                }) {
+                                    Label("Delete", systemImage: "trash")
+                                        .symbolRenderingMode(.palette)
+                                        .foregroundColor(.red)
+                                }
+                                .alert("Delete library entry", isPresented: $showAlert) {
+                                    Button("Delete", role: .destructive) {
+                                        Task {
+                                            if(mediaType == .manga) {
+                                                try await profileController.deleteMangaListItem(mangaId: media.id)
+                                                media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                                            }
+                                            if(mediaType == .anime) {
+                                                try await profileController.deleteAnimeListItem(animeId: media.id)
+                                                media = try await animeController.fetchAnimeDetails(animeId: media.id)
+                                            }
+                                            showAlert = false
+                                            isSheetPresented = false
+                                        }
+                                    }
+                                    Button("Cancel", role: .cancel) {}
+                                } message: {
+                                    Text("Are you sure you want to delete \(media.title) from your library?")
+                                }
                             }
                         }
+                        .navigationBarTitleDisplayMode(.inline)
+                        .presentationDetents([.fraction(0.4)])
+                        .presentationBackgroundInteraction(.disabled)
+                        .presentationBackground(.regularMaterial)
+                    }
+                }
+                else {
+                    GroupBox {
+                        Text("Log in with your MyAnimeList account to be able to edit \(media.title)'s progress, rating and progress status.")
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.leading)
+                    } label: {
+                        Label("Info", systemImage: "info.circle")
+                            .font(.headline)
                     }
                     .navigationBarTitleDisplayMode(.inline)
-                    .presentationDetents([.fraction(0.5)])
+                    .presentationDetents([.fraction(0.2)])
                     .presentationBackgroundInteraction(.disabled)
                     .presentationBackground(.regularMaterial)
                 }
             }
-            else {
-                GroupBox {
-                    Text("Log in with your MyAnimeList account to be able to edit \(media.title)'s progress, rating and progress status.")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.leading)
-                } label: {
-                    Label("Info", systemImage: "info.circle")
-                        .font(.headline)
-                }
-                .navigationBarTitleDisplayMode(.inline)
-                .presentationDetents([.fraction(0.2)])
-                .presentationBackgroundInteraction(.disabled)
-                .presentationBackground(.regularMaterial)
-            }
         }
         .onAppear {
             Task {
-                if (mediaType == .anime){
+                if (mediaType == .anime) {
                     media = try await animeController.fetchAnimeDetails(animeId: media.id)
-                    print(media)
+                    if let validStatus = AnimeProgressStatus(rawValue: media.getListStatus.getStatus) {
+                        animeStatus = validStatus
+                    }
+                    progress = media.getListStatus.getWatchedEpisodes
+                    rating = media.getListStatus.getRating
+                    end = media.getEpisodes
                 }
                 
                 if(mediaType == .manga) {
                     media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                    if let validStatus = MangaProgressStatus(rawValue: media.getListStatus.getStatus) {
+                        mangaStatus = validStatus
+                    }
+                    progress = media.getListStatus.getReadChapters
+                    rating = media.getListStatus.getRating
+                    end = media.getChapters
                 }
             }
+        }
+    }
+    private func progressIcon(status: String) -> String {
+        switch status {
+        case "completed": return "checkmark"
+        case "watching": return "play.fill"
+        case "reading": return "book.fill"
+        case "on_hold": return "pause.fill"
+        case "plan_to_watch", "plan_to_read": return "calendar"
+        case "dropped": return "trash.fill"
+        default: return "questionmark"
         }
     }
 }

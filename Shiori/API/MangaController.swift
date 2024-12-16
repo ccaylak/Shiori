@@ -10,6 +10,30 @@ class MangaController {
     private let apiKey = Config.apiKey
     private let keychain = KeychainSwift()
     
+    func addMangaToWatchList(mangaId: Int, status: String) async throws {
+        let urlComponents = URLComponents(string: "\(baseURL)/manga/\(mangaId)/my_list_status")
+        guard let url = urlComponents?.url else {
+            throw URLError(.badURL)
+        }
+
+        let parameters = ["status": status]
+        let bodyData = parameters
+            .map { "\($0.key)=\($0.value)" }
+            .joined(separator: "&")
+            .data(using: .utf8)
+
+        guard let bodyData else {
+            print("Failed to encode body string")
+            throw URLError(.cannotDecodeRawData)
+        }
+
+        var request = buildRequest(url: url, httpMethod: "PUT")
+        request.httpBody = bodyData
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        _ = try await URLSession.shared.data(for: request)
+    }
+    
     func fetchMangaDetails(mangaId: Int) async throws -> Media {
         var components = URLComponents(string: "\(baseURL)/manga/\(mangaId)")!
         
@@ -21,7 +45,7 @@ class MangaController {
             throw URLError(.badURL)
         }
         
-        let request = buildRequest(url: url)
+        let request = buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         return try JSONDecoder().decode(Media.self, from: data)
     }
@@ -38,7 +62,7 @@ class MangaController {
             throw URLError(.badURL)
         }
         
-        let request = buildRequest(url: url)
+        let request = buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         return try JSONDecoder().decode(MediaResponse.self, from: data)
     }
@@ -55,7 +79,7 @@ class MangaController {
             throw URLError(.badURL)
         }
         
-        let request = buildRequest(url: url)
+        let request = buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         return try JSONDecoder().decode(MediaResponse.self, from: data)
     }
@@ -65,14 +89,14 @@ class MangaController {
             throw URLError(.badURL)
         }
         
-        let request = buildRequest(url: url)
+        let request = buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         return try JSONDecoder().decode(MediaResponse.self, from: data)
     }
     
-    private func buildRequest(url: URL) -> URLRequest {
+    private func buildRequest(url: URL, httpMethod: String) -> URLRequest {
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = httpMethod
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if let accessToken = keychain.get("accessToken"), !accessToken.isEmpty {
