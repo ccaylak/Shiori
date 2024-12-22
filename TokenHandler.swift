@@ -1,13 +1,12 @@
 import Foundation
 import KeychainSwift
 
-@MainActor
-class TokenHandler: ObservableObject {
+@MainActor class TokenHandler: ObservableObject {
     static let shared = TokenHandler()
 
     private let keychain = KeychainSwift()
 
-    private var accessToken: String?
+    private(set) var accessToken: String?
     @Published private(set) var isAuthenticated: Bool = false
 
     private init() {
@@ -32,10 +31,6 @@ class TokenHandler: ObservableObject {
         keychain.set(tokenString, forKey: "accessToken")
         accessToken = tokenString
         isAuthenticated = true
-    }
-
-    func getToken() -> String? {
-        return accessToken
     }
 
     func revokeToken() {
