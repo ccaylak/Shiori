@@ -7,7 +7,7 @@ struct ResultView: View {
     private let profileController = ProfileController()
     
     @State var mediaResponse = MediaResponse(results: [], page: MediaResponse.Paging(next: ""))
-    @State private var searchTerm = ""
+    @State private var searchTerm: String = ""
     @State private var isLoading = false
     
     @AppStorage("mediaType") private var mediaType = MediaType.manga
@@ -38,7 +38,7 @@ struct ResultView: View {
                             guard !isLoading else { return }
                             isLoading = true
                             do {
-                                let newMediaResponse = try await profileController.loadNextPage(nextPage)
+                                let newMediaResponse = try await profileController.fetchNextPage(nextPage)
                                 mediaResponse.results.append(contentsOf: newMediaResponse.results)
                                 mediaResponse.page = newMediaResponse.page
                             } catch {
@@ -68,56 +68,54 @@ struct ResultView: View {
         .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))
         .onSubmit(of: .search) {
             Task {
-                await loadPreviews(for: searchTerm)
+                await loadMediaData()
             }
         }
         .onAppear {
             Task {
-                await loadRankings()
+                await loadMediaData()
             }
         }
         .onChange(of: animeRankingType) {
             Task {
-                await loadRankings()
+                await loadMediaData()
             }
         }
         .onChange(of: mangaRankingType) {
             Task {
-                await loadRankings()
+                await loadMediaData()
             }
         }
         .onChange(of: mediaType) {
             Task {
-                await loadRankings()
+                await loadMediaData()
             }
         }
     }
     
-    private func loadRankings() async {
+    private func loadMediaData() async {
+        isLoading = true
         do {
             switch mediaType {
             case .anime:
-                mediaResponse = try await animeController.fetchAnimeRankings(result: result, by: animeRankingType)
+                mediaResponse = try await animeController.fetchPreviews(
+                    searchTerm: searchTerm,
+                    by: animeRankingType,
+                    result: result
+                )
             case .manga:
-                mediaResponse = try await mangaController.fetchMangaRankings(result: result, by: mangaRankingType)
+                mediaResponse = try await mangaController.fetchPreviews(
+                    searchTerm: searchTerm,
+                    by: mangaRankingType,
+                    result: result
+                )
             }
         } catch {
-            print("Loading rankings failed: \(error.localizedDescription)")
+            print("Loading media data failed: \(error.localizedDescription)")
         }
+        isLoading = false
     }
     
-    private func loadPreviews(for searchTerm: String) async {
-        do {
-            switch mediaType {
-            case .anime:
-                mediaResponse = try await animeController.fetchAnimePreviews(searchTerm: searchTerm, result: result)
-            case .manga:
-                mediaResponse = try await mangaController.fetchMangaPreviews(searchTerm: searchTerm, result: result)
-            }
-        } catch {
-            print("Fehler beim Laden der Previews: \(error.localizedDescription)")
-        }
-    }
 }
 
 #Preview {

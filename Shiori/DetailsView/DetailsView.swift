@@ -22,7 +22,6 @@ struct DetailsView: View {
     
     let animeController = AnimeController()
     let mangaController = MangaController()
-    let profileController = ProfileController()
     
     var body: some View {
         NavigationStack {
@@ -76,12 +75,12 @@ struct DetailsView: View {
                                     Button("Add to \(mediaType == .anime ? "Watch" : "Reading") list") {
                                         Task {
                                             if (mediaType == .anime) {
-                                                try await profileController.addAnimeToWatchList(animeId: media.id, status: AnimeProgressStatus.planToWatch.rawValue)
-                                                media = try await animeController.fetchAnimeDetails(animeId: media.id)
+                                                try await animeController.addToWatchList(id: media.id)
+                                                media = try await animeController.fetchDetails(id: media.id)
                                             }
                                             if (mediaType == .manga) {
-                                                try await profileController.addMangaToReadingList(mangaId: media.id, status: MangaProgressStatus.planToRead.rawValue)
-                                                media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                                                try await mangaController.addToReadingList(id: media.id)
+                                                media = try await mangaController.fetchDetails(id: media.id)
                                             }
                                         }
                                     }
@@ -226,13 +225,13 @@ struct DetailsView: View {
                                 Button("Save") {
                                     Task {
                                         if (mediaType == .manga) {
-                                            try await profileController.saveMangaProgress(mangaId: media.id, status: mangaStatus.rawValue, score: rating, chapters: progress)
-                                            media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                                            try await mangaController.saveProgress(id: media.id, status: mangaStatus.rawValue, score: rating, chapters: progress)
+                                            media = try await mangaController.fetchDetails(id: media.id)
                                             isSheetPresented = false
                                         }
                                         if (mediaType == .anime) {
-                                            try await profileController.saveAnimeProgress(animeId: media.id, status: animeStatus.rawValue, score: rating, episodes: progress)
-                                            media = try await animeController.fetchAnimeDetails(animeId: media.id)
+                                            try await animeController.saveProgress(id: media.id, status: animeStatus.rawValue, score: rating, episodes: progress)
+                                            media = try await animeController.fetchDetails(id: media.id)
                                             isSheetPresented = false
                                         }
                                     }
@@ -253,12 +252,12 @@ struct DetailsView: View {
                                     Button("Delete", role: .destructive) {
                                         Task {
                                             if(mediaType == .manga) {
-                                                try await profileController.deleteMangaListItem(mangaId: media.id)
-                                                media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                                                try await mangaController.deleteEntry(id: media.id)
+                                                media = try await mangaController.fetchDetails(id: media.id)
                                             }
                                             if(mediaType == .anime) {
-                                                try await profileController.deleteAnimeListItem(animeId: media.id)
-                                                media = try await animeController.fetchAnimeDetails(animeId: media.id)
+                                                try await animeController.deleteEntry(id: media.id)
+                                                media = try await animeController.fetchDetails(id: media.id)
                                             }
                                             showAlert = false
                                             isSheetPresented = false
@@ -296,7 +295,7 @@ struct DetailsView: View {
         .onAppear {
             Task {
                 if (mediaType == .anime) {
-                    media = try await animeController.fetchAnimeDetails(animeId: media.id)
+                    media = try await animeController.fetchDetails(id: media.id)
                     if let validStatus = AnimeProgressStatus(rawValue: media.getListStatus.getStatus) {
                         animeStatus = validStatus
                     }
@@ -306,7 +305,7 @@ struct DetailsView: View {
                 }
                 
                 if(mediaType == .manga) {
-                    media = try await mangaController.fetchMangaDetails(mangaId: media.id)
+                    media = try await mangaController.fetchDetails(id: media.id)
                     if let validStatus = MangaProgressStatus(rawValue: media.getListStatus.getStatus) {
                         mangaStatus = validStatus
                     }

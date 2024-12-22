@@ -42,7 +42,7 @@ struct StatisticsView: View {
             }
         }
         .padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
-        .background(Color.gray)
+        .background(Color.gray.opacity(0.15))
         .cornerRadius(12)
     }
 }
