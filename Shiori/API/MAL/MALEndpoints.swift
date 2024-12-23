@@ -28,7 +28,7 @@ struct MALEndpoints {
         static func update(id: Int) -> String {
             "\(mangaURL)/\(id)/my_list_status"
         }
-        static let library = "\(baseURL)/users/@me/animelist"
+        static let library = "\(baseURL)/users/@me/mangalist"
     }
     
     struct Profile {

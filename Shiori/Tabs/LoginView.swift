@@ -15,6 +15,8 @@ struct LoginView: View {
     @State private var mangasOnHold: Int?
     @State private var mangasPlanToRead: Int?
     
+    @State private var isAuthenticating: Bool = false
+    
     private var profileController = ProfileController()
     
     @StateObject private var tokenHandler: TokenHandler = .shared
@@ -136,12 +138,14 @@ struct LoginView: View {
                         
                         Button(action: {
                             Task {
+                                isAuthenticating = true
                                 do {
                                     let urlWithToken = try await webAuthenticationSession.authenticate(using: generateLoginUrl()!, callbackURLScheme: "yourapp", preferredBrowserSession: .shared)
                                     await signIn(using: urlWithToken)
                                 } catch {
                                     print("Authentication failed: \(error)")
                                 }
+                                isAuthenticating = false
                             }
                         }) {
                             Text("Log in with MyAnimeList")
@@ -149,6 +153,14 @@ struct LoginView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
+                        .disabled(isAuthenticating)
+                        .overlay {
+                            if isAuthenticating {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            }
+                        }
                         
                         Text("To use these features, you can create an account at MyAnimeList.net.")
                             .font(.footnote)
