@@ -221,12 +221,15 @@ struct LibraryView: View {
             .sheet(item: $selectedMedia) { media in
                 NavigationStack {
                     VStack(alignment: .leading, spacing: 10) {
-                        AsyncImageView(imageUrl: media.node.images.large)
-                            .cornerRadius(12)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        
-                        
                         List {
+                            VStack {
+                                AsyncImageView(imageUrl: media.node.images.large)
+                                    .frame(width: 146, height: 230)
+                                    .cornerRadius(12)
+                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            
                             if (mediaType == .manga){
                                 Picker("Status", selection: $mangaStatus) {
                                     ForEach([MangaProgressStatus.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in

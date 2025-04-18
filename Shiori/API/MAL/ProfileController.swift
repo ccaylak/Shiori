@@ -3,25 +3,7 @@ import SwiftUI
 
 @MainActor class ProfileController {
     
-    func fetchMangaStatistics (status: String) async throws -> Int {
-        var components = URLComponents(string: MALEndpoints.Manga.library)!
-        components.queryItems = [
-            URLQueryItem(name: "status", value: status)
-        ]
-        
-        guard let url = components.url else {
-            throw URLError(.badURL)
-        }
-        
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
-        let (data, _) = try await URLSession.shared.data(for: request)
-        
-        if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let dataArray = json["data"] as? [[String: Any]] {
-            return dataArray.count
-        }
-        throw NSError(domain: "InvalidResponse", code: -1, userInfo: nil)
-    }
+    private var malService: MALService = .shared
     
     func fetchUserProfile() async throws -> ProfileDetails {
         var components = URLComponents(string: MALEndpoints.Profile.information)!
@@ -34,7 +16,14 @@ import SwiftUI
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
-        let (data, _) = try await URLSession.shared.data(for: request)
+        var (data, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (data, response) = try await URLSession.shared.data(for: request)
+        }
+        
         return try JSONDecoder().decode(ProfileDetails.self, from: data)
     }
     
@@ -44,7 +33,13 @@ import SwiftUI
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
-        let (data, _) = try await URLSession.shared.data(for: request)
+        var (data, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (data, response) = try await URLSession.shared.data(for: request)
+        }
         return try JSONDecoder().decode(MediaResponse.self, from: data)
     }
 }

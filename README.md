@@ -1,4 +1,4 @@
-# MALytics
+# Shiori
 
 A free and modern anime/manga application for iOS, powered by the MyAnimeList.net API.
 
@@ -82,6 +82,46 @@ A free and modern anime/manga application for iOS, powered by the MyAnimeList.ne
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## Privacy Policy
+
+**Shiori** respects your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, and protect your data while using the app.
+
+### Data Collection
+
+**Shiori** uses the publicly available [MyAnimeList.net API](https://myanimelist.net) to fetch anime and manga data. This data includes information like titles, cover images, release dates, and other public details, which are displayed within the app. The app does not collect any personal information from its users beyond what is necessary for authentication.
+
+### User Authentication Data
+
+To provide personalized features (such as user libraries), **Shiori** allows users to authenticate using their MyAnimeList account. Authentication tokens (such as OAuth tokens) are stored securely on your device to manage your session and enable login/logout functionality. These tokens are not shared with third parties and are only used locally for the purpose of authenticating requests to the MyAnimeList API.
+
+### Data Storage
+
+All data retrieved from the MyAnimeList API (such as anime/manga information) is displayed within the app and is not stored on any external servers. The app does not store any of this data beyond the local cache used for displaying content while offline. 
+
+Your preferences and library data (such as scores, episodes, and chapters) are also stored locally on your device. **Shiori** does not collect or store any personal data on remote servers.
+
+### Third-Party Services
+
+**Shiori** does not integrate third-party analytics, advertising, or data collection services. Your usage of the app is not tracked by any third-party entities.
+
+### Data Sharing
+
+As **Shiori** does not collect or store any personal information, there is no data shared with any third parties. The only data shared with external services is via requests made to the MyAnimeList API for fetching public data.
+
+### Security
+
+Your authentication tokens and other local data are securely stored on your device. The app relies on the security features provided by iOS to protect this data.
+
+### Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time. Any changes will be reflected within the app's Privacy Policy section.
+
+### Contact
+
+If you have any questions or concerns about this Privacy Policy, feel free to contact us at: [support@shioriapp.com]
 
 ---
 

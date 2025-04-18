@@ -42,9 +42,11 @@ struct MediaView: View {
     var body: some View {
         HStack(spacing: 20) {
             AsyncImageView(imageUrl: image)
-                .frame(height: 100)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(width: 70, height: 110)
+                .clipped()
+                .cornerRadius(12)
                 .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
+                
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)

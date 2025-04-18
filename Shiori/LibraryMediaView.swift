@@ -33,8 +33,9 @@ struct LibraryMediaView: View {
     var body: some View {
         HStack(spacing: 20) {
             AsyncImageView(imageUrl: image)
-                .frame(height: 100)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(width: 70, height: 110)
+                .clipped()
+                .cornerRadius(12)
                 .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
             
             VStack(alignment: .leading, spacing: 5) {
@@ -108,7 +109,7 @@ struct LibraryMediaView: View {
 #Preview {
     LibraryMediaView(
         title: "Tokyo Ghoul",
-        image: "test",
+        image: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg",
         releaseYear: "2020-01-01",
         type: "manga",
         rating: 4,

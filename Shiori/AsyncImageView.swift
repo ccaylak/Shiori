@@ -1,21 +1,21 @@
 import SwiftUI
+import NukeUI
 
 struct AsyncImageView: View {
     let imageUrl: String
 
     var body: some View {
-        AsyncImage(url: URL(string: imageUrl)) { phase in
-            
+        LazyImage(url: URL(string: imageUrl)) { phase in
             if let image = phase.image {
                 image
                     .resizable()
-                    .scaledToFit()
-                    .clipped()
+                    .aspectRatio(contentMode: .fill)
             } else if phase.error != nil {
                 Text("There was an error loading the image.")
                     .foregroundColor(.red)
             } else {
-                ProgressView()
+                Rectangle()
+                    .fill(Color.gray)
             }
         }
     }

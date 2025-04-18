@@ -65,9 +65,9 @@ struct CoverImage: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             AsyncImageView(imageUrl: imageUrl)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(width: 159, height: 250)
                 .cornerRadius(12)
-                .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
+                .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
         }
         .overlay(alignment: .topTrailing) {
             ScoreBadge(score: score)

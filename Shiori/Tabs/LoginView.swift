@@ -9,103 +9,99 @@ struct LoginView: View {
     
     @State private var profileDetails: ProfileDetails?
     
-    @State private var mangasCompleted: Int?
-    @State private var mangasReading: Int?
-    @State private var mangasDropped: Int?
-    @State private var mangasOnHold: Int?
-    @State private var mangasPlanToRead: Int?
+    @State private var animeStatistics: JikanResponse.AnimeManga.AnimeStatistics?
+    @State private var mangaStatistics: JikanResponse.AnimeManga.MangaStatistics?
     
     @State private var isAuthenticating: Bool = false
     
+    private var jikanProfileController = JikanProfileController()
     private var profileController = ProfileController()
     
     @StateObject private var tokenHandler: TokenHandler = .shared
+    private var malService: MALService = .shared
     
     var body: some View {
         NavigationStack {
             VStack (alignment: .leading, spacing: 30) {
                 if tokenHandler.isAuthenticated {
-                    HStack(alignment: .center, spacing: 12) {
-                        AsyncImageView(imageUrl: profileDetails?.profilePicture ?? "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg")
-                            .scaledToFill()
-                            .frame(width: 80, height: 80)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                            )
-                            .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
-                        
-                        VStack(alignment: .leading, spacing: 6) {
-                            if let name = profileDetails?.name {
-                                Text(name)
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                            }
-                            
-                            if let birthDate = profileDetails?.birthDate {
-                                HStack {
-                                    Text("Birthdate:")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                    Text(String.formatDateStringWithLocale(birthDate, fromFormat: "yyyy-MM-dd")!)
-                                        .font(.subheadline)
+                    Form {
+                        HStack(alignment: .center, spacing: 20) {
+                            AsyncImageView(imageUrl: profileDetails?.profilePicture ?? "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg")
+                                .frame(width: 80, height: 100)
+                                .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                                )
+                            VStack(alignment: .leading, spacing: 6) {
+                                if let name = profileDetails?.name {
+                                    Text(name)
+                                        .font(.headline)
                                         .foregroundColor(.primary)
                                 }
-                            }
-                            
-                            if let gender = profileDetails?.gender {
-                                HStack {
-                                    Text("Gender:")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                    Text(gender.capitalized)
-                                        .font(.subheadline)
-                                        .foregroundColor(.primary)
+                                
+                                if let birthDate = profileDetails?.birthDate {
+                                    HStack {
+                                        Text("Birthdate:")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Text(String.formatDateStringWithLocale(birthDate, fromFormat: "yyyy-MM-dd")!)
+                                            .font(.subheadline)
+                                            .foregroundColor(.primary)
+                                    }
                                 }
-                            }
-                            
-                            if let joinDate = profileDetails?.joinDate {
-                                HStack {
-                                    Text("Join Date:")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                    Text(String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ")!)
-                                        .font(.subheadline)
-                                        .foregroundColor(.primary)
+                                
+                                if let gender = profileDetails?.gender {
+                                    HStack {
+                                        Text("Gender:")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Text(gender.capitalized)
+                                            .font(.subheadline)
+                                            .foregroundColor(.primary)
+                                    }
                                 }
-                            }
-                            
-                            if let location = profileDetails?.location {
-                                HStack {
-                                    Text("Location:")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                    Text(location)
-                                        .font(.subheadline)
-                                        .foregroundColor(.primary)
+                                
+                                if let joinDate = profileDetails?.joinDate {
+                                    HStack {
+                                        Text("Join Date:")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Text(String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ")!)
+                                            .font(.subheadline)
+                                            .foregroundColor(.primary)
+                                    }
+                                }
+                                
+                                if let location = profileDetails?.location {
+                                    HStack {
+                                        Text("Location:")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Text(location)
+                                            .font(.subheadline)
+                                            .foregroundColor(.primary)
+                                    }
                                 }
                             }
                         }
-                    }
-                    .padding(.horizontal)
-                    Form {
+                        
                         let animeStatistics = [
-                            Statistics(title: "Completed", value: profileDetails?.animeStatistics?.completed ?? 0),
-                            Statistics(title: "Watching", value: profileDetails?.animeStatistics?.watching ?? 0),
-                            Statistics(title: "On hold", value: profileDetails?.animeStatistics?.onHold ?? 0),
-                            Statistics(title: "Dropped", value: profileDetails?.animeStatistics?.dropped ?? 0),
-                            Statistics(title: "Plan to watch", value: profileDetails?.animeStatistics?.planToWatch ?? 0),
+                            Statistics(title: "Completed", value: animeStatistics?.completed ?? 0),
+                            Statistics(title: "Watching", value: animeStatistics?.watching ?? 0),
+                            Statistics(title: "On hold", value: animeStatistics?.onHold ?? 0),
+                            Statistics(title: "Dropped", value: animeStatistics?.dropped ?? 0),
+                            Statistics(title: "Plan to watch", value: animeStatistics?.planToWatch ?? 0),
                         ]
                         
                         UserStatistics(title: "Anime statistics", statisticsValues: animeStatistics)
                         
                         let mangaStatistics = [
-                            Statistics(title: "Completed", value: mangasCompleted ?? 0),
-                            Statistics(title: "Reading", value: mangasReading ?? 0),
-                            Statistics(title: "On hold", value: mangasOnHold ?? 0),
-                            Statistics(title: "Dropped", value: mangasDropped ?? 0),
-                            Statistics(title: "Planned to read", value: mangasPlanToRead ?? 0),
+                            Statistics(title: "Completed", value: mangaStatistics?.completed ?? 0),
+                            Statistics(title: "Reading", value: mangaStatistics?.reading ?? 0),
+                            Statistics(title: "On hold", value: mangaStatistics?.onHold ?? 0),
+                            Statistics(title: "Dropped", value: mangaStatistics?.dropped ?? 0),
+                            Statistics(title: "Planned to read", value: mangaStatistics?.planToRead ?? 0),
                         ]
                         
                         UserStatistics(title: "Manga statistics", statisticsValues: mangaStatistics)
@@ -113,13 +109,12 @@ struct LoginView: View {
                     }
                     .onAppear {
                         Task {
-                            profileDetails = try await profileController.fetchUserProfile()
-                            mangasCompleted = try await profileController.fetchMangaStatistics(status: "completed")
-                            mangasReading = try await profileController.fetchMangaStatistics(status: "reading")
-                            mangasDropped = try await profileController.fetchMangaStatistics(status: "dropped")
-                            mangasOnHold = try await profileController.fetchMangaStatistics(status: "on_hold")
-                            mangasPlanToRead = try await profileController.fetchMangaStatistics(status: "plan_to_read")
-                            
+                                profileDetails = try await profileController.fetchUserProfile()
+                                
+                                let response = try await jikanProfileController.fetchProfileStatistics(username: profileDetails?.name ?? "test")
+                                
+                                animeStatistics = response.data.anime
+                                mangaStatistics = response.data.manga
                         }
                     }
                 }
@@ -262,10 +257,8 @@ struct LoginView: View {
             
             let content = try JSONDecoder().decode(TokenResponse.self, from: data)
             
-            let accessToken = content.accessToken
-            let accessTokenData = Data(accessToken.utf8)
-            
-            tokenHandler.setToken(accessTokenData)
+            tokenHandler.setRefreshToken(Data(content.refreshToken.utf8))
+            tokenHandler.setToken(Data(content.accessToken.utf8))
         } catch {
             print("Error during sign-in: \(error)")
         }

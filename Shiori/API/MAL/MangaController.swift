@@ -3,6 +3,8 @@ import SwiftUI
 
 @MainActor class MangaController {
     
+    private var malService: MALService = .shared
+    
     func saveProgress(id: Int, status: String, score: Int, chapters: Int) async throws {
         let url = URL(string: MALEndpoints.Manga.update(id: id))!
         
@@ -18,7 +20,13 @@ import SwiftUI
         request.httpBody = formBody.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
-        _ = try await URLSession.shared.data(for: request)
+        var (_, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (_, response) = try await URLSession.shared.data(for: request)
+        }
     }
     
     func addToReadingList(id: Int) async throws {
@@ -37,7 +45,13 @@ import SwiftUI
         request.httpBody = formBody.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
-        _ = try await URLSession.shared.data(for: request)
+        var (_, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (_, response) = try await URLSession.shared.data(for: request)
+        }
     }
     
     func fetchDetails(id: Int) async throws -> Media {
@@ -52,7 +66,14 @@ import SwiftUI
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        var (data, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (data, response) = try await URLSession.shared.data(for: request)
+        }
         return try JSONDecoder().decode(Media.self, from: data)
     }
     
@@ -76,7 +97,13 @@ import SwiftUI
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
-        let (data, _) = try await URLSession.shared.data(for: request)
+        var (data, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (data, response) = try await URLSession.shared.data(for: request)
+        }
         return try JSONDecoder().decode(MediaResponse.self, from: data)
     }
     
@@ -95,7 +122,13 @@ import SwiftUI
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
-        let (data, _) = try await URLSession.shared.data(for: request)
+        var (data, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (data, response) = try await URLSession.shared.data(for: request)
+        }
         
         return try JSONDecoder().decode(LibraryResponse.self, from: data)
     }
@@ -108,6 +141,12 @@ import SwiftUI
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "DELETE")
-        _ = try await URLSession.shared.data(for: request)
+        
+        var (_, response) = try await URLSession.shared.data(for: request)
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (_, response) = try await URLSession.shared.data(for: request)
+        }
     }
 }

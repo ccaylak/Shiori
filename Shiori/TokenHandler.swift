@@ -7,6 +7,7 @@ import KeychainSwift
     private let keychain = KeychainSwift()
 
     private(set) var accessToken: String?
+    private(set) var refreshToken: String?
     @Published private(set) var isAuthenticated: Bool = false
 
     private init() {
@@ -20,7 +21,7 @@ import KeychainSwift
         } else {
             isAuthenticated = false
         }
-    }
+    } 
 
     func setToken(_ token: Data) {
         guard let tokenString = String(data: token, encoding: .utf8) else {
@@ -31,6 +32,16 @@ import KeychainSwift
         keychain.set(tokenString, forKey: "accessToken")
         accessToken = tokenString
         isAuthenticated = true
+    }
+    
+    func setRefreshToken(_ token: Data) {
+        guard let tokenString = String(data: token, encoding: .utf8) else {
+            print("Fehler beim Umwandeln des Tokens in String")
+            return
+        }
+        
+        keychain.set(tokenString, forKey: "refreshToken")
+        refreshToken = tokenString
     }
 
     func revokeToken() {

@@ -7,16 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F33F4D912D0849DF00BCFDD1 /* TokenHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33F4D902D0849DF00BCFDD1 /* TokenHandler.swift */; };
+		F36329482D94AD1300329F11 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = F36329472D94AD1300329F11 /* NukeUI */; };
 		F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37EA6182CFFC19700CD994E /* KeychainSwift */; };
-		F37EA6922D01A6CE00CD994E /* LibraryMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37EA6912D01A6CE00CD994E /* LibraryMediaView.swift */; };
 		F3DE62ED2CF140BC00CD77EF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F3DE62EC2CF140BC00CD77EF /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F33F4D902D0849DF00BCFDD1 /* TokenHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenHandler.swift; sourceTree = "<group>"; };
 		F365CCE32CE74B3F0027F040 /* Shiori.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shiori.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F37EA6912D01A6CE00CD994E /* LibraryMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMediaView.swift; sourceTree = "<group>"; };
 		F3DE62EC2CF140BC00CD77EF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -47,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */,
+				F36329482D94AD1300329F11 /* NukeUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,8 +54,6 @@
 		F365CCDA2CE74B3F0027F040 = {
 			isa = PBXGroup;
 			children = (
-				F33F4D902D0849DF00BCFDD1 /* TokenHandler.swift */,
-				F37EA6912D01A6CE00CD994E /* LibraryMediaView.swift */,
 				F3DE62EC2CF140BC00CD77EF /* README.md */,
 				F365CCE52CE74B3F0027F040 /* Shiori */,
 				F365CCE42CE74B3F0027F040 /* Products */,
@@ -93,6 +89,7 @@
 			name = Shiori;
 			packageProductDependencies = (
 				F37EA6182CFFC19700CD994E /* KeychainSwift */,
+				F36329472D94AD1300329F11 /* NukeUI */,
 			);
 			productName = MALytics;
 			productReference = F365CCE32CE74B3F0027F040 /* Shiori.app */;
@@ -124,6 +121,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				F37EA6172CFFC19700CD994E /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				F36329462D94AA4700329F11 /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F365CCE42CE74B3F0027F040 /* Products */;
@@ -151,8 +149,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F33F4D912D0849DF00BCFDD1 /* TokenHandler.swift in Sources */,
-				F37EA6922D01A6CE00CD994E /* LibraryMediaView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +380,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F36329462D94AA4700329F11 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.8.0;
+			};
+		};
 		F37EA6172CFFC19700CD994E /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
@@ -395,6 +399,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F36329472D94AD1300329F11 /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F36329462D94AA4700329F11 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
+		};
 		F37EA6182CFFC19700CD994E /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F37EA6172CFFC19700CD994E /* XCRemoteSwiftPackageReference "keychain-swift" */;

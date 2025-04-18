@@ -15,9 +15,7 @@ struct RelatedMediaView: View {
                             VStack(alignment: .center) {
                                 Text(relatedMedia.getRelationType)
                                 AsyncImageView(imageUrl: relatedMedia.node.images.large)
-                                    .aspectRatio(contentMode: .fit)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .cornerRadius(12)
                             }
                             .padding(8)
                             .background(Color.gray.opacity(0.15))

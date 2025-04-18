@@ -17,7 +17,7 @@ struct DetailsView: View {
     @State private var end: Int = 0
     
     @State private var showAlert = false
-    @State private var isLoading = false  // Neue State-Variable
+    @State private var isLoading = false
 
     @StateObject private var tokenHandler: TokenHandler = .shared
     
