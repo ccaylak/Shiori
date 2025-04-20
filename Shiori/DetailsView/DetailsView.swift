@@ -149,11 +149,6 @@ struct DetailsView: View {
                     
                     if let recommendations = media.recommendations, !recommendations.isEmpty {
                         RecommendationsView(recommendations: recommendations)
-                        Divider()
-                    }
-                    
-                    if let moreImages = media.moreImages, moreImages.count >= 3 {
-                        MoreImagesView(images: moreImages)
                     }
                 }
                 .scrollIndicators(.hidden)

@@ -18,7 +18,6 @@ import Foundation
         
         let content = try JSONDecoder().decode(TokenResponse.self, from: data)
         
-        tokenHandler.setToken(Data(content.accessToken.utf8))
-        tokenHandler.setRefreshToken(Data(content.refreshToken.utf8))
+        tokenHandler.setTokens(from: content)
     }
 }

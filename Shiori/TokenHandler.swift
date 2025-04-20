@@ -11,42 +11,41 @@ import KeychainSwift
     @Published private(set) var isAuthenticated: Bool = false
 
     private init() {
-        populateAccess()
+        loadTokens()
     }
 
-    private func populateAccess() {
-        if let token = keychain.get("accessToken") {
+    private func loadTokens() {
+        if let token = keychain.get("accessToken"),
+           let refresh = keychain.get("refreshToken") {
             accessToken = token
+            refreshToken = refresh
             isAuthenticated = true
         } else {
             isAuthenticated = false
         }
-    } 
+    }
 
-    func setToken(_ token: Data) {
-        guard let tokenString = String(data: token, encoding: .utf8) else {
-            print("Fehler beim Umwandeln des Tokens in String")
+    func setTokens(from content: TokenResponse) {
+        guard let accessString = String(data: Data(content.accessToken.utf8), encoding: .utf8),
+              let refreshString = String(data: Data(content.refreshToken.utf8), encoding: .utf8) else {
+            print("Fehler beim Umwandeln der Tokens in String")
             return
         }
 
-        keychain.set(tokenString, forKey: "accessToken")
-        accessToken = tokenString
+        keychain.set(accessString, forKey: "accessToken")
+        keychain.set(refreshString, forKey: "refreshToken")
+
+        accessToken = accessString
+        refreshToken = refreshString
+
         isAuthenticated = true
     }
-    
-    func setRefreshToken(_ token: Data) {
-        guard let tokenString = String(data: token, encoding: .utf8) else {
-            print("Fehler beim Umwandeln des Tokens in String")
-            return
-        }
-        
-        keychain.set(tokenString, forKey: "refreshToken")
-        refreshToken = tokenString
-    }
 
-    func revokeToken() {
+    func revokeTokens() {
         keychain.delete("accessToken")
+        keychain.delete( "refreshToken")
         accessToken = nil
+        refreshToken = nil
         isAuthenticated = false
     }
 }

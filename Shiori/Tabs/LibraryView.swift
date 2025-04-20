@@ -368,26 +368,28 @@ struct LibraryView: View {
     }
     
     private func fetchLibrary() {
-        Task {
-            isLoading = true
-            do {
-                if mediaType == .manga {
-                    libraryResponse = try await mangaController.fetchLibrary(
-                        status: mangaProgressSelection.rawValue,
-                        sortOrder: libraryMangaSort.rawValue
-                    )
-                } else if mediaType == .anime {
-                    libraryResponse = try await animeController.fetchLibrary(
-                        status: animeProgressSelection.rawValue,
-                        sortOrder: libraryAnimeSort.rawValue
-                    )
+        if (tokenHandler.isAuthenticated) {
+            Task {
+                isLoading = true
+                do {
+                    if mediaType == .manga {
+                        libraryResponse = try await mangaController.fetchLibrary(
+                            status: mangaProgressSelection.rawValue,
+                            sortOrder: libraryMangaSort.rawValue
+                        )
+                    } else if mediaType == .anime {
+                        libraryResponse = try await animeController.fetchLibrary(
+                            status: animeProgressSelection.rawValue,
+                            sortOrder: libraryAnimeSort.rawValue
+                        )
+                    }
+                } catch {
+                    print("Error fetching library: \(error)")
                 }
-            } catch {
-                print("Error fetching library: \(error)")
+                isLoading = false
             }
-            isLoading = false
         }
-    }
+    }    
 }
 
 #Preview {

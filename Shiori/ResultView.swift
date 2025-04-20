@@ -13,7 +13,6 @@ struct ResultView: View {
     @State private var isLoading = false
     
     @AppStorage("mediaType") private var mediaType = MediaType.manga
-    @AppStorage("result") private var result = 10
     @AppStorage("accentColor") private var accentColor = AccentColor.blue
     
     @AppStorage("animeRankingType") private var animeRankingType = AnimeSortType.all
@@ -105,14 +104,12 @@ struct ResultView: View {
             case .anime:
                 mediaResponse = try await animeController.fetchPreviews(
                     searchTerm: searchTerm,
-                    by: animeRankingType,
-                    result: result
+                    by: animeRankingType
                 )
             case .manga:
                 mediaResponse = try await mangaController.fetchPreviews(
                     searchTerm: searchTerm,
-                    by: mangaRankingType,
-                    result: result
+                    by: mangaRankingType
                 )
             }
         } catch {

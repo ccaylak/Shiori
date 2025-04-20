@@ -5,6 +5,9 @@ import SwiftUI
     
     private var malService: MALService = .shared
     
+    @AppStorage("result") private var result = 10
+    @AppStorage("nsfw") private var showNSFW = false
+    
     func saveProgress(id: Int, status: String, score: Int, episodes: Int) async throws {
         let url = URL(string: MALEndpoints.Anime.update(id: id))!
         
@@ -29,7 +32,7 @@ import SwiftUI
         }
     }
     
-    func fetchPreviews(searchTerm: String, by: AnimeSortType, result: Int) async throws -> MediaResponse {
+    func fetchPreviews(searchTerm: String, by: AnimeSortType) async throws -> MediaResponse {
         var components: URLComponents
         if searchTerm == "" {
             components = URLComponents(string: MALEndpoints.Anime.ranking)!
@@ -39,7 +42,8 @@ import SwiftUI
         
         components.queryItems = [
             URLQueryItem(name: "ranking_type", value: by.rawValue),
-            URLQueryItem(name: "limit", value: "\(result)"),
+            URLQueryItem(name: "limit", value: String(result)),
+            URLQueryItem(name: "nsfw", value: String(showNSFW)),
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .numEpisodes, .mediaType, .startDate, .status])),
             URLQueryItem(name: "q", value: searchTerm)
         ]
@@ -113,7 +117,8 @@ import SwiftUI
                 URLQueryItem(name: "status", value: status),
                 URLQueryItem(name: "sort", value: sortOrder),
                 URLQueryItem(name:"fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .startDate, .mediaType, .listStatus, .numEpisodes, .status])),
-                URLQueryItem(name:"limit", value: "1000")
+                URLQueryItem(name:"limit", value: "1000"),
+                URLQueryItem(name:"nsfw", value: String(showNSFW)),
             ]
         
         guard let url = components.url else {

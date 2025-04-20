@@ -11,7 +11,7 @@ struct ShioriApp: App {
             MainView()
                 .onAppear {
                     if isFirstLaunch {
-                        tokenHandler.revokeToken()
+                        tokenHandler.revokeTokens()
                         isFirstLaunch = false
                     }
                 }

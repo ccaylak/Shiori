@@ -5,6 +5,9 @@ import SwiftUI
     
     private var malService: MALService = .shared
     
+    @AppStorage("nsfw") private var showNSFW = false
+    @AppStorage("result") private var result = 10
+    
     func saveProgress(id: Int, status: String, score: Int, chapters: Int) async throws {
         let url = URL(string: MALEndpoints.Manga.update(id: id))!
         
@@ -77,7 +80,7 @@ import SwiftUI
         return try JSONDecoder().decode(Media.self, from: data)
     }
     
-    func fetchPreviews(searchTerm: String, by: MangaSortType, result: Int) async throws -> MediaResponse {
+    func fetchPreviews(searchTerm: String, by: MangaSortType) async throws -> MediaResponse {
         var components: URLComponents
         if searchTerm == "" {
             components = URLComponents(string: MALEndpoints.Manga.ranking)!
@@ -87,9 +90,10 @@ import SwiftUI
         
         components.queryItems = [
             URLQueryItem(name: "ranking_type", value: by.rawValue),
-            URLQueryItem(name: "limit", value: "\(result)"),
+            URLQueryItem(name: "limit", value: String(result)),
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .numChapters, .numVolumes, .mediaType, .startDate, .status])),
-            URLQueryItem(name: "q", value: searchTerm)
+            URLQueryItem(name: "q", value: searchTerm),
+            URLQueryItem(name: "nsfw", value: String(showNSFW)),
         ]
         
         guard let url = components.url else {
@@ -114,7 +118,8 @@ import SwiftUI
                 URLQueryItem(name: "status", value: status),
                 URLQueryItem(name: "sort", value: sortOrder),
                 URLQueryItem(name:"fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .startDate, .mediaType, .listStatus, .numVolumes, .numChapters, .status])),
-                URLQueryItem(name:"limit", value: "1000")
+                URLQueryItem(name:"limit", value: "1000"),
+                URLQueryItem(name: "nsfw", value: String(showNSFW)),
             ]
         
         guard let url = components.url else {

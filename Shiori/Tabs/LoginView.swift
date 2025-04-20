@@ -45,9 +45,15 @@ struct LoginView: View {
                                         Text("Birthdate:")
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
-                                        Text(String.formatDateStringWithLocale(birthDate, fromFormat: "yyyy-MM-dd")!)
-                                            .font(.subheadline)
-                                            .foregroundColor(.primary)
+                                        if let formattedDate = String.formatDateStringWithLocale(birthDate, fromFormat: "yyyy-MM-dd") {
+                                            Text(formattedDate)
+                                                .font(.subheadline)
+                                                .foregroundColor(.primary)
+                                        } else {
+                                            Text("Invalid Date")
+                                                .font(.subheadline)
+                                                .foregroundColor(.primary)
+                                        }
                                     }
                                 }
                                 
@@ -67,9 +73,14 @@ struct LoginView: View {
                                         Text("Join Date:")
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
-                                        Text(String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ")!)
-                                            .font(.subheadline)
-                                            .foregroundColor(.primary)
+                                        if let formattedDate = String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ") {
+                                            Text(formattedDate)
+                                                .font(.subheadline)
+                                                .foregroundColor(.primary)
+                                        } else {
+                                            Text("Invalid Date")
+                                        }
+                                        
                                     }
                                 }
                                 
@@ -105,16 +116,16 @@ struct LoginView: View {
                         ]
                         
                         UserStatistics(title: "Manga statistics", statisticsValues: mangaStatistics)
-
+                        
                     }
                     .onAppear {
                         Task {
-                                profileDetails = try await profileController.fetchUserProfile()
-                                
-                                let response = try await jikanProfileController.fetchProfileStatistics(username: profileDetails?.name ?? "test")
-                                
-                                animeStatistics = response.data.anime
-                                mangaStatistics = response.data.manga
+                            profileDetails = try await profileController.fetchUserProfile()
+                            
+                            let response = try await jikanProfileController.fetchProfileStatistics(username: profileDetails?.name ?? "test")
+                            
+                            animeStatistics = response.data.anime
+                            mangaStatistics = response.data.manga
                         }
                     }
                 }
@@ -186,7 +197,7 @@ struct LoginView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if tokenHandler.isAuthenticated {
                         Button(action: {
-                            tokenHandler.revokeToken()
+                            tokenHandler.revokeTokens()
                         }) {
                             Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
                         }
@@ -228,7 +239,7 @@ struct LoginView: View {
                 }
             }
         }
-
+        
     }
     
     func signIn(using url: URL) async {
@@ -256,9 +267,7 @@ struct LoginView: View {
             }
             
             let content = try JSONDecoder().decode(TokenResponse.self, from: data)
-            
-            tokenHandler.setRefreshToken(Data(content.refreshToken.utf8))
-            tokenHandler.setToken(Data(content.accessToken.utf8))
+            tokenHandler.setTokens(from: content)
         } catch {
             print("Error during sign-in: \(error)")
         }
