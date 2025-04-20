@@ -19,11 +19,6 @@ This app is not officially affiliated with MyAnimeList.net. It leverages their p
 
 This project is licensed under the [Apache License 2.0](LICENSE).
 
----
-
-Changes
-Any updates to this policy will be reflected in the app.
-
 ## Privacy Policy
 
 Shiori respects your privacy and is committed to protecting your personal information.
