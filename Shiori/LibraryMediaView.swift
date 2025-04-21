@@ -2,7 +2,7 @@ import SwiftUI
 
 struct LibraryMediaView: View {
     
-    @AppStorage("appearance") private var appearance = Appearance.light
+    @ObservedObject private var settingsManager: SettingsManager = .shared
     @Environment(\.colorScheme) private var colorScheme
     
     let title: String
@@ -24,10 +24,10 @@ struct LibraryMediaView: View {
     }
     
     private var isDarkMode: Bool {
-        if appearance == .system {
+        if settingsManager.appearance == .system {
             return colorScheme == .dark
         }
-        return appearance == .dark
+        return settingsManager.appearance == .dark
     }
     
     var body: some View {

@@ -84,7 +84,7 @@ struct ScoreBadge: View {
     let score: Double
     
     var body: some View {
-        if (score >= 0 && score <= 10){
+        if (score > 0 && score <= 10){
             HStack {
                 Text("\(score.formatted())")
                     .font(.title3)

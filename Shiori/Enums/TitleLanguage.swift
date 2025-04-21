@@ -1,7 +1,7 @@
 import Foundation
 
 enum TitleLanguage: String, CaseIterable {
-    case mixed = "default"
+    case romanji = "romanji"
     case english = "english"
     case japanese = "japanese"
 }

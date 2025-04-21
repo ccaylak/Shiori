@@ -12,11 +12,8 @@ struct ResultView: View {
     @State private var isInitialLoading = false
     @State private var isLoading = false
     
-    @AppStorage("mediaType") private var mediaType = MediaType.manga
-    @AppStorage("accentColor") private var accentColor = AccentColor.blue
-    
-    @AppStorage("animeRankingType") private var animeRankingType = AnimeSortType.all
-    @AppStorage("mangaRankingType") private var mangaRankingType = MangaSortType.all
+    @StateObject private var resultManager: ResultManager = .shared
+    @ObservedObject private var settingsManager: SettingsManager = .shared
     
     var body: some View {
         
@@ -25,12 +22,12 @@ struct ResultView: View {
                 ForEach(mediaResponse.results, id: \.node.id) { media in
                     NavigationLink(destination: DetailsView(media: media.node)) {
                         MediaView(
-                            title: media.node.title,
+                            title: media.node.getTitle,
                             image: media.node.images.large,
                             releaseYear: media.node.getReleaseYear,
                             type: media.node.getType,
                             status: media.node.getStatus,
-                            mediaCount: (mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters)
+                            mediaCount: (resultManager.mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters)
                         )
                     }
                 }
@@ -52,12 +49,12 @@ struct ResultView: View {
                         if isLoading {
                             ProgressView()
                                 .frame(width: 370, height: 50)
-                                .background(Color.getByColorString(accentColor.rawValue))
+                                .background(Color.getByColorString(settingsManager.accentColor.rawValue))
                                 .cornerRadius(10)
                         } else {
                             Text("Load more")
                                 .frame(width: 370, height: 50)
-                                .background(Color.getByColorString(accentColor.rawValue))
+                                .background(Color.getByColorString(settingsManager.accentColor.rawValue))
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                         }
@@ -80,17 +77,7 @@ struct ResultView: View {
                 }
             }
         }
-        .onChange(of: animeRankingType) {
-            Task {
-                await loadMediaData()
-            }
-        }
-        .onChange(of: mangaRankingType) {
-            Task {
-                await loadMediaData()
-            }
-        }
-        .onChange(of: mediaType) {
+        .onChange(of: resultManager.needsToLoadData) {
             Task {
                 await loadMediaData()
             }
@@ -100,17 +87,11 @@ struct ResultView: View {
     private func loadMediaData() async {
         isInitialLoading = true
         do {
-            switch mediaType {
+            switch resultManager.mediaType {
             case .anime:
-                mediaResponse = try await animeController.fetchPreviews(
-                    searchTerm: searchTerm,
-                    by: animeRankingType
-                )
+                mediaResponse = try await animeController.fetchPreviews(searchTerm: searchTerm)
             case .manga:
-                mediaResponse = try await mangaController.fetchPreviews(
-                    searchTerm: searchTerm,
-                    by: mangaRankingType
-                )
+                mediaResponse = try await mangaController.fetchPreviews(searchTerm: searchTerm)
             }
         } catch {
             print("Loading media data failed: \(error.localizedDescription)")

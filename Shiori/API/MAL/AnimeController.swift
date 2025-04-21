@@ -5,8 +5,9 @@ import SwiftUI
     
     private var malService: MALService = .shared
     
-    @AppStorage("result") private var result = 10
-    @AppStorage("nsfw") private var showNSFW = false
+    private var libraryManager: LibraryManager = .shared
+    private var settingsManager: SettingsManager = .shared
+    private var resultManager: ResultManager = .shared
     
     func saveProgress(id: Int, status: String, score: Int, episodes: Int) async throws {
         let url = URL(string: MALEndpoints.Anime.update(id: id))!
@@ -17,7 +18,7 @@ import SwiftUI
             "num_watched_episodes": "\(episodes)"
         ]
         let formBody = parameters.map { "\($0.key)=\($0.value)" }
-                                 .joined(separator: "&")
+            .joined(separator: "&")
         
         var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
         request.httpBody = formBody.data(using: .utf8)
@@ -32,7 +33,7 @@ import SwiftUI
         }
     }
     
-    func fetchPreviews(searchTerm: String, by: AnimeSortType) async throws -> MediaResponse {
+    func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
         var components: URLComponents
         if searchTerm == "" {
             components = URLComponents(string: MALEndpoints.Anime.ranking)!
@@ -41,10 +42,10 @@ import SwiftUI
         }
         
         components.queryItems = [
-            URLQueryItem(name: "ranking_type", value: by.rawValue),
-            URLQueryItem(name: "limit", value: String(result)),
-            URLQueryItem(name: "nsfw", value: String(showNSFW)),
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .numEpisodes, .mediaType, .startDate, .status])),
+            URLQueryItem(name: "ranking_type", value: resultManager.animeRankingType.rawValue),
+            URLQueryItem(name: "limit", value: String(settingsManager.resultsPerPage)),
+            URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent)),
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .otherTitles, .cover, .episodes, .mediaType, .startDate, .status])),
             URLQueryItem(name: "q", value: searchTerm)
         ]
         
@@ -67,8 +68,10 @@ import SwiftUI
         var components = URLComponents(string: MALEndpoints.Anime.details(id: id))!
         
         components.queryItems = [
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.numEpisodes, .mediaType, .startDate, .status, .mean, .synopsis, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .pictures, .myListStatus, .users]))
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [
+                .otherTitles, .episodes, .mediaType, .startDate, .status, .mean, .summary, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .entryStatus, .scoredUsers,]))
         ]
+        
         
         guard let url = components.url else {
             throw URLError(.badURL)
@@ -87,12 +90,12 @@ import SwiftUI
     
     func addToWatchList(id: Int) async throws {
         let components = URLComponents(string: MALEndpoints.Anime.update(id: id))!
-
+        
         let parameters = ["status": AnimeProgressStatus.planToWatch.rawValue]
         let bodyData = parameters
             .map { "\($0.key)=\($0.value)" }
             .joined(separator: "&")
-
+        
         guard let url = components.url else {
             throw URLError(.badURL)
         }
@@ -100,7 +103,7 @@ import SwiftUI
         var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
         request.httpBody = bodyData.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+        
         var (_, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
@@ -110,16 +113,25 @@ import SwiftUI
         }
     }
     
-    func fetchLibrary(status: String, sortOrder: String) async throws -> LibraryResponse {
+    func fetchLibrary() async throws -> LibraryResponse {
         var components = URLComponents(string: MALEndpoints.Anime.library)!
         
-            components.queryItems = [
-                URLQueryItem(name: "status", value: status),
-                URLQueryItem(name: "sort", value: sortOrder),
-                URLQueryItem(name:"fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .startDate, .mediaType, .listStatus, .numEpisodes, .status])),
-                URLQueryItem(name:"limit", value: "1000"),
-                URLQueryItem(name:"nsfw", value: String(showNSFW)),
-            ]
+        components.queryItems = (
+            libraryManager.animeProgressStatus != .all
+            ? [URLQueryItem(name: "status", value: libraryManager.animeProgressStatus.rawValue)]
+            : []
+        ) + [
+            URLQueryItem(name: "sort", value: libraryManager.animeSortOrder.rawValue),
+            URLQueryItem(
+                name: "fields",
+                value: MALApiFields.fieldsHeader(for: [
+                    .id, .title, .otherTitles, .cover, .startDate,
+                    .mediaType, .entryStatus, .episodes, .status
+                ])
+            ),
+            URLQueryItem(name: "limit", value: "1000"),
+            URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
+        ]
         
         guard let url = components.url else {
             throw URLError(.badURL)

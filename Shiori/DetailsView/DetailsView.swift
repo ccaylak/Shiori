@@ -6,9 +6,6 @@ struct DetailsView: View {
     @State var isDescriptionExpanded = false
     @State private var isSheetPresented = false
     
-    @AppStorage("mediaType") private var mediaType = MediaType.manga
-    @AppStorage("accentColor") private var accentColor = AccentColor.blue
-    
     @State private var mangaStatus = MangaProgressStatus.planToRead
     @State private var animeStatus = AnimeProgressStatus.planToWatch
     
@@ -19,7 +16,9 @@ struct DetailsView: View {
     @State private var showAlert = false
     @State private var isLoading = false
 
-    @StateObject private var tokenHandler: TokenHandler = .shared
+    @ObservedObject private var tokenHandler: TokenHandler = .shared
+    @ObservedObject private var settingsManager: SettingsManager = .shared
+    @ObservedObject private var resultManager: ResultManager = .shared
     
     let animeController = AnimeController()
     let mangaController = MangaController()
@@ -30,13 +29,13 @@ struct DetailsView: View {
                 ScrollView {
                     VStack(alignment: .leading) {
                         CoverAndDescriptionView(
-                            title: media.title,
+                            title: media.getTitle,
                             imageUrl: media.images.large,
                             score: media.getScore,
                             mediaCount: media.getChapters,
                             description: media.getDescription,
                             type: media.getType,
-                            mediaType: mediaType
+                            mediaType: resultManager.mediaType
                         )
                     }
                     Group {
@@ -65,24 +64,24 @@ struct DetailsView: View {
                                         }
                                         Spacer()
                                         VStack {
-                                            Text(mediaType == .anime ? "Episodes" : "Chapters")
+                                            Text(resultManager.mediaType == .anime ? "Episodes" : "Chapters")
                                                 .font(.caption)
                                                 .bold()
-                                            Label(mediaType == .anime
+                                            Label(resultManager.mediaType == .anime
                                                   ? "\(media.getListStatus.getWatchedEpisodes)/\(media.getEpisodes)"
-                                                  : "\(media.getListStatus.getReadChapters)/\(media.getChapters)", systemImage: mediaType == .anime ? "tv.fill" : "book.pages")
+                                                  : "\(media.getListStatus.getReadChapters)/\(media.getChapters)", systemImage: resultManager.mediaType == .anime ? "tv.fill" : "book.pages")
                                             .accentColor(.primary)
                                         }
                                     } else {
-                                        Button("Add to \(mediaType == .anime ? "Watch" : "Reading") list") {
+                                        Button("Add to \(resultManager.mediaType == .anime ? "Watch" : "Reading") list") {
                                             Task {
                                                 isLoading = true
                                                 defer { isLoading = false }
-                                                if (mediaType == .anime) {
+                                                if (resultManager.mediaType == .anime) {
                                                     try await animeController.addToWatchList(id: media.id)
                                                     media = try await animeController.fetchDetails(id: media.id)
                                                 }
-                                                if (mediaType == .manga) {
+                                                if (resultManager.mediaType == .manga) {
                                                     try await mangaController.addToReadingList(id: media.id)
                                                     media = try await mangaController.fetchDetails(id: media.id)
                                                 }
@@ -93,12 +92,12 @@ struct DetailsView: View {
                                 }
                             }
                             .padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
-                            .background(Color.getByColorString(accentColor.rawValue).opacity(0.3))
+                            .background(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.3))
                             .cornerRadius(12)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         } else {
                             GroupBox {
-                                Text("Log in with your MyAnimeList account to see your \(mediaType.rawValue) progress, rating, and status.")
+                                Text("Log in with your MyAnimeList account to see your \(resultManager.mediaType.rawValue) progress, rating, and status.")
                                     .font(.body)
                                     .foregroundColor(.secondary)
                                     .multilineTextAlignment(.leading)
@@ -137,12 +136,12 @@ struct DetailsView: View {
                     )
                     Divider()
                     
-                    if let relatedAnimes = media.relatedAnimes, !relatedAnimes.isEmpty && mediaType == .anime {
+                    if let relatedAnimes = media.relatedAnimes, !relatedAnimes.isEmpty && resultManager.mediaType == .anime {
                         RelatedMediaView(relatedMediaItems: relatedAnimes)
                         Divider()
                     }
                     
-                    if let relatedMangas = media.relatedMangas, !relatedMangas.isEmpty && mediaType == .manga {
+                    if let relatedMangas = media.relatedMangas, !relatedMangas.isEmpty && resultManager.mediaType == .manga {
                         RelatedMediaView(relatedMediaItems: relatedMangas)
                         Divider()
                     }
@@ -153,7 +152,7 @@ struct DetailsView: View {
                 }
                 .scrollIndicators(.hidden)
                 .scrollClipDisabled()
-                .navigationTitle(media.title)
+                .navigationTitle(media.getTitle)
                 .padding(.horizontal)
                 .toolbar {
                     if (!media.getListStatus.getStatus.isEmpty) {
@@ -166,11 +165,11 @@ struct DetailsView: View {
                         }
                     }
                     ToolbarItem(placement: .confirmationAction) {
-                        let escapedTitle = media.title.replacingOccurrences(of: " ", with: "_")
+                        let escapedTitle = media.getTitle.replacingOccurrences(of: " ", with: "_")
                         
-                        if let url = URL(string: "https://myanimelist.net/\(mediaType.rawValue)/\(media.id)/\(escapedTitle)") {
+                        if let url = URL(string: "https://myanimelist.net/\(resultManager.mediaType.rawValue)/\(media.id)/\(escapedTitle)") {
                             ShareLink(item: url) {
-                                Label("Share \(mediaType.rawValue.capitalized)", systemImage: "square.and.arrow.up")
+                                Label("Share \(resultManager.mediaType.rawValue.capitalized)", systemImage: "square.and.arrow.up")
                             }
                         } else {
                             Text("Invalid URL")
@@ -181,15 +180,15 @@ struct DetailsView: View {
                                     if (tokenHandler.isAuthenticated) {
                                         NavigationStack {
                                             List {
-                                                if (mediaType == .manga) {
+                                                if (resultManager.mediaType == .manga) {
                                                     Picker("Status", selection: $mangaStatus) {
-                                                        ForEach(MangaProgressStatus.allCases, id: \.self) { mangaSelection in
+                                                        ForEach([MangaProgressStatus.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
                                                             Text(mangaSelection.displayName).tag(mangaSelection)
                                                         }
                                                     }
                                                 }
                                                 
-                                                if (mediaType == .anime){
+                                                if (resultManager.mediaType == .anime){
                                                     Picker("Status", selection: $animeStatus) {
                                                         ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
                                                             Text(animeSelection.displayName).tag(animeSelection)
@@ -197,7 +196,7 @@ struct DetailsView: View {
                                                     }
                                                 }
                                                 
-                                                Picker((mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
+                                                Picker((resultManager.mediaType == .manga) ? "Chapters" : "Episodes", selection: $progress) {
                                                     let chapterRange = end > 0 ? 0...end : 0...1000
                                                     ForEach(chapterRange, id: \.self) { chapter in
                                                         Text("\(chapter)").tag(chapter)
@@ -221,12 +220,12 @@ struct DetailsView: View {
                                                 ToolbarItem(placement: .primaryAction) {
                                                     Button("Save") {
                                                         Task {
-                                                            if (mediaType == .manga) {
+                                                            if (resultManager.mediaType == .manga) {
                                                                 try await mangaController.saveProgress(id: media.id, status: mangaStatus.rawValue, score: rating, chapters: progress)
                                                                 media = try await mangaController.fetchDetails(id: media.id)
                                                                 isSheetPresented = false
                                                             }
-                                                            if (mediaType == .anime) {
+                                                            if (resultManager.mediaType == .anime) {
                                                                 try await animeController.saveProgress(id: media.id, status: animeStatus.rawValue, score: rating, episodes: progress)
                                                                 media = try await animeController.fetchDetails(id: media.id)
                                                                 isSheetPresented = false
@@ -235,7 +234,7 @@ struct DetailsView: View {
                                                     }
                                                 }
                                                 ToolbarItem(placement: .principal) {
-                                                    Text(mediaType == .manga ? "Edit Reading Progress" : "Edit Watch Progress")
+                                                    Text(resultManager.mediaType == .manga ? "Edit Reading Progress" : "Edit Watch Progress")
                                                 }
                                                 ToolbarItem(placement: .cancellationAction) {
                                                     Button(action: {
@@ -248,11 +247,11 @@ struct DetailsView: View {
                                                     .alert("Delete library entry", isPresented: $showAlert) {
                                                         Button("Delete", role: .destructive) {
                                                             Task {
-                                                                if(mediaType == .manga) {
+                                                                if(resultManager.mediaType == .manga) {
                                                                     try await mangaController.deleteEntry(id: media.id)
                                                                     media = try await mangaController.fetchDetails(id: media.id)
                                                                 }
-                                                                if(mediaType == .anime) {
+                                                                if(resultManager.mediaType == .anime) {
                                                                     try await animeController.deleteEntry(id: media.id)
                                                                     media = try await animeController.fetchDetails(id: media.id)
                                                                 }
@@ -262,7 +261,7 @@ struct DetailsView: View {
                                                         }
                                                         Button("Cancel", role: .cancel) {}
                                                     } message: {
-                                                        Text("Are you sure you want to delete \(media.title) from your library?")
+                                                        Text("Are you sure you want to delete \(media.getTitle) from your library?")
                                                     }
                                                 }
                                             }
@@ -274,7 +273,7 @@ struct DetailsView: View {
                                     }
                                     else {
                                         GroupBox {
-                                            Text("Log in with your MyAnimeList account to be able to edit \(media.title)'s progress, rating and progress status.")
+                                            Text("Log in with your MyAnimeList account to be able to edit \(media.getTitle)'s progress, rating and progress status.")
                                                 .font(.body)
                                                 .foregroundColor(.secondary)
                                                 .multilineTextAlignment(.leading)
@@ -309,7 +308,7 @@ struct DetailsView: View {
                 isLoading = true
                 defer { isLoading = false }
                 do {
-                    if mediaType == .anime {
+                    if resultManager.mediaType == .anime {
                         media = try await animeController.fetchDetails(id: media.id)
                         if let validStatus = AnimeProgressStatus(rawValue: media.getListStatus.getStatus) {
                             animeStatus = validStatus
@@ -319,7 +318,7 @@ struct DetailsView: View {
                         end = media.getEpisodes
                     }
                     
-                    if mediaType == .manga {
+                    if resultManager.mediaType == .manga {
                         media = try await mangaController.fetchDetails(id: media.id)
                         if let validStatus = MangaProgressStatus(rawValue: media.getListStatus.getStatus) {
                             mangaStatus = validStatus

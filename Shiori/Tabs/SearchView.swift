@@ -2,16 +2,14 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @AppStorage("mediaType") private var mediaType = MediaType.manga
-    @AppStorage("animeRankingType") private var animeRankingType = AnimeSortType.all
-    @AppStorage("mangaRankingType") private var mangaRankingType = MangaSortType.all
+    @ObservedObject private var resultManager: ResultManager = .shared
     
     @State private var isOn = false
     
     var body: some View {
         NavigationStack {
             ResultView()
-                .navigationTitle(mediaType.rawValue.capitalized)
+                .navigationTitle(resultManager.mediaType.rawValue.capitalized)
                 .toolbar {
                     selectionMenu
                     sortMenu
@@ -21,17 +19,17 @@ struct SearchView: View {
     
     private var selectionMenu: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Menu {
-                Text("Select media")
-                Picker("Manga oder Anime", selection: $mediaType) {
-                    Label("Manga", systemImage: "book")
-                        .tag(MediaType.manga)
-                    Label("Anime", systemImage: "tv")
-                        .tag(MediaType.anime)
-                }
+            Button {
+                resultManager.mediaType = (resultManager.mediaType == .manga) ? .anime : .manga
             } label: {
-                Label("Media selection", systemImage: "sparkles")
+                Image(systemName: resultManager.mediaType == .manga ? "book" : "tv")
+                    .contentTransition(.symbolEffect(.replace))
+                    .imageScale(.large)
+                    .foregroundColor(.accentColor)
+                    .symbolRenderingMode(.monochrome)
             }
+            .sensoryFeedback(.selection, trigger: resultManager.mediaType)
+            .buttonStyle(.borderless)
         }
     }
     
@@ -40,7 +38,7 @@ struct SearchView: View {
         ToolbarItem(placement: .primaryAction) {
             Menu {
                 Text("Sort by")
-                if mediaType == .anime {
+                if resultManager.mediaType == .anime {
                     animeSortPicker
                 } else {
                     mangaSortPicker
@@ -52,7 +50,7 @@ struct SearchView: View {
     }
     
     private var animeSortPicker: some View {
-        Picker("Sort by", selection: $animeRankingType) {
+        Picker("Sort by", selection: $resultManager.animeRankingType) {
             ForEach(AnimeSortType.allCases, id: \.self) { type in
                 Label(type.displayName, systemImage: type.icon).tag(type)
             }
@@ -60,7 +58,7 @@ struct SearchView: View {
     }
     
     private var mangaSortPicker: some View {
-        Picker("Sort by", selection: $mangaRankingType) {
+        Picker("Sort by", selection: $resultManager.mangaRankingType) {
             ForEach(MangaSortType.allCases, id: \.self) { type in
                 Text(type.displayName).tag(type)
             }

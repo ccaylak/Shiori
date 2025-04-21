@@ -3,8 +3,7 @@ import SwiftUI
 struct MainView: View {
     
     @State private var selectedTab = "search"
-    @AppStorage("appearance") private var appearance = Appearance.system
-    @AppStorage("accentColor") private var accentColor = AccentColor.blue
+    @ObservedObject private var settingsManager: SettingsManager = .shared
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -24,8 +23,8 @@ struct MainView: View {
                 }
                 .tag("login")
         }
-        .preferredColorScheme(ColorScheme.getByColorSchemeString(appearance.rawValue))
-        .accentColor(Color.getByColorString(accentColor.rawValue))
+        .preferredColorScheme(ColorScheme.getByColorSchemeString(settingsManager.appearance.rawValue))
+        .accentColor(Color.getByColorString(settingsManager.accentColor.rawValue))
     }
 }
 

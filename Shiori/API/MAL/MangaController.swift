@@ -5,8 +5,9 @@ import SwiftUI
     
     private var malService: MALService = .shared
     
-    @AppStorage("nsfw") private var showNSFW = false
-    @AppStorage("result") private var result = 10
+    private var settingsManager: SettingsManager = .shared
+    private var libraryManager: LibraryManager = .shared
+    private var resultManager: ResultManager = .shared
     
     func saveProgress(id: Int, status: String, score: Int, chapters: Int) async throws {
         let url = URL(string: MALEndpoints.Manga.update(id: id))!
@@ -61,7 +62,7 @@ import SwiftUI
         var components = URLComponents(string: MALEndpoints.Manga.details(id: id))!
         
         components.queryItems = [
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.authors, .numChapters, .numVolumes, .mediaType, .startDate, .status,.endDate, .synopsis, .mean, .rank, .popularity, .genres, .mediaType, .pictures, .recommendations, .relatedManga, .myListStatus, .users]))
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.otherTitles, .authors, .chapters, .volumes, .mediaType, .startDate, .status,.endDate, .summary, .mean, .rank, .popularity, .genres, .mediaType, .recommendations, .relatedManga, .entryStatus, .scoredUsers]))
         ]
         
         guard let url = components.url else {
@@ -80,7 +81,7 @@ import SwiftUI
         return try JSONDecoder().decode(Media.self, from: data)
     }
     
-    func fetchPreviews(searchTerm: String, by: MangaSortType) async throws -> MediaResponse {
+    func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
         var components: URLComponents
         if searchTerm == "" {
             components = URLComponents(string: MALEndpoints.Manga.ranking)!
@@ -89,11 +90,11 @@ import SwiftUI
         }
         
         components.queryItems = [
-            URLQueryItem(name: "ranking_type", value: by.rawValue),
-            URLQueryItem(name: "limit", value: String(result)),
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .numChapters, .numVolumes, .mediaType, .startDate, .status])),
+            URLQueryItem(name: "ranking_type", value: resultManager.mangaRankingType.rawValue),
+            URLQueryItem(name: "limit", value: String(settingsManager.resultsPerPage)),
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .otherTitles, .cover, .chapters, .volumes, .mediaType, .startDate, .status])),
             URLQueryItem(name: "q", value: searchTerm),
-            URLQueryItem(name: "nsfw", value: String(showNSFW)),
+            URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent)),
         ]
         
         guard let url = components.url else {
@@ -111,16 +112,25 @@ import SwiftUI
         return try JSONDecoder().decode(MediaResponse.self, from: data)
     }
     
-    func fetchLibrary(status: String, sortOrder: String) async throws -> LibraryResponse {
+    func fetchLibrary() async throws -> LibraryResponse {
         var components = URLComponents(string: MALEndpoints.Manga.library)!
         
-            components.queryItems = [
-                URLQueryItem(name: "status", value: status),
-                URLQueryItem(name: "sort", value: sortOrder),
-                URLQueryItem(name:"fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .mainPicture, .startDate, .mediaType, .listStatus, .numVolumes, .numChapters, .status])),
-                URLQueryItem(name:"limit", value: "1000"),
-                URLQueryItem(name: "nsfw", value: String(showNSFW)),
-            ]
+        components.queryItems = (
+            libraryManager.mangaProgressStatus != .all
+            ? [URLQueryItem(name: "status", value: libraryManager.mangaProgressStatus.rawValue)]
+            : []
+        ) + [
+            URLQueryItem(name: "sort", value: libraryManager.mangaSortOrder.rawValue),
+            URLQueryItem(
+                name: "fields",
+                value: MALApiFields.fieldsHeader(for: [
+                    .id, .title, .otherTitles, .cover, .startDate,
+                    .mediaType, .entryStatus, .volumes, .chapters, .status
+                ])
+            ),
+            URLQueryItem(name: "limit", value: "1000"),
+            URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
+        ]
         
         guard let url = components.url else {
             throw URLError(.badURL)

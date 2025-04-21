@@ -8,7 +8,7 @@ import SwiftUI
     func fetchUserProfile() async throws -> ProfileDetails {
         var components = URLComponents(string: MALEndpoints.Profile.information)!
         components.queryItems = [
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .name, .picture, .gender, .birthday, .location, .joinedAt, .timeZone, .animeStatistics]))
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .username, .profilePicture, .gender, .birthday, .location, .joinedAt, .timeZone]))
         ]
         
         guard let url = components.url else {

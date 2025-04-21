@@ -1,6 +1,7 @@
 import Foundation
 
 enum MangaProgressStatus: String, CaseIterable {
+    case all = "all"
     case completed = "completed"
     case reading = "reading"
     case onHold = "on_hold"
@@ -15,6 +16,11 @@ enum MangaProgressStatus: String, CaseIterable {
         case .onHold: return "On Hold"
         case .dropped: return "Dropped"
         case .planToRead: return "Plan To Read"
+        case .all: return "All"
         }
     }
+    
+    static var allDisplayNames: [String] {
+            Self.allCases.map { $0.displayName }
+        }
 }

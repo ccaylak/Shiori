@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MediaView: View {
     
-    @AppStorage("appearance") private var appearance = Appearance.light
+    @ObservedObject private var settingsManager: SettingsManager = .shared
     @Environment(\.colorScheme) private var colorScheme
     
     let title: String
@@ -33,11 +33,11 @@ struct MediaView: View {
     }
     
     private var isDarkMode: Bool {
-            if appearance == .system {
-                return colorScheme == .dark
-            }
-            return appearance == .dark
+        if settingsManager.appearance == .system {
+            return colorScheme == .dark
         }
+        return settingsManager.appearance == .dark
+    }
     
     var body: some View {
         HStack(spacing: 20) {
@@ -46,7 +46,7 @@ struct MediaView: View {
                 .clipped()
                 .cornerRadius(12)
                 .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
-                
+            
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
@@ -110,11 +110,11 @@ struct MediaView: View {
         if episodes == 0 && (status == .notYetAired || status == .currentlyAiring) {
             return status.displayName
         }
-
+        
         if type == .movie {
             return episodes > 1 ? "\(episodes) parts" : ""
         }
-
+        
         if type == .tvSpecial || type == .special {
             return episodes > 1 ? "\(episodes) episodes" : ""
         }

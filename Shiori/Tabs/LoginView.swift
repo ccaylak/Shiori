@@ -20,6 +20,8 @@ struct LoginView: View {
     @StateObject private var tokenHandler: TokenHandler = .shared
     private var malService: MALService = .shared
     
+    @State private var showLogoutConfirmationDialog: Bool = false
+    
     var body: some View {
         NavigationStack {
             VStack (alignment: .leading, spacing: 30) {
@@ -194,13 +196,24 @@ struct LoginView: View {
                         Label("Go to Settings", systemImage: "gearshape.fill")
                     }
                 }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    if tokenHandler.isAuthenticated {
-                        Button(action: {
-                            tokenHandler.revokeTokens()
-                        }) {
-                            Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
+                
+                if tokenHandler.isAuthenticated {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button {
+                            showLogoutConfirmationDialog = true
+                        } label: {
+                            Label("Logout", systemImage: "rectangle.portrait.and.arrow.right"
+                            )
                         }
+                        .confirmationDialog(
+                            Text("Do you really want to logout of your MAL-Account?"),
+                            isPresented: $showLogoutConfirmationDialog,
+                            titleVisibility: .visible,
+                            actions: {
+                                Button("Yes", role: .destructive) { tokenHandler.revokeTokens() }
+                                Button("Cancel", role: .cancel) {}
+                            }
+                        )
                     }
                 }
             }

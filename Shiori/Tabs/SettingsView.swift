@@ -1,11 +1,8 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("appearance") private var appearance = Appearance.system
-    @AppStorage("accentColor") private var accentColor = AccentColor.blue
-    @AppStorage("result") private var resultsPerPage = 10
-    @AppStorage("nsfw") private var showNSFW = false
-    @AppStorage("titleLanguage") private var titleLanguage = TitleLanguage.english
+    
+    @StateObject private var settingsManager: SettingsManager = .shared
     
     private var tokenHandler: TokenHandler = .shared
     
@@ -17,14 +14,14 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section("General") {
-                    Picker("Appearance", systemImage: "circle.lefthalf.filled", selection: $appearance) {
+                    Picker("Appearance", systemImage: "circle.lefthalf.filled", selection: $settingsManager.appearance) {
                         ForEach(Appearance.allCases, id: \.self) { appearance in
                             Text(appearance.rawValue.capitalized).tag(appearance)
                         }
                     }
                     .pickerStyle(.navigationLink)
                     
-                    Picker("Accent Color", systemImage: "circle.fill", selection: $accentColor) {
+                    Picker("Accent color", systemImage: "paintpalette", selection: $settingsManager.accentColor) {
                         ForEach(AccentColor.allCases, id: \.self) { accentColor in
                             HStack {
                                 Image(systemName: "circle.fill")
@@ -37,32 +34,82 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.navigationLink)
                     
-                    Picker("Show NSFW-Content", systemImage: "eye.trianglebadge.exclamationmark.fill", selection: $showNSFW) {
-                        Text("Yes")
-                            .tag(true)
-                        Text("No")
-                            .tag(false)
+                    HStack {
+                        Label("Show mature content", systemImage: "eye")
+                        Spacer()
+                        Button {
+                            settingsManager.showNsfwContent.toggle()
+                        }label: {
+                            ZStack(alignment: .centerFirstTextBaseline) {
+                                Image(systemName: "eye.slash")
+                                    .hidden()
+                                    .imageScale(.large)
+                                Image(systemName: settingsManager.showNsfwContent ? "eye" : "eye.slash")
+                                    .contentTransition(.symbolEffect(.replace))
+                                    .imageScale(.large)
+                            }
+                            .foregroundColor(.accentColor)
+                            .symbolRenderingMode(.hierarchical)
+                        }
+                        .sensoryFeedback(.selection, trigger: settingsManager.showNsfwContent)
+                        .buttonStyle(.borderless)
                     }
-                    .pickerStyle(.menu)
-                    .tint(.secondary)
                 }
                 Section("List") {
-                    Picker("Results per page", systemImage: "list.bullet.rectangle", selection: $resultsPerPage) {
+                    Picker("Results per page", systemImage: "list.bullet.rectangle", selection: $settingsManager.resultsPerPage) {
                         ForEach(resultOptions, id: \.self) { resultOption in
                             Text(String(resultOption)).tag(resultOption)
                         }
                     }
+                    Picker("Title language", systemImage: "translate", selection: $settingsManager.titleLanguage) {
+                        ForEach(TitleLanguage.allCases, id: \.self) { selectedLanguage in
+                            Text(selectedLanguage.rawValue.capitalized).tag(selectedLanguage)
+                        }
+                    }
+                    
+                    /* todo
+                    HStack {
+                        Label("Show airing banner", systemImage: "flag")
+                        Spacer()
+                        Button {
+                            settingsManager.showAiringSoonBanner.toggle()
+                        } label: {
+                            ZStack(alignment: .centerFirstTextBaseline) {
+                                Image(systemName: "flag.slash")
+                                    .hidden()
+                                    .imageScale(.large)
+                                Image(systemName: settingsManager.showAiringSoonBanner ? "flag" : "flag.slash")
+                                    .contentTransition(.symbolEffect(.replace))
+                                    .imageScale(.large)
+                            }
+                            .foregroundColor(.accentColor)
+                            .symbolRenderingMode(.hierarchical)
+                        }
+                        .buttonStyle(.borderless)
+                    }
+                     */
+                }
+                
+                Section(header: Text("App icon"), footer: Text("Icons made by Nicole Knutas")) {
+                    VStack{
+                        Image("AppIconSelector")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 70, height: 70)
+                            .cornerRadius(10)
+                        
+                    }
                 }
                 
                 Section ("Info") {
-                    Link("GitHub-Repository", destination: URL(string: "https://github.com/ccaylak/MALytics")!)
-                        .tint(Color.getByColorString(accentColor.rawValue))
+                    Link("GitHub repository", destination: URL(string: "https://github.com/ccaylak/MALytics")!)
+                        .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
                     
                     if tokenHandler.isAuthenticated {
                         Button(action: {
                             showConfirmationDialog = true
                         }) {
-                            Text("Delete MyAnimeList Account")
+                            Text("Delete MyAnimeList account")
                                 .foregroundColor(.red)
                         }
                         .confirmationDialog(Text("You will be redirected to the MyAnimeList account deletion page."),

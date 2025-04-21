@@ -4,6 +4,7 @@ enum MangaType: String, CaseIterable {
     case unknown = "unknown"
     case manga = "manga"
     case novel = "novel"
+    case light_novel = "light_novel"
     case one_shot = "one_shot"
     case doujinshi = "doujinshi"
     case manhwa = "manhwa"
@@ -28,6 +29,8 @@ enum MangaType: String, CaseIterable {
             return "Manhua"
         case .oel:
             return "OEL"
+        case .light_novel:
+            return "Light Novel"
         }
     }
 }

@@ -1,6 +1,33 @@
 import Foundation
+import SwiftUI
 
 extension Media {
+    
+    var getTitle: String {
+        
+        let value = UserDefaults.standard.string(forKey: "titleLanguage") ?? TitleLanguage.romanji.rawValue
+        
+        switch value {
+        case "romanji":
+            return title
+        case "english":
+            if let english = alternativeTitles?.en, !english.isEmpty {
+                return english
+            } else {
+                return title
+            }
+        case "japanese":
+            if let japanese = alternativeTitles?.ja, !japanese.isEmpty {
+                return japanese
+            } else {
+                return title
+            }
+
+        default:
+            return "Unknown title"
+        }
+    }
+    
     var getReleaseYear: String {
         String(startDate?.prefix(4) ?? "Unknown startDate")
     }
