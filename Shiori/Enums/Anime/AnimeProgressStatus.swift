@@ -1,22 +1,18 @@
 import Foundation
 
 enum AnimeProgressStatus: String, CaseIterable {
-    case all = "all"
-    case completed = "completed"
-    case watching = "watching"
+    case all, completed, watching, dropped
     case onHold = "on_hold"
-    case dropped = "dropped"
     case planToWatch = "plan_to_watch"
-    
     
     var displayName: String {
         switch self {
-        case .all: return "All"
-        case .watching: return "Watching"
-        case .completed: return "Completed"
-        case .onHold: return "On Hold"
-        case .dropped: return "Dropped"
-        case .planToWatch: return "Plan To Watch"
+        case .all: return String(localized: "All")
+        case .watching: return String(localized: "Watching")
+        case .completed: return String(localized: "Completed")
+        case .onHold: return String(localized: "On Hold")
+        case .dropped: return String(localized: "Dropped")
+        case .planToWatch: return String(localized: "Plan To Watch")
         }
     }
 }

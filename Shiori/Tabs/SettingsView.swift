@@ -28,8 +28,15 @@ struct SettingsView: View {
                                     .resizable()
                                     .frame(width: 20, height: 20)
                                     .foregroundStyle(Color.getByColorString(accentColor.rawValue))
-                                Text(accentColor.rawValue.capitalized)
+                                Text(accentColor.displayName)
                             }.tag(accentColor)
+                        }
+                    }
+                    .pickerStyle(.navigationLink)
+                    
+                    Picker("Language", systemImage: "globe", selection: $settingsManager.appLanguage) {
+                        ForEach(AppLanguage.allCases, id: \.self) { language in
+                            Text(language.displayName).tag(language)
                         }
                     }
                     .pickerStyle(.navigationLink)

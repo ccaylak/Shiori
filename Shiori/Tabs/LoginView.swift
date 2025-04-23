@@ -59,16 +59,17 @@ struct LoginView: View {
                                     }
                                 }
                                 
-                                if let gender = profileDetails?.gender {
-                                    HStack {
-                                        Text("Gender:")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                        Text(gender.capitalized)
-                                            .font(.subheadline)
-                                            .foregroundColor(.primary)
-                                    }
+                                
+                                HStack {
+                                    Text("Gender:")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    Text(Gender(rawValue: profileDetails?.gender ?? "")?.displayName ?? String(localized: "Not specified"))
+                                        .font(.subheadline)
+                                        .foregroundColor(.primary)
                                 }
+
+                                
                                 
                                 if let joinDate = profileDetails?.joinDate {
                                     HStack {
@@ -100,30 +101,30 @@ struct LoginView: View {
                         }
                         
                         let animeStatistics = [
-                            Statistics(title: "Completed", value: animeStatistics?.completed ?? 0),
-                            Statistics(title: "Watching", value: animeStatistics?.watching ?? 0),
-                            Statistics(title: "On hold", value: animeStatistics?.onHold ?? 0),
-                            Statistics(title: "Dropped", value: animeStatistics?.dropped ?? 0),
-                            Statistics(title: "Plan to watch", value: animeStatistics?.planToWatch ?? 0),
+                            Statistics(title: AnimeProgressStatus.completed.displayName, value: animeStatistics?.completed ?? 0),
+                            Statistics(title: AnimeProgressStatus.watching.displayName, value: animeStatistics?.watching ?? 0),
+                            Statistics(title: AnimeProgressStatus.onHold.displayName, value: animeStatistics?.onHold ?? 0),
+                            Statistics(title: AnimeProgressStatus.dropped.displayName, value: animeStatistics?.dropped ?? 0),
+                            Statistics(title: AnimeProgressStatus.planToWatch.displayName, value: animeStatistics?.planToWatch ?? 0),
                         ]
                         
-                        UserStatistics(title: "Anime statistics", statisticsValues: animeStatistics)
+                        UserStatistics(title: String(localized:"Anime statistics"), statisticsValues: animeStatistics)
                         
                         let mangaStatistics = [
-                            Statistics(title: "Completed", value: mangaStatistics?.completed ?? 0),
-                            Statistics(title: "Reading", value: mangaStatistics?.reading ?? 0),
-                            Statistics(title: "On hold", value: mangaStatistics?.onHold ?? 0),
-                            Statistics(title: "Dropped", value: mangaStatistics?.dropped ?? 0),
-                            Statistics(title: "Planned to read", value: mangaStatistics?.planToRead ?? 0),
+                            Statistics(title: MangaProgressStatus.completed.displayName, value: mangaStatistics?.completed ?? 0),
+                            Statistics(title: MangaProgressStatus.reading.displayName, value: mangaStatistics?.reading ?? 0),
+                            Statistics(title: MangaProgressStatus.onHold.displayName, value: mangaStatistics?.onHold ?? 0),
+                            Statistics(title: MangaProgressStatus.dropped.displayName, value: mangaStatistics?.dropped ?? 0),
+                            Statistics(title: MangaProgressStatus.planToRead.displayName, value: mangaStatistics?.planToRead ?? 0),
                         ]
                         
-                        UserStatistics(title: "Manga statistics", statisticsValues: mangaStatistics)
+                        UserStatistics(title: String(localized: "Manga statistics"), statisticsValues: mangaStatistics)
                         
                     }
                     .onAppear {
                         Task {
                             profileDetails = try await profileController.fetchUserProfile()
-                            
+                            print(profileDetails)
                             let response = try await jikanProfileController.fetchProfileStatistics(username: profileDetails?.name ?? "test")
                             
                             animeStatistics = response.data.anime
@@ -187,13 +188,13 @@ struct LoginView: View {
                     if tokenHandler.isAuthenticated, let profileName = profileDetails?.name,
                        let url = URL(string: "https://myanimelist.net/profile/\(profileName)") {
                         ShareLink(item: url) {
-                            Label("Share profile", systemImage: "square.and.arrow.up")
+                            Image(systemName: "square.and.arrow.up")
                         }
                     }
                 }
                 ToolbarItem(placement: .primaryAction) {
                     NavigationLink(destination: SettingsView()) {
-                        Label("Go to Settings", systemImage: "gearshape.fill")
+                        Image(systemName: "gearshape.fill")
                     }
                 }
                 
@@ -202,8 +203,7 @@ struct LoginView: View {
                         Button {
                             showLogoutConfirmationDialog = true
                         } label: {
-                            Label("Logout", systemImage: "rectangle.portrait.and.arrow.right"
-                            )
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
                         }
                         .confirmationDialog(
                             Text("Do you really want to logout of your MAL-Account?"),

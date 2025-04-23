@@ -1,27 +1,19 @@
 import Foundation
 
 enum MangaSortType: String, CaseIterable {
-    case all = "all"
-    case manga = "manga"
-    case novels = "novels"
-    case oneshots = "oneshots"
-    case doujin = "doujin"
-    case manhwa = "manhwa"
-    case manhua = "manhua"
-    case bypopularity = "bypopularity"
-    case favorite = "favorite"
+    case all, manga, novels, oneshots, doujin, manhwa, manhua, bypopularity, favorite
     
     var displayName: String {
         switch self {
-        case .all: return "All"
-        case .manga: return "Top Manga"
-        case .novels: return "Top Novels"
-        case .oneshots: return "Top One-shots"
-        case .doujin: return "Top Doujinshi"
-        case .manhwa: return "Top Manhwa"
-        case .manhua: return "Top Manhua"
-        case .bypopularity: return "Most Popular"
-        case .favorite: return "Most Favorited"
+        case .all: return String(localized: "All")
+        case .manga: return String(localized: "Top Manga")
+        case .novels: return String(localized: "Top Novels")
+        case .oneshots: return String(localized: "Top One-shots")
+        case .doujin: return String(localized: "Top Doujinshi")
+        case .manhwa: return String(localized: "Top Manhwa")
+        case .manhua: return String(localized: "Top Manhua")
+        case .bypopularity: return String(localized: "Most Popular")
+        case .favorite: return String(localized: "Most Favorited")
         }
     }
 }

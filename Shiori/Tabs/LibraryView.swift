@@ -134,13 +134,13 @@ struct LibraryView: View {
                                 } else {
                                     if (libraryManager.mediaType == .manga) {
                                         ContentUnavailableView {
-                                            Label("No \(libraryManager.mangaProgressStatus.rawValue) mangas found", systemImage: "character.book.closed.ja")
+                                            Label("No \(libraryManager.mangaProgressStatus.displayName) mangas found", systemImage: "character.book.closed.ja")
                                         } description: {
                                             Text("Try a different filter category.")
                                         }
                                     } else {
                                         ContentUnavailableView {
-                                            Label("No \(libraryManager.animeProgressStatus.rawValue) animes found", systemImage: "play.tv")
+                                            Label("No \(libraryManager.animeProgressStatus.displayName) animes found", systemImage: "play.tv")
                                         } description: {
                                             Text("Try a different filter category.")
                                         }
@@ -194,6 +194,7 @@ struct LibraryView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Menu {
+                        Text("Sort by")
                         if libraryManager.mediaType == .anime {
                             Picker("Sort by", selection: $libraryManager.animeSortOrder) {
                                 ForEach(LibraryAnimeSort.allCases, id: \ .self) { sortSelection in
@@ -208,7 +209,7 @@ struct LibraryView: View {
                             }
                         }
                     } label: {
-                        Label("Sorting options", systemImage: "arrow.up.arrow.down")
+                        Image(systemName: "arrow.up.arrow.down")
                     }
                 }
             }
@@ -315,11 +316,11 @@ struct LibraryView: View {
                             Button(action: {
                                 showAlert = true
                             }) {
-                                Label("Delete", systemImage: "trash")
+                                Image(systemName: "trash")
                                     .symbolRenderingMode(.palette)
                                     .foregroundColor(.red)
                             }
-                            .alert("Delete Entry", isPresented: $showAlert) {
+                            .alert("Remove entry", isPresented: $showAlert) {
                                 Button("Delete", role: .destructive) {
                                     Task {
                                         if(libraryManager.mediaType == .manga) {
@@ -337,7 +338,7 @@ struct LibraryView: View {
                                 }
                                 Button("Cancel", role: .cancel) {}
                             } message: {
-                                Text("Are you sure you want to delete \(media.node.getTitle) from your Library?")
+                                Text("Are you sure you want to remove \(media.node.getTitle) from your library?")
                             }
                         }
                     }

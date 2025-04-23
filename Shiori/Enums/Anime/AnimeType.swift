@@ -1,39 +1,21 @@
 import Foundation
 
 enum AnimeType: String {
-    case unknown = "unknown"
-    case tv = "tv"
-    case ova = "ova"
-    case movie = "movie"
+    case unknown, tv, ova, movie, special, ona, music, cm, pv
     case tvSpecial = "tv_special"
-    case special = "special"
-    case ona = "ona"
-    case music = "music"
-    case cm = "cm"
-    case pv = "pv"
     
     var displayName: String {
         switch self {
-        case .unknown:
-            return "Unknown"
-        case .tv:
-            return "TV"
-        case .ova:
-            return "OVA"
-        case .movie:
-            return "Movie"
-        case .tvSpecial:
-            return "TV Special"
-        case .special:
-            return "Special"
-        case .ona:
-            return "ONA"
-        case .music:
-            return "Music"
-        case .cm:
-            return "CM"
-        case .pv:
-            return "PV"
+        case .unknown: return String(localized: "Unknown")
+        case .tv: return String(localized: "TV")
+        case .ova: return String(localized: "OVA")
+        case .movie: return String(localized: "Movie")
+        case .tvSpecial: return String(localized: "TV Special")
+        case .special: return String(localized: "Special")
+        case .ona: return String(localized: "ONA")
+        case .music: return String(localized: "Music")
+        case .cm: return String(localized: "CM")
+        case .pv: return String(localized: "PV")
         }
     }
 }

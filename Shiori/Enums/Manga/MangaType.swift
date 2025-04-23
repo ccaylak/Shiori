@@ -1,36 +1,21 @@
 import Foundation
 
 enum MangaType: String, CaseIterable {
-    case unknown = "unknown"
-    case manga = "manga"
-    case novel = "novel"
+    case unknown, manga, novel, doujinshi, manhwa, manhua, oel
     case light_novel = "light_novel"
     case one_shot = "one_shot"
-    case doujinshi = "doujinshi"
-    case manhwa = "manhwa"
-    case manhua = "manhua"
-    case oel = "oel"
     
     var displayName: String {
         switch self {
-        case .unknown:
-            return "Unknown"
-        case .manga:
-            return "Manga"
-        case .novel:
-            return "Novel"
-        case .one_shot:
-            return "One-Shot"
-        case .doujinshi:
-            return "Doujinshi"
-        case .manhwa:
-            return "Manhwa"
-        case .manhua:
-            return "Manhua"
-        case .oel:
-            return "OEL"
-        case .light_novel:
-            return "Light Novel"
+        case .unknown: return String(localized: "Unknown")
+        case .manga: return String(localized: "Manga")
+        case .novel: return String(localized: "Novel")
+        case .one_shot: return String(localized: "One-Shot")
+        case .doujinshi: return String(localized: "Doujinshi")
+        case .manhwa: return String(localized: "Manhwa")
+        case .manhua: return String(localized: "Manhua")
+        case .oel: return String(localized: "OEL")
+        case .light_novel: return String(localized: "Light Novel")
         }
     }
 }

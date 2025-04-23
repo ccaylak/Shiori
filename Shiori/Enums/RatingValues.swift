@@ -15,17 +15,17 @@ enum RatingValues: Int, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .zero : return "Not rated yet"
-        case .one: return "1 (Appalling)"
-        case .two: return "2 (Horrible)"
-        case .three: return "3 (Very bad)"
-        case .four: return "4 (Bad)"
-        case .five: return "5 (Average)"
-        case .six: return "6 (Fine)"
-        case .seven: return "7 (Good)"
-        case .eight: return "8 (Very good)"
-        case .nine: return "9 (Great)"
-        case .ten: return "10 (Masterpiece)"
+        case .zero : return String(localized: "Not rated yet")
+        case .one: return String(localized: "1 (Appalling)")
+        case .two: return String(localized: "2 (Horrible)")
+        case .three: return String(localized: "3 (Very bad)")
+        case .four: return String(localized: "4 (Bad)")
+        case .five: return String(localized: "5 (Average)")
+        case .six: return String(localized: "6 (Fine)")
+        case .seven: return String(localized: "7 (Good)")
+        case .eight: return String(localized: "8 (Very good)")
+        case .nine: return String(localized: "9 (Great)")
+        case .ten: return String(localized: "10 (Masterpiece)")
         }
     }
 }

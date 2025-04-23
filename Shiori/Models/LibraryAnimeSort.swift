@@ -9,10 +9,10 @@ enum LibraryAnimeSort: String, CaseIterable {
     
     var displayName: String {
         switch self {
-            case .score: return "Score"
-            case .lastUpdated: return "Last updated"
-            case .title: return "Anime title"
-            case .startDate: return "Anime start date"
+        case .score: return String(localized: "Score")
+        case .lastUpdated: return String(localized: "Last updated")
+        case .title: return String(localized: "Title")
+        case .startDate: return String(localized: "Airing date")
         }
     }
 }

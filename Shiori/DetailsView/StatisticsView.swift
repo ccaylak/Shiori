@@ -9,10 +9,7 @@ struct StatisticsView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 15) {
-            Text("Statistics by ")
-                .font(.caption)
-            +
-            Text("\(users) users")
+            Text("Based on \(users) user ratings")
                 .font(.caption)
                 .bold()
             

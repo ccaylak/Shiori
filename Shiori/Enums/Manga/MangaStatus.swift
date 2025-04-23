@@ -1,27 +1,19 @@
 import Foundation
 
 enum MangaStatus: String, CaseIterable {
-    case finished = "finished"
+    case finished, discontinued, unknown
     case currentlyPublishing = "currently_publishing"
     case notYetPublished = "not_yet_published"
     case onHiatus = "on_hiatus"
-    case discontinued = "discontinued"
-    case unknown = "unknown"
     
     var displayName: String {
         switch self {
-        case .finished: 
-            return "Finished"
-        case .currentlyPublishing: 
-            return "Currently Publishing"
-        case .notYetPublished: 
-            return "Not Yet Published"
-        case .onHiatus: 
-            return "On Hiatus"
-        case .discontinued: 
-            return "Discontinued"
-        case .unknown: 
-            return "Unknown"
+        case .finished: return String(localized: "Finished")
+        case .currentlyPublishing: return String(localized: "Currently Publishing")
+        case .notYetPublished: return String(localized: "Publishing soon")
+        case .onHiatus: return String(localized: "On Hiatus")
+        case .discontinued: return String(localized: "Discontinued")
+        case .unknown: return String(localized: "Unknown")
         }
     }
 }

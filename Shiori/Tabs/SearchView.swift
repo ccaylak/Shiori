@@ -44,7 +44,7 @@ struct SearchView: View {
                     mangaSortPicker
                 }
             } label: {
-                Label("Sorting method", systemImage: "arrow.up.arrow.down")
+                Image(systemName: "arrow.up.arrow.down")
             }
         }
     }

@@ -73,7 +73,7 @@ struct DetailsView: View {
                                             .accentColor(.primary)
                                         }
                                     } else {
-                                        Button("Add to \(resultManager.mediaType == .anime ? "Watch" : "Reading") list") {
+                                        Button("Add to \(resultManager.mediaType == .anime ? "Watch" : "Reading") library") {
                                             Task {
                                                 isLoading = true
                                                 defer { isLoading = false }
@@ -97,7 +97,7 @@ struct DetailsView: View {
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         } else {
                             GroupBox {
-                                Text("Log in with your MyAnimeList account to see your \(resultManager.mediaType.rawValue) progress, rating, and status.")
+                                Text("Log in with your MyAnimeList account to see your \(resultManager.mediaType.displayName) progress, rating, and status.")
                                     .font(.body)
                                     .foregroundColor(.secondary)
                                     .multilineTextAlignment(.leading)
@@ -169,7 +169,7 @@ struct DetailsView: View {
                         
                         if let url = URL(string: "https://myanimelist.net/\(resultManager.mediaType.rawValue)/\(media.id)/\(escapedTitle)") {
                             ShareLink(item: url) {
-                                Label("Share \(resultManager.mediaType.rawValue.capitalized)", systemImage: "square.and.arrow.up")
+                                Image(systemName: "square.and.arrow.up")
                             }
                         } else {
                             Text("Invalid URL")
@@ -240,11 +240,11 @@ struct DetailsView: View {
                                                     Button(action: {
                                                         showAlert = true
                                                     }) {
-                                                        Label("Delete", systemImage: "trash")
+                                                        Image(systemName: "trash")
                                                             .symbolRenderingMode(.palette)
                                                             .foregroundColor(.red)
                                                     }
-                                                    .alert("Delete library entry", isPresented: $showAlert) {
+                                                    .alert("Delete progress", isPresented: $showAlert) {
                                                         Button("Delete", role: .destructive) {
                                                             Task {
                                                                 if(resultManager.mediaType == .manga) {
@@ -261,7 +261,7 @@ struct DetailsView: View {
                                                         }
                                                         Button("Cancel", role: .cancel) {}
                                                     } message: {
-                                                        Text("Are you sure you want to delete \(media.getTitle) from your library?")
+                                                        Text("Do you really want to delete your progress for \(media.getTitle)?")
                                                     }
                                                 }
                                             }
