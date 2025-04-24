@@ -20,8 +20,72 @@
         }
       }
     },
+    "%@, %lld chapters" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld Kapitel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$lld chapters"
+          }
+        }
+      }
+    },
+    "%@, %lld chapters in %lld volumes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld Kapitel in %3$lld Bänden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$lld chapters in %3$lld volumes"
+          }
+        }
+      }
+    },
+    "%@, %lld episodes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld Folgen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$lld episodes"
+          }
+        }
+      }
+    },
+    "%@, %lld parts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld Teile"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$lld parts"
+          }
+        }
+      }
+    },
     "%lld" : {
-
+      "shouldTranslate" : false
     },
     "%lld chapters (%@)" : {
       "localizations" : {
@@ -75,21 +139,16 @@
         }
       }
     },
-    "%lld/%lld" : {
+    "%lld/%@" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld/%2$lld"
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$lld/%2$lld"
+            "value" : "%1$lld/%2$@"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "1" : {
       "shouldTranslate" : false
@@ -204,12 +263,38 @@
         }
       }
     },
-    "Add to %@ library" : {
+    "Add to Library" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ zur Bibliothek hinzufügen"
+            "value" : "Zur Bibliothek hinzufügen"
+          }
+        }
+      }
+    },
+    "Aired from %@ - %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgestrahlt von %1$@ - %2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Aired from %1$@ - %2$@"
+          }
+        }
+      }
+    },
+    "Aired in %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wurde %@ ausgestrahlt"
           }
         }
       }
@@ -230,6 +315,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Veröffentlichungsdatum"
+          }
+        }
+      }
+    },
+    "Airing since %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird ausgestrahlt seit %@"
           }
         }
       }
@@ -634,16 +729,6 @@
         }
       }
     },
-    "German" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deutsch"
-          }
-        }
-      }
-    },
     "GitHub repository" : {
       "localizations" : {
         "de" : {
@@ -710,16 +795,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Registrierungsdatum:"
-          }
-        }
-      }
-    },
-    "Language" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprache"
           }
         }
       }
@@ -869,7 +944,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Produziert ovn"
+            "value" : "Produziert von"
           }
         }
       }
@@ -965,10 +1040,24 @@
       }
     },
     "No %@ animes found" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine %@ Anime gefunden"
+          }
+        }
+      }
     },
     "No %@ mangas found" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine %@ Manga gefunden"
+          }
+        }
+      }
     },
     "Non-binary" : {
       "localizations" : {
@@ -1136,6 +1225,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Profil"
+          }
+        }
+      }
+    },
+    "Published from %@ - %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wurde von %1$@ - %2$@ veröffnetlich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Published from %1$@ - %2$@"
+          }
+        }
+      }
+    },
+    "Published in %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veröffentlicht am %@"
+          }
+        }
+      }
+    },
+    "Publishing since %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird seit %@ veröffentlich"
           }
         }
       }
@@ -1610,12 +1735,52 @@
         }
       }
     },
+    "Unknown airing date" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekanntes Veröffentlichungsdatum"
+          }
+        }
+      }
+    },
+    "Unknown publishing date" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekanntes Serialisierungsdatum"
+          }
+        }
+      }
+    },
     "Watching" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Am schauen"
+          }
+        }
+      }
+    },
+    "Will air in %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird im %@ ausgestrahlt"
+          }
+        }
+      }
+    },
+    "Will publish in %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird im %@ veröffentlich"
           }
         }
       }

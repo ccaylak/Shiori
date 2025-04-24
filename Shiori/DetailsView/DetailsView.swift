@@ -67,13 +67,16 @@ struct DetailsView: View {
                                             Text(resultManager.mediaType == .anime ? "Episodes" : "Chapters")
                                                 .font(.caption)
                                                 .bold()
-                                            Label(resultManager.mediaType == .anime
-                                                  ? "\(media.getListStatus.getWatchedEpisodes)/\(media.getEpisodes)"
-                                                  : "\(media.getListStatus.getReadChapters)/\(media.getChapters)", systemImage: resultManager.mediaType == .anime ? "tv.fill" : "book.pages")
+                                            Label(
+                                                resultManager.mediaType == .anime
+                                                        ? "\(media.getListStatus.getWatchedEpisodes)/\((media.getEpisodes != 0) ? "\(media.getEpisodes)" : "?")"
+                                                        : "\(media.getListStatus.getReadChapters)/\((media.getChapters != 0) ? "\(media.getChapters)" : "?")",
+                                                    systemImage: resultManager.mediaType == .anime ? "tv.fill" : "book.pages"
+                                            )
                                             .accentColor(.primary)
                                         }
                                     } else {
-                                        Button("Add to \(resultManager.mediaType == .anime ? "Watch" : "Reading") library") {
+                                        Button("Add to Library") {
                                             Task {
                                                 isLoading = true
                                                 defer { isLoading = false }

@@ -34,13 +34,6 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.navigationLink)
                     
-                    Picker("Language", systemImage: "globe", selection: $settingsManager.appLanguage) {
-                        ForEach(AppLanguage.allCases, id: \.self) { language in
-                            Text(language.displayName).tag(language)
-                        }
-                    }
-                    .pickerStyle(.navigationLink)
-                    
                     HStack {
                         Label("Show mature content", systemImage: "eye")
                         Spacer()

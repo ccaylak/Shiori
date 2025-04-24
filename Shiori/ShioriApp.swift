@@ -16,7 +16,7 @@ struct ShioriApp: App {
                         isFirstLaunch = false
                     }
                 }
-                .environment(\.locale, .init(identifier: settingsManager.appLanguage.rawValue))
+                //.environment(\.locale, .init(identifier: settingsManager.appLanguage.rawValue))
         }
     }
 }

@@ -84,11 +84,11 @@ struct GeneralInformationView: View {
         case (.movie, 1):
             return type.displayName
         case (.movie, let episodes) where episodes > 1:
-            return "\(type.displayName), \(episodes) parts"
+            return String(localized: "\(type.displayName), \(episodes) parts")
         case (.tv, 0):
             return type.displayName
         case (.tv, let episodes):
-            return "\(type.displayName), \(episodes) episodes"
+            return String(localized: "\(type.displayName), \(episodes) episodes")
         default:
             return type.displayName
         }
@@ -98,9 +98,9 @@ struct GeneralInformationView: View {
         
         switch (chapters, volumes) {
         case (let chapters, let volumes) where chapters > 0 && volumes > 0:
-            return "\(type.displayName), \(chapters) chapters in \(volumes) volumes"
+            return String(localized: "\(type.displayName), \(chapters) chapters in \(volumes) volumes")
         case (let chapters, 0) where chapters > 0:
-            return "\(type.displayName), \(chapters) chapters"
+            return String(localized: "\(type.displayName), \(chapters) chapters")
         default:
             return type.displayName
         }
@@ -124,17 +124,17 @@ struct GeneralInformationView: View {
         
         switch status {
         case .finishedAiring where startFormatted != nil && endFormatted != nil && startFormatted == endFormatted:
-            return "Aired in \(startFormatted!)"
+            return String(localized: "Aired in \(startFormatted!)")
         case .finishedAiring where startFormatted != nil && endFormatted != nil:
-            return "Aired from \(startFormatted!) - \(endFormatted!)"
+            return String(localized: "Aired from \(startFormatted!) - \(endFormatted!)")
         case .currentlyAiring where startFormatted != nil:
-            return "Airing since \(startFormatted!)"
+            return String(localized: "Airing since \(startFormatted!)")
         case .notYetAired where startFormatted != nil:
-            return "Will air in \(startFormatted!)"
+            return String(localized: "Will air in \(startFormatted!)")
         case .notYetAired where startFormatted == nil && endFormatted == nil:
-            return "Unkown release date"
+            return String(localized: "Unknown airing date")
         default:
-            return "Unkown release date"
+            return String(localized: "Unknown airing date")
         }
     }
     
@@ -142,21 +142,19 @@ struct GeneralInformationView: View {
         
         switch status {
         case .finished where startFormatted != nil && endFormatted != nil && startFormatted == endFormatted:
-            return "Published in \(startFormatted!)"
+            return String(localized: "Published in \(startFormatted!)")
         case .finished where startFormatted != nil && endFormatted != nil:
-            return "Published from \(startFormatted!) - \(endFormatted!)"
+            return String(localized: "Published from \(startFormatted!) - \(endFormatted!)")
         case .currentlyPublishing where startFormatted != nil:
-            return "Publishing since \(startFormatted!)"
+            return String(localized: "Publishing since \(startFormatted!)")
         case .notYetPublished where startFormatted != nil:
-            return "Will publish in \(startFormatted!)"
+            return String(localized: "Will publish in \(startFormatted!)")
         case .notYetPublished where startFormatted == nil && endFormatted == nil:
-            return "Unkown publishing date"
-        case .discontinued:
-            return "Published from \(startFormatted!) - \(endFormatted ?? "Unknown")"
-        case .onHiatus:
-            return "Published from \(startFormatted!) - \(endFormatted ?? "Unknown")"
+            return String(localized: "Unknown publishing date")
+        case .discontinued, .onHiatus:
+            return String(localized: "Published from \(startFormatted!) - \(endFormatted ?? "Unknown")")
         default:
-            return "Unkown publishing date"
+            return String(localized: "Unknown publishing date")
         }
     }
 }
