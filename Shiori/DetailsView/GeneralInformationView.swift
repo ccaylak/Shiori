@@ -2,7 +2,7 @@ import SwiftUI
 
 struct GeneralInformationView: View {
     
-    let type: String
+    let type: TypeWrapper
     let episodes: Int?
     let numberOfChapters: Int?
     let numberOfVolumes: Int?
@@ -10,25 +10,7 @@ struct GeneralInformationView: View {
     let endDate: String
     let studios: [Studio]
     let authorInfos: [AuthorInfos]
-    let status: String
-    
-    var mediaType: Any? {
-        if let mangaType = MangaType(rawValue: type) {
-            return mangaType
-        } else if let animeType = AnimeType(rawValue: type) {
-            return animeType
-        }
-        return nil
-    }
-    
-    var statusType: Any? {
-        if let mangaStatus = MangaStatus(rawValue: status) {
-            return mangaStatus
-        } else if let animeStatus = AnimeStatus(rawValue: status) {
-            return animeStatus
-        }
-        return nil
-    }
+    let status: StatusWrapper
     
     var body: some View {
         LazyVStack(alignment: .leading, spacing: 10) {
@@ -70,13 +52,12 @@ struct GeneralInformationView: View {
     }
     
     func formattedDetails(chapters: Int, volumes: Int, episodes: Int) -> String {
-        var formattedResult = ""
-        if mediaType is MangaType{
-            formattedResult = formattedMangaDetails(type: mediaType as! MangaType, chapters: chapters, volumes: volumes)
-        } else if mediaType is AnimeType {
-            formattedResult = formattedAnimeDetails(type: mediaType as! AnimeType, episodes: episodes)
+        switch type {
+        case .manga(let manga):
+            return formattedMangaDetails(type: manga, chapters: chapters, volumes: volumes)
+        case .anime(let anime):
+            return formattedAnimeDetails(type: anime, episodes: episodes)
         }
-        return formattedResult
     }
     
     private func formattedAnimeDetails(type: AnimeType, episodes: Int) -> String {
@@ -111,11 +92,14 @@ struct GeneralInformationView: View {
         var formattedReleaseDate = ""
         let (startFormatted, endFormatted) = String.formatDates(startDate: startDate, endDate: endDate)
         
-        if statusType is MangaStatus {
-            formattedReleaseDate = formatPublishRange(startFormatted: startFormatted, endFormatted: endFormatted, status: statusType as! MangaStatus)
-        } else if statusType is AnimeStatus {
-            formattedReleaseDate = formatReleaseRange(startFormatted: startFormatted, endFormatted: endFormatted, status: statusType as! AnimeStatus)
+        switch status {
+        case .anime(let animeStatus): formattedReleaseDate = formatReleaseRange(startFormatted: startFormatted, endFormatted: endFormatted, status: animeStatus)
+        case .manga(let mangaStatus):
+            formattedReleaseDate = formatPublishRange(startFormatted: startFormatted, endFormatted: endFormatted, status: mangaStatus)
+        case .unknown:
+            formattedReleaseDate = ""
         }
+        
         
         return formattedReleaseDate
     }
@@ -166,7 +150,7 @@ struct GeneralInformationView: View {
     ]
     
     GeneralInformationView(
-        type: "tv",
+        type: .anime(.tv),
         episodes: 10,
         numberOfChapters: nil,
         numberOfVolumes: nil,
@@ -174,6 +158,6 @@ struct GeneralInformationView: View {
         endDate: "2025-10-10",
         studios: exampleStudios,
         authorInfos: [],
-        status: "currently_airing"
+        status: .anime(.currentlyAiring)
     )
 }

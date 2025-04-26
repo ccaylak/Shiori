@@ -8,20 +8,10 @@ struct LibraryMediaView: View {
     let title: String
     let image: String
     let releaseYear: String
-    let type: String
+    let type: TypeWrapper
     let rating: Int
     let completedUnits: Int
     let totalUnits: Int
-    
-    var mediaType: Any? {
-        if let mangaType = MangaType(rawValue: type) {
-            return mangaType
-        } else if let animeType = AnimeType(rawValue: type) {
-            return animeType
-        }
-        
-        return nil
-    }
     
     private var isDarkMode: Bool {
         if settingsManager.appearance == .system {
@@ -89,10 +79,12 @@ struct LibraryMediaView: View {
     
     func formattedDetails(year: String) -> String {
         var formattedResult = ""
-        if mediaType is MangaType {
-            formattedResult = formattedMangaDetails(type: mediaType as! MangaType, year: year)
-        } else if mediaType is AnimeType {
-            formattedResult = formattedAnimeDetails(type: mediaType as! AnimeType, year: year)
+        
+        switch type {
+        case .anime(let animeType):
+            formattedResult = formattedAnimeDetails(type: animeType, year: year)
+        case .manga(let mangaType):
+            formattedResult = formattedMangaDetails(type: mangaType, year: year)
         }
         return formattedResult
     }
@@ -111,7 +103,7 @@ struct LibraryMediaView: View {
         title: "Tokyo Ghoul",
         image: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg",
         releaseYear: "2020-01-01",
-        type: "manga",
+        type: .manga(.manga),
         rating: 4,
         completedUnits: 5,
         totalUnits: 0

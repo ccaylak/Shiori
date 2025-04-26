@@ -1,8 +1,9 @@
 import Foundation
 
 extension ListStatus {
-    var getStatus: String {
-        status ?? "Unknown"
+    
+    var getProgressStatus: ProgressStatusWrapper {
+        progressStatusWrapper
     }
     
     var getRating: Int {
@@ -16,4 +17,19 @@ extension ListStatus {
     var getReadChapters: Int {
         readChapters ?? 0
     }
+    
+    private var getStatusString: String {
+        status ?? "Unknown"
+    }
+    
+    private var progressStatusWrapper: ProgressStatusWrapper {
+        if let animeStatus = AnimeProgressStatus(rawValue: getStatusString) {
+            return .anime(animeStatus)
+        } else if let mangaStatus = MangaProgressStatus(rawValue: getStatusString) {
+            return .manga(mangaStatus)
+        }
+        
+        return .unknown
+    }
+    
 }

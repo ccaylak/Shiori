@@ -74,7 +74,7 @@ struct LibraryView: View {
                                     }) {
                                         LibraryMediaView(
                                             title: manga.node.getTitle,
-                                            image: manga.node.images.large,
+                                            image: manga.node.getCover,
                                             releaseYear: manga.node.getReleaseYear,
                                             type: manga.node.getType,
                                             rating: manga.node.getListStatus.getRating,
@@ -105,7 +105,7 @@ struct LibraryView: View {
                                     }) {
                                         LibraryMediaView(
                                             title: anime.node.getTitle,
-                                            image: anime.node.images.large,
+                                            image: anime.node.getCover,
                                             releaseYear: anime.node.getReleaseYear,
                                             type: anime.node.getType,
                                             rating: anime.node.getListStatus.getRating,
@@ -221,7 +221,7 @@ struct LibraryView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         List {
                             VStack {
-                                AsyncImageView(imageUrl: media.node.images.large)
+                                AsyncImageView(imageUrl: media.node.getCover)
                                     .frame(width: 146, height: 230)
                                     .cornerRadius(12)
                                     .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)

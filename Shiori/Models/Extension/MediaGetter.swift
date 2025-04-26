@@ -22,18 +22,22 @@ extension Media {
             } else {
                 return title
             }
-
+            
         default:
             return "Unknown title"
         }
     }
     
     var getReleaseYear: String {
-        String(startDate?.prefix(4) ?? "Unknown startDate")
+        guard let startDate = startDate else {
+            return String(localized: "Unknown release year")
+        }
+        return String(startDate.prefix(4))
     }
+
     
     var getStartDate: String {
-        startDate ?? "Unknown startDate"
+        startDate ?? String(localized: "Unknown startDate")
     }
     
     var getEpisodes: Int {
@@ -72,14 +76,46 @@ extension Media {
         genres ?? []
     }
     
-    var getStatus: String {
-        // hier könnte man mit enums arbeiten
-        status ?? "Unknown status"
+    var getCover: String {
+        images.large
     }
     
-    var getType: String {
-        // hier könnte man mit enums arbeiten
-        type ?? "Unknown type"
+    var getMediaStatus: StatusWrapper {
+
+        switch isMangaOrAnime(from: type ?? "") {
+        case .anime:
+            let animeStatus = AnimeStatus(rawValue: status ?? "") ?? .unknown
+            return .anime(animeStatus)
+        case .manga:
+            let mangaStatus = MangaStatus(rawValue: status ?? "") ?? .unknown
+            return .manga(mangaStatus)
+        case .unknown:
+            return .unknown
+        }
+    }
+    
+    var getMediaType: MediaType {
+        switch isMangaOrAnime(from: type ?? "") {
+        case .anime: MediaType.anime
+        case .manga: MediaType.manga
+        case .unknown:
+            MediaType.unknown
+        }
+    }
+    
+    var getType: TypeWrapper {
+        let raw = type ?? ""
+
+        switch isMangaOrAnime(from: raw) {
+        case .anime:
+            let anime = AnimeType(rawValue: raw) ?? .unknown
+            return .anime(anime)
+        case .manga:
+            let manga = MangaType(rawValue: raw) ?? .unknown
+            return .manga(manga)
+        case .unknown:
+            return .anime(.unknown)
+        }
     }
     
     var getVolumes: Int {
@@ -95,7 +131,7 @@ extension Media {
     }
     
     var getDescription: String {
-        description ?? "Unknown description"
+        description ?? String(localized: "No description available")
     }
     
     var getScore: Double {
@@ -112,5 +148,15 @@ extension Media {
     
     var getPopularity: Int {
         popularity ?? 0
+    }
+    
+    private func isMangaOrAnime(from type: String) -> MediaType {
+        if MangaType(rawValue: type) != nil {
+            return .manga
+        }
+        if AnimeType(rawValue: type) != nil {
+            return .anime
+        }
+        return .unknown
     }
 }

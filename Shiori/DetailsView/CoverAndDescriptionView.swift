@@ -7,8 +7,7 @@ struct CoverAndDescriptionView: View {
     let score: Double
     let mediaCount: Int
     let description: String
-    let type: String
-    let mediaType: MediaType
+    let type: TypeWrapper
     
     @State private var isDescriptionExpanded = false
     
@@ -18,7 +17,6 @@ struct CoverAndDescriptionView: View {
                 imageUrl: imageUrl,
                 score: score,
                 type: type,
-                mediaType: mediaType,
                 mediaCount: mediaCount
             )
             VStack (alignment: .leading) {
@@ -58,8 +56,7 @@ struct CoverImage: View {
     
     let imageUrl: String
     let score: Double
-    let type: String
-    let mediaType: MediaType
+    let type: TypeWrapper
     let mediaCount: Int
     
     var body: some View {
@@ -73,14 +70,13 @@ struct CoverImage: View {
             ScoreBadge(score: score)
         }
         .overlay(alignment: .bottomTrailing) {
-            MediaInfoText(mediaCount: mediaCount, type: type, mediaType: mediaType)
+            MediaInfoText(mediaCount: mediaCount, type: type)
         }
         .frame(maxWidth: .infinity)
     }
 }
 
 struct ScoreBadge: View {
-    
     let score: Double
     
     var body: some View {
@@ -102,14 +98,11 @@ struct ScoreBadge: View {
 }
 
 struct MediaInfoText: View {
-    
     let mediaCount: Int
-    let type: String
-    let mediaType: MediaType
+    let type: TypeWrapper
     
     var body: some View {
-        if let formattedText = formatMediaInfo(type: type, count: mediaCount),
-           (mediaType == .anime || mediaType == .manga) {
+        if let formattedText = formatMediaInfo(type: type, count: mediaCount) {
             Text(formattedText)
                 .bold()
                 .font(.title3)
@@ -120,17 +113,24 @@ struct MediaInfoText: View {
         }
     }
     
-    func formatMediaInfo(type: String, count: Int) -> String? {
+    func formatMediaInfo(type: TypeWrapper, count: Int) -> String? {
         guard count > 0 else { return nil }
         
         switch type {
-        case AnimeType.movie.rawValue where count > 1:
-            return "\(count) parts"
-        case AnimeType.tv.rawValue where count > 1:
-            return "\(count) episodes"
-        case MangaType.manga.rawValue:
-            return "\(count) chapters"
-        default:
+        case .anime(let animeType):
+            switch animeType {
+            case .movie where count > 1:
+                return "\(count) parts"
+            case .tv where count > 1:
+                return "\(count) episodes"
+            default:
+                return nil
+            }
+        case .manga(let mangaType):
+            if mangaType == .manga {
+                return "\(count) chapters"
+            }
+            
             return nil
         }
     }
@@ -158,7 +158,6 @@ more to stop their and nefarious goals from becoming a concrete reality.
 
 [Written by MAL Rewrite]
 """,
-        type: "tv",
-        mediaType: MediaType.anime
+        type: .anime(.tv),
     )
 }

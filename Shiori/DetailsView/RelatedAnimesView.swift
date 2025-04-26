@@ -14,7 +14,7 @@ struct RelatedMediaView: View {
                         NavigationLink(destination: DetailsView(media: relatedMedia.node)) {
                             VStack(alignment: .center) {
                                 Text(relatedMedia.getRelationType)
-                                AsyncImageView(imageUrl: relatedMedia.node.images.large)
+                                AsyncImageView(imageUrl: relatedMedia.node.getCover)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             .padding(8)

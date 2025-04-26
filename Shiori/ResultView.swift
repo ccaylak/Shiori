@@ -23,11 +23,11 @@ struct ResultView: View {
                     NavigationLink(destination: DetailsView(media: media.node)) {
                         MediaView(
                             title: media.node.getTitle,
-                            image: media.node.images.large,
+                            image: media.node.getCover,
                             releaseYear: media.node.getReleaseYear,
                             type: media.node.getType,
-                            status: media.node.getStatus,
-                            mediaCount: (resultManager.mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters)
+                            mediaCount: (resultManager.mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters),
+                            status: media.node.getMediaStatus
                         )
                     }
                 }
@@ -92,6 +92,8 @@ struct ResultView: View {
                 mediaResponse = try await animeController.fetchPreviews(searchTerm: searchTerm)
             case .manga:
                 mediaResponse = try await mangaController.fetchPreviews(searchTerm: searchTerm)
+            case .unknown:
+                print("test")
             }
         } catch {
             print("Loading media data failed: \(error.localizedDescription)")

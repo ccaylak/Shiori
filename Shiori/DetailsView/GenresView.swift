@@ -22,7 +22,9 @@ struct GenresView: View {
                                 .foregroundColor(.primary)
                         }
                     }
-                }.scrollIndicators(.hidden)
+                }
+                .scrollClipDisabled()
+                .scrollIndicators(.hidden)
             }
         }
     }

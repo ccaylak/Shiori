@@ -8,29 +8,9 @@ struct MediaView: View {
     let title: String
     let image: String
     let releaseYear: String
-    let type: String
-    let status: String
+    let type: TypeWrapper
     let mediaCount: Int
-    
-    var statusType: Any? {
-        if let mangaStatus = MangaStatus(rawValue: status) {
-            return mangaStatus
-        } else if let animeStatus = AnimeStatus(rawValue: status) {
-            return animeStatus
-        }
-        
-        return nil
-    }
-    
-    var mediaType: Any? {
-        if let mangaType = MangaType(rawValue: type) {
-            return mangaType
-        } else if let animeType = AnimeType(rawValue: type) {
-            return animeType
-        }
-        
-        return nil
-    }
+    let status: StatusWrapper
     
     private var isDarkMode: Bool {
         if settingsManager.appearance == .system {
@@ -79,11 +59,14 @@ struct MediaView: View {
     
     func formattedDetails(year: String) -> String {
         var formattedResult = ""
-        if mediaType is MangaType{
-            formattedResult = formattedMangaDetails(type: mediaType as! MangaType, year: year)
-        } else if mediaType is AnimeType {
-            formattedResult = formattedAnimeDetails(type: mediaType as! AnimeType, year: year)
+        
+        switch type {
+        case .anime(let animeType):
+            formattedResult = formattedAnimeDetails(type: animeType, year: year)
+        case .manga(let mangaType):
+            formattedResult = formattedMangaDetails(type: mangaType, year: year)
         }
+        
         return formattedResult
     }
     
@@ -96,14 +79,29 @@ struct MediaView: View {
     }
     
     func formattedOtherDetails(year: String) -> String {
-        var formattedResult = ""
-        if mediaType is MangaType && statusType is MangaStatus{
-            formattedResult = formattedOtherMangaDetails(chapters: mediaCount, status: statusType as! MangaStatus, type: mediaType as! MangaType)
-        } else if mediaType is AnimeType && statusType is AnimeStatus {
-            formattedResult = formattedOtherAnimeDetails(episodes: mediaCount, status: statusType as! AnimeStatus, type: mediaType as! AnimeType)
+        switch (type, status) {
+        case (.anime(let animeType), .anime(let animeStatus)):
+            return formattedOtherAnimeDetails(
+                episodes: mediaCount,
+                status: animeStatus,
+                type: animeType
+            )
+
+        case (.manga(let mangaType), .manga(let mangaStatus)):
+            return formattedOtherMangaDetails(
+                chapters: mediaCount,
+                status: mangaStatus,
+                type: mangaType
+            )
+
+        default:
+            return ""
         }
-        return formattedResult
     }
+
+    // getMediaStatus() kannst du in diesem Fall sogar ganz weglassen,
+    // weil du den Status hier schon zur Hand hast.
+
     
     func formattedOtherAnimeDetails(episodes: Int, status: AnimeStatus, type: AnimeType) -> String {
         
@@ -138,8 +136,8 @@ struct MediaView: View {
         title: "Tokyo Ghoul",
         image: "https://cdn.myanimelist.net/images/manga/3/145997l.jpg",
         releaseYear: "2021",
-        type: "tv",
-        status: "finished_airing",
-        mediaCount: 12
+        type: .anime(.tv),
+        mediaCount: 12,
+        status: .anime(.currentlyAiring)
     )
 }
