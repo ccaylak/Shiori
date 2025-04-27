@@ -1,6 +1,6 @@
 import Foundation
 
-@MainActor class JikanProfileController {
+@MainActor public class JikanProfileController {
     
     func fetchProfileStatistics(username: String) async throws -> JikanResponse {
         let url = URL(string: JikanEndpoints.Profile(username: username).statistics)!

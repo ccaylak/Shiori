@@ -6,6 +6,8 @@ struct DetailsView: View {
     @State var isDescriptionExpanded = false
     @State private var isSheetPresented = false
     
+    @State private var jikanCharacters: JikanCharacter = JikanCharacter(data: [])
+    
     struct UserProgress {
         var mangaProgress: MangaProgressStatus
         var animeProgress: AnimeProgressStatus
@@ -31,6 +33,7 @@ struct DetailsView: View {
     
     let animeController = AnimeController()
     let mangaController = MangaController()
+    let jikanCharacterController = JikanCharacterController()
     
     var body: some View {
         ZStack {
@@ -109,8 +112,11 @@ struct DetailsView: View {
                             .padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
                             .background(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.3))
                             .cornerRadius(12)
-                            .onTapGesture(perform: {isSheetPresented = true})
-                            
+                            .onTapGesture(perform: {
+                                if media.getListStatus.getProgressStatus != .unknown {
+                                    isSheetPresented = true
+                                }
+                            })
                         } else {
                             GroupBox {
                                 Text("Log in with your MyAnimeList account to see your \(resultManager.mediaType.displayName) progress, rating, and status.")
@@ -165,6 +171,34 @@ struct DetailsView: View {
                     if let recommendations = media.recommendations, !recommendations.isEmpty {
                         RecommendationsView(recommendations: recommendations)
                     }
+                    Divider()
+                    let characters = jikanCharacters.data
+                    if !characters.isEmpty {
+                        VStack (alignment: .leading){
+                            Text("Characters")
+                                .font(.headline)
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 10) {
+                                    ForEach(characters, id: \.id) { character in
+                                        VStack(alignment: .leading) {
+                                            AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
+                                                .frame(width: 60, height: 90)
+                                                .cornerRadius(12)
+                                                .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+                                            Text(character.metaData.name)
+                                                .font(.caption)
+                                                .frame(width: 60, alignment: .leading)
+                                                .lineLimit(1)
+                                                .truncationMode(.tail)
+                                        }
+                                    }
+                                }
+                            }
+                            .scrollClipDisabled()
+                        }
+                            
+                    }
+                    
                 }
                 .scrollIndicators(.hidden)
                 .scrollClipDisabled()
@@ -326,6 +360,8 @@ struct DetailsView: View {
                 do {
                     if resultManager.mediaType == .anime {
                         media = try await animeController.fetchDetails(id: media.id)
+                        jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
+
                         
                         userProgress.progress = media.getListStatus.getWatchedEpisodes
                         userProgress.rating = media.getListStatus.getRating
@@ -334,7 +370,8 @@ struct DetailsView: View {
                     
                     if resultManager.mediaType == .manga {
                         media = try await mangaController.fetchDetails(id: media.id)
-                        
+                        jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id)
+
                         userProgress.progress = media.getListStatus.getReadChapters
                         userProgress.rating = media.getListStatus.getRating
                         userProgress.end = media.getChapters

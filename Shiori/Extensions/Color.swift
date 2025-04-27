@@ -11,7 +11,7 @@ extension Color {
         case "orange":
             return .orange
         case "pink":
-            return .pink
+            return .getByRGB(235, 101, 176)
         case "purple":
             return .purple
         default:

@@ -10,4 +10,16 @@ struct JikanEndpoints {
             "\(baseURL)/users/\(username)/statistics"
         }
     }
+    
+    struct Character {
+        let id: Int
+        
+        var anime: String {
+            "\(baseURL)/anime/\(id)/characters"
+        }
+        
+        var manga: String {
+            "\(baseURL)/manga/\(id)/characters"
+        }
+    }
 }

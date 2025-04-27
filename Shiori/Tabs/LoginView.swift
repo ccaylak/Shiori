@@ -124,7 +124,7 @@ struct LoginView: View {
                     .onAppear {
                         Task {
                             profileDetails = try await profileController.fetchUserProfile()
-                            print(profileDetails)
+                            
                             let response = try await jikanProfileController.fetchProfileStatistics(username: profileDetails?.name ?? "test")
                             
                             animeStatistics = response.data.anime

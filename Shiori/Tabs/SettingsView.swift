@@ -35,7 +35,7 @@ struct SettingsView: View {
                     .pickerStyle(.navigationLink)
                     
                     HStack {
-                        Label("Show mature content", systemImage: "eye")
+                        Label("Show mature content", systemImage: "eye.trianglebadge.exclamationmark")
                         Spacer()
                         Button {
                             settingsManager.showNsfwContent.toggle()
