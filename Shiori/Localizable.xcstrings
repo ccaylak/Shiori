@@ -262,12 +262,42 @@
         }
       }
     },
+    "Action" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Action"
+          }
+        }
+      }
+    },
     "Add to Library" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zur Bibliothek hinzufügen"
+          }
+        }
+      }
+    },
+    "Adult Cast" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erwachsene Charaktere"
+          }
+        }
+      }
+    },
+    "Adventure" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abenteuer"
           }
         }
       }
@@ -368,6 +398,16 @@
         }
       }
     },
+    "Anthropomorphic" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anthropomorph"
+          }
+        }
+      }
+    },
     "App icon" : {
       "localizations" : {
         "de" : {
@@ -394,6 +434,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Möchtest du %@ wirklich aus deiner Bibliothek entfernen?"
+          }
+        }
+      }
+    },
+    "Avant Garde" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avantgarde"
+          }
+        }
+      }
+    },
+    "Award Winning" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preisgekrönt"
           }
         }
       }
@@ -428,6 +488,16 @@
         }
       }
     },
+    "Boys Love" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boys Love"
+          }
+        }
+      }
+    },
     "By" : {
       "localizations" : {
         "de" : {
@@ -444,6 +514,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abbrechen"
+          }
+        }
+      }
+    },
+    "CGDCT" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CGDCT"
           }
         }
       }
@@ -478,6 +558,16 @@
         }
       }
     },
+    "Childcare" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kinderbetreuung"
+          }
+        }
+      }
+    },
     "CM" : {
       "localizations" : {
         "de" : {
@@ -488,12 +578,42 @@
         }
       }
     },
+    "Combat Sports" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kampfsport"
+          }
+        }
+      }
+    },
+    "Comedy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comedy"
+          }
+        }
+      }
+    },
     "Completed" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abgeschlossen"
+          }
+        }
+      }
+    },
+    "Crossdressing" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crossdressing"
           }
         }
       }
@@ -548,6 +668,26 @@
         }
       }
     },
+    "Delinquents" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Straffällige Jugendliche"
+          }
+        }
+      }
+    },
+    "Detective" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detektiv"
+          }
+        }
+      }
+    },
     "Discontinued" : {
       "localizations" : {
         "de" : {
@@ -588,12 +728,32 @@
         }
       }
     },
+    "Drama" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drama"
+          }
+        }
+      }
+    },
     "Dropped" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abgebrochen"
+          }
+        }
+      }
+    },
+    "Ecchi" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecchi"
           }
         }
       }
@@ -624,6 +784,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wiedergabefortschritt bearbeiten"
+          }
+        }
+      }
+    },
+    "Educational" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lehrreich"
           }
         }
       }
@@ -668,6 +838,26 @@
         }
       }
     },
+    "Erotica" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erotik"
+          }
+        }
+      }
+    },
+    "Fantasy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fantasy"
+          }
+        }
+      }
+    },
     "Female" : {
       "localizations" : {
         "de" : {
@@ -684,6 +874,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abgeschlossen"
+          }
+        }
+      }
+    },
+    "Gag Humor" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gag-Humor"
           }
         }
       }
@@ -728,6 +928,16 @@
         }
       }
     },
+    "Girls Love" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Girls Love"
+          }
+        }
+      }
+    },
     "GitHub repository" : {
       "localizations" : {
         "de" : {
@@ -738,12 +948,112 @@
         }
       }
     },
+    "Gore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Splatter"
+          }
+        }
+      }
+    },
+    "Gourment" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gourment"
+          }
+        }
+      }
+    },
+    "Gourmet" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gourmet"
+          }
+        }
+      }
+    },
+    "Harem" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Harem"
+          }
+        }
+      }
+    },
+    "Hentai" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hentai"
+          }
+        }
+      }
+    },
+    "High Stakes Game" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hochrisiko-Spiel"
+          }
+        }
+      }
+    },
+    "Historical" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historisch"
+          }
+        }
+      }
+    },
+    "Horror" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horror"
+          }
+        }
+      }
+    },
     "Icons made by Nicole Knutas" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Icons erstellt von Nicole Knutas"
+          }
+        }
+      }
+    },
+    "Idols (Female)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idols (weiblich)"
+          }
+        }
+      }
+    },
+    "Idols (Male)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idols (männlich)"
           }
         }
       }
@@ -778,6 +1088,26 @@
         }
       }
     },
+    "Isekai" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isekai"
+          }
+        }
+      }
+    },
+    "Iyashikei" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iyashikei"
+          }
+        }
+      }
+    },
     "Japanese" : {
       "localizations" : {
         "de" : {
@@ -794,6 +1124,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Registrierungsdatum:"
+          }
+        }
+      }
+    },
+    "Josei" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josei"
+          }
+        }
+      }
+    },
+    "Kids" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kinder"
           }
         }
       }
@@ -938,12 +1288,52 @@
         }
       }
     },
+    "Love Polygon" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liebes-Polygon"
+          }
+        }
+      }
+    },
+    "Love Status Quo" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liebe mit Status Quo"
+          }
+        }
+      }
+    },
     "Made by" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Produziert von"
+          }
+        }
+      }
+    },
+    "Magical Sex Shift" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magische Geschlechtsumwandlung"
+          }
+        }
+      }
+    },
+    "Mahou Shoujo" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maho Shojo"
           }
         }
       }
@@ -998,6 +1388,56 @@
         }
       }
     },
+    "Martial Arts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kampfkunst"
+          }
+        }
+      }
+    },
+    "Mecha" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mecha"
+          }
+        }
+      }
+    },
+    "Medical" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medizin"
+          }
+        }
+      }
+    },
+    "Memoir" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Memoiren"
+          }
+        }
+      }
+    },
+    "Military" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Militär"
+          }
+        }
+      }
+    },
     "Most Favorited" : {
       "localizations" : {
         "de" : {
@@ -1034,6 +1474,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Musik"
+          }
+        }
+      }
+    },
+    "Mystery" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mystery"
+          }
+        }
+      }
+    },
+    "Mythology" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mythologie"
           }
         }
       }
@@ -1178,12 +1638,62 @@
         }
       }
     },
+    "Organized Crime" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organisierte Kriminalität"
+          }
+        }
+      }
+    },
+    "Otaku Culture" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otaku-Kultur"
+          }
+        }
+      }
+    },
     "OVA" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OVA"
+          }
+        }
+      }
+    },
+    "Parody" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parodie"
+          }
+        }
+      }
+    },
+    "Performing Arts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Darstellende Künste"
+          }
+        }
+      }
+    },
+    "Pets" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haustiere"
           }
         }
       }
@@ -1234,6 +1744,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Profil"
+          }
+        }
+      }
+    },
+    "Psychological" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Psychologisch"
           }
         }
       }
@@ -1304,6 +1824,16 @@
         }
       }
     },
+    "Racing" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rennsport"
+          }
+        }
+      }
+    },
     "Rank" : {
       "localizations" : {
         "de" : {
@@ -1354,6 +1884,16 @@
         }
       }
     },
+    "Reincarnation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiedergeburt"
+          }
+        }
+      }
+    },
     "Related" : {
       "localizations" : {
         "de" : {
@@ -1384,6 +1924,26 @@
         }
       }
     },
+    "Reverse Harem" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reverse Harem"
+          }
+        }
+      }
+    },
+    "Romance" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Romantik"
+          }
+        }
+      }
+    },
     "Romanji" : {
       "localizations" : {
         "de" : {
@@ -1394,12 +1954,42 @@
         }
       }
     },
+    "Samurai" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samurai"
+          }
+        }
+      }
+    },
     "Save" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Speichern"
+          }
+        }
+      }
+    },
+    "School" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schule"
+          }
+        }
+      }
+    },
+    "Sci-Fi" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Science Fiction"
           }
         }
       }
@@ -1424,6 +2014,16 @@
         }
       }
     },
+    "Seinen" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seinen"
+          }
+        }
+      }
+    },
     "Serialization date" : {
       "localizations" : {
         "de" : {
@@ -1440,6 +2040,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einstellungen"
+          }
+        }
+      }
+    },
+    "Shoujo" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shojo"
+          }
+        }
+      }
+    },
+    "Shounen" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shonen"
           }
         }
       }
@@ -1474,12 +2094,42 @@
         }
       }
     },
+    "Showbiz" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Showbusiness"
+          }
+        }
+      }
+    },
+    "Slice of Life" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slice of Life"
+          }
+        }
+      }
+    },
     "Sort by" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sortieren nach"
+          }
+        }
+      }
+    },
+    "Space" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weltraum"
           }
         }
       }
@@ -1494,12 +2144,72 @@
         }
       }
     },
+    "Sports" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sport"
+          }
+        }
+      }
+    },
     "Status" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Status"
+          }
+        }
+      }
+    },
+    "Strategy Game" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strategiespiel"
+          }
+        }
+      }
+    },
+    "Super Power" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Superkräfte"
+          }
+        }
+      }
+    },
+    "Supernatural" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übernatürlich"
+          }
+        }
+      }
+    },
+    "Survival" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überlebenskampf"
+          }
+        }
+      }
+    },
+    "Suspense" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thriller"
           }
         }
       }
@@ -1514,12 +2224,32 @@
         }
       }
     },
+    "Team Sports" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teamsport"
+          }
+        }
+      }
+    },
     "There was an error loading the image." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Das Bild konnte nicht geladen werden."
+          }
+        }
+      }
+    },
+    "Time Travel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitreise"
           }
         }
       }
@@ -1754,6 +2484,16 @@
         }
       }
     },
+    "Unknown genre" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekanntes Genre"
+          }
+        }
+      }
+    },
     "Unknown progress status" : {
       "localizations" : {
         "de" : {
@@ -1794,6 +2534,56 @@
         }
       }
     },
+    "Urban Fantasy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Urban Fantasy"
+          }
+        }
+      }
+    },
+    "Vampire" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vampire"
+          }
+        }
+      }
+    },
+    "Video Game" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Videospiel"
+          }
+        }
+      }
+    },
+    "Villainess" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bösewichtin"
+          }
+        }
+      }
+    },
+    "Visual Arts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildende Künste"
+          }
+        }
+      }
+    },
     "Watching" : {
       "localizations" : {
         "de" : {
@@ -1820,6 +2610,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wird im %@ veröffentlicht"
+          }
+        }
+      }
+    },
+    "Workplace" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berufsleben"
           }
         }
       }

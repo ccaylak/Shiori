@@ -2,7 +2,7 @@ import SwiftUI
 
 struct GenresView: View {
     
-    let genres: [Genre]
+    let genres: [GenreWrapper]
     
     var body: some View {
         if !genres.isEmpty {
@@ -13,8 +13,8 @@ struct GenresView: View {
                 
                 ScrollView(.horizontal) {
                     LazyHStack(spacing: 10) {
-                        ForEach(genres, id: \.id) { genre in
-                            Text(genre.name)
+                        ForEach(genres, id: \.self) { genre in
+                            Text(genre.displayName)
                                 .font(.caption)
                                 .padding(9)
                                 .background(Color.gray.opacity(0.15))
@@ -31,13 +31,5 @@ struct GenresView: View {
 }
 
 #Preview {
-    GenresView(genres: [
-        Genre(id: 1, name: "Horror"),
-        Genre(id: 2, name: "Shonen"),
-        Genre(id: 3, name: "Seinen"),
-        Genre(id: 4, name: "Psycho"),
-        Genre(id: 5, name: "Shojo"),
-        Genre(id: 6, name: "Error"),
-        Genre(id: 7, name: "Deep")
-    ])
+    GenresView(genres: [.anime(.action), .anime(.shoujo), .anime(.adultCast), .anime(.seinen), .anime(.anthropomorphic)])
 }

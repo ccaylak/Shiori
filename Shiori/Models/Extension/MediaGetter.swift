@@ -72,8 +72,26 @@ extension Media {
         studios ?? []
     }
     
-    var getGenres: [Genre] {
+    private var getGenres: [Genre] {
         genres ?? []
+    }
+    
+    var getGenreWrapper: [GenreWrapper] {
+        return getGenres.map { genre in
+            switch isMangaOrAnime(from: type ?? "") {
+            case .anime:
+                if let eg = AnimeGenre(rawValue: genre.name) {
+                    return .anime(eg)
+                }
+            case .manga:
+                if let mg = MangaGenre(rawValue: genre.name) {
+                    return .manga(mg)
+                }
+            case .unknown:
+                return .unknown
+            }
+            return .unknown
+        }
     }
     
     var getCover: String {
@@ -106,7 +124,7 @@ extension Media {
     var getType: TypeWrapper {
         let raw = type ?? ""
 
-        switch isMangaOrAnime(from: raw) {
+        switch isMangaOrAnime(from: type ?? "") {
         case .anime:
             let anime = AnimeType(rawValue: raw) ?? .unknown
             return .anime(anime)

@@ -140,7 +140,7 @@ struct DetailsView: View {
                     
                     Divider()
                     
-                    GenresView(genres: media.getGenres)
+                    GenresView(genres: media.getGenreWrapper)
                     
                     Divider()
                     
