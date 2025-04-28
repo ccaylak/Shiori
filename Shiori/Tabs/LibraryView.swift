@@ -1,4 +1,5 @@
 import SwiftUI
+import AlertToast
 
 struct LibraryView: View {
     
@@ -39,6 +40,9 @@ struct LibraryView: View {
     
     @State private var showAlert = false
     @State private var searchTerm = ""
+    
+    @State private var showUpdatedAlert = false
+    @State private var showRemovedFromLibraryAlert = false
     
     @State private var isLoading = false
     @State private var loadingMediaID: Int?
@@ -163,20 +167,6 @@ struct LibraryView: View {
                 .scrollIndicators(.hidden)
                 .scrollClipDisabled()
                 .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))
-                
-                if isLoading && tokenHandler.isAuthenticated{
-                    GroupBox {
-                        VStack {
-                            ProgressView()
-                            Text("Loading...")
-                                .font(.headline)
-                                .foregroundColor(.gray)
-                        }
-                        .padding()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .cornerRadius(10)
-                }
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -296,10 +286,12 @@ struct LibraryView: View {
                                 Task {
                                     if (libraryManager.mediaType == .manga) {
                                         try await mangaController.saveProgress(id: media.node.id, status: mangaEntry.progressStatus.rawValue, score: mangaEntry.score, chapters: mangaEntry.currentChapter)
+                                        showUpdatedAlert = true
                                         libraryResponse = try await mangaController.fetchLibrary()
                                     }
                                     if (libraryManager.mediaType == .anime) {
                                         try await animeController.saveProgress(id: media.node.id, status: animeEntry.progressStatus.rawValue, score: animeEntry.score, episodes: animeEntry.currentEpisode)
+                                        showUpdatedAlert = true
                                         libraryResponse = try await animeController.fetchLibrary()
                                         
                                     }
@@ -325,10 +317,12 @@ struct LibraryView: View {
                                     Task {
                                         if(libraryManager.mediaType == .manga) {
                                             try await mangaController.deleteEntry(id: media.node.id)
+                                            showRemovedFromLibraryAlert = true
                                             libraryResponse = try await mangaController.fetchLibrary()
                                         }
                                         if(libraryManager.mediaType == .anime) {
                                             try await animeController.deleteEntry(id: media.node.id)
+                                            showRemovedFromLibraryAlert = true
                                             libraryResponse = try await animeController.fetchLibrary()
                                         }
                                         showAlert = false
@@ -351,6 +345,15 @@ struct LibraryView: View {
                     }
                 }
             }
+        }
+        .toast(isPresenting: $isLoading, tapToDismiss: false) {
+            AlertToast(type: .loading, title: String(localized: "Loading..."))
+        }
+        .toast(isPresenting: $showRemovedFromLibraryAlert) {
+            AlertToast(displayMode: .hud, type: .systemImage("x.circle", .red), title: String(localized: "Removed from library"))
+        }
+        .toast(isPresenting: $showUpdatedAlert) {
+            AlertToast(displayMode: .hud, type: .systemImage("arrow.trianglehead.2.clockwise.rotate.90.circle", .accentColor), title: String(localized: "Progress updated"))
         }
         .onAppear {
             fetchLibrary()

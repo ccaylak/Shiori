@@ -1,6 +1,15 @@
 {
-  "originHash" : "49e75bcc57304a9045940bdc0cae2ca694cfef429ccc570faea5c2069da1303e",
+  "originHash" : "cbd04c029475508680b30fb7699ab1452dd3f8f389f4c64ffa9b2617239d3866",
   "pins" : [
+    {
+      "identity" : "alerttoast",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elai950/AlertToast.git",
+      "state" : {
+        "revision" : "b39252eacd159904afd7d718bba0afabb87f2f2f",
+        "version" : "1.3.9"
+      }
+    },
     {
       "identity" : "keychain-swift",
       "kind" : "remoteSourceControl",

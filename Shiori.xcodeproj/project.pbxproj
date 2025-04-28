@@ -10,6 +10,7 @@
 		F36329482D94AD1300329F11 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = F36329472D94AD1300329F11 /* NukeUI */; };
 		F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37EA6182CFFC19700CD994E /* KeychainSwift */; };
 		F3DE62ED2CF140BC00CD77EF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F3DE62EC2CF140BC00CD77EF /* README.md */; };
+		F3E27BBB2DBF743C00BB1AE4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = F3E27BBA2DBF743C00BB1AE4 /* AlertToast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3E27BBB2DBF743C00BB1AE4 /* AlertToast in Frameworks */,
 				F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */,
 				F36329482D94AD1300329F11 /* NukeUI in Frameworks */,
 			);
@@ -90,6 +92,7 @@
 			packageProductDependencies = (
 				F37EA6182CFFC19700CD994E /* KeychainSwift */,
 				F36329472D94AD1300329F11 /* NukeUI */,
+				F3E27BBA2DBF743C00BB1AE4 /* AlertToast */,
 			);
 			productName = MALytics;
 			productReference = F365CCE32CE74B3F0027F040 /* Shiori.app */;
@@ -123,6 +126,7 @@
 			packageReferences = (
 				F37EA6172CFFC19700CD994E /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				F36329462D94AA4700329F11 /* XCRemoteSwiftPackageReference "Nuke" */,
+				F3E27BB92DBF743C00BB1AE4 /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F365CCE42CE74B3F0027F040 /* Products */;
@@ -401,6 +405,14 @@
 				minimumVersion = 24.0.0;
 			};
 		};
+		F3E27BB92DBF743C00BB1AE4 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.9;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -413,6 +425,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F37EA6172CFFC19700CD994E /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		F3E27BBA2DBF743C00BB1AE4 /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3E27BB92DBF743C00BB1AE4 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

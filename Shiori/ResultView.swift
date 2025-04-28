@@ -1,4 +1,5 @@
 import SwiftUI
+import AlertToast
 
 struct ResultView: View {
     
@@ -71,16 +72,23 @@ struct ResultView: View {
             }
         }
         .onAppear {
+            guard mediaResponse.results.isEmpty else { return }
+            isInitialLoading = true
+            
             Task {
-                if mediaResponse.results.isEmpty {
-                    await loadMediaData()
+                defer {
+                    isInitialLoading = false
                 }
+                await loadMediaData()
             }
         }
         .onChange(of: resultManager.needsToLoadData) {
             Task {
                 await loadMediaData()
             }
+        }
+        .toast(isPresenting: $isInitialLoading, tapToDismiss: false) {
+            AlertToast(type: .loading, title: String(localized: "Loading..."))
         }
     }
     

@@ -17,12 +17,6 @@ import Foundation
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         
-        let character = try JSONDecoder().decode(JikanCharacter.self, from: data)
-                
-                // Drucke es in der Konsole
-                print("Fetched character:", character)
-                
-                // Gib es zurück
-                return character
+        return try JSONDecoder().decode(JikanCharacter.self, from: data)
     }
 }

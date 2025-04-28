@@ -2,7 +2,7 @@ import Foundation
 
 extension MediaNode {
     var getRelationType: Related {
-        Related(rawValue: relationType ?? "Unknown")!
+        Related(rawValue: relationType ?? "Unbekannt") ?? .unknown
     }
     
     var getListStatus: ListStatus {

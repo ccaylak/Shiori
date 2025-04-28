@@ -8,7 +8,9 @@ enum Related: String {
     case adaption = "Adaption"
     case character = "Character"
     case alternativeSetting = "Alternative setting"
+    case summary = "Summary"
     case unknown = "Unknown"
+    case parentStory = "Parent story"
     
     var displayName: String {
         switch self {
@@ -22,6 +24,8 @@ enum Related: String {
         case .character: return String(localized: "Character", comment: "Relation type of detailview")
         case .alternativeSetting: return String(localized: "Alternative setting", comment: "Relation type of detailview")
         case .unknown: return String(localized: "Unknown relationtype", comment: "Relation type of detailview")
+        case .summary: return String(localized: "Summary", comment: "Relation type of detailview")
+        case .parentStory: return String(localized: "Parent story", comment: "Relation type of detailview")
         }
     }
 }

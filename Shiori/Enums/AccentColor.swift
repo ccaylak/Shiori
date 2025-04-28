@@ -2,7 +2,6 @@ import Foundation
 
 enum AccentColor: String, CaseIterable {
     case blue, red, orange, pink, purple
-    // #eb65b0
     
     var displayName: String {
         switch self {
