@@ -27,7 +27,7 @@ struct RelatedMediaView: View {
                 .font(.headline)
             
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
+                LazyHStack {
                     ForEach(sortedMediaItems, id: \.node.id) { relatedMedia in
                         NavigationLink(destination: DetailsView(media: relatedMedia.node)) {
                             VStack(alignment: .center) {
@@ -43,8 +43,10 @@ struct RelatedMediaView: View {
                         }
                     }
                 }
+                .scrollTargetLayout()
                 .frame(height: 250)
             }
+            .scrollTargetBehavior(.viewAligned)
             .scrollClipDisabled()
         }
     }

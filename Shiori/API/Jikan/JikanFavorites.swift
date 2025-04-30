@@ -1,0 +1,50 @@
+import Foundation
+
+struct JikanFavorites: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+    
+    let data: FavoriteData
+}
+
+struct FavoriteData: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case animes = "anime"
+        case mangas = "manga"
+        case characters
+    }
+    
+    let animes: [FavoriteEntries]
+    let mangas: [FavoriteEntries]
+    let characters: [FavoriteEntries]
+}
+
+struct FavoriteEntries: Decodable, Hashable {
+    enum CodingKeys: String, CodingKey {
+        case title, images, name
+    }
+    
+    let title: String?
+    let name: String?
+    let images: FavoriteImage
+}
+
+struct FavoriteImage: Decodable, Hashable {
+    enum CodingKeys: String, CodingKey {
+        case jpg
+    }
+    let jpg: FavoriteJPG
+}
+
+struct FavoriteJPG: Decodable, Hashable {
+    enum CodingKeys: String, CodingKey {
+        case imageUrl = "image_url"
+        case smallImageUrl = "small_image_url"
+        case largeImageUrl = "large_image_url"
+    }
+    
+    let imageUrl: String
+    let smallImageUrl: String?
+    let largeImageUrl: String?
+}

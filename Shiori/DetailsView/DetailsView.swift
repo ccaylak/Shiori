@@ -1,5 +1,4 @@
 import SwiftUI
-import AlertToast
 
 struct DetailsView: View {
     
@@ -26,15 +25,11 @@ struct DetailsView: View {
     )
     
     @State private var showAlert = false
-    @State private var isLoading = false
-    
-    @State private var showAddedToLibraryAlert = false
-    @State private var showRemovedFromLibraryAlert = false
-    @State private var showUpdatedAlert = false
     
     @ObservedObject private var tokenHandler: TokenHandler = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
     @ObservedObject private var resultManager: ResultManager = .shared
+    @EnvironmentObject private var alertManager: AlertManager
     
     let animeController = AnimeController()
     let mangaController = MangaController()
@@ -97,10 +92,10 @@ struct DetailsView: View {
                                     } else {
                                         Button("Add to Library") {
                                             Task {
-                                                isLoading = true
-                                                showAddedToLibraryAlert = true
+                                                alertManager.isLoading = true
+                                                alertManager.showAddedAlert = true
                                                 defer {
-                                                    isLoading = false
+                                                    alertManager.isLoading = false
                                                 }
                                                 if (resultManager.mediaType == .anime) {
                                                     try await animeController.addToWatchList(id: media.id)
@@ -280,13 +275,13 @@ struct DetailsView: View {
                                         Task {
                                             if (resultManager.mediaType == .manga) {
                                                 try await mangaController.saveProgress(id: media.id, status: userProgress.mangaProgress.rawValue, score: userProgress.rating, chapters: userProgress.progress)
-                                                showUpdatedAlert = true
+                                                alertManager.showUpdatedAlert = true
                                                 media = try await mangaController.fetchDetails(id: media.id)
                                                 isSheetPresented = false
                                             }
                                             if (resultManager.mediaType == .anime) {
                                                 try await animeController.saveProgress(id: media.id, status: userProgress.animeProgress.rawValue, score: userProgress.rating, episodes: userProgress.progress)
-                                                showUpdatedAlert = true
+                                                alertManager.showUpdatedAlert = true
                                                 media = try await animeController.fetchDetails(id: media.id)
                                                 isSheetPresented = false
                                             }
@@ -309,12 +304,12 @@ struct DetailsView: View {
                                             Task {
                                                 if(resultManager.mediaType == .manga) {
                                                     try await mangaController.deleteEntry(id: media.id)
-                                                    showRemovedFromLibraryAlert = true
+                                                    alertManager.showRemovedAlert = true
                                                     media = try await mangaController.fetchDetails(id: media.id)
                                                 }
                                                 if(resultManager.mediaType == .anime) {
                                                     try await animeController.deleteEntry(id: media.id)
-                                                    showRemovedFromLibraryAlert = true
+                                                    alertManager.showRemovedAlert = true
                                                     media = try await animeController.fetchDetails(id: media.id)
                                                 }
                                                 showAlert = false
@@ -351,22 +346,10 @@ struct DetailsView: View {
                 }
             }
         }
-        .toast(isPresenting: $isLoading, tapToDismiss: false) {
-            AlertToast(type: .loading, title: String(localized: "Loading..."))
-        }
-        .toast(isPresenting: $showAddedToLibraryAlert) {
-            AlertToast(displayMode: .hud, type: .systemImage("book.circle", .accentColor), title: String(localized: "Added to library"))
-        }
-        .toast(isPresenting: $showRemovedFromLibraryAlert) {
-            AlertToast(displayMode: .hud, type: .systemImage("x.circle", .red), title: String(localized: "Removed from library"))
-        }
-        .toast(isPresenting: $showUpdatedAlert) {
-            AlertToast(displayMode: .hud, type: .systemImage("arrow.trianglehead.2.clockwise.rotate.90.circle", .accentColor), title: String(localized: "Progress updated"))
-        }
         .onAppear {
             Task {
-                isLoading = true
-                defer { isLoading = false }
+                alertManager.isLoading = true
+                defer { alertManager.isLoading = false }
                 do {
                     if resultManager.mediaType == .anime {
                         media = try await animeController.fetchDetails(id: media.id)
@@ -433,4 +416,5 @@ struct DetailsView: View {
             users: 10
         )
     )
+    .environmentObject(AlertManager.shared)
 }

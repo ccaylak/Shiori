@@ -1,5 +1,4 @@
 import SwiftUI
-import AlertToast
 
 struct ResultView: View {
     
@@ -10,11 +9,11 @@ struct ResultView: View {
     @State var mediaResponse = MediaResponse(results: [], page: MediaResponse.Paging(next: ""))
     @State private var searchTerm: String = ""
     
-    @State private var isInitialLoading = false
     @State private var isLoading = false
     
     @StateObject private var resultManager: ResultManager = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
+    @EnvironmentObject private var alertManager: AlertManager
     
     var body: some View {
         
@@ -73,11 +72,11 @@ struct ResultView: View {
         }
         .onAppear {
             guard mediaResponse.results.isEmpty else { return }
-            isInitialLoading = true
+            alertManager.isLoading = true
             
             Task {
                 defer {
-                    isInitialLoading = false
+                    alertManager.isLoading = false
                 }
                 await loadMediaData()
             }
@@ -87,13 +86,9 @@ struct ResultView: View {
                 await loadMediaData()
             }
         }
-        .toast(isPresenting: $isInitialLoading, tapToDismiss: false) {
-            AlertToast(type: .loading, title: String(localized: "Loading..."))
-        }
     }
     
     private func loadMediaData() async {
-        isInitialLoading = true
         do {
             switch resultManager.mediaType {
             case .anime:
@@ -106,11 +101,11 @@ struct ResultView: View {
         } catch {
             print("Loading media data failed: \(error.localizedDescription)")
         }
-        isInitialLoading = false
     }
     
 }
 
 #Preview {
     ResultView()
+        .environmentObject(AlertManager.shared)
 }

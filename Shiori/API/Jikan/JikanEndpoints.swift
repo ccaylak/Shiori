@@ -9,6 +9,14 @@ struct JikanEndpoints {
         var statistics: String {
             "\(baseURL)/users/\(username)/statistics"
         }
+        
+        var favorites: String {
+            "\(baseURL)/users/\(username)/favorites"
+        }
+        
+        var friends: String {
+            "\(baseURL)/users/\(username)/friends"
+        }
     }
     
     struct Character {

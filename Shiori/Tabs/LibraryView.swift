@@ -1,5 +1,4 @@
 import SwiftUI
-import AlertToast
 
 struct LibraryView: View {
     
@@ -41,17 +40,15 @@ struct LibraryView: View {
     @State private var showAlert = false
     @State private var searchTerm = ""
     
-    @State private var showUpdatedAlert = false
-    @State private var showRemovedFromLibraryAlert = false
-    
-    @State private var isLoading = false
     @State private var loadingMediaID: Int?
     
     private let mangaController = MangaController()
     private let animeController = AnimeController()
     
     @StateObject private var libraryManager: LibraryManager = .shared
+    @EnvironmentObject private var alertManager: AlertManager
     @ObservedObject private var tokenHandler: TokenHandler = .shared
+    
     
     private var filteredLibraryData: [MediaNode] {
         if searchTerm.isEmpty {
@@ -132,7 +129,7 @@ struct LibraryView: View {
                                     }
                                 }
                             }
-                            if filteredLibraryData.isEmpty && !isLoading {
+                            if filteredLibraryData.isEmpty && !alertManager.isLoading {
                                 if searchTerm != "" {
                                     ContentUnavailableView.search
                                 } else {
@@ -286,12 +283,12 @@ struct LibraryView: View {
                                 Task {
                                     if (libraryManager.mediaType == .manga) {
                                         try await mangaController.saveProgress(id: media.node.id, status: mangaEntry.progressStatus.rawValue, score: mangaEntry.score, chapters: mangaEntry.currentChapter)
-                                        showUpdatedAlert = true
+                                        alertManager.showUpdatedAlert = true
                                         libraryResponse = try await mangaController.fetchLibrary()
                                     }
                                     if (libraryManager.mediaType == .anime) {
                                         try await animeController.saveProgress(id: media.node.id, status: animeEntry.progressStatus.rawValue, score: animeEntry.score, episodes: animeEntry.currentEpisode)
-                                        showUpdatedAlert = true
+                                        alertManager.showUpdatedAlert = true
                                         libraryResponse = try await animeController.fetchLibrary()
                                         
                                     }
@@ -317,12 +314,12 @@ struct LibraryView: View {
                                     Task {
                                         if(libraryManager.mediaType == .manga) {
                                             try await mangaController.deleteEntry(id: media.node.id)
-                                            showRemovedFromLibraryAlert = true
+                                            alertManager.showRemovedAlert = true
                                             libraryResponse = try await mangaController.fetchLibrary()
                                         }
                                         if(libraryManager.mediaType == .anime) {
                                             try await animeController.deleteEntry(id: media.node.id)
-                                            showRemovedFromLibraryAlert = true
+                                            alertManager.showRemovedAlert = true
                                             libraryResponse = try await animeController.fetchLibrary()
                                         }
                                         showAlert = false
@@ -345,15 +342,6 @@ struct LibraryView: View {
                     }
                 }
             }
-        }
-        .toast(isPresenting: $isLoading, tapToDismiss: false) {
-            AlertToast(type: .loading, title: String(localized: "Loading..."))
-        }
-        .toast(isPresenting: $showRemovedFromLibraryAlert) {
-            AlertToast(displayMode: .hud, type: .systemImage("x.circle", .red), title: String(localized: "Removed from library"))
-        }
-        .toast(isPresenting: $showUpdatedAlert) {
-            AlertToast(displayMode: .hud, type: .systemImage("arrow.trianglehead.2.clockwise.rotate.90.circle", .accentColor), title: String(localized: "Progress updated"))
         }
         .onAppear {
             fetchLibrary()
@@ -388,7 +376,7 @@ struct LibraryView: View {
     private func fetchLibrary() {
         if (tokenHandler.isAuthenticated) {
             Task {
-                isLoading = true
+                alertManager.isLoading = true
                 do {
                     if libraryManager.mediaType == .manga {
                         libraryResponse = try await mangaController.fetchLibrary()
@@ -398,14 +386,13 @@ struct LibraryView: View {
                 } catch {
                     print("Error fetching library: \(error)")
                 }
-                isLoading = false
+                alertManager.isLoading = false
             }
         }
     }
 }
 
 #Preview {
-    LibraryView(
-        
-    )
+    LibraryView()
+    .environmentObject(AlertManager.shared)
 }

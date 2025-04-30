@@ -4,23 +4,27 @@ import AuthenticationServices
 struct LoginView: View {
     
     @Environment(\.webAuthenticationSession) private var webAuthenticationSession
+    
+    private var jikanProfileController = JikanProfileController()
+    private var profileController = ProfileController()
+    private var malService: MALService = .shared
+    
+    @StateObject private var tokenHandler: TokenHandler = .shared
+    
     @State private var code: String = ""
     @State private var codeChallenge: String = ""
     
     @State private var profileDetails: ProfileDetails?
-    
     @State private var animeStatistics: JikanResponse.AnimeManga.AnimeStatistics?
     @State private var mangaStatistics: JikanResponse.AnimeManga.MangaStatistics?
+    @State private var jikanFavorites: JikanFavorites = JikanFavorites(data: FavoriteData(animes: [], mangas: [], characters: []))
+    @State private var jikanFriends: JikanFriends = JikanFriends(data: [])
     
     @State private var isAuthenticating: Bool = false
     
-    private var jikanProfileController = JikanProfileController()
-    private var profileController = ProfileController()
-    
-    @StateObject private var tokenHandler: TokenHandler = .shared
-    private var malService: MALService = .shared
-    
     @State private var showLogoutConfirmationDialog: Bool = false
+    
+    @EnvironmentObject private var alertManager: AlertManager
     
     var body: some View {
         NavigationStack {
@@ -68,7 +72,7 @@ struct LoginView: View {
                                         .font(.subheadline)
                                         .foregroundColor(.primary)
                                 }
-
+                                
                                 
                                 
                                 if let joinDate = profileDetails?.joinDate {
@@ -100,35 +104,145 @@ struct LoginView: View {
                             }
                         }
                         
-                        let animeStatistics = [
-                            Statistics(title: AnimeProgressStatus.completed.displayName, value: animeStatistics?.completed ?? 0),
-                            Statistics(title: AnimeProgressStatus.watching.displayName, value: animeStatistics?.watching ?? 0),
-                            Statistics(title: AnimeProgressStatus.onHold.displayName, value: animeStatistics?.onHold ?? 0),
-                            Statistics(title: AnimeProgressStatus.dropped.displayName, value: animeStatistics?.dropped ?? 0),
-                            Statistics(title: AnimeProgressStatus.planToWatch.displayName, value: animeStatistics?.planToWatch ?? 0),
-                        ]
+                        let friends = jikanFriends.data
+                        if !friends.isEmpty {
+                            Section("Friends") {
+                                ScrollView(.horizontal) {
+                                    HStack(spacing: 10) {
+                                        ForEach(friends, id: \.self) { friend in
+                                            VStack {
+                                                AsyncImageView(imageUrl: friend.user.images.jpg.imageUrl ?? "")
+                                                    .frame(width: 50, height: 50)
+                                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+
+                                                Text(friend.user.username)
+                                                    .font(.caption)
+                                                    .frame(alignment: .center)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                            }
+                                        }
+                                    }
+                                    .scrollTargetLayout()
+                                }
+                                .scrollTargetBehavior(.viewAligned)
+                                .scrollIndicators(.hidden)
+                                .scrollClipDisabled()
+                            }
+                        }
                         
-                        UserStatistics(title: String(localized:"Anime statistics"), statisticsValues: animeStatistics)
+                        let animeStatistics = [
+                            Statistics(title: AnimeProgressStatus.completed.displayName, value: animeStatistics?.completed ?? 0, iconCombination: .animeCompleted),
+                            Statistics(title: AnimeProgressStatus.watching.displayName, value: animeStatistics?.watching ?? 0, iconCombination: .animeWatching),
+                            Statistics(title: AnimeProgressStatus.onHold.displayName, value: animeStatistics?.onHold ?? 0, iconCombination: .animeOnHold),
+                            Statistics(title: AnimeProgressStatus.dropped.displayName, value: animeStatistics?.dropped ?? 0, iconCombination: .animeDropped),
+                            Statistics(title: AnimeProgressStatus.planToWatch.displayName, value: animeStatistics?.planToWatch ?? 0, iconCombination: .animePlanToWatch),
+                        ]
+                        UserStatistics(title: String(localized: "Anime statistics"), statisticsValues: animeStatistics)
                         
                         let mangaStatistics = [
-                            Statistics(title: MangaProgressStatus.completed.displayName, value: mangaStatistics?.completed ?? 0),
-                            Statistics(title: MangaProgressStatus.reading.displayName, value: mangaStatistics?.reading ?? 0),
-                            Statistics(title: MangaProgressStatus.onHold.displayName, value: mangaStatistics?.onHold ?? 0),
-                            Statistics(title: MangaProgressStatus.dropped.displayName, value: mangaStatistics?.dropped ?? 0),
-                            Statistics(title: MangaProgressStatus.planToRead.displayName, value: mangaStatistics?.planToRead ?? 0),
+                            Statistics(title: MangaProgressStatus.completed.displayName, value: mangaStatistics?.completed ?? 0, iconCombination: .mangaCompleted),
+                            Statistics(title: MangaProgressStatus.reading.displayName, value: mangaStatistics?.reading ?? 0, iconCombination: .mangaReading),
+                            Statistics(title: MangaProgressStatus.onHold.displayName, value: mangaStatistics?.onHold ?? 0, iconCombination: .mangaOnHold),
+                            Statistics(title: MangaProgressStatus.dropped.displayName, value: mangaStatistics?.dropped ?? 0, iconCombination: .mangaDropped),
+                            Statistics(title: MangaProgressStatus.planToRead.displayName, value: mangaStatistics?.planToRead ?? 0, iconCombination: .mangaPlanToRead),
                         ]
-                        
                         UserStatistics(title: String(localized: "Manga statistics"), statisticsValues: mangaStatistics)
                         
+                        
+                        let favoriteMangas = jikanFavorites.data.mangas
+                        if !favoriteMangas.isEmpty {
+                            Section("Favorite manga") {
+                                ScrollView(.horizontal) {
+                                    HStack(spacing: 10) {
+                                        ForEach(favoriteMangas, id: \.self) { manga in
+                                            VStack {
+                                                AsyncImageView(imageUrl: manga.images.jpg.imageUrl)
+                                                    .frame(width: 100, height: 156)
+                                                    .cornerRadius(12)
+                                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+
+                                                Text(manga.title ?? "–")
+                                                    .font(.caption)
+                                                    .frame(width: 100, alignment: .leading)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                            }
+                                        }
+                                    }
+                                    .scrollTargetLayout()
+                                }
+                                .scrollTargetBehavior(.viewAligned)
+                                .scrollIndicators(.hidden)
+                                .scrollClipDisabled()
+                            }
+                        }
+                        
+                        let favoriteAnimes = jikanFavorites.data.animes
+                        if !favoriteAnimes.isEmpty {
+                            Section("Favorite animes") {
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 10) {
+                                        ForEach(jikanFavorites.data.animes, id: \.self) { anime in
+                                            VStack {
+                                                AsyncImageView(imageUrl: anime.images.jpg.imageUrl)
+                                                    .frame(width: 100, height: 156)
+                                                    .cornerRadius(12)
+                                                    .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 5)
+
+                                                Text(anime.title ?? "–")
+                                                    .font(.caption)
+                                                    .frame(width: 100, alignment: .leading)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                            }
+                                        }
+                                    }
+                                    .scrollTargetLayout()
+                                }
+                                .scrollTargetBehavior(.viewAligned)
+                                .scrollIndicators(.hidden)
+                                .scrollClipDisabled()
+                            }
+                        }
+                        
+                        let favoriteCharacters = jikanFavorites.data.characters
+                        if !favoriteCharacters.isEmpty {
+                            Section("Favorite characters") {
+                                ScrollView(.horizontal) {
+                                    HStack(spacing: 10) {
+                                        ForEach(jikanFavorites.data.characters, id: \.self) { character in
+                                            VStack {
+                                                AsyncImageView(imageUrl: character.images.jpg.imageUrl)
+                                                    .frame(width: 100, height: 156)
+                                                    .cornerRadius(12)
+                                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+                                                Text(character.name ?? "Test")
+                                                    .font(.caption)
+                                                    .frame(width: 100, alignment: .leading)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                            }
+                                        }
+                                    }
+                                    .scrollTargetLayout()
+                                }
+                                .scrollTargetBehavior(.viewAligned)
+                                .scrollIndicators(.hidden)
+                                .scrollClipDisabled()
+                            }
+                        }
                     }
                     .onAppear {
                         Task {
+                            alertManager.isLoading = true
                             profileDetails = try await profileController.fetchUserProfile()
-                            
+                            jikanFavorites = try await jikanProfileController.fetchProfileFavorites(username: profileDetails?.name ?? "test")
+                            jikanFriends = try await jikanProfileController.fetchFriends(username: profileDetails?.name ?? "test")
                             let response = try await jikanProfileController.fetchProfileStatistics(username: profileDetails?.name ?? "test")
-                            
                             animeStatistics = response.data.anime
                             mangaStatistics = response.data.manga
+                            alertManager.isLoading = false
                         }
                     }
                 }
@@ -223,6 +337,7 @@ struct LoginView: View {
     struct Statistics {
         let title: String
         let value: Int
+        let iconCombination: LoginIcon
     }
     
     struct UserStatistics: View {
@@ -233,7 +348,7 @@ struct LoginView: View {
         var body: some View {
             Section(title) {
                 ForEach(statisticsValues, id: \.title) { stat in
-                    StatisticsRow(title: stat.title, value: stat.value)
+                    StatisticsRow(title: stat.title, value: stat.value, iconCombination: stat.iconCombination)
                 }
             }
         }
@@ -241,9 +356,11 @@ struct LoginView: View {
         struct StatisticsRow: View {
             let title: String
             let value: Int
+            let iconCombination: LoginIcon
             
             var body: some View {
                 HStack {
+                    iconCombination.image
                     Text(title)
                         .foregroundColor(.primary)
                     Spacer()
