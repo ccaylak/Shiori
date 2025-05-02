@@ -6,7 +6,7 @@ struct Media: Decodable, Hashable {
         case alternativeTitles = "alternative_titles"
         case images = "main_picture"
         case type = "media_type"
-        case description = "synopsis"
+        case summary = "synopsis"
         case score = "mean"
         case episodes = "num_episodes"
         case startDate = "start_date"
@@ -37,9 +37,9 @@ struct Media: Decodable, Hashable {
     let users: Int?
     
     // Optionale Felder für DetailsView
-    let description: String?
+    let summary: String?
     let score: Double?
-    let genres: [Genre]?
+    let genres: [MediaGenre]?
     let endDate: String?
     let recommendations: [MediaNode]?
     let studios: [Studio]?
@@ -50,7 +50,7 @@ struct Media: Decodable, Hashable {
     let moreImages: [Images]?
     let listStatus: ListStatus?
     
-    init(id: Int, title: String, alternativeTitles: OtherTitles? = nil, images: Images, startDate: String? = nil, type: String? = nil, status: String? = nil, episodes: Int? = nil, numberOfVolumes: Int? = nil, numberOfChapters: Int? = nil, authors: [AuthorInfos]? = nil, description: String? = nil, score: Double? = nil, genres: [Genre]? = nil, endDate: String? = nil, recommendations: [MediaNode]? = nil, studios: [Studio]? = nil, relatedAnimes: [MediaNode]? = nil, relatedMangas: [MediaNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil, listStatus: ListStatus? = nil, users: Int? = nil) {
+    init(id: Int, title: String, alternativeTitles: OtherTitles? = nil, images: Images, startDate: String? = nil, type: String? = nil, status: String? = nil, episodes: Int? = nil, numberOfVolumes: Int? = nil, numberOfChapters: Int? = nil, authors: [AuthorInfos]? = nil, summary: String? = nil, score: Double? = nil, genres: [MediaGenre]? = nil, endDate: String? = nil, recommendations: [MediaNode]? = nil, studios: [Studio]? = nil, relatedAnimes: [MediaNode]? = nil, relatedMangas: [MediaNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil, listStatus: ListStatus? = nil, users: Int? = nil) {
         self.id = id
         self.title = title
         self.alternativeTitles = alternativeTitles
@@ -62,7 +62,7 @@ struct Media: Decodable, Hashable {
         self.numberOfVolumes = numberOfVolumes
         self.numberOfChapters = numberOfChapters
         self.authors = authors
-        self.description = description
+        self.summary = summary
         self.score = score
         self.genres = genres
         self.endDate = endDate

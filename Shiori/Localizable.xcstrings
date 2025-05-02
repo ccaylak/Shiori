@@ -10,7 +10,7 @@
     "%@" : {
 
     },
-    "%@ Library" : {
+    "%@ library" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -87,6 +87,16 @@
     "%lld" : {
       "shouldTranslate" : false
     },
+    "%lld chapters" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Kapitel"
+          }
+        }
+      }
+    },
     "%lld chapters (%@)" : {
       "localizations" : {
         "de" : {
@@ -139,6 +149,16 @@
         }
       }
     },
+    "%lld volumes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Bände"
+          }
+        }
+      }
+    },
     "%lld/%@" : {
       "localizations" : {
         "en" : {
@@ -153,6 +173,7 @@
       "shouldTranslate" : false
     },
     "1 (Appalling)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -163,6 +184,7 @@
       }
     },
     "2 (Horrible)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -173,6 +195,7 @@
       }
     },
     "3 (Very bad)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -183,6 +206,7 @@
       }
     },
     "4 (Bad)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -193,6 +217,7 @@
       }
     },
     "5 (Average)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -203,6 +228,7 @@
       }
     },
     "6 (Fine)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -213,6 +239,7 @@
       }
     },
     "7 (Good)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -223,6 +250,7 @@
       }
     },
     "8 (Very good)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -233,6 +261,7 @@
       }
     },
     "9 (Great)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -243,6 +272,7 @@
       }
     },
     "10 (Masterpiece)" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -263,7 +293,7 @@
       }
     },
     "Action" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -305,7 +335,7 @@
       }
     },
     "Adult Cast" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -316,7 +346,7 @@
       }
     },
     "Adventure" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -353,6 +383,7 @@
       }
     },
     "Airing" : {
+      "comment" : "Status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -383,6 +414,7 @@
       }
     },
     "Airing soon" : {
+      "comment" : "Status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -393,6 +425,7 @@
       }
     },
     "All" : {
+      "comment" : "Progress status\nSort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -445,7 +478,7 @@
       }
     },
     "Anthropomorphic" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -486,7 +519,7 @@
       }
     },
     "Avant Garde" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -497,7 +530,7 @@
       }
     },
     "Award Winning" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -528,6 +561,7 @@
       }
     },
     "Blue" : {
+      "comment" : "Accent color",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -538,7 +572,7 @@
       }
     },
     "Boys Love" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -569,7 +603,7 @@
       }
     },
     "CGDCT" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -631,7 +665,7 @@
       }
     },
     "Childcare" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -642,6 +676,7 @@
       }
     },
     "CM" : {
+      "comment" : "Anime type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -652,7 +687,7 @@
       }
     },
     "Combat Sports" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -663,7 +698,7 @@
       }
     },
     "Comedy" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -674,6 +709,7 @@
       }
     },
     "Completed" : {
+      "comment" : "Progress status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -684,7 +720,7 @@
       }
     },
     "Crossdressing" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -694,17 +730,19 @@
         }
       }
     },
-    "Currently Publishing" : {
+    "Currently publishing" : {
+      "comment" : "Status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wird veröffentlicht"
+            "value" : "Wird veröffentlich"
           }
         }
       }
     },
     "Dark" : {
+      "comment" : "Appereance",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -745,7 +783,7 @@
       }
     },
     "Delinquents" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -756,7 +794,7 @@
       }
     },
     "Detective" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -767,6 +805,7 @@
       }
     },
     "Discontinued" : {
+      "comment" : "Status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -797,6 +836,7 @@
       }
     },
     "Doujinshi" : {
+      "comment" : "Manga type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -807,7 +847,7 @@
       }
     },
     "Drama" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -818,6 +858,7 @@
       }
     },
     "Dropped" : {
+      "comment" : "Progress status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -828,7 +869,7 @@
       }
     },
     "Ecchi" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -869,7 +910,7 @@
       }
     },
     "Educational" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -920,7 +961,7 @@
       }
     },
     "Erotica" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -931,7 +972,7 @@
       }
     },
     "Fantasy" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -972,6 +1013,7 @@
       }
     },
     "Female" : {
+      "comment" : "Gender",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -982,6 +1024,7 @@
       }
     },
     "Finished" : {
+      "comment" : "Status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1002,7 +1045,7 @@
       }
     },
     "Gag Humor" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1053,7 +1096,7 @@
       }
     },
     "Girls Love" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1074,7 +1117,7 @@
       }
     },
     "Gore" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1085,7 +1128,7 @@
       }
     },
     "Gourmet" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1096,7 +1139,7 @@
       }
     },
     "Harem" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1107,7 +1150,7 @@
       }
     },
     "Hentai" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1118,7 +1161,7 @@
       }
     },
     "High Stakes Game" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1129,7 +1172,7 @@
       }
     },
     "Historical" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1140,7 +1183,7 @@
       }
     },
     "Horror" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1161,7 +1204,7 @@
       }
     },
     "Idols (Female)" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1172,7 +1215,7 @@
       }
     },
     "Idols (Male)" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1213,7 +1256,7 @@
       }
     },
     "Isekai" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1224,7 +1267,7 @@
       }
     },
     "Iyashikei" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1255,7 +1298,7 @@
       }
     },
     "Josei" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1266,7 +1309,7 @@
       }
     },
     "Kids" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1297,6 +1340,7 @@
       }
     },
     "Light" : {
+      "comment" : "Appereance",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1307,6 +1351,7 @@
       }
     },
     "Light Novel" : {
+      "comment" : "Manga type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1417,7 +1462,7 @@
       }
     },
     "Love Polygon" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1428,7 +1473,7 @@
       }
     },
     "Love Status Quo" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1449,7 +1494,7 @@
       }
     },
     "Magical Sex Shift" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1460,7 +1505,7 @@
       }
     },
     "Mahou Shoujo" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1471,6 +1516,7 @@
       }
     },
     "Male" : {
+      "comment" : "Gender",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1481,6 +1527,7 @@
       }
     },
     "Manga" : {
+      "comment" : "Manga type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1501,6 +1548,7 @@
       }
     },
     "Manhua" : {
+      "comment" : "Manga type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1511,6 +1559,7 @@
       }
     },
     "Manhwa" : {
+      "comment" : "Manga type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1521,7 +1570,7 @@
       }
     },
     "Martial Arts" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1532,7 +1581,7 @@
       }
     },
     "Mecha" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1543,7 +1592,7 @@
       }
     },
     "Medical" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1554,7 +1603,7 @@
       }
     },
     "Memoir" : {
-      "comment" : "Manga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1565,7 +1614,7 @@
       }
     },
     "Military" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1576,6 +1625,7 @@
       }
     },
     "Most Favorited" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1586,6 +1636,7 @@
       }
     },
     "Most Popular" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1596,6 +1647,7 @@
       }
     },
     "Movie" : {
+      "comment" : "Anime type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1606,7 +1658,7 @@
       }
     },
     "Music" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Anime type\nGenre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1617,7 +1669,7 @@
       }
     },
     "Mystery" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1628,7 +1680,7 @@
       }
     },
     "Mythology" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1658,7 +1710,7 @@
         }
       }
     },
-    "No description available" : {
+    "No summary available" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1669,6 +1721,7 @@
       }
     },
     "Non-binary" : {
+      "comment" : "Gender",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1679,6 +1732,7 @@
       }
     },
     "Not rated yet" : {
+      "comment" : "Rating",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1699,6 +1753,7 @@
       }
     },
     "Novel" : {
+      "comment" : "Manga type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1709,6 +1764,7 @@
       }
     },
     "OEL" : {
+      "comment" : "Manga type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1728,7 +1784,8 @@
         }
       }
     },
-    "On Hiatus" : {
+    "On hiatus" : {
+      "comment" : "Status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1739,6 +1796,7 @@
       }
     },
     "On Hold" : {
+      "comment" : "Progress status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1749,6 +1807,7 @@
       }
     },
     "ONA" : {
+      "comment" : "Anime type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1759,6 +1818,7 @@
       }
     },
     "One-Shot" : {
+      "comment" : "Manga type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1769,6 +1829,7 @@
       }
     },
     "Orange" : {
+      "comment" : "Accent color",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1779,7 +1840,7 @@
       }
     },
     "Organized Crime" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1790,7 +1851,7 @@
       }
     },
     "Otaku Culture" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1812,6 +1873,7 @@
       }
     },
     "OVA" : {
+      "comment" : "Anime type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1833,7 +1895,7 @@
       }
     },
     "Parody" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1844,7 +1906,7 @@
       }
     },
     "Performing Arts" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1855,7 +1917,7 @@
       }
     },
     "Pets" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1866,6 +1928,7 @@
       }
     },
     "Pink" : {
+      "comment" : "Accent color",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1886,6 +1949,7 @@
       }
     },
     "Plan To Watch" : {
+      "comment" : "Progress status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1937,7 +2001,7 @@
       }
     },
     "Psychological" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1984,6 +2048,7 @@
       }
     },
     "Publishing soon" : {
+      "comment" : "Status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1994,6 +2059,7 @@
       }
     },
     "Purple" : {
+      "comment" : "Accent color",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2004,6 +2070,7 @@
       }
     },
     "PV" : {
+      "comment" : "Anime type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2014,7 +2081,7 @@
       }
     },
     "Racing" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2065,6 +2132,7 @@
       }
     },
     "Red" : {
+      "comment" : "Accent color",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2075,7 +2143,7 @@
       }
     },
     "Reincarnation" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2126,7 +2194,7 @@
       }
     },
     "Reverse Harem" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2137,7 +2205,7 @@
       }
     },
     "Romance" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2158,7 +2226,7 @@
       }
     },
     "Samurai" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2179,7 +2247,7 @@
       }
     },
     "School" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2190,7 +2258,7 @@
       }
     },
     "Sci-Fi" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2221,7 +2289,7 @@
       }
     },
     "Seinen" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2263,7 +2331,7 @@
       }
     },
     "Shoujo" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2274,7 +2342,7 @@
       }
     },
     "Shounen" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2315,7 +2383,7 @@
       }
     },
     "Showbiz" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2337,7 +2405,7 @@
       }
     },
     "Slice of Life" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2358,7 +2426,7 @@
       }
     },
     "Space" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2369,6 +2437,7 @@
       }
     },
     "Special" : {
+      "comment" : "Anime type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2390,7 +2459,7 @@
       }
     },
     "Sports" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2411,7 +2480,7 @@
       }
     },
     "Strategy Game" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2433,7 +2502,7 @@
       }
     },
     "Super Power" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2444,7 +2513,7 @@
       }
     },
     "Supernatural" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2455,7 +2524,7 @@
       }
     },
     "Survival" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2466,7 +2535,7 @@
       }
     },
     "Suspense" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2477,6 +2546,7 @@
       }
     },
     "System" : {
+      "comment" : "Appereance",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2487,7 +2557,7 @@
       }
     },
     "Team Sports" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2508,7 +2578,7 @@
       }
     },
     "Time Travel" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2549,6 +2619,7 @@
       }
     },
     "Top Airing Anime" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2559,6 +2630,7 @@
       }
     },
     "Top Anime by Popularity" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2569,6 +2641,7 @@
       }
     },
     "Top Anime Movies" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2579,6 +2652,7 @@
       }
     },
     "Top Anime OVA Series" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2589,6 +2663,7 @@
       }
     },
     "Top Anime Series" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2599,6 +2674,7 @@
       }
     },
     "Top Anime Specials" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2609,6 +2685,7 @@
       }
     },
     "Top Anime TV Series" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2619,6 +2696,7 @@
       }
     },
     "Top Doujinshi" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2629,6 +2707,7 @@
       }
     },
     "Top Favorited Anime" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2639,6 +2718,7 @@
       }
     },
     "Top Manga" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2649,6 +2729,7 @@
       }
     },
     "Top Manhua" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2659,6 +2740,7 @@
       }
     },
     "Top Manhwa" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2669,6 +2751,7 @@
       }
     },
     "Top Novels" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2679,6 +2762,7 @@
       }
     },
     "Top One-shots" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2689,6 +2773,7 @@
       }
     },
     "Top Upcoming Anime" : {
+      "comment" : "Sort by",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2709,6 +2794,7 @@
       }
     },
     "TV" : {
+      "comment" : "Anime type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2719,6 +2805,7 @@
       }
     },
     "TV Special" : {
+      "comment" : "Anime type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2748,8 +2835,19 @@
         }
       }
     },
+    "Unknown anime type" : {
+      "comment" : "Anime type",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannter Animetyp"
+          }
+        }
+      }
+    },
     "Unknown genre" : {
-      "comment" : "Manga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2759,12 +2857,13 @@
         }
       }
     },
-    "Unknown progress status" : {
+    "Unknown manga type" : {
+      "comment" : "Manga type",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unbekannter Fortschrittsstatus"
+            "value" : "Unbekannter Mangatyp"
           }
         }
       }
@@ -2810,8 +2909,19 @@
         }
       }
     },
+    "Unknown status" : {
+      "comment" : "Status",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannter Fortschritt"
+          }
+        }
+      }
+    },
     "Urban Fantasy" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2822,7 +2932,7 @@
       }
     },
     "Vampire" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2833,7 +2943,7 @@
       }
     },
     "Video Game" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2844,7 +2954,7 @@
       }
     },
     "Villainess" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2855,7 +2965,7 @@
       }
     },
     "Visual Arts" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2866,6 +2976,7 @@
       }
     },
     "Watching" : {
+      "comment" : "Progress status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2896,7 +3007,7 @@
       }
     },
     "Workplace" : {
-      "comment" : "Anime genre\nManga genre",
+      "comment" : "Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {

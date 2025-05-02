@@ -29,6 +29,6 @@ struct PillPicker<T: Hashable>: View {
 }
 
 #Preview {
-    @Previewable @State var mangaStatus: MangaProgressStatus = .completed
-    PillPicker(options: MangaProgressStatus.allCases, selectedOption: $mangaStatus, displayName: { $0.displayName })
+    @Previewable @State var mangaStatus: ProgressStatus.Manga = .completed
+    PillPicker(options: ProgressStatus.Manga.allCases, selectedOption: $mangaStatus, displayName: { $0.displayName })
 }

@@ -1,0 +1,30 @@
+import SwiftUI
+
+struct CharactersView: View {
+    let characters: [Character]
+    
+    var body: some View {
+        VStack (alignment: .leading){
+            Text("Characters")
+                .font(.headline)
+            ScrollView(.horizontal) {
+                HStack(spacing: 10) {
+                    ForEach(characters, id: \.id) { character in
+                        VStack(alignment: .leading) {
+                            AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
+                                .frame(width: 60, height: 90)
+                                .cornerRadius(12)
+                                .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+                            Text(character.metaData.name)
+                                .font(.caption)
+                                .frame(width: 60, alignment: .leading)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                        }
+                    }
+                }
+            }
+            .scrollClipDisabled()
+        }
+    }
+}

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct GenresView: View {
     
-    let genres: [GenreWrapper]
+    let genres: [Genre]
     
     var body: some View {
         if !genres.isEmpty {
@@ -31,5 +31,5 @@ struct GenresView: View {
 }
 
 #Preview {
-    GenresView(genres: [.anime(.action), .anime(.shoujo), .anime(.adultCast), .anime(.seinen), .anime(.anthropomorphic)])
+    GenresView(genres: [.action, .shoujo, .adultCast, .seinen, .anthropomorphic])
 }

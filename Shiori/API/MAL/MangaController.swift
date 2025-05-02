@@ -40,7 +40,7 @@ import SwiftUI
         }
 
         let parameters: [String: String] = [
-            "status": MangaProgressStatus.planToRead.rawValue,
+            "status": ProgressStatus.Manga.planToRead.rawValue,
         ]
         let formBody = parameters.map { "\($0.key)=\($0.value)" }
                                  .joined(separator: "&")

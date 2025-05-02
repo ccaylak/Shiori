@@ -2,7 +2,7 @@ import Foundation
 
 extension ListStatus {
     
-    var getProgressStatus: ProgressStatusWrapper {
+    var getProgressStatus: ProgressStatus {
         progressStatusWrapper
     }
     
@@ -22,10 +22,10 @@ extension ListStatus {
         status ?? "Unknown"
     }
     
-    private var progressStatusWrapper: ProgressStatusWrapper {
-        if let animeStatus = AnimeProgressStatus(rawValue: getStatusString) {
+    private var progressStatusWrapper: ProgressStatus {
+        if let animeStatus = ProgressStatus.Anime(rawValue: getStatusString) {
             return .anime(animeStatus)
-        } else if let mangaStatus = MangaProgressStatus(rawValue: getStatusString) {
+        } else if let mangaStatus = ProgressStatus.Manga(rawValue: getStatusString) {
             return .manga(mangaStatus)
         }
         

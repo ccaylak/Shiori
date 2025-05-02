@@ -91,7 +91,7 @@ import SwiftUI
     func addToWatchList(id: Int) async throws {
         let components = URLComponents(string: MALEndpoints.Anime.update(id: id))!
         
-        let parameters = ["status": AnimeProgressStatus.planToWatch.rawValue]
+        let parameters = ["status": ProgressStatus.Anime.planToWatch.rawValue]
         let bodyData = parameters
             .map { "\($0.key)=\($0.value)" }
             .joined(separator: "&")

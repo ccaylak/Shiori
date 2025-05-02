@@ -1,16 +1,16 @@
 import SwiftUI
 
-struct GeneralInformationView: View {
+struct GeneralOverviewView: View {
     
-    let type: TypeWrapper
-    let episodes: Int?
-    let numberOfChapters: Int?
-    let numberOfVolumes: Int?
+    let type: FormatType
+    let episodes: Int
+    let numberOfChapters: Int
+    let numberOfVolumes: Int
     let startDate: String
     let endDate: String
     let studios: [Studio]
     let authorInfos: [AuthorInfos]
-    let status: StatusWrapper
+    let status: Status
     
     var body: some View {
         LazyVStack(alignment: .leading, spacing: 10) {
@@ -18,35 +18,14 @@ struct GeneralInformationView: View {
                 .font(.headline)
             VStack(alignment: .leading, spacing: 4) {
                 
-                Text(formattedDetails(chapters: numberOfChapters ?? 0, volumes: numberOfVolumes ?? 0, episodes: episodes ?? 0))
+                Text(formattedDetails(chapters: numberOfChapters, volumes: numberOfVolumes, episodes: episodes))
                     .font(.body)
                 
                 Text(formattedRelease(startDate: startDate, endDate: endDate))
                     .font(.body)
                 
-                Spacer()
-                if (!studios.isEmpty && authorInfos.isEmpty) {
-                    HStack(spacing: 5) {
-                        Text("Made by")
-                            .bold()
-                        ForEach(studios, id: \.id) {studio in
-                            Text(studio.name)
-                        }
-                    }
-                }
-                
-                if(!authorInfos.isEmpty && studios.isEmpty) {
-                    
-                    Text("By")
-                        .bold()
-                    VStack (alignment: .leading) {
-                        ForEach(authorInfos, id: \.self) { authorElement in
-                            Text(authorElement.getAuthor)
-                        }
-                    }
-                }
-                
-                
+                StudiosView(studios: studios)
+                AuthorsView(authorInfos: authorInfos)
             }.padding(.bottom, 10)
         }
     }
@@ -60,7 +39,7 @@ struct GeneralInformationView: View {
         }
     }
     
-    private func formattedAnimeDetails(type: AnimeType, episodes: Int) -> String {
+    private func formattedAnimeDetails(type: FormatType.Anime, episodes: Int) -> String {
         switch (type, episodes) {
         case (.movie, 1):
             return type.displayName
@@ -75,7 +54,7 @@ struct GeneralInformationView: View {
         }
     }
     
-    private func formattedMangaDetails(type: MangaType, chapters: Int, volumes: Int) -> String {
+    private func formattedMangaDetails(type: FormatType.Manga, chapters: Int, volumes: Int) -> String {
         
         switch (chapters, volumes) {
         case (let chapters, let volumes) where chapters > 0 && volumes > 0:
@@ -104,7 +83,7 @@ struct GeneralInformationView: View {
         return formattedReleaseDate
     }
     
-    private func formatReleaseRange(startFormatted: String?, endFormatted: String?, status: AnimeStatus) -> String {
+    private func formatReleaseRange(startFormatted: String?, endFormatted: String?, status: Status.Anime) -> String {
         
         switch status {
         case .finishedAiring where startFormatted != nil && endFormatted != nil && startFormatted == endFormatted:
@@ -122,7 +101,7 @@ struct GeneralInformationView: View {
         }
     }
     
-    private func formatPublishRange(startFormatted: String?, endFormatted: String?, status: MangaStatus) -> String {
+    private func formatPublishRange(startFormatted: String?, endFormatted: String?, status: Status.Manga) -> String {
         
         switch status {
         case .finished where startFormatted != nil && endFormatted != nil && startFormatted == endFormatted:
@@ -143,17 +122,51 @@ struct GeneralInformationView: View {
     }
 }
 
+private struct StudiosView: View {
+    let studios: [Studio]
+    
+    var body: some View {
+        if (!studios.isEmpty) {
+            Spacer()
+            HStack(spacing: 5) {
+                Text("Made by")
+                    .bold()
+                ForEach(studios, id: \.id) {studio in
+                    Text(studio.name)
+                }
+            }
+        }
+    }
+}
+
+private struct AuthorsView: View {
+    let authorInfos: [AuthorInfos]
+    
+    var body: some View {
+        if(!authorInfos.isEmpty) {
+            Spacer()
+            Text("By")
+                .bold()
+            VStack (alignment: .leading) {
+                ForEach(authorInfos, id: \.self) { authorElement in
+                    Text(authorElement.getAuthor)
+                }
+            }
+        }
+    }
+}
+
 #Preview {
     let exampleStudios: [Studio] = [
         Studio(id: 1, name: "Netflix"),
         Studio(id: 2, name: "Amazon")
     ]
     
-    GeneralInformationView(
+    GeneralOverviewView(
         type: .anime(.tv),
         episodes: 10,
-        numberOfChapters: nil,
-        numberOfVolumes: nil,
+        numberOfChapters: 10,
+        numberOfVolumes: 0,
         startDate: "2024-10-10",
         endDate: "2025-10-10",
         studios: exampleStudios,

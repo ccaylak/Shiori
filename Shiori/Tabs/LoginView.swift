@@ -132,20 +132,20 @@ struct LoginView: View {
                         }
                         
                         let animeStatistics = [
-                            Statistics(title: AnimeProgressStatus.completed.displayName, value: animeStatistics?.completed ?? 0, iconCombination: .animeCompleted),
-                            Statistics(title: AnimeProgressStatus.watching.displayName, value: animeStatistics?.watching ?? 0, iconCombination: .animeWatching),
-                            Statistics(title: AnimeProgressStatus.onHold.displayName, value: animeStatistics?.onHold ?? 0, iconCombination: .animeOnHold),
-                            Statistics(title: AnimeProgressStatus.dropped.displayName, value: animeStatistics?.dropped ?? 0, iconCombination: .animeDropped),
-                            Statistics(title: AnimeProgressStatus.planToWatch.displayName, value: animeStatistics?.planToWatch ?? 0, iconCombination: .animePlanToWatch),
+                            Statistics(title: ProgressStatus.Anime.completed.displayName, value: animeStatistics?.completed ?? 0, iconCombination: .animeCompleted),
+                            Statistics(title: ProgressStatus.Anime.watching.displayName, value: animeStatistics?.watching ?? 0, iconCombination: .animeWatching),
+                            Statistics(title: ProgressStatus.Anime.onHold.displayName, value: animeStatistics?.onHold ?? 0, iconCombination: .animeOnHold),
+                            Statistics(title: ProgressStatus.Anime.dropped.displayName, value: animeStatistics?.dropped ?? 0, iconCombination: .animeDropped),
+                            Statistics(title: ProgressStatus.Anime.planToWatch.displayName, value: animeStatistics?.planToWatch ?? 0, iconCombination: .animePlanToWatch),
                         ]
                         UserStatistics(title: String(localized: "Anime statistics"), statisticsValues: animeStatistics)
                         
                         let mangaStatistics = [
-                            Statistics(title: MangaProgressStatus.completed.displayName, value: mangaStatistics?.completed ?? 0, iconCombination: .mangaCompleted),
-                            Statistics(title: MangaProgressStatus.reading.displayName, value: mangaStatistics?.reading ?? 0, iconCombination: .mangaReading),
-                            Statistics(title: MangaProgressStatus.onHold.displayName, value: mangaStatistics?.onHold ?? 0, iconCombination: .mangaOnHold),
-                            Statistics(title: MangaProgressStatus.dropped.displayName, value: mangaStatistics?.dropped ?? 0, iconCombination: .mangaDropped),
-                            Statistics(title: MangaProgressStatus.planToRead.displayName, value: mangaStatistics?.planToRead ?? 0, iconCombination: .mangaPlanToRead),
+                            Statistics(title: ProgressStatus.Manga.completed.displayName, value: mangaStatistics?.completed ?? 0, iconCombination: .mangaCompleted),
+                            Statistics(title: ProgressStatus.Manga.reading.displayName, value: mangaStatistics?.reading ?? 0, iconCombination: .mangaReading),
+                            Statistics(title: ProgressStatus.Manga.onHold.displayName, value: mangaStatistics?.onHold ?? 0, iconCombination: .mangaOnHold),
+                            Statistics(title: ProgressStatus.Manga.dropped.displayName, value: mangaStatistics?.dropped ?? 0, iconCombination: .mangaDropped),
+                            Statistics(title: ProgressStatus.Manga.planToRead.displayName, value: mangaStatistics?.planToRead ?? 0, iconCombination: .mangaPlanToRead),
                         ]
                         UserStatistics(title: String(localized: "Manga statistics"), statisticsValues: mangaStatistics)
                         

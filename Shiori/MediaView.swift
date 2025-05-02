@@ -8,9 +8,9 @@ struct MediaView: View {
     let title: String
     let image: String
     let releaseYear: String
-    let type: TypeWrapper
+    let type: FormatType
     let mediaCount: Int
-    let status: StatusWrapper
+    let status: Status
     
     private var isDarkMode: Bool {
         if settingsManager.appearance == .system {
@@ -70,11 +70,11 @@ struct MediaView: View {
         return formattedResult
     }
     
-    func formattedAnimeDetails(type: AnimeType, year: String) -> String {
+    func formattedAnimeDetails(type: FormatType.Anime, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
     
-    func formattedMangaDetails(type: MangaType, year: String) -> String {
+    func formattedMangaDetails(type: FormatType.Manga, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
     
@@ -98,12 +98,8 @@ struct MediaView: View {
             return ""
         }
     }
-
-    // getMediaStatus() kannst du in diesem Fall sogar ganz weglassen,
-    // weil du den Status hier schon zur Hand hast.
-
     
-    func formattedOtherAnimeDetails(episodes: Int, status: AnimeStatus, type: AnimeType) -> String {
+    func formattedOtherAnimeDetails(episodes: Int, status: Status.Anime, type: FormatType.Anime) -> String {
         
         if episodes == 0 && (status == .notYetAired || status == .currentlyAiring) {
             return status.displayName
@@ -120,7 +116,7 @@ struct MediaView: View {
         return String(localized: "\(episodes) episodes (\(status.displayName))")
     }
     
-    func formattedOtherMangaDetails(chapters: Int, status: MangaStatus, type: MangaType) -> String {
+    func formattedOtherMangaDetails(chapters: Int, status: Status.Manga, type: FormatType.Manga) -> String {
         if(status == .currentlyPublishing) {
             return status.displayName
         }

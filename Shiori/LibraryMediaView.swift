@@ -8,7 +8,7 @@ struct LibraryMediaView: View {
     let title: String
     let image: String
     let releaseYear: String
-    let type: TypeWrapper
+    let type: FormatType
     let rating: Int
     let completedUnits: Int
     let totalUnits: Int
@@ -89,11 +89,11 @@ struct LibraryMediaView: View {
         return formattedResult
     }
     
-    func formattedAnimeDetails(type: AnimeType, year: String) -> String {
+    func formattedAnimeDetails(type: FormatType.Anime, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
     
-    func formattedMangaDetails(type: MangaType, year: String) -> String {
+    func formattedMangaDetails(type: FormatType.Manga, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
 }

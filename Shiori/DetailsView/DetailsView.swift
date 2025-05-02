@@ -9,8 +9,8 @@ struct DetailsView: View {
     @State private var jikanCharacters: JikanCharacter = JikanCharacter(data: [])
     
     struct UserProgress {
-        var mangaProgress: MangaProgressStatus
-        var animeProgress: AnimeProgressStatus
+        var mangaProgress: ProgressStatus.Manga
+        var animeProgress: ProgressStatus.Anime
         var rating: Int
         var progress: Int
         var end: Int
@@ -40,16 +40,16 @@ struct DetailsView: View {
             NavigationStack {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        
-                        CoverAndDescriptionView(
+                        CoverSummaryView(
                             title: media.getTitle,
                             imageUrl: media.getCover,
                             score: media.getScore,
-                            mediaCount: media.getChapters,
-                            description: media.getDescription,
+                            chapters: media.getChapters,
+                            volumes: media.getVolumes,
+                            episodes: media.getEpisodes,
+                            summary: media.getSummary,
                             type: media.getType
                         )
-                         
                     }
                     
                     Group {
@@ -135,7 +135,7 @@ struct DetailsView: View {
                     
                     Divider()
                     
-                    GeneralInformationView(
+                    GeneralOverviewView(
                         type: media.getType,
                         episodes: media.getEpisodes,
                         numberOfChapters: media.getChapters,
@@ -149,7 +149,7 @@ struct DetailsView: View {
                     
                     Divider()
                     
-                    GenresView(genres: media.getGenreWrapper)
+                    GenresView(genres: media.getGenres)
                     
                     Divider()
                     
@@ -159,48 +159,18 @@ struct DetailsView: View {
                         popularity: media.getPopularity,
                         users: media.getUsers
                     )
+                    
                     Divider()
                     
-                    if let relatedAnimes = media.relatedAnimes, !relatedAnimes.isEmpty && resultManager.mediaType == .anime {
-                        RelatedMediaView(relatedMediaItems: relatedAnimes)
-                        Divider()
-                    }
+                    RelatedMediaView(media: media, mediaType: media.getMediaType)
                     
-                    if let relatedMangas = media.relatedMangas, !relatedMangas.isEmpty && resultManager.mediaType == .manga {
-                        RelatedMediaView(relatedMediaItems: relatedMangas)
-                        Divider()
-                    }
-                    
-                    if let recommendations = media.recommendations, !recommendations.isEmpty {
-                        RecommendationsView(recommendations: recommendations)
-                    }
                     Divider()
-                    let characters = jikanCharacters.data
-                    if !characters.isEmpty {
-                        VStack (alignment: .leading){
-                            Text("Characters")
-                                .font(.headline)
-                            ScrollView(.horizontal) {
-                                HStack(spacing: 10) {
-                                    ForEach(characters, id: \.id) { character in
-                                        VStack(alignment: .leading) {
-                                            AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
-                                                .frame(width: 60, height: 90)
-                                                .cornerRadius(12)
-                                                .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
-                                            Text(character.metaData.name)
-                                                .font(.caption)
-                                                .frame(width: 60, alignment: .leading)
-                                                .lineLimit(1)
-                                                .truncationMode(.tail)
-                                        }
-                                    }
-                                }
-                            }
-                            .scrollClipDisabled()
-                        }
-                            
-                    }
+                    
+                    RecommendationsView(recommendations: media.getRecommendations)
+                    
+                    Divider()
+                    
+                    CharactersView(characters: jikanCharacters.data)
                     
                 }
                 .scrollIndicators(.hidden)
@@ -235,7 +205,7 @@ struct DetailsView: View {
                             List {
                                 if (resultManager.mediaType == .manga) {
                                     Picker("Status", selection: $userProgress.mangaProgress) {
-                                        ForEach([MangaProgressStatus.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
+                                        ForEach([ProgressStatus.Manga.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
                                             Text(mangaSelection.displayName).tag(mangaSelection)
                                         }
                                     }
@@ -243,7 +213,7 @@ struct DetailsView: View {
                                 
                                 if (resultManager.mediaType == .anime){
                                     Picker("Status", selection: $userProgress.animeProgress) {
-                                        ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
+                                        ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
                                             Text(animeSelection.displayName).tag(animeSelection)
                                         }
                                     }
@@ -354,7 +324,6 @@ struct DetailsView: View {
                     if resultManager.mediaType == .anime {
                         media = try await animeController.fetchDetails(id: media.id)
                         jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
-
                         
                         userProgress.progress = media.getListStatus.getWatchedEpisodes
                         userProgress.rating = media.getListStatus.getRating

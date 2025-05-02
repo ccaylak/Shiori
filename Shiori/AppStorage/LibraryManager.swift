@@ -14,7 +14,7 @@ import SwiftUI
             settingsChanged()
         }
     }
-    @AppStorage("animeProgressStatus") var animeProgressStatus: AnimeProgressStatus = .completed {
+    @AppStorage("animeProgressStatus") var animeProgressStatus: ProgressStatus.Anime = .completed {
         didSet {
             settingsChanged()
         }
@@ -25,7 +25,7 @@ import SwiftUI
             settingsChanged()
         }
     }
-    @AppStorage("mangaProgressStatus") var mangaProgressStatus: MangaProgressStatus = .completed {
+    @AppStorage("mangaProgressStatus") var mangaProgressStatus: ProgressStatus.Manga = .completed {
         didSet {
             settingsChanged()
         }

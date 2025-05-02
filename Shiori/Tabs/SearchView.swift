@@ -51,7 +51,7 @@ struct SearchView: View {
     
     private var animeSortPicker: some View {
         Picker("Sort by", selection: $resultManager.animeRankingType) {
-            ForEach(AnimeSortType.allCases, id: \.self) { type in
+            ForEach(SortType.Anime.allCases, id: \.self) { type in
                 Label(type.displayName, systemImage: type.icon).tag(type)
             }
         }
@@ -59,7 +59,7 @@ struct SearchView: View {
     
     private var mangaSortPicker: some View {
         Picker("Sort by", selection: $resultManager.mangaRankingType) {
-            ForEach(MangaSortType.allCases, id: \.self) { type in
+            ForEach(SortType.Manga.allCases, id: \.self) { type in
                 Text(type.displayName).tag(type)
             }
         }

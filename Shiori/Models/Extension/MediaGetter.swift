@@ -64,48 +64,30 @@ extension Media {
         relatedMangas ?? []
     }
     
-    var getMoreImages: [Images] {
-        moreImages ?? []
-    }
-    
     var getStudios: [Studio] {
         studios ?? []
     }
     
-    private var getGenres: [Genre] {
+    private var getMediaGenres: [MediaGenre] {
         genres ?? []
     }
-    
-    var getGenreWrapper: [GenreWrapper] {
-        return getGenres.map { genre in
-            switch isMangaOrAnime(from: type ?? "") {
-            case .anime:
-                if let eg = AnimeGenre(rawValue: genre.name) {
-                    return .anime(eg)
-                }
-            case .manga:
-                if let mg = MangaGenre(rawValue: genre.name) {
-                    return .manga(mg)
-                }
-            case .unknown:
-                return .unknown
-            }
-            return .unknown
-        }
+
+    var getGenres: [Genre] {
+        getMediaGenres.compactMap { Genre(rawValue: $0.name) }
     }
     
     var getCover: String {
         images.large
     }
     
-    var getMediaStatus: StatusWrapper {
+    var getMediaStatus: Status {
 
         switch isMangaOrAnime(from: type ?? "") {
         case .anime:
-            let animeStatus = AnimeStatus(rawValue: status ?? "") ?? .unknown
+            let animeStatus = Status.Anime(rawValue: status ?? "") ?? .unknown
             return .anime(animeStatus)
         case .manga:
-            let mangaStatus = MangaStatus(rawValue: status ?? "") ?? .unknown
+            let mangaStatus = Status.Manga(rawValue: status ?? "") ?? .unknown
             return .manga(mangaStatus)
         case .unknown:
             return .unknown
@@ -121,15 +103,15 @@ extension Media {
         }
     }
     
-    var getType: TypeWrapper {
+    var getType: FormatType {
         let raw = type ?? ""
 
         switch isMangaOrAnime(from: type ?? "") {
         case .anime:
-            let anime = AnimeType(rawValue: raw) ?? .unknown
+            let anime = FormatType.Anime(rawValue: raw) ?? .unknown
             return .anime(anime)
         case .manga:
-            let manga = MangaType(rawValue: raw) ?? .unknown
+            let manga = FormatType.Manga(rawValue: raw) ?? .unknown
             return .manga(manga)
         case .unknown:
             return .anime(.unknown)
@@ -148,8 +130,8 @@ extension Media {
         users ?? 0
     }
     
-    var getDescription: String {
-        description ?? String(localized: "No description available")
+    var getSummary: String {
+        summary ?? String(localized: "No summary available")
     }
     
     var getScore: Double {
@@ -169,10 +151,10 @@ extension Media {
     }
     
     private func isMangaOrAnime(from type: String) -> MediaType {
-        if MangaType(rawValue: type) != nil {
+        if FormatType.Manga(rawValue: type) != nil {
             return .manga
         }
-        if AnimeType(rawValue: type) != nil {
+        if FormatType.Anime(rawValue: type) != nil {
             return .anime
         }
         return .unknown

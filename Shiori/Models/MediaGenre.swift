@@ -1,6 +1,6 @@
 import Foundation
 
-struct Genre: Decodable, Hashable {
+struct MediaGenre: Decodable, Hashable {
     let id: Int
     let name: String
 }

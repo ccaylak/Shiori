@@ -3,7 +3,7 @@ import SwiftUI
 struct LibraryView: View {
     
     struct MangaEntry {
-        var progressStatus: MangaProgressStatus
+        var progressStatus: ProgressStatus.Manga
         var score: Int
         var currentVolume: Int
         var totalVolumes: Int
@@ -12,7 +12,7 @@ struct LibraryView: View {
     }
     
     struct AnimeEntry {
-        var progressStatus: AnimeProgressStatus
+        var progressStatus: ProgressStatus.Anime
         var score: Int
         var currentEpisode: Int
         var totalEpisodes: Int
@@ -67,7 +67,7 @@ struct LibraryView: View {
                     LazyVStack {
                         if tokenHandler.isAuthenticated {
                             if libraryManager.mediaType == .manga {
-                                PillPicker(options: MangaProgressStatus.allCases, selectedOption: $libraryManager.mangaProgressStatus, displayName: { $0.displayName })
+                                PillPicker(options: ProgressStatus.Manga.allCases, selectedOption: $libraryManager.mangaProgressStatus, displayName: { $0.displayName })
                                 ForEach(filteredLibraryData, id: \ .self) { manga in
                                     Button(action: {
                                         selectedMedia = manga
@@ -98,7 +98,7 @@ struct LibraryView: View {
                                 }
                             }
                             if libraryManager.mediaType == .anime {
-                                PillPicker(options: AnimeProgressStatus.allCases, selectedOption: $libraryManager.animeProgressStatus, displayName: { $0.displayName })
+                                PillPicker(options: ProgressStatus.Anime.allCases, selectedOption: $libraryManager.animeProgressStatus, displayName: { $0.displayName })
                                 ForEach(filteredLibraryData, id: \ .self) { anime in
                                     Button(action: {
                                         selectedMedia = anime
@@ -200,7 +200,7 @@ struct LibraryView: View {
                     }
                 }
             }
-            .navigationTitle("\(libraryManager.mediaType.rawValue.capitalized) Library")
+            .navigationTitle("\(libraryManager.mediaType.rawValue.capitalized) library")
             .navigationBarTitleDisplayMode(.inline)
             .padding()
             .sheet(item: $selectedMedia) { media in
@@ -217,7 +217,7 @@ struct LibraryView: View {
                             
                             if (libraryManager.mediaType == .manga){
                                 Picker("Status", selection: $mangaEntry.progressStatus) {
-                                    ForEach([MangaProgressStatus.completed, .reading, .onHold, .dropped, .planToRead], id: \.self) { mangaSelection in
+                                    ForEach([ProgressStatus.Manga.completed, .reading, .onHold, .dropped, .planToRead], id: \.self) { mangaSelection in
                                         Text(mangaSelection.displayName).tag(mangaSelection)
                                     }
                                 }
@@ -245,7 +245,7 @@ struct LibraryView: View {
                             
                             if (libraryManager.mediaType == .anime){
                                 Picker("Status", selection: $animeEntry.progressStatus) {
-                                    ForEach([AnimeProgressStatus.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
+                                    ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
                                         Text(animeSelection.displayName).tag(animeSelection)
                                     }
                                 }
@@ -353,7 +353,7 @@ struct LibraryView: View {
             if (selectedMedia != nil) {
                 if (libraryManager.mediaType == .manga) {
                     mangaEntry = MangaEntry(
-                        progressStatus: MangaProgressStatus(rawValue: selectedMedia?.node.listStatus?.status ?? "") ?? .reading,
+                        progressStatus: ProgressStatus.Manga(rawValue: selectedMedia?.node.listStatus?.status ?? "") ?? .reading,
                         score: selectedMedia?.node.listStatus?.rating ?? 0,
                         currentVolume: selectedMedia?.node.listStatus?.readVolumes ?? 0,
                         totalVolumes: selectedMedia?.node.numberOfVolumes ?? 0,
@@ -363,7 +363,7 @@ struct LibraryView: View {
                 }
                 if (libraryManager.mediaType == .anime) {
                     animeEntry = AnimeEntry(
-                        progressStatus: AnimeProgressStatus(rawValue: selectedMedia?.node.listStatus?.status ?? "") ?? .watching,
+                        progressStatus: ProgressStatus.Anime(rawValue: selectedMedia?.node.listStatus?.status ?? "") ?? .watching,
                         score: selectedMedia?.node.listStatus?.rating ?? 0,
                         currentEpisode: selectedMedia?.node.listStatus?.watchedEpisodes ?? 0,
                         totalEpisodes: selectedMedia?.node.episodes ?? 0

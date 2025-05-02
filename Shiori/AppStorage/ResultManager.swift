@@ -8,12 +8,12 @@ import SwiftUI
             settingsChanged()
         }
     }
-    @AppStorage("animeRankingType") var animeRankingType = AnimeSortType.all {
+    @AppStorage("animeRankingType") var animeRankingType = SortType.Anime.all {
         didSet {
             settingsChanged()
         }
     }
-    @AppStorage("mangaRankingType") var mangaRankingType = MangaSortType.all {
+    @AppStorage("mangaRankingType") var mangaRankingType = SortType.Manga.all {
         didSet {
             settingsChanged()
         }
