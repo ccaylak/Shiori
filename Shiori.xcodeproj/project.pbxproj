@@ -19,7 +19,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F3A786442D0CBB5E00C701BF /* Exceptions for "Shiori" folder in "Shiori" target */ = {
+		F3A786442D0CBB5E00C701BF /* Exceptions for "App" folder in "Shiori" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -29,12 +29,12 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F365CCE52CE74B3F0027F040 /* Shiori */ = {
+		F365CCE52CE74B3F0027F040 /* App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				F3A786442D0CBB5E00C701BF /* Exceptions for "Shiori" folder in "Shiori" target */,
+				F3A786442D0CBB5E00C701BF /* Exceptions for "App" folder in "Shiori" target */,
 			);
-			path = Shiori;
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -57,7 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				F3DE62EC2CF140BC00CD77EF /* README.md */,
-				F365CCE52CE74B3F0027F040 /* Shiori */,
+				F365CCE52CE74B3F0027F040 /* App */,
 				F365CCE42CE74B3F0027F040 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,7 +86,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F365CCE52CE74B3F0027F040 /* Shiori */,
+				F365CCE52CE74B3F0027F040 /* App */,
 			);
 			name = Shiori;
 			packageProductDependencies = (
@@ -298,7 +298,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Shiori/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Shiori/Info.plist;
+				INFOPLIST_FILE = Shiori/App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Shiori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -338,7 +338,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Shiori/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Shiori/Info.plist;
+				INFOPLIST_FILE = Shiori/App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Shiori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
