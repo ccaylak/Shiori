@@ -1,0 +1,4 @@
+Whats New:
+
+- Added automated CI/CD setup for this project
+- Nothing really new regarding the app itself
