@@ -1,4 +1,3 @@
-Whats New:
+What's New:
 
-- Added automated CI/CD setup for this project
-- Nothing really new regarding the app itself
+- Added detailed ListViews in the DetailsView for characters, recommendations, and genres.

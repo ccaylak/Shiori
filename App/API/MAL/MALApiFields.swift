@@ -17,7 +17,7 @@ enum MALApiFields: String {
     case genres = "genres"
     case mediaType = "media_type"
     case status = "status"
-    case recommendations = "recommendations"
+    case recommendations = "recommendations{mean, num_episodes, num_volumes, num_chapters}"
     case scoredUsers = "num_scoring_users"
     
     // anime related
