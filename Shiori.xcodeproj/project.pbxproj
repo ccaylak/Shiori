@@ -140,6 +140,7 @@
 				en,
 				Base,
 				de,
+				"pt-BR",
 			);
 			mainGroup = F365CCDA2CE74B3F0027F040;
 			minimizedProjectReferenceProxies = 1;

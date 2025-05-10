@@ -8,7 +8,14 @@
       "shouldTranslate" : false
     },
     "%@" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
     },
     "%@ library" : {
       "localizations" : {
@@ -16,6 +23,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@-Bibliothek"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biblioteca de %@ "
           }
         }
       }
@@ -33,6 +46,12 @@
             "state" : "new",
             "value" : "%1$@, %2$lld chapters"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld capítulos"
+          }
         }
       }
     },
@@ -48,6 +67,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@, %2$lld chapters in %3$lld volumes"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld capítulos em%3$lld volumes"
           }
         }
       }
@@ -65,6 +90,12 @@
             "state" : "new",
             "value" : "%1$@, %2$lld episodes"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld episódios"
+          }
         }
       }
     },
@@ -81,6 +112,12 @@
             "state" : "new",
             "value" : "%1$@, %2$lld parts"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld partes"
+          }
         }
       }
     },
@@ -93,6 +130,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld Kapitel"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld capítulos"
           }
         }
       }
@@ -110,6 +153,12 @@
             "state" : "new",
             "value" : "%1$lld chapters (%2$@)"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld capítulos (%2$@)"
+          }
         }
       }
     },
@@ -119,6 +168,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld Folgen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld episódios"
           }
         }
       }
@@ -136,6 +191,12 @@
             "state" : "new",
             "value" : "%1$lld episodes (%2$@)"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld episódios (%2$@)"
+          }
         }
       }
     },
@@ -145,6 +206,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld Teile"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld partes"
           }
         }
       }
@@ -156,6 +223,12 @@
             "state" : "translated",
             "value" : "%lld Bände"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld volumes"
+          }
         }
       }
     },
@@ -164,6 +237,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "%1$lld/%2$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "%1$lld/%2$@"
           }
         }
@@ -180,6 +259,12 @@
             "state" : "translated",
             "value" : "1 (Grauenhaft)"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 (Terrível)"
+          }
         }
       }
     },
@@ -190,6 +275,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "2 (Schrecklich)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 (Horrível)"
           }
         }
       }
@@ -202,6 +293,12 @@
             "state" : "translated",
             "value" : "3 (Sehr schlecht)"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 (Muito ruim)"
+          }
         }
       }
     },
@@ -212,6 +309,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "4 (Schlecht)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4 (Ruim)"
           }
         }
       }
@@ -224,6 +327,12 @@
             "state" : "translated",
             "value" : "5 (Durchschnittlich)"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 (Média)"
+          }
         }
       }
     },
@@ -234,6 +343,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "6 (Fine)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 (Regular)"
           }
         }
       }
@@ -246,6 +361,12 @@
             "state" : "translated",
             "value" : "7 (Gut)"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 (Bom)"
+          }
         }
       }
     },
@@ -256,6 +377,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "8 (Sehr gut)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "8 (Muito bom)"
           }
         }
       }
@@ -268,6 +395,12 @@
             "state" : "translated",
             "value" : "9 (Gut)"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "9 (Ótimo)"
+          }
         }
       }
     },
@@ -278,6 +411,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "10 (Meisterwerk)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 (Obra-prima)"
           }
         }
       }
@@ -298,6 +437,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Akzentfarbe"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cor de destaque"
           }
         }
       }
@@ -320,6 +465,12 @@
             "state" : "translated",
             "value" : "Action"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ação"
+          }
         }
       }
     },
@@ -331,6 +482,12 @@
             "state" : "translated",
             "value" : "Adaption"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adaptação"
+          }
         }
       }
     },
@@ -341,6 +498,12 @@
             "state" : "translated",
             "value" : "Zur Bibliothek hinzufügen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionar à Biblioteca"
+          }
         }
       }
     },
@@ -350,6 +513,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zur Bibliothek hinzugefügt"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionado à biblioteca"
           }
         }
       }
@@ -362,6 +531,12 @@
             "state" : "translated",
             "value" : "Erwachsene Charaktere"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elenco Adulto"
+          }
         }
       }
     },
@@ -372,6 +547,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abenteuer"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aventura"
           }
         }
       }
@@ -389,6 +570,12 @@
             "state" : "new",
             "value" : "Aired from %1$@ - %2$@"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exibido de %1$@ - %2$@"
+          }
         }
       }
     },
@@ -398,6 +585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wurde %@ ausgestrahlt"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exibido em %@"
           }
         }
       }
@@ -410,6 +603,12 @@
             "state" : "translated",
             "value" : "Wird ausgestrahlt"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Em Exibição"
+          }
         }
       }
     },
@@ -419,6 +618,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Veröffentlichungsdatum"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data de Exibição"
           }
         }
       }
@@ -430,6 +635,12 @@
             "state" : "translated",
             "value" : "Wird ausgestrahlt seit %@"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exibindo desde %@"
+          }
         }
       }
     },
@@ -440,6 +651,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erscheint bald"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exibindo em breve"
           }
         }
       }
@@ -455,6 +672,12 @@
             "state" : "translated",
             "value" : "Alles"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos"
+          }
         }
       }
     },
@@ -465,6 +688,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alternatives Setting"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuração alternativa"
           }
         }
       }
@@ -477,12 +706,24 @@
             "state" : "translated",
             "value" : "Alternative Version"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versão alternativa"
+          }
         }
       }
     },
     "Anime" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anime"
@@ -497,6 +738,12 @@
             "state" : "translated",
             "value" : "Anime-Statistiken"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estatísticas de anime"
+          }
         }
       }
     },
@@ -508,6 +755,12 @@
             "state" : "translated",
             "value" : "Anthropomorph"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antropomórfico"
+          }
         }
       }
     },
@@ -517,6 +770,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App Icon"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ícone do aplicativo"
           }
         }
       }
@@ -548,6 +807,12 @@
             "state" : "translated",
             "value" : "Erscheinungsbild"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aparência"
+          }
         }
       }
     },
@@ -557,6 +822,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Möchtest du %@ wirklich aus deiner Bibliothek entfernen?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você tem certeza de que deseja remover %@ da sua biblioteca?"
           }
         }
       }
@@ -569,6 +840,12 @@
             "state" : "translated",
             "value" : "Avantgarde"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vanguarda"
+          }
         }
       }
     },
@@ -580,6 +857,12 @@
             "state" : "translated",
             "value" : "Preisgekrönt"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premiado"
+          }
         }
       }
     },
@@ -590,6 +873,12 @@
             "state" : "translated",
             "value" : "Basierend auf %lld Benutzerbewertungen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baseado em %lld avaliações de usuários."
+          }
         }
       }
     },
@@ -599,6 +888,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geburtsdatum"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data de nascimento:"
           }
         }
       }
@@ -611,6 +906,12 @@
             "state" : "translated",
             "value" : "Blau"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Azul"
+          }
         }
       }
     },
@@ -618,6 +919,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boys Love"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Boys Love"
@@ -632,6 +939,12 @@
             "state" : "translated",
             "value" : "Von"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por"
+          }
         }
       }
     },
@@ -642,6 +955,12 @@
             "state" : "translated",
             "value" : "Abbrechen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
         }
       }
     },
@@ -649,6 +968,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CGDCT"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "CGDCT"
@@ -663,6 +988,12 @@
             "state" : "translated",
             "value" : "Kapitel"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capítulo"
+          }
         }
       }
     },
@@ -673,6 +1004,12 @@
             "state" : "translated",
             "value" : "Kapitel %lld"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capítulo %lld"
+          }
         }
       }
     },
@@ -682,6 +1019,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kapitel"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capítulos"
           }
         }
       }
@@ -694,6 +1037,12 @@
             "state" : "translated",
             "value" : "Charakter"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personagem"
+          }
         }
       }
     },
@@ -703,6 +1052,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Charaktere"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personagens"
           }
         }
       }
@@ -715,6 +1070,12 @@
             "state" : "translated",
             "value" : "Kinderbetreuung"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuidado Infantil"
+          }
         }
       }
     },
@@ -722,6 +1083,12 @@
       "comment" : "Anime type",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CM"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "CM"
@@ -737,6 +1104,12 @@
             "state" : "translated",
             "value" : "Kampfsport"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esportes de Combate"
+          }
         }
       }
     },
@@ -748,6 +1121,12 @@
             "state" : "translated",
             "value" : "Comedy"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comédia"
+          }
         }
       }
     },
@@ -758,6 +1137,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abgeschlossen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concluído"
           }
         }
       }
@@ -780,6 +1165,12 @@
             "state" : "translated",
             "value" : "Crossdressing"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crossdressing"
+          }
         }
       }
     },
@@ -790,6 +1181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wird veröffentlich"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atualmente publicando"
           }
         }
       }
@@ -802,6 +1199,12 @@
             "state" : "translated",
             "value" : "Dunkel"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escuro"
+          }
         }
       }
     },
@@ -811,6 +1214,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Löschen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deletar"
           }
         }
       }
@@ -822,6 +1231,12 @@
             "state" : "translated",
             "value" : "MyAnimeList-Account löschen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir conta MyAnimeList"
+          }
         }
       }
     },
@@ -831,6 +1246,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fortschritt löschen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir progresso"
           }
         }
       }
@@ -843,6 +1264,12 @@
             "state" : "translated",
             "value" : "Straffällige Jugendliche"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delinquentes"
+          }
         }
       }
     },
@@ -854,6 +1281,12 @@
             "state" : "translated",
             "value" : "Detektiv"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detetive"
+          }
         }
       }
     },
@@ -864,6 +1297,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eingestellt"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descontinuado"
           }
         }
       }
@@ -878,6 +1317,12 @@
             "state" : "translated",
             "value" : "Möchtest du deinen Fortschritt für %@ wirklich löschen?"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você realmente deseja excluir seu progresso para %@?"
+          }
         }
       }
     },
@@ -888,6 +1333,12 @@
             "state" : "translated",
             "value" : "Möchtest du dich wirklich aus deinem MyAnimeList-Account ausloggen?"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você realmente quer sair da sua conta MAL?"
+          }
         }
       }
     },
@@ -895,6 +1346,12 @@
       "comment" : "Manga type",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doujinshi"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Doujinshi"
@@ -910,6 +1367,12 @@
             "state" : "translated",
             "value" : "Drama"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drama"
+          }
         }
       }
     },
@@ -921,6 +1384,12 @@
             "state" : "translated",
             "value" : "Abgebrochen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonado"
+          }
         }
       }
     },
@@ -928,6 +1397,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ecchi"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ecchi"
@@ -942,6 +1417,12 @@
             "state" : "translated",
             "value" : "Bearbeiten"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar"
+          }
         }
       }
     },
@@ -952,6 +1433,12 @@
             "state" : "translated",
             "value" : "Lesefortschritt bearbeiten"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar Progresso de Leitura"
+          }
         }
       }
     },
@@ -961,6 +1448,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wiedergabefortschritt bearbeiten"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar Progresso de Assistir"
           }
         }
       }
@@ -973,6 +1466,12 @@
             "state" : "translated",
             "value" : "Lehrreich"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Educacional"
+          }
         }
       }
     },
@@ -982,6 +1481,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Englisch"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inglês"
           }
         }
       }
@@ -993,6 +1498,12 @@
             "state" : "translated",
             "value" : "Folge"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Episódio"
+          }
         }
       }
     },
@@ -1003,6 +1514,12 @@
             "state" : "translated",
             "value" : "Folge %lld"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Episódio %lld"
+          }
         }
       }
     },
@@ -1012,6 +1529,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Folgen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Episódios"
           }
         }
       }
@@ -1024,6 +1547,12 @@
             "state" : "translated",
             "value" : "Erotik"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erótica"
+          }
         }
       }
     },
@@ -1035,6 +1564,12 @@
             "state" : "translated",
             "value" : "Fantasy"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fantasia"
+          }
         }
       }
     },
@@ -1044,6 +1579,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lieblingsanime"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animes favoritos"
           }
         }
       }
@@ -1055,6 +1596,12 @@
             "state" : "translated",
             "value" : "Lieblingscharaktere"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personagens favoritos"
+          }
         }
       }
     },
@@ -1064,6 +1611,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lieblingsmanga"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mangá favorito"
           }
         }
       }
@@ -1076,6 +1629,12 @@
             "state" : "translated",
             "value" : "Weiblich"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feminino"
+          }
         }
       }
     },
@@ -1087,6 +1646,12 @@
             "state" : "translated",
             "value" : "Abgeschlossen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizado"
+          }
         }
       }
     },
@@ -1096,6 +1661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Freunde"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amigos"
           }
         }
       }
@@ -1108,6 +1679,12 @@
             "state" : "translated",
             "value" : "Gag-Humor"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Humor de Gag"
+          }
         }
       }
     },
@@ -1117,6 +1694,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geschlecht:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gênero:"
           }
         }
       }
@@ -1128,6 +1711,12 @@
             "state" : "translated",
             "value" : "Allgemein"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geral"
+          }
         }
       }
     },
@@ -1138,6 +1727,12 @@
             "state" : "translated",
             "value" : "Allgemeine Informationen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informações gerais"
+          }
         }
       }
     },
@@ -1147,6 +1742,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Genres"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gêneros"
           }
         }
       }
@@ -1169,6 +1770,12 @@
             "state" : "translated",
             "value" : "Girls Love"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Girls Love"
+          }
         }
       }
     },
@@ -1180,6 +1787,12 @@
             "state" : "translated",
             "value" : "Splatter"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gore"
+          }
         }
       }
     },
@@ -1187,6 +1800,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gourmet"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gourmet"
@@ -1202,6 +1821,12 @@
             "state" : "translated",
             "value" : "Harem"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Harem"
+          }
         }
       }
     },
@@ -1209,6 +1834,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hentai"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hentai"
@@ -1224,6 +1855,12 @@
             "state" : "translated",
             "value" : "Hochrisiko-Spiel"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jogo de Alto Risco"
+          }
         }
       }
     },
@@ -1234,6 +1871,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Historisch"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Histórico"
           }
         }
       }
@@ -1246,6 +1889,12 @@
             "state" : "translated",
             "value" : "Horror"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terror"
+          }
         }
       }
     },
@@ -1255,6 +1904,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Icons erstellt von Nicole Knutas"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ícones feitos por Nicole Knutas"
           }
         }
       }
@@ -1267,6 +1922,12 @@
             "state" : "translated",
             "value" : "Idols (weiblich)"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ídolos (Feminino)"
+          }
         }
       }
     },
@@ -1277,6 +1938,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Idols (männlich)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ídolos (Masculino)"
           }
         }
       }
@@ -1308,6 +1975,12 @@
             "state" : "translated",
             "value" : "Info"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informação"
+          }
         }
       }
     },
@@ -1317,6 +1990,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ungültiges Datum"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data inválida."
           }
         }
       }
@@ -1328,6 +2007,12 @@
             "state" : "translated",
             "value" : "Ungültige URL"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URL inválido."
+          }
         }
       }
     },
@@ -1335,6 +2020,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isekai"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Isekai"
@@ -1350,6 +2041,12 @@
             "state" : "translated",
             "value" : "Iyashikei"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iyashikei"
+          }
         }
       }
     },
@@ -1359,6 +2056,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Japanisch"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Japonês"
           }
         }
       }
@@ -1373,6 +2076,12 @@
             "state" : "translated",
             "value" : "Registrierungsdatum:"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data de entrada:"
+          }
         }
       }
     },
@@ -1380,6 +2089,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josei"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Josei"
@@ -1398,6 +2113,12 @@
             "state" : "translated",
             "value" : "Kinder"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Infantil"
+          }
         }
       }
     },
@@ -1408,6 +2129,12 @@
             "state" : "translated",
             "value" : "Zuletzt aktualisiert"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Última atualização"
+          }
         }
       }
     },
@@ -1417,6 +2144,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bibliothek"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biblioteca"
           }
         }
       }
@@ -1429,6 +2162,12 @@
             "state" : "translated",
             "value" : "Hell"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claro"
+          }
         }
       }
     },
@@ -1436,6 +2175,12 @@
       "comment" : "Manga type",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light Novel"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Light Novel"
@@ -1450,6 +2195,12 @@
             "state" : "translated",
             "value" : "Liste"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista"
+          }
         }
       }
     },
@@ -1459,6 +2210,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mehr laden"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carregar mais"
           }
         }
       }
@@ -1470,6 +2227,12 @@
             "state" : "translated",
             "value" : "Lädt…"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carregando..."
+          }
         }
       }
     },
@@ -1479,6 +2242,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Standort:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Localização:"
           }
         }
       }
@@ -1490,6 +2259,12 @@
             "state" : "translated",
             "value" : "Mit MyAnimeList einloggen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faça login com MyAnimeList"
+          }
         }
       }
     },
@@ -1499,6 +2274,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Logge dich mit deinem MyAnimeList-Account ein, um den Fortschritt, die Bewertung und den Status von %@ bearbeiten zu können."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faça login com sua conta do MyAnimeList para poder editar o progresso, a avaliação e o status de progresso de %@."
           }
         }
       }
@@ -1510,6 +2291,12 @@
             "state" : "translated",
             "value" : "Melde dich mit deinem MyAnimeList-Account an, um deine Bibliothek bearbeiten zu können."
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faça login com sua conta MyAnimeList para poder editar sua biblioteca."
+          }
         }
       }
     },
@@ -1519,6 +2306,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mit MyAnimeList einloggen, um Fortschritt, Bewertung und Status von %@ zu sehen oder zu bearbeiten."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faça login com sua conta do MyAnimeList para ver seu progresso, avaliação e status de %@."
           }
         }
       }
@@ -1530,6 +2323,12 @@
             "state" : "translated",
             "value" : "Logge dich mit deinem MyAnimeList-Account ein, um deinen Anime- und Manga-Fortschritt zu tracken, Titel zu bewerten und personalisierte Funktionen zu nutzen."
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faça login com sua conta MyAnimeList para acompanhar seu progresso em Anime e Mangá, avaliar títulos e acessar recursos personalizados."
+          }
         }
       }
     },
@@ -1539,6 +2338,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einloggen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login"
           }
         }
       }
@@ -1551,6 +2356,12 @@
             "state" : "translated",
             "value" : "Liebes-Polygon"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polígono do Amor"
+          }
         }
       }
     },
@@ -1562,6 +2373,12 @@
             "state" : "translated",
             "value" : "Liebe mit Status Quo"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status Quo do Amor"
+          }
         }
       }
     },
@@ -1571,6 +2388,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Produziert von"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feito por"
           }
         }
       }
@@ -1583,6 +2406,12 @@
             "state" : "translated",
             "value" : "Magische Geschlechtsumwandlung"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mudança Mágica de Sexo"
+          }
         }
       }
     },
@@ -1593,6 +2422,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maho Shojo"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mahou Shoujo"
           }
         }
       }
@@ -1615,6 +2450,12 @@
             "state" : "translated",
             "value" : "Männlich"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masculino"
+          }
         }
       }
     },
@@ -1626,6 +2467,12 @@
             "state" : "translated",
             "value" : "Manga"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mangá"
+          }
         }
       }
     },
@@ -1636,6 +2483,12 @@
             "state" : "translated",
             "value" : "Manga-Statistiken"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estatísticas de mangá"
+          }
         }
       }
     },
@@ -1643,6 +2496,12 @@
       "comment" : "Manga type",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manhua"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Manhua"
@@ -1658,6 +2517,12 @@
             "state" : "translated",
             "value" : "Manhwa"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manhwa"
+          }
         }
       }
     },
@@ -1669,6 +2534,12 @@
             "state" : "translated",
             "value" : "Kampfkunst"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artes Marciais"
+          }
         }
       }
     },
@@ -1676,6 +2547,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mecha"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mecha"
@@ -1691,6 +2568,12 @@
             "state" : "translated",
             "value" : "Medizin"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Médico"
+          }
         }
       }
     },
@@ -1701,6 +2584,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Memoiren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Memórias"
           }
         }
       }
@@ -1713,6 +2602,12 @@
             "state" : "translated",
             "value" : "Militär"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Militar"
+          }
         }
       }
     },
@@ -1723,6 +2618,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Meist favorisierte"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mais Favoritados"
           }
         }
       }
@@ -1735,6 +2636,12 @@
             "state" : "translated",
             "value" : "Am beliebtesten"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mais Populares"
+          }
         }
       }
     },
@@ -1746,6 +2653,12 @@
             "state" : "translated",
             "value" : "Film"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filme"
+          }
         }
       }
     },
@@ -1756,6 +2669,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Musik"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Música"
           }
         }
       }
@@ -1771,6 +2690,12 @@
             "state" : "translated",
             "value" : "Mystery"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mistério"
+          }
         }
       }
     },
@@ -1782,6 +2707,12 @@
             "state" : "translated",
             "value" : "Mythologie"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitologia"
+          }
         }
       }
     },
@@ -1791,6 +2722,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine %@ Anime gefunden"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum anime %@ encontrado."
           }
         }
       }
@@ -1802,6 +2739,12 @@
             "state" : "translated",
             "value" : "Keine %@ Manga gefunden"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum mangá %@ encontrado."
+          }
         }
       }
     },
@@ -1811,6 +2754,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Zusammenfassung verfügbar"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum resumo disponível."
           }
         }
       }
@@ -1823,6 +2772,12 @@
             "state" : "translated",
             "value" : "Nonbinär"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não-binário"
+          }
         }
       }
     },
@@ -1834,6 +2789,12 @@
             "state" : "translated",
             "value" : "Noch nicht bewertet"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ainda não avaliado."
+          }
         }
       }
     },
@@ -1844,6 +2805,12 @@
             "state" : "translated",
             "value" : "Nicht spezifiziert"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não especificado."
+          }
         }
       }
     },
@@ -1851,6 +2818,12 @@
       "comment" : "Manga type",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novel"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Novel"
@@ -1869,6 +2842,12 @@
             "state" : "translated",
             "value" : "OEL"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OEL"
+          }
         }
       }
     },
@@ -1878,6 +2857,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Okay"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
@@ -1890,6 +2875,12 @@
             "state" : "translated",
             "value" : "Unterbrochen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Em hiato"
+          }
         }
       }
     },
@@ -1901,6 +2892,12 @@
             "state" : "translated",
             "value" : "Pausiert"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Em espera"
+          }
         }
       }
     },
@@ -1908,6 +2905,12 @@
       "comment" : "Anime type",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ONA"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "ONA"
@@ -1923,6 +2926,12 @@
             "state" : "translated",
             "value" : "One-Shot"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One-Shot"
+          }
         }
       }
     },
@@ -1933,6 +2942,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Orange"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laranja"
           }
         }
       }
@@ -1945,6 +2960,12 @@
             "state" : "translated",
             "value" : "Organisierte Kriminalität"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crime Organizado"
+          }
         }
       }
     },
@@ -1955,6 +2976,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Otaku-Kultur"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cultura Otaku"
           }
         }
       }
@@ -1967,6 +2994,12 @@
             "state" : "translated",
             "value" : "Anderes"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outro"
+          }
         }
       }
     },
@@ -1974,6 +3007,12 @@
       "comment" : "Anime type",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OVA"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OVA"
@@ -1989,6 +3028,12 @@
             "state" : "translated",
             "value" : "Hauptgeschichte"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "História principal"
+          }
         }
       }
     },
@@ -1999,6 +3044,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Parodie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paródia"
           }
         }
       }
@@ -2011,6 +3062,12 @@
             "state" : "translated",
             "value" : "Darstellende Künste"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artes Cênicas"
+          }
         }
       }
     },
@@ -2021,6 +3078,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Haustiere"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animais de Estimação"
           }
         }
       }
@@ -2033,6 +3096,12 @@
             "state" : "translated",
             "value" : "Pink"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosa"
+          }
         }
       }
     },
@@ -2042,6 +3111,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Später lesen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planejo Ler"
           }
         }
       }
@@ -2054,6 +3129,12 @@
             "state" : "translated",
             "value" : "Später schauen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planejo Assistir"
+          }
         }
       }
     },
@@ -2063,6 +3144,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Popularität"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Popularidade"
           }
         }
       }
@@ -2075,6 +3162,12 @@
             "state" : "translated",
             "value" : "Vorgeschichte"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prequela"
+          }
         }
       }
     },
@@ -2084,6 +3177,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Profil"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perfil"
           }
         }
       }
@@ -2095,6 +3194,12 @@
             "state" : "translated",
             "value" : "Fortschritt aktualisiert"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progresso atualizado"
+          }
         }
       }
     },
@@ -2105,6 +3210,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Psychologisch"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Psicológico"
           }
         }
       }
@@ -2122,6 +3233,12 @@
             "state" : "new",
             "value" : "Published from %1$@ - %2$@"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publicado entre %1$@ - %2$@"
+          }
         }
       }
     },
@@ -2132,6 +3249,12 @@
             "state" : "translated",
             "value" : "Veröffentlicht am %@"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publicado em %@"
+          }
         }
       }
     },
@@ -2141,6 +3264,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wird seit %@ veröffentlicht"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publicação desde %@"
           }
         }
       }
@@ -2153,6 +3282,12 @@
             "state" : "translated",
             "value" : "Erscheint bald"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publicação em breve"
+          }
         }
       }
     },
@@ -2164,6 +3299,12 @@
             "state" : "translated",
             "value" : "Lila"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roxo"
+          }
         }
       }
     },
@@ -2171,6 +3312,12 @@
       "comment" : "Anime type",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PV"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "PV"
@@ -2186,6 +3333,12 @@
             "state" : "translated",
             "value" : "Rennsport"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corrida"
+          }
         }
       }
     },
@@ -2195,6 +3348,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rang"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Classificação"
           }
         }
       }
@@ -2206,6 +3365,12 @@
             "state" : "translated",
             "value" : "Bewertung"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avaliação"
+          }
         }
       }
     },
@@ -2216,6 +3381,12 @@
             "state" : "translated",
             "value" : "Am lesen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lendo"
+          }
         }
       }
     },
@@ -2225,6 +3396,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Empfehlungen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recomendações"
           }
         }
       }
@@ -2237,6 +3414,12 @@
             "state" : "translated",
             "value" : "Rot"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vermelho"
+          }
         }
       }
     },
@@ -2248,6 +3431,12 @@
             "state" : "translated",
             "value" : "Wiedergeburt"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reencarnação"
+          }
         }
       }
     },
@@ -2257,6 +3446,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ähnliches"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relacionado"
           }
         }
       }
@@ -2268,6 +3463,12 @@
             "state" : "translated",
             "value" : "Eintrag entfernen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover entrada"
+          }
         }
       }
     },
@@ -2277,6 +3478,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aus Bibliothek entfernt"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removido da biblioteca"
           }
         }
       }
@@ -2291,6 +3498,12 @@
             "state" : "translated",
             "value" : "Ergebnisse pro Seite"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultados por página"
+          }
         }
       }
     },
@@ -2301,6 +3514,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reverse Harem"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Harém Reverso"
           }
         }
       }
@@ -2313,6 +3532,12 @@
             "state" : "translated",
             "value" : "Romantik"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Romance"
+          }
         }
       }
     },
@@ -2323,6 +3548,12 @@
             "state" : "translated",
             "value" : "Romanji"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Romaji"
+          }
         }
       }
     },
@@ -2330,6 +3561,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samurai"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Samurai"
@@ -2344,6 +3581,12 @@
             "state" : "translated",
             "value" : "Speichern"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salvar"
+          }
         }
       }
     },
@@ -2354,6 +3597,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schule"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escola"
           }
         }
       }
@@ -2366,6 +3615,12 @@
             "state" : "translated",
             "value" : "Science Fiction"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ficção Científica"
+          }
         }
       }
     },
@@ -2375,6 +3630,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wertung"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pontuação"
           }
         }
       }
@@ -2386,6 +3647,12 @@
             "state" : "translated",
             "value" : "Suchen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Busca"
+          }
         }
       }
     },
@@ -2393,6 +3660,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seinen"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seinen"
@@ -2408,6 +3681,12 @@
             "state" : "translated",
             "value" : "Fortsetzung"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sequência"
+          }
         }
       }
     },
@@ -2418,6 +3697,12 @@
             "state" : "translated",
             "value" : "Serialisierungsdatum"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data de serialização"
+          }
         }
       }
     },
@@ -2427,6 +3712,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einstellungen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurações"
           }
         }
       }
@@ -2445,6 +3736,12 @@
             "state" : "translated",
             "value" : "Shojo"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shoujo"
+          }
         }
       }
     },
@@ -2456,6 +3753,12 @@
             "state" : "translated",
             "value" : "Shonen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shounen"
+          }
         }
       }
     },
@@ -2465,6 +3768,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Weniger anzeigen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar menos"
           }
         }
       }
@@ -2476,6 +3785,12 @@
             "state" : "translated",
             "value" : "Mature-Inhalte anzeigen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar conteúdo adulto"
+          }
         }
       }
     },
@@ -2485,6 +3800,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mehr anzeigen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar mais"
           }
         }
       }
@@ -2497,6 +3818,12 @@
             "state" : "translated",
             "value" : "Showbusiness"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Showbiz"
+          }
         }
       }
     },
@@ -2508,6 +3835,12 @@
             "state" : "translated",
             "value" : "Zusatzgeschichte"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "História secundária"
+          }
         }
       }
     },
@@ -2515,6 +3848,12 @@
       "comment" : "Genre",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slice of Life"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Slice of Life"
@@ -2529,6 +3868,12 @@
             "state" : "translated",
             "value" : "Sortieren nach"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Classificar por"
+          }
         }
       }
     },
@@ -2539,6 +3884,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Weltraum"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espaço"
           }
         }
       }
@@ -2551,6 +3902,12 @@
             "state" : "translated",
             "value" : "Special"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Especial"
+          }
         }
       }
     },
@@ -2558,6 +3915,12 @@
       "comment" : "Relation type of detailview",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spin-off"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spin-off"
@@ -2573,12 +3936,24 @@
             "state" : "translated",
             "value" : "Sport"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esportes"
+          }
         }
       }
     },
     "Status" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Status"
@@ -2594,6 +3969,12 @@
             "state" : "translated",
             "value" : "Strategiespiel"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jogo de Estratégia"
+          }
         }
       }
     },
@@ -2604,6 +3985,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zusammenfassung"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resumo"
           }
         }
       }
@@ -2616,6 +4003,12 @@
             "state" : "translated",
             "value" : "Superkräfte"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Superpoder"
+          }
         }
       }
     },
@@ -2626,6 +4019,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Übernatürlich"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sobrenatural"
           }
         }
       }
@@ -2648,6 +4047,12 @@
             "state" : "translated",
             "value" : "Überlebenskampf"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sobrevivência"
+          }
         }
       }
     },
@@ -2658,6 +4063,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thriller"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suspense"
           }
         }
       }
@@ -2670,6 +4081,12 @@
             "state" : "translated",
             "value" : "System"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema"
+          }
         }
       }
     },
@@ -2680,6 +4097,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Teamsport"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esportes em Equipe"
           }
         }
       }
@@ -2694,6 +4117,12 @@
             "state" : "translated",
             "value" : "Das Bild konnte nicht geladen werden."
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houve um erro ao carregar a imagem."
+          }
         }
       }
     },
@@ -2705,6 +4134,12 @@
             "state" : "translated",
             "value" : "Zeitreise"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Viagem no Tempo"
+          }
         }
       }
     },
@@ -2714,6 +4149,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Titel"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Título"
           }
         }
       }
@@ -2725,6 +4166,12 @@
             "state" : "translated",
             "value" : "Titelsprache"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma do título"
+          }
         }
       }
     },
@@ -2734,6 +4181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erstelle einen Account bei MyAnimeList.net, um diese Funktionen zu nutzen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para usar esses recursos, você pode criar uma conta em MyAnimeList.net."
           }
         }
       }
@@ -2746,6 +4199,12 @@
             "state" : "translated",
             "value" : "Aktuell laufende Top-Anime"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Anime em Exibição"
+          }
         }
       }
     },
@@ -2756,6 +4215,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beliebteste Anime"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Animes por Popularidade"
           }
         }
       }
@@ -2768,6 +4233,12 @@
             "state" : "translated",
             "value" : "Top-Anime-Filme"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Filmes de Anime"
+          }
         }
       }
     },
@@ -2778,6 +4249,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Top-OVA-Anime"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Séries de Anime OVA"
           }
         }
       }
@@ -2790,6 +4267,12 @@
             "state" : "translated",
             "value" : "Top-Anime-Serien"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Séries de Anime"
+          }
         }
       }
     },
@@ -2800,6 +4283,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Top-Specials"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Especiais de Anime"
           }
         }
       }
@@ -2812,6 +4301,12 @@
             "state" : "translated",
             "value" : "Top-TV-Anime"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Séries de Anime para TV"
+          }
         }
       }
     },
@@ -2822,6 +4317,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Top-Doujinshi"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Doujinshi"
           }
         }
       }
@@ -2834,6 +4335,12 @@
             "state" : "translated",
             "value" : "Meist favorisierte Anime"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Animes Favoritados"
+          }
         }
       }
     },
@@ -2844,6 +4351,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Top-Manga"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Mangás"
           }
         }
       }
@@ -2856,6 +4369,12 @@
             "state" : "translated",
             "value" : "Top-Manhua"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Manhua"
+          }
         }
       }
     },
@@ -2866,6 +4385,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Top-Manwha"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Manhwa"
           }
         }
       }
@@ -2878,6 +4403,12 @@
             "state" : "translated",
             "value" : "Top-Light-Novels"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Novels"
+          }
         }
       }
     },
@@ -2889,6 +4420,12 @@
             "state" : "translated",
             "value" : "Top-One-Shots"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top One-shots"
+          }
         }
       }
     },
@@ -2899,6 +4436,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bald erscheinende Top-Anime"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Principais Próximos Animes"
           }
         }
       }
@@ -2920,6 +4463,12 @@
             "state" : "translated",
             "value" : "Probier einen anderen Filter aus"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tente uma categoria de filtro diferente."
+          }
         }
       }
     },
@@ -2927,6 +4476,12 @@
       "comment" : "Anime type",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TV"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "TV"
@@ -2942,6 +4497,12 @@
             "state" : "translated",
             "value" : "TV Special"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Especial de TV"
+          }
         }
       }
     },
@@ -2952,6 +4513,12 @@
             "state" : "translated",
             "value" : "Unbekannt"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desconhecido"
+          }
         }
       }
     },
@@ -2961,6 +4528,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unbekanntes Veröffentlichungsdatum"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data de transmissão desconhecida"
           }
         }
       }
@@ -2973,6 +4546,12 @@
             "state" : "translated",
             "value" : "Unbekannter Animetyp"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo de anime desconhecido"
+          }
         }
       }
     },
@@ -2983,6 +4562,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unbekanntes Genre"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gênero desconhecido"
           }
         }
       }
@@ -2995,6 +4580,12 @@
             "state" : "translated",
             "value" : "Unbekannter Mangatyp"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo de mangá desconhecido"
+          }
         }
       }
     },
@@ -3004,6 +4595,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unbekanntes Serialisierungsdatum"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data de publicação desconhecida"
           }
         }
       }
@@ -3016,6 +4613,12 @@
             "state" : "translated",
             "value" : "Unbekannt"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo de relacionamento desconhecido"
+          }
         }
       }
     },
@@ -3026,6 +4629,12 @@
             "state" : "translated",
             "value" : "Unbekanntes Veröffentlichungsjahr"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ano de lançamento desconhecido"
+          }
         }
       }
     },
@@ -3035,6 +4644,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unbekanntes Startdatum"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data de início desconhecida"
           }
         }
       }
@@ -3047,6 +4662,12 @@
             "state" : "translated",
             "value" : "Unbekannter Fortschritt"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status desconhecido"
+          }
         }
       }
     },
@@ -3057,6 +4678,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Urban Fantasy"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fantasia Urbana"
           }
         }
       }
@@ -3089,6 +4716,12 @@
             "state" : "translated",
             "value" : "Vampire"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vampiro"
+          }
         }
       }
     },
@@ -3099,6 +4732,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Videospiel"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video Game"
           }
         }
       }
@@ -3111,6 +4750,12 @@
             "state" : "translated",
             "value" : "Bösewichtin"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vilões"
+          }
         }
       }
     },
@@ -3121,6 +4766,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bildende Künste"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artes visuais"
           }
         }
       }
@@ -3133,6 +4784,12 @@
             "state" : "translated",
             "value" : "Am schauen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistindo"
+          }
         }
       }
     },
@@ -3143,6 +4800,12 @@
             "state" : "translated",
             "value" : "Wird im %@ ausgestrahlt"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vai ao ar em %@"
+          }
         }
       }
     },
@@ -3152,6 +4815,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wird im %@ veröffentlicht"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vai publicar em %@"
           }
         }
       }
@@ -3164,6 +4833,12 @@
             "state" : "translated",
             "value" : "Berufsleben"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local de trabalho"
+          }
         }
       }
     },
@@ -3173,6 +4848,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ja"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sim"
           }
         }
       }
@@ -3194,6 +4875,12 @@
             "state" : "translated",
             "value" : "Du wirst auf die Kontolöschungsseite von MyAnimeList weitergeleitet"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você será redirecionado para a página de exclusão da conta MyAnimeList."
+          }
         }
       }
     },
@@ -3203,6 +4890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dein Fortschritt"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suas estatísticas"
           }
         }
       }
