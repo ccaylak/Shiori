@@ -11,4 +11,8 @@ struct Config {
     static var apiKey: String {
         return secrets()["API_KEY"] as! String
     }
+    
+    static var telemetryDeck: String {
+        return secrets()["TELEMETRY_DECK"] as! String
+    }
 }

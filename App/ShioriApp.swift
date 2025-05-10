@@ -1,5 +1,6 @@
 import SwiftUI
 import AlertToast
+import TelemetryDeck
 
 @main
 struct ShioriApp: App {
@@ -8,6 +9,10 @@ struct ShioriApp: App {
     @ObservedObject private var settingsManager: SettingsManager = .shared
     @StateObject private var alertManager: AlertManager = .shared   // ← hier
     private var tokenHandler: TokenHandler = .shared
+    
+    init() {
+        TelemetryDeck.initialize(config: .init(appID: Config.telemetryDeck))
+    }
     
     var body: some Scene {
         WindowGroup {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F36329482D94AD1300329F11 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = F36329472D94AD1300329F11 /* NukeUI */; };
 		F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37EA6182CFFC19700CD994E /* KeychainSwift */; };
+		F38579932DCB5AAF00CB4D14 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = F38579922DCB5AAF00CB4D14 /* TelemetryDeck */; };
 		F3DE62ED2CF140BC00CD77EF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F3DE62EC2CF140BC00CD77EF /* README.md */; };
 		F3E27BBB2DBF743C00BB1AE4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = F3E27BBA2DBF743C00BB1AE4 /* AlertToast */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,7 @@
 				F3E27BBB2DBF743C00BB1AE4 /* AlertToast in Frameworks */,
 				F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */,
 				F36329482D94AD1300329F11 /* NukeUI in Frameworks */,
+				F38579932DCB5AAF00CB4D14 /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +112,7 @@
 				F37EA6182CFFC19700CD994E /* KeychainSwift */,
 				F36329472D94AD1300329F11 /* NukeUI */,
 				F3E27BBA2DBF743C00BB1AE4 /* AlertToast */,
+				F38579922DCB5AAF00CB4D14 /* TelemetryDeck */,
 			);
 			productName = MALytics;
 			productReference = F365CCE32CE74B3F0027F040 /* Shiori.app */;
@@ -144,6 +147,7 @@
 				F37EA6172CFFC19700CD994E /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				F36329462D94AA4700329F11 /* XCRemoteSwiftPackageReference "Nuke" */,
 				F3E27BB92DBF743C00BB1AE4 /* XCRemoteSwiftPackageReference "AlertToast" */,
+				F38579912DCB5AAF00CB4D14 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F365CCE42CE74B3F0027F040 /* Products */;
@@ -325,12 +329,12 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.MALytics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -365,12 +369,12 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.MALytics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -466,12 +470,12 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.MALytics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -527,6 +531,14 @@
 				minimumVersion = 24.0.0;
 			};
 		};
+		F38579912DCB5AAF00CB4D14 /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.4;
+			};
+		};
 		F3E27BB92DBF743C00BB1AE4 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elai950/AlertToast.git";
@@ -547,6 +559,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F37EA6172CFFC19700CD994E /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		F38579922DCB5AAF00CB4D14 /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F38579912DCB5AAF00CB4D14 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
 		};
 		F3E27BBA2DBF743C00BB1AE4 /* AlertToast */ = {
 			isa = XCSwiftPackageProductDependency;

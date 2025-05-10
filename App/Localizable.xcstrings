@@ -282,12 +282,32 @@
         }
       }
     },
+    "About Shiori" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über Shiori"
+          }
+        }
+      }
+    },
     "Accent color" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Akzentfarbe"
+          }
+        }
+      }
+    },
+    "Account" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account"
           }
         }
       }
@@ -424,6 +444,9 @@
         }
       }
     },
+    "AlertToast" : {
+      "shouldTranslate" : false
+    },
     "All" : {
       "comment" : "Progress status\nSort by",
       "localizations" : {
@@ -494,6 +517,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App Icon"
+          }
+        }
+      }
+    },
+    "App Info" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Info"
+          }
+        }
+      }
+    },
+    "App version" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-Version"
           }
         }
       }
@@ -719,6 +762,16 @@
         }
       }
     },
+    "Contact" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontaktmöglichkeiten"
+          }
+        }
+      }
+    },
     "Crossdressing" : {
       "comment" : "Genre",
       "localizations" : {
@@ -814,6 +867,9 @@
           }
         }
       }
+    },
+    "Discord" : {
+      "shouldTranslate" : false
     },
     "Do you really want to delete your progress for %@?" : {
       "localizations" : {
@@ -1095,6 +1151,16 @@
         }
       }
     },
+    "German" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch"
+          }
+        }
+      }
+    },
     "Girls Love" : {
       "comment" : "Genre",
       "localizations" : {
@@ -1102,16 +1168,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Girls Love"
-          }
-        }
-      }
-    },
-    "GitHub repository" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "GitHub-Repository"
           }
         }
       }
@@ -1225,6 +1281,26 @@
         }
       }
     },
+    "If you want to contribute, please send me a mail:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei Interesse bitte eine Mail an:"
+          }
+        }
+      }
+    },
+    "Illustrated by Lara Prüß" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Illustriert von Lara Prüß"
+          }
+        }
+      }
+    },
     "Info" : {
       "localizations" : {
         "de" : {
@@ -1287,6 +1363,9 @@
         }
       }
     },
+    "Jikan" : {
+      "shouldTranslate" : false
+    },
     "Join Date:" : {
       "localizations" : {
         "de" : {
@@ -1307,6 +1386,9 @@
           }
         }
       }
+    },
+    "KeychainSwift" : {
+      "shouldTranslate" : false
     },
     "Kids" : {
       "comment" : "Genre",
@@ -1515,6 +1597,16 @@
         }
       }
     },
+    "Mail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
+        }
+      }
+    },
     "Male" : {
       "comment" : "Gender",
       "localizations" : {
@@ -1668,6 +1760,9 @@
         }
       }
     },
+    "MyAnimeList" : {
+      "shouldTranslate" : false
+    },
     "Mystery" : {
       "comment" : "Genre",
       "localizations" : {
@@ -1762,6 +1857,9 @@
           }
         }
       }
+    },
+    "Nuke" : {
+      "shouldTranslate" : false
     },
     "OEL" : {
       "comment" : "Manga type",
@@ -2183,6 +2281,9 @@
         }
       }
     },
+    "Repository" : {
+      "shouldTranslate" : false
+    },
     "Results per page" : {
       "localizations" : {
         "de" : {
@@ -2329,6 +2430,12 @@
           }
         }
       }
+    },
+    "Shiori-chan" : {
+      "shouldTranslate" : false
+    },
+    "shiori.app@icloud.com" : {
+      "shouldTranslate" : false
     },
     "Shoujo" : {
       "comment" : "Genre",
@@ -2523,6 +2630,16 @@
         }
       }
     },
+    "Supported languages" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterstützte Sprachen"
+          }
+        }
+      }
+    },
     "Survival" : {
       "comment" : "Genre",
       "localizations" : {
@@ -2566,6 +2683,9 @@
           }
         }
       }
+    },
+    "TelemetryDeck" : {
+      "shouldTranslate" : false
     },
     "There was an error loading the image." : {
       "localizations" : {
@@ -2783,6 +2903,16 @@
         }
       }
     },
+    "Translations are added through community contributions." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übersetzungen entstehen durch Hilfe der Community."
+          }
+        }
+      }
+    },
     "Try a different filter category." : {
       "localizations" : {
         "de" : {
@@ -2931,6 +3061,26 @@
         }
       }
     },
+    "Used Third-Party libraries" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwendete Drittanbieter-Bibliotheken"
+          }
+        }
+      }
+    },
+    "Used Third-Party Services" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwendete Drittanbieter-Services"
+          }
+        }
+      }
+    },
     "Vampire" : {
       "comment" : "Genre",
       "localizations" : {
@@ -3023,6 +3173,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ja"
+          }
+        }
+      }
+    },
+    "You can contact me for feedback, bugs or feature requests" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst mich für Feedback, Bugs oder Feature-Ideen kontaktieren"
           }
         }
       }

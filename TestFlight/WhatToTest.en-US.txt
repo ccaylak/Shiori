@@ -1,3 +1,10 @@
 What's New:
 
-- Added detailed ListViews in the DetailsView for characters, recommendations, and genres.
+- Reorganized SettingsView
+    - Added Contact section (via email and Discord)
+- Added AboutView
+    - Includes App Info section with version number and more
+    - Added Shiori-chan image
+    - Added Supported Languages section
+    - Added Used 3rd-Party Services section
+    - Added Used 3rd-Party Libraries section
