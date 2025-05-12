@@ -16,7 +16,7 @@ struct CharactersView: View {
                 }
                 .buttonStyle(.plain)
                 ScrollView(.horizontal) {
-                    HStack(spacing: 10) {
+                    LazyHStack(spacing: 10) {
                         ForEach(characters, id: \.id) { character in
                             VStack(alignment: .leading) {
                                 AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)

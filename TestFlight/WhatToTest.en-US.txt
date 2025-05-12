@@ -1,3 +1,4 @@
 What's New:
 
-- Added portuguese language support
+- Fixed CharactersView performance
+- Added Shiori-chan as app icon

@@ -96,14 +96,40 @@ struct SettingsView: View {
                      */
                 }
                 
-                Section(header: Text("App icon"), footer: Text("Icons made by Nicole Knutas")) {
-                    VStack{
-                        Image("AppIconSelector")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 70, height: 70)
-                            .cornerRadius(10)
-                        
+                let icons: [(name: String, title: String)] = [
+                    (name: "AppIcon", title: String(localized: "Default")),
+                    (name: "ShioriIcon", title: String(localized: "Shiori-chan"))
+                ]
+                
+                Section(
+                    header: Text("App icons"),
+                    footer:
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Icons made by Nicole Knutas")
+                            Text("Shiori-chan illustrated by Lara Prüß")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                        }
+                ) {
+                    HStack (spacing: 13){
+                        ForEach(icons, id: \.name) { icon in
+                            VStack{
+                                Image(uiImage: UIImage(named: icon.name)!)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 70, height: 70)
+                                    .cornerRadius(12)
+                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+                                    .onTapGesture {
+                                        changeAppIcon(to: icon.name == "AppIcon" ? nil : icon.name)
+                                    }
+                                Text(icon.title)
+                                    .font(.caption2)
+                                    .frame(width: 70, alignment: .leading)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+                            }
+                        }
                     }
                 }
                 
@@ -151,6 +177,15 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+    }
+}
+
+private func changeAppIcon(to iconName: String?) {
+    
+    UIApplication.shared.setAlternateIconName(iconName) { error in
+        if let error = error {
+            print("Error setting alternate icon \(error.localizedDescription)")
+        }
     }
 }
 

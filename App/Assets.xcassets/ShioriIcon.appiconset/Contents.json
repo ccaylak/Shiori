@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "AppIcon.jpeg",
+      "filename" : "shiori_close.jpg",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "AppIconDark.jpg",
+      "filename" : "ShioriIconDark.jpg",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "AppIconTinted.png",
+      "filename" : "ShioriIconTinted.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

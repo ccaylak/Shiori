@@ -764,21 +764,8 @@
         }
       }
     },
-    "App icon" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App Icon"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ícone do aplicativo"
-          }
-        }
-      }
+    "App icons" : {
+      "shouldTranslate" : false
     },
     "App Info" : {
       "localizations" : {
@@ -1204,6 +1191,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escuro"
+          }
+        }
+      }
+    },
+    "Default" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
           }
         }
       }
@@ -3724,6 +3721,16 @@
     },
     "Shiori-chan" : {
       "shouldTranslate" : false
+    },
+    "Shiori-chan illustrated by Lara Prüß" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shiori-chan, illustriert von Lara Prüß"
+          }
+        }
+      }
     },
     "shiori.app@icloud.com" : {
       "shouldTranslate" : false
