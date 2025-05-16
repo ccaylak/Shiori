@@ -31,74 +31,76 @@ struct LoginView: View {
             VStack (alignment: .leading, spacing: 30) {
                 if tokenHandler.isAuthenticated {
                     Form {
-                        HStack(alignment: .center, spacing: 20) {
-                            AsyncImageView(imageUrl: profileDetails?.profilePicture ?? "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg")
-                                .frame(width: 80, height: 100)
-                                .cornerRadius(12)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                                )
-                            VStack(alignment: .leading, spacing: 6) {
-                                if let name = profileDetails?.name {
-                                    Text(name)
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
-                                }
-                                
-                                if let birthDate = profileDetails?.birthDate {
-                                    HStack {
-                                        Text("Birthdate:")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                        if let formattedDate = String.formatDateStringWithLocale(birthDate, fromFormat: "yyyy-MM-dd") {
-                                            Text(formattedDate)
+                        Section(header: Label("Profile", systemImage: "person.text.rectangle")) {
+                            HStack(alignment: .center, spacing: 20) {
+                                AsyncImageView(imageUrl: profileDetails?.profilePicture ?? "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg")
+                                    .frame(width: 80, height: 100)
+                                    .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                                    )
+                                VStack(alignment: .leading, spacing: 6) {
+                                    if let name = profileDetails?.name {
+                                        Text(name)
+                                            .font(.headline)
+                                            .foregroundColor(.primary)
+                                    }
+                                    
+                                    if let birthDate = profileDetails?.birthDate {
+                                        HStack {
+                                            Text("Birthdate:")
                                                 .font(.subheadline)
-                                                .foregroundColor(.primary)
-                                        } else {
-                                            Text("Invalid Date")
-                                                .font(.subheadline)
-                                                .foregroundColor(.primary)
+                                                .foregroundColor(.secondary)
+                                            if let formattedDate = String.formatDateStringWithLocale(birthDate, fromFormat: "yyyy-MM-dd") {
+                                                Text(formattedDate)
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.primary)
+                                            } else {
+                                                Text("Invalid Date")
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.primary)
+                                            }
                                         }
                                     }
-                                }
-                                
-                                
-                                HStack {
-                                    Text("Gender:")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                    Text(Gender(rawValue: profileDetails?.gender ?? "")?.displayName ?? String(localized: "Not specified"))
-                                        .font(.subheadline)
-                                        .foregroundColor(.primary)
-                                }
-                                
-                                
-                                
-                                if let joinDate = profileDetails?.joinDate {
+                                    
+                                    
                                     HStack {
-                                        Text("Join Date:")
+                                        Text("Gender:")
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
-                                        if let formattedDate = String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ") {
-                                            Text(formattedDate)
-                                                .font(.subheadline)
-                                                .foregroundColor(.primary)
-                                        } else {
-                                            Text("Invalid Date")
-                                        }
-                                        
-                                    }
-                                }
-                                
-                                if let location = profileDetails?.location {
-                                    HStack {
-                                        Text("Location:")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                        Text(location)
+                                        Text(Gender(rawValue: profileDetails?.gender ?? "")?.displayName ?? String(localized: "Not specified"))
                                             .font(.subheadline)
                                             .foregroundColor(.primary)
+                                    }
+                                    
+                                    
+                                    
+                                    if let joinDate = profileDetails?.joinDate {
+                                        HStack {
+                                            Text("Join Date:")
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                            if let formattedDate = String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ") {
+                                                Text(formattedDate)
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.primary)
+                                            } else {
+                                                Text("Invalid Date")
+                                            }
+                                            
+                                        }
+                                    }
+                                    
+                                    if let location = profileDetails?.location {
+                                        HStack {
+                                            Text("Location:")
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                            Text(location)
+                                                .font(.subheadline)
+                                                .foregroundColor(.primary)
+                                        }
                                     }
                                 }
                             }
@@ -106,7 +108,7 @@ struct LoginView: View {
                         
                         let friends = jikanFriends.data
                         if !friends.isEmpty {
-                            Section("Friends") {
+                            Section(header: Label("Friends", systemImage: "person.3")) {
                                 ScrollView(.horizontal) {
                                     HStack(spacing: 10) {
                                         ForEach(friends, id: \.self) { friend in
@@ -131,28 +133,76 @@ struct LoginView: View {
                             }
                         }
                         
-                        let animeStatistics = [
-                            Statistics(title: ProgressStatus.Anime.completed.displayName, value: animeStatistics?.completed ?? 0, iconCombination: .animeCompleted),
-                            Statistics(title: ProgressStatus.Anime.watching.displayName, value: animeStatistics?.watching ?? 0, iconCombination: .animeWatching),
-                            Statistics(title: ProgressStatus.Anime.onHold.displayName, value: animeStatistics?.onHold ?? 0, iconCombination: .animeOnHold),
-                            Statistics(title: ProgressStatus.Anime.dropped.displayName, value: animeStatistics?.dropped ?? 0, iconCombination: .animeDropped),
-                            Statistics(title: ProgressStatus.Anime.planToWatch.displayName, value: animeStatistics?.planToWatch ?? 0, iconCombination: .animePlanToWatch),
+                        let animeStatistics: [Statistics] = [
+                            Statistics(
+                                title: ProgressStatus.Anime.completed.displayName,
+                                icon: AnyView(ProgressStatus.Anime.completed.profileIcon),
+                                value: animeStatistics?.completed ?? 0
+                            ),
+                            Statistics(
+                                title: ProgressStatus.Anime.watching.displayName,
+                                icon: AnyView(ProgressStatus.Anime.watching.profileIcon),
+                                value: animeStatistics?.watching ?? 0
+                            ),
+                            Statistics(
+                                title: ProgressStatus.Anime.onHold.displayName,
+                                icon: AnyView(ProgressStatus.Anime.onHold.profileIcon),
+                                value: animeStatistics?.onHold ?? 0
+                            ),
+                            Statistics(
+                                title: ProgressStatus.Anime.dropped.displayName,
+                                icon: AnyView(ProgressStatus.Anime.dropped.profileIcon),
+                                value: animeStatistics?.dropped ?? 0
+                            ),
+                            Statistics(
+                                title: ProgressStatus.Anime.planToWatch.displayName,
+                                icon: AnyView(ProgressStatus.Anime.planToWatch.profileIcon),
+                                value: animeStatistics?.planToWatch ?? 0
+                            ),
                         ]
-                        UserStatistics(title: String(localized: "Anime statistics"), statisticsValues: animeStatistics)
+                        UserStatistics(
+                            title: String(localized: "Anime statistics"),
+                            icon: "tv",
+                            statisticsValues: animeStatistics
+                        )
                         
-                        let mangaStatistics = [
-                            Statistics(title: ProgressStatus.Manga.completed.displayName, value: mangaStatistics?.completed ?? 0, iconCombination: .mangaCompleted),
-                            Statistics(title: ProgressStatus.Manga.reading.displayName, value: mangaStatistics?.reading ?? 0, iconCombination: .mangaReading),
-                            Statistics(title: ProgressStatus.Manga.onHold.displayName, value: mangaStatistics?.onHold ?? 0, iconCombination: .mangaOnHold),
-                            Statistics(title: ProgressStatus.Manga.dropped.displayName, value: mangaStatistics?.dropped ?? 0, iconCombination: .mangaDropped),
-                            Statistics(title: ProgressStatus.Manga.planToRead.displayName, value: mangaStatistics?.planToRead ?? 0, iconCombination: .mangaPlanToRead),
+                        let mangaStatistics: [Statistics] = [
+                            Statistics(
+                                title: ProgressStatus.Manga.completed.displayName,
+                                icon: AnyView(ProgressStatus.Manga.completed.profileIcon),
+                                value: mangaStatistics?.completed ?? 0
+                            ),
+                            Statistics(
+                                title: ProgressStatus.Manga.reading.displayName,
+                                icon: AnyView(ProgressStatus.Manga.reading.profileIcon),
+                                value: mangaStatistics?.reading ?? 0
+                            ),
+                            Statistics(
+                                title: ProgressStatus.Manga.onHold.displayName,
+                                icon: AnyView(ProgressStatus.Manga.onHold.profileIcon),
+                                value: mangaStatistics?.onHold ?? 0
+                            ),
+                            Statistics(
+                                title: ProgressStatus.Manga.dropped.displayName,
+                                icon: AnyView(ProgressStatus.Manga.dropped.profileIcon),
+                                value: mangaStatistics?.dropped ?? 0
+                            ),
+                            Statistics(
+                                title: ProgressStatus.Manga.planToRead.displayName,
+                                icon: AnyView(ProgressStatus.Manga.planToRead.profileIcon),
+                                value: mangaStatistics?.planToRead ?? 0
+                            ),
                         ]
-                        UserStatistics(title: String(localized: "Manga statistics"), statisticsValues: mangaStatistics)
+                        UserStatistics(
+                            title: String(localized: "Manga statistics"),
+                            icon: "character.book.closed.ja",
+                            statisticsValues: mangaStatistics
+                        )
                         
                         
                         let favoriteMangas = jikanFavorites.data.mangas
                         if !favoriteMangas.isEmpty {
-                            Section("Favorite manga") {
+                            Section(header: Label("Favorite manga", systemImage: "heart")) {
                                 ScrollView(.horizontal) {
                                     HStack(spacing: 10) {
                                         ForEach(favoriteMangas, id: \.self) { manga in
@@ -180,7 +230,7 @@ struct LoginView: View {
                         
                         let favoriteAnimes = jikanFavorites.data.animes
                         if !favoriteAnimes.isEmpty {
-                            Section("Favorite animes") {
+                            Section(header: Label("Favorite animes", systemImage: "heart")) {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(jikanFavorites.data.animes, id: \.self) { anime in
@@ -208,7 +258,7 @@ struct LoginView: View {
                         
                         let favoriteCharacters = jikanFavorites.data.characters
                         if !favoriteCharacters.isEmpty {
-                            Section("Favorite characters") {
+                            Section(header: Label("Favorite characters", systemImage: "person.3.sequence")) {
                                 ScrollView(.horizontal) {
                                     HStack(spacing: 10) {
                                         ForEach(jikanFavorites.data.characters, id: \.self) { character in
@@ -336,34 +386,39 @@ struct LoginView: View {
     
     struct Statistics {
         let title: String
+        let icon: AnyView
         let value: Int
-        let iconCombination: LoginIcon
     }
     
     struct UserStatistics: View {
         let title: String
-        
+        let icon: String
         let statisticsValues: [Statistics]
         
         var body: some View {
-            Section(title) {
+            Section(header: Label(title, systemImage: icon)) {
                 ForEach(statisticsValues, id: \.title) { stat in
-                    StatisticsRow(title: stat.title, value: stat.value, iconCombination: stat.iconCombination)
+                    StatisticsRow(title: stat.title, icon: stat.icon, value: stat.value)
                 }
             }
         }
         
         struct StatisticsRow: View {
             let title: String
+            let icon: AnyView
             let value: Int
-            let iconCombination: LoginIcon
             
             var body: some View {
                 HStack {
-                    iconCombination.image
-                    Text(title)
-                        .foregroundColor(.primary)
+                    Label {
+                        Text(title)
+                            .foregroundColor(.primary)
+                    } icon: {
+                        icon
+                    }
+                    
                     Spacer()
+                    
                     Text("\(value)")
                         .foregroundColor(.primary)
                 }

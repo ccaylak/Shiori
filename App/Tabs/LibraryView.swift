@@ -67,7 +67,12 @@ struct LibraryView: View {
                     LazyVStack {
                         if tokenHandler.isAuthenticated {
                             if libraryManager.mediaType == .manga {
-                                PillPicker(options: ProgressStatus.Manga.allCases, selectedOption: $libraryManager.mangaProgressStatus, displayName: { $0.displayName })
+                                PillPicker(
+                                    options: ProgressStatus.Manga.allCases,
+                                    selectedOption: $libraryManager.mangaProgressStatus,
+                                    displayName: { $0.displayName },
+                                    icon: { AnyView($0.libraryIcon) }
+                                )
                                 ForEach(filteredLibraryData, id: \ .self) { manga in
                                     Button(action: {
                                         selectedMedia = manga
@@ -98,7 +103,12 @@ struct LibraryView: View {
                                 }
                             }
                             if libraryManager.mediaType == .anime {
-                                PillPicker(options: ProgressStatus.Anime.allCases, selectedOption: $libraryManager.animeProgressStatus, displayName: { $0.displayName })
+                                PillPicker(
+                                    options: ProgressStatus.Anime.allCases,
+                                    selectedOption: $libraryManager.animeProgressStatus,
+                                    displayName: { $0.displayName },
+                                    icon: { AnyView($0.libraryIcon) },
+                                )
                                 ForEach(filteredLibraryData, id: \ .self) { anime in
                                     Button(action: {
                                         selectedMedia = anime

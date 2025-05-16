@@ -38,14 +38,38 @@ struct GenresView: View {
 
 private struct GenresListView: View {
     let genres: [Genre]
+    @State private var sortingOptions = "Default"
+    
+    private var sortedGenres: [Genre] {
+        switch sortingOptions {
+        case "Title":
+            return genres.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+        default:
+            return genres
+        }
+    }
     
     var body: some View {
-        List {
-            ForEach(genres, id: \.self) { genre in
+        NavigationStack {
+            List(sortedGenres, id: \.self) { genre in
                 Text(genre.displayName)
             }
             .navigationTitle("Genres")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        Picker("Sort", selection: $sortingOptions) {
+                            Label("Default", systemImage: "circle")
+                                .tag("Default")
+                            Label("Title", systemImage: "textformat.characters")
+                                .tag("Title")
+                        }
+                    } label: {
+                        Label("Sort", systemImage: "ellipsis")
+                    }
+                }
+            }
         }
     }
 }

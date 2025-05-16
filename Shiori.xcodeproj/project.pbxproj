@@ -21,6 +21,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F3ACED2C2DD5643A005A2A21 /* Exceptions for "Assets" folder in "Shiori" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppIcon/AppIcon.jpeg,
+				AppIcon/AppIconDark.jpg,
+				AppIcon/AppIconTinted.png,
+				ShioriIcon/ShioriIcon.jpg,
+				ShioriIcon/ShioriIconDark.jpg,
+				ShioriIcon/ShioriIconTinted.png,
+			);
+			target = F365CCE22CE74B3F0027F040 /* Shiori */;
+		};
 		F3D7A3DE2DC6D35100EB3572 /* Exceptions for "App" folder in "Shiori" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -37,6 +49,14 @@
 				F3D7A3DE2DC6D35100EB3572 /* Exceptions for "App" folder in "Shiori" target */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		F3ACED252DD563DB005A2A21 /* Assets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F3ACED2C2DD5643A005A2A21 /* Exceptions for "Assets" folder in "Shiori" target */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		F3D7A3E12DC6DCB700EB3572 /* TestFlight */ = {
@@ -64,6 +84,7 @@
 		F365CCDA2CE74B3F0027F040 = {
 			isa = PBXGroup;
 			children = (
+				F3ACED252DD563DB005A2A21 /* Assets */,
 				F385798E2DC6F38D00CB4D14 /* ci_scripts */,
 				F3D7A3E12DC6DCB700EB3572 /* TestFlight */,
 				F3DE62EC2CF140BC00CD77EF /* README.md */,
@@ -105,6 +126,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				F365CCE52CE74B3F0027F040 /* App */,
+				F3ACED252DD563DB005A2A21 /* Assets */,
 				F3D7A3E12DC6DCB700EB3572 /* TestFlight */,
 			);
 			name = Shiori;

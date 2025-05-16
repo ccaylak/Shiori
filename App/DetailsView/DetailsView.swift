@@ -132,46 +132,7 @@ struct DetailsView: View {
                             }
                         }
                     }
-                    
-                    Divider()
-                    
-                    GeneralOverviewView(
-                        type: media.getType,
-                        episodes: media.getEpisodes,
-                        numberOfChapters: media.getChapters,
-                        numberOfVolumes: media.getVolumes,
-                        startDate: media.getStartDate,
-                        endDate: media.getEndDate,
-                        studios: media.getStudios,
-                        authorInfos: media.getAuthors,
-                        status: media.getMediaStatus
-                    )
-                    
-                    Divider()
-                    
-                    GenresView(genres: media.getGenres)
-                    
-                    Divider()
-                    
-                    StatisticsView(
-                        score: media.getScore,
-                        rank: media.getRank,
-                        popularity: media.getPopularity,
-                        users: media.getUsers
-                    )
-                    
-                    Divider()
-                    
-                    RelatedMediaView(media: media, mediaType: media.getMediaType)
-                    
-                    Divider()
-                    
-                    RecommendationsView(recommendations: media.getRecommendations)
-                    
-                    Divider()
-                    
-                    CharactersView(characters: jikanCharacters.data)
-                    
+                    Sections(media: media, jikanCharacters: jikanCharacters)
                 }
                 .scrollIndicators(.hidden)
                 .scrollClipDisabled()
@@ -191,8 +152,18 @@ struct DetailsView: View {
                         let escapedTitle = media.getTitle.replacingOccurrences(of: " ", with: "_")
                         
                         if let url = URL(string: "https://myanimelist.net/\(resultManager.mediaType.rawValue)/\(media.id)/\(escapedTitle)") {
-                            ShareLink(item: url) {
-                                Image(systemName: "square.and.arrow.up")
+                            Menu {
+                                ShareLink(item: url) {
+                                    Label("Share", systemImage: "square.and.arrow.up")
+                                }
+                                
+                                NavigationLink {
+                                    EditDetailsView()
+                                } label: {
+                                    Label("Edit layout", systemImage: "slider.horizontal.3")
+                                }
+                            } label: {
+                                Image(systemName: "ellipsis")
                             }
                         } else {
                             Text("Invalid URL")
@@ -353,6 +324,73 @@ struct DetailsView: View {
                     print("Fehler beim Abrufen der Daten: \(error)")
                 }
             }
+        }
+    }
+}
+
+private struct Sections: View {
+    let media: Media
+    let jikanCharacters: JikanCharacter
+    @ObservedObject private var sectionsManager: SectionsManager = .shared
+    
+    private var activeSections: [EditSections] {
+        EditSections.allCases.filter { type in
+            switch type {
+            case .general:
+                return sectionsManager.showGeneral
+            case .genres:
+                return sectionsManager.showGenres
+            case .score:
+                return sectionsManager.showScore
+            case .related:
+                return sectionsManager.showRelated
+            case .recommendations:
+                return sectionsManager.showRecommendations
+            case .characters:
+                return sectionsManager.showCharacters
+            }
+        }
+    }
+    
+    var body: some View {
+        ForEach(Array(activeSections.enumerated()), id: \.element) { index, type in
+            if index > 0 {
+                Divider()
+            }
+            sectionView(for: type)
+        }
+    }
+    
+    @ViewBuilder
+    private func sectionView(for type: EditSections) -> some View {
+        switch type {
+        case .general:
+            GeneralOverviewView(
+                type: media.getType,
+                episodes: media.getEpisodes,
+                numberOfChapters: media.getChapters,
+                numberOfVolumes: media.getVolumes,
+                startDate: media.getStartDate,
+                endDate: media.getEndDate,
+                studios: media.getStudios,
+                authorInfos: media.getAuthors,
+                status: media.getMediaStatus
+            )
+        case .genres:
+            GenresView(genres: media.getGenres)
+        case .score:
+            StatisticsView(
+                score: media.getScore,
+                rank: media.getRank,
+                popularity: media.getPopularity,
+                users: media.getUsers
+            )
+        case .related:
+            RelatedMediaView(media: media, mediaType: media.getMediaType)
+        case .recommendations:
+            RecommendationsView(recommendations: media.getRecommendations)
+        case .characters:
+            CharactersView(characters: jikanCharacters.data)
         }
     }
 }

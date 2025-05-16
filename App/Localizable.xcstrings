@@ -248,6 +248,39 @@
         }
       }
     },
+    "🇩🇪 German" : {
+      "comment" : "Supported language",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🇩🇪 Deutsch"
+          }
+        }
+      }
+    },
+    "🇬🇧 English" : {
+      "comment" : "Supported language",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🇬🇧 Englisch"
+          }
+        }
+      }
+    },
+    "🇵🇹 Portuguese" : {
+      "comment" : "Supported language",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🇵🇹 Portugiesisch"
+          }
+        }
+      }
+    },
     "1" : {
       "shouldTranslate" : false
     },
@@ -670,7 +703,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alles"
+            "value" : "Alle"
           }
         },
         "pt-BR" : {
@@ -1307,6 +1340,9 @@
     "Discord" : {
       "shouldTranslate" : false
     },
+    "Display options" : {
+
+    },
     "Do you really want to delete your progress for %@?" : {
       "localizations" : {
         "de" : {
@@ -1423,6 +1459,16 @@
         }
       }
     },
+    "Edit layout" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereiche anpassen"
+          }
+        }
+      }
+    },
     "Edit Reading Progress" : {
       "localizations" : {
         "de" : {
@@ -1473,6 +1519,7 @@
       }
     },
     "English" : {
+      "comment" : "Supported language",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1745,16 +1792,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gêneros"
-          }
-        }
-      }
-    },
-    "German" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deutsch"
           }
         }
       }
@@ -2439,6 +2476,16 @@
         }
       }
     },
+    "Main" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hauptcharakter"
+          }
+        }
+      }
+    },
     "Male" : {
       "comment" : "Gender",
       "localizations" : {
@@ -2712,6 +2759,9 @@
           }
         }
       }
+    },
+    "Name" : {
+
     },
     "No %@ animes found" : {
       "localizations" : {
@@ -3521,6 +3571,16 @@
         }
       }
     },
+    "Role" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rolle"
+          }
+        }
+      }
+    },
     "Romance" : {
       "comment" : "Genre",
       "localizations" : {
@@ -3653,6 +3713,26 @@
         }
       }
     },
+    "Search characters" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Charaktere suchen"
+          }
+        }
+      }
+    },
+    "Sections" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereiche"
+          }
+        }
+      }
+    },
     "Seinen" : {
       "comment" : "Genre",
       "localizations" : {
@@ -3715,6 +3795,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Configurações"
+          }
+        }
+      }
+    },
+    "Share" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen"
           }
         }
       }
@@ -3868,6 +3958,9 @@
         }
       }
     },
+    "Sort" : {
+
+    },
     "Sort by" : {
       "localizations" : {
         "de" : {
@@ -3883,6 +3976,9 @@
           }
         }
       }
+    },
+    "Sorting options" : {
+
     },
     "Space" : {
       "comment" : "Genre",
@@ -4042,6 +4138,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unterstützte Sprachen"
+          }
+        }
+      }
+    },
+    "Supporting" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nebencharakter"
           }
         }
       }
@@ -4861,6 +4967,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sim"
+          }
+        }
+      }
+    },
+    "You can choose which sections of an anime or manga to show or hide." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst entscheiden welche Bereiche angezeigt werden sollen."
           }
         }
       }

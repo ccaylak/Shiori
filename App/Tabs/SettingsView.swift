@@ -143,12 +143,14 @@ struct SettingsView: View {
                         Label("Mail", systemImage: "envelope")
                     }
                     Link(destination: URL(string: "https://discordapp.com/users/239715812506599424")!) {
-                        HStack(spacing: 19) {
+                        Label {
+                            Text("Discord")
+                        } icon: {
                             Image("discord_icon")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
-                            Text("Discord")
+                                .foregroundColor(.accentColor)
                         }
                     }
                 }
@@ -194,14 +196,20 @@ private struct AboutView: View {
         Form {
             Section("Info") {
                 LabeledContent("App version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "–")
-                HStack (spacing: 25) {
-                    Image("github_icon")
-                        .resizable()
-                         .scaledToFit()
-                        .frame(width: 20, height: 20)
-                    Link("Repository", destination: URL(string: "https://github.com/ccaylak/Shiori")!)
-                        .foregroundStyle(.primary)
+                
+                Link(destination: URL(string: "https://github.com/ccaylak/Shiori")!) {
+                    Label {
+                        Text("Repository")
+                    } icon: {
+                        Image("github_icon")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(.accentColor)
+                    }
                 }
+                .foregroundStyle(.primary)
+                
                 NavigationLink(destination: ShioriChanView()) {
                     Label("Shiori-chan", systemImage: "character.ja")
                 }
@@ -223,8 +231,9 @@ private struct AboutView: View {
                         }
                     }
             ) {
-                Text("German")
-                Text("English")
+                ForEach(SupportedLanguages.allCases, id: \.self) { language in
+                    Text(language.displayName)
+                }
             }
             
             Section ("Used Third-Party Services") {

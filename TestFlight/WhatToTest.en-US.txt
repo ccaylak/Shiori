@@ -1,4 +1,12 @@
 What's New:
 
-- Fixed CharactersView performance
-- Added Shiori-chan as app icon
+- Added option to enable or disable sections on anime and manga detail pages
+- Added sorting and search functionality to the Character view
+- Added sorting functionality to the Recommendations view
+- Added sorting functionality to the Genres view
+- Redesigned the Profile page for a cleaner look
+- Redesigned the PillPicker component for better usability
+
+What's Next?
+- Overall rework of how entries are edited
+- More sections to anime and manga detail pages
