@@ -9,13 +9,19 @@ import SwiftUI
     private var settingsManager: SettingsManager = .shared
     private var resultManager: ResultManager = .shared
     
-    func saveProgress(id: Int, status: String, score: Int, episodes: Int) async throws {
+    func saveProgress(id: Int, status: String, score: Int, episodes: Int, comments: String, startDate: Date?, finishDate: Date?) async throws {
         let url = URL(string: MALEndpoints.Anime.update(id: id))!
+        
+        let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
         
         let parameters: [String: String] = [
             "status": status,
             "score": "\(score)",
-            "num_watched_episodes": "\(episodes)"
+            "num_watched_episodes": "\(episodes)",
+            "comments": comments,
+            "start_date": startDate.map { dateFormatter.string(from: $0) } ?? "",
+            "finish_date": finishDate.map { dateFormatter.string(from: $0) } ?? ""
         ]
         let formBody = parameters.map { "\($0.key)=\($0.value)" }
             .joined(separator: "&")

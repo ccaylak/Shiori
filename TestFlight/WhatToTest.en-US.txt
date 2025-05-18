@@ -1,12 +1,10 @@
 What's New:
 
-- Added option to enable or disable sections on anime and manga detail pages
-- Added sorting and search functionality to the Character view
-- Added sorting functionality to the Recommendations view
-- Added sorting functionality to the Genres view
-- Redesigned the Profile page for a cleaner look
-- Redesigned the PillPicker component for better usability
+- PillPicker Redesign – cleaner look with outline‑style selection
+- Library Entry Editing – fully revamped, more intuitive workflow
+- Auto‑Fill Feature – marking an entry as “Completed” now fills all episodes/chapters/volumes automatically
+- Smart Status Sync – setting counts to their maximum toggles status to “Completed” (and updates missing counts)
+- Comments & Ranges – add notes or define custom reading/watching ranges per entry
 
 What's Next?
-- Overall rework of how entries are edited
 - More sections to anime and manga detail pages

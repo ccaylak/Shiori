@@ -14,6 +14,11 @@ struct DetailsView: View {
         var rating: Int
         var progress: Int
         var end: Int
+        var comments: String
+        var volumes: Int
+        var currentVolume: Int
+        var startDate: Date?
+        var endDate: Date?
     }
 
     @State private var userProgress = UserProgress(
@@ -21,10 +26,19 @@ struct DetailsView: View {
         animeProgress: .planToWatch,
         rating: 0,
         progress: 0,
-        end: 0
+        end: 0,
+        comments: "",
+        volumes: 0,
+        currentVolume: 0,
+        startDate: nil,
+        endDate: nil
     )
     
     @State private var showAlert = false
+    
+    @State private var mangaMode = "all"
+    @State private var showComments = false
+    @State private var showDates = false
     
     @ObservedObject private var tokenHandler: TokenHandler = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
@@ -175,9 +189,199 @@ struct DetailsView: View {
                         NavigationStack {
                             List {
                                 if (resultManager.mediaType == .manga) {
-                                    Picker("Status", selection: $userProgress.mangaProgress) {
-                                        ForEach([ProgressStatus.Manga.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
-                                            Text(mangaSelection.displayName).tag(mangaSelection)
+                                    Section {
+                                        Picker("Progress", selection: $userProgress.mangaProgress) {
+                                            ForEach([ProgressStatus.Manga.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
+                                                Text(mangaSelection.displayName).tag(mangaSelection)
+                                            }
+                                        }
+                                        .onChange(of: userProgress.mangaProgress) {
+                                            if userProgress.mangaProgress == .completed {
+                                                if userProgress.volumes != 0 {
+                                                    userProgress.currentVolume = userProgress.volumes
+                                                }
+                                                if userProgress.end != 0 {
+                                                    userProgress.progress = userProgress.end
+                                                }
+                                            }
+                                        }
+                                        
+                                        Picker("Rating", selection: $userProgress.rating) {
+                                            ForEach(0...10, id: \.self) { rating in
+                                                if let ratingValue = RatingValues(rawValue: rating) {
+                                                    Text(ratingValue.displayName).tag(rating)
+                                                } else {
+                                                    Text("Unknown")
+                                                }
+                                            }
+                                        }
+                                        
+                                        VStack(alignment: .leading, spacing: 6) {
+                                            Text("Mode")
+                                            
+                                            Picker("", selection: $mangaMode) {
+                                                Text("All").tag("all")
+                                                Text("Chapter").tag("chapters")
+                                                Text("Volume").tag("volumes")
+                                            }
+                                            .pickerStyle(.segmented)
+                                        }
+                                        
+                                        if (mangaMode == "all") {
+                                            if userProgress.end != 0 {
+                                                HStack {
+                                                    Text("Chapter")
+                                                        .foregroundStyle(Color.primary)
+                                                    Spacer()
+                                                    Menu {
+                                                        ForEach(0...userProgress.end, id: \.self) { chapter in
+                                                            Button("\(chapter)") {
+                                                                userProgress.progress = chapter
+                                                            }
+                                                        }
+                                                    } label: {
+                                                        HStack(spacing: 4) {
+                                                            Text("\(userProgress.progress)/\(userProgress.end)")
+                                                                .foregroundColor(.secondary)
+                                                            Image(systemName: "chevron.up.chevron.down")
+                                                                .imageScale(.small)
+                                                                .foregroundColor(.secondary)
+                                                        }
+                                                    }
+                                                    .onChange(of: userProgress.progress) {
+                                                        if userProgress.end != 0 {
+                                                            if userProgress.progress == userProgress.end {
+                                                                userProgress.mangaProgress = .completed
+                                                            }
+                                                        }
+                                                        
+                                                        if userProgress.volumes != 0 {
+                                                            if userProgress.progress == userProgress.end {
+                                                                userProgress.currentVolume = userProgress.volumes
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                Stepper("Chapter \(userProgress.progress)/?", value: $userProgress.progress, in: 0...Int.max)
+                                            }
+                                            
+                                            if userProgress.volumes != 0 {
+                                                HStack {
+                                                    Text("Volume")
+                                                        .foregroundStyle(Color.primary)
+                                                    Spacer()
+                                                    Menu {
+                                                        ForEach(0...userProgress.volumes, id: \.self) { volume in
+                                                            Button("\(volume)") {
+                                                                userProgress.volumes = volume
+                                                            }
+                                                        }
+                                                    } label: {
+                                                        HStack(spacing: 4) {
+                                                            Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
+                                                                .foregroundColor(.secondary)
+                                                            Image(systemName: "chevron.up.chevron.down")
+                                                                .imageScale(.small)
+                                                                .foregroundColor(.secondary)
+                                                        }
+                                                    }
+                                                    .onChange(of: userProgress.currentVolume) {
+                                                        if userProgress.volumes != 0 {
+                                                            if userProgress.currentVolume == userProgress.volumes {
+                                                                userProgress.mangaProgress = .completed
+                                                            }
+                                                        }
+                                                        
+                                                        if userProgress.end != 0 {
+                                                            if userProgress.currentVolume == userProgress.volumes {
+                                                                userProgress.progress = userProgress.end
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                Stepper("Volume \(userProgress.currentVolume)/?", value: $userProgress.currentVolume, in: 0...Int.max)
+                                            }
+                                        }
+                                        
+                                        if (mangaMode == "chapters") {
+                                            if userProgress.end != 0 {
+                                                HStack {
+                                                    Text("Chapter")
+                                                        .foregroundStyle(Color.primary)
+                                                    Spacer()
+                                                    Menu {
+                                                        ForEach(0...userProgress.end, id: \.self) { chapter in
+                                                            Button("\(chapter)") {
+                                                                userProgress.progress = chapter
+                                                            }
+                                                        }
+                                                    } label: {
+                                                        HStack(spacing: 4) {
+                                                            Text("\(userProgress.progress)/\(userProgress.end)")
+                                                                .foregroundColor(.secondary)
+                                                            Image(systemName: "chevron.up.chevron.down")
+                                                                .imageScale(.small)
+                                                                .foregroundColor(.secondary)
+                                                        }
+                                                    }
+                                                    .onChange(of: userProgress.progress) {
+                                                        if userProgress.end != 0 {
+                                                            if userProgress.progress == userProgress.end {
+                                                                userProgress.mangaProgress = .completed
+                                                            }
+                                                        }
+                                                        
+                                                        if userProgress.volumes != 0 {
+                                                            if userProgress.progress == userProgress.volumes {
+                                                                userProgress.currentVolume = userProgress.volumes
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                Stepper("Chapter \(userProgress.progress)/?", value: $userProgress.progress, in: 0...Int.max)
+                                            }
+                                        }
+                                        if (mangaMode == "volumes") {
+                                            if userProgress.volumes != 0 {
+                                                HStack {
+                                                    Text("Volume")
+                                                        .foregroundStyle(Color.primary)
+                                                    Spacer()
+                                                    Menu {
+                                                        ForEach(0...userProgress.volumes, id: \.self) { volume in
+                                                            Button("\(volume)") {
+                                                                userProgress.volumes = volume
+                                                            }
+                                                        }
+                                                    } label: {
+                                                        HStack(spacing: 4) {
+                                                            Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
+                                                                .foregroundColor(.secondary)
+                                                            Image(systemName: "chevron.up.chevron.down")
+                                                                .imageScale(.small)
+                                                                .foregroundColor(.secondary)
+                                                        }
+                                                    }
+                                                    .onChange(of: userProgress.volumes) {
+                                                        if userProgress.volumes != 0 {
+                                                            if userProgress.volumes == userProgress.currentVolume {
+                                                                userProgress.mangaProgress = .completed
+                                                            }
+                                                        }
+                                                        
+                                                        if userProgress.end != 0 {
+                                                            if userProgress.end == userProgress.progress {
+                                                                userProgress.progress = userProgress.end
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                Stepper("Volume \(userProgress.currentVolume)/?", value: $userProgress.currentVolume, in: 0...Int.max)
+                                            }
                                         }
                                     }
                                 }
@@ -188,26 +392,109 @@ struct DetailsView: View {
                                             Text(animeSelection.displayName).tag(animeSelection)
                                         }
                                     }
-                                }
-                                
-                                Picker((resultManager.mediaType == .manga) ? "Chapters" : "Episodes", selection: $userProgress.progress) {
-                                    let chapterRange = userProgress.end > 0 ? 0...userProgress.end : 0...1000
-                                    ForEach(chapterRange, id: \.self) { chapter in
-                                        Text("\(chapter)").tag(chapter)
+                                    
+                                    Picker("Rating", selection: $userProgress.rating) {
+                                        ForEach(0...10, id: \.self) { rating in
+                                            if let ratingValue = RatingValues(rawValue: rating) {
+                                                Text(ratingValue.displayName).tag(rating)
+                                            } else {
+                                                Text("Unknown")
+                                            }
+                                        }
+                                    }
+                                    
+                                    if userProgress.end != 0 {
+                                        HStack {
+                                            Text("Episode")
+                                                .foregroundStyle(Color.primary)
+                                            Spacer()
+                                            Menu {
+                                                ForEach(0...userProgress.end, id: \.self) { episode in
+                                                    Button("\(episode)") {
+                                                        userProgress.progress = episode
+                                                    }
+                                                }
+                                            } label: {
+                                                HStack(spacing: 4) {
+                                                    Text("\(userProgress.progress)/\(userProgress.end)")
+                                                        .foregroundColor(.secondary)
+                                                    Image(systemName: "chevron.up.chevron.down")
+                                                        .imageScale(.small)
+                                                        .foregroundColor(.secondary)
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        Stepper("Episode \(userProgress.progress)/?", value: $userProgress.progress, in: 0...Int.max)
                                     }
                                 }
                                 
-                                Picker("Rating", selection: $userProgress.rating) {
-                                    ForEach(0...10, id: \.self) { rating in
-                                        if let ratingValue = RatingValues(rawValue: rating) {
-                                            Text(ratingValue.displayName).tag(rating)
-                                        } else {
-                                            Text("Unknown")
+                                Section {
+                                    Button(action: {
+                                        withAnimation {
+                                            showComments.toggle()
+                                            if !showComments {
+                                                userProgress.comments = ""
+                                            }
                                         }
+                                    }
+                                    ){
+                                        Label(
+                                            showComments ? "Remove comments" : "Add comments",
+                                            systemImage: showComments ? "minus.circle.fill" : "plus.circle.fill"
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    if showComments {
+                                        TextField("Comments", text: $userProgress.comments)
+                                            .transition(.opacity.combined(with: .move(edge: .top)))
+                                    }
+                                }
+                                
+                                Section {
+                                    Button(action: {
+                                        withAnimation {
+                                            showDates.toggle()
+                                            if !showDates {
+                                                userProgress.startDate = nil
+                                                userProgress.endDate = nil
+                                            }
+                                        }
+                                    }) {
+                                        Label(
+                                            showDates ? "Remove dates" : "Add dates",
+                                            systemImage: showDates ? "calendar.badge.minus" : "calendar.badge.plus"
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    if showDates {
+                                        VStack {
+                                            DatePicker(
+                                                "Startdate",
+                                                selection: Binding(
+                                                    get: { userProgress.startDate ?? Date() },
+                                                    set: { userProgress.startDate = $0 }
+                                                ),
+                                                displayedComponents: .date
+                                            )
+                                            DatePicker(
+                                                "Enddate",
+                                                selection: Binding(
+                                                    get: { userProgress.endDate ?? Date() },
+                                                    set: { userProgress.endDate = $0 }
+                                                ),
+                                                displayedComponents: .date
+                                            )
+                                        }
+                                        .transition(.opacity.combined(with: .move(edge: .top)))
                                     }
                                 }
                                 
                             }
+                            .scrollIndicators(.hidden)
+                            .padding(.horizontal)
                             .scrollContentBackground(.hidden)
                             .scrollBounceBehavior(.basedOnSize)
                             .toolbar {
@@ -215,13 +502,30 @@ struct DetailsView: View {
                                     Button("Save") {
                                         Task {
                                             if (resultManager.mediaType == .manga) {
-                                                try await mangaController.saveProgress(id: media.id, status: userProgress.mangaProgress.rawValue, score: userProgress.rating, chapters: userProgress.progress)
+                                                try await mangaController.saveProgress(
+                                                    id: media.id,
+                                                    status: userProgress.mangaProgress.rawValue,
+                                                    score: userProgress.rating,
+                                                    chapters: userProgress.progress,
+                                                    volumes: userProgress.currentVolume,
+                                                    comments: userProgress.comments,
+                                                    startDate: userProgress.startDate,
+                                                    finishDate: userProgress.endDate
+                                                )
                                                 alertManager.showUpdatedAlert = true
                                                 media = try await mangaController.fetchDetails(id: media.id)
                                                 isSheetPresented = false
                                             }
                                             if (resultManager.mediaType == .anime) {
-                                                try await animeController.saveProgress(id: media.id, status: userProgress.animeProgress.rawValue, score: userProgress.rating, episodes: userProgress.progress)
+                                                try await animeController.saveProgress(
+                                                    id: media.id,
+                                                    status: userProgress.animeProgress.rawValue,
+                                                    score: userProgress.rating,
+                                                    episodes: userProgress.progress,
+                                                    comments: userProgress.comments,
+                                                    startDate: userProgress.startDate,
+                                                    finishDate: userProgress.endDate
+                                                )
                                                 alertManager.showUpdatedAlert = true
                                                 media = try await animeController.fetchDetails(id: media.id)
                                                 isSheetPresented = false
@@ -264,7 +568,7 @@ struct DetailsView: View {
                                 }
                             }
                             .navigationBarTitleDisplayMode(.inline)
-                            .presentationDetents([.fraction(0.4)])
+                            .presentationDetents([.fraction(0.8)])
                             .presentationBackgroundInteraction(.disabled)
                             .presentationBackground(.regularMaterial)
                         }
@@ -299,6 +603,14 @@ struct DetailsView: View {
                         userProgress.progress = media.getListStatus.getWatchedEpisodes
                         userProgress.rating = media.getListStatus.getRating
                         userProgress.end = media.getEpisodes
+                        userProgress.comments = media.getListStatus.getComments
+                        
+                        if (media.getListStatus.getStartDate != nil) {
+                            userProgress.startDate = stringToDate(media.getListStatus.getStartDate!)
+                        }
+                        if (media.getListStatus.getEndDate != nil) {
+                            userProgress.startDate = stringToDate(media.getListStatus.getEndDate!)
+                        }
                     }
                     
                     if resultManager.mediaType == .manga {
@@ -307,7 +619,19 @@ struct DetailsView: View {
 
                         userProgress.progress = media.getListStatus.getReadChapters
                         userProgress.rating = media.getListStatus.getRating
+                        
                         userProgress.end = media.getChapters
+                        userProgress.comments = media.getListStatus.getComments
+                        
+                        userProgress.currentVolume = media.getListStatus.getReadVolumes
+                        userProgress.volumes = media.getVolumes
+                        
+                        if (media.getListStatus.getStartDate != nil) {
+                            userProgress.startDate = stringToDate(media.getListStatus.getStartDate!)
+                        }
+                        if (media.getListStatus.getEndDate != nil) {
+                            userProgress.startDate = stringToDate(media.getListStatus.getEndDate!)
+                        }
                     }
                     
                     let wrapper = media.getListStatus.getProgressStatus
@@ -325,6 +649,12 @@ struct DetailsView: View {
                 }
             }
         }
+    }
+    
+    private func stringToDate(_ dateString: String) -> Date {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.date(from: dateString) ?? Date()
     }
 }
 

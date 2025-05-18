@@ -15,7 +15,8 @@
             "value" : "%@"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "%@ library" : {
       "localizations" : {
@@ -246,7 +247,19 @@
             "value" : "%1$lld/%2$@"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
+    },
+    "%lld/%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld/%2$lld"
+          }
+        }
+      },
+      "shouldTranslate" : false
     },
     "🇩🇪 German" : {
       "comment" : "Supported language",
@@ -520,6 +533,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adaptação"
+          }
+        }
+      }
+    },
+    "Add comments" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommentare hinzufügen"
+          }
+        }
+      }
+    },
+    "Add dates" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitraum hinzufügen"
           }
         }
       }
@@ -1017,18 +1050,12 @@
         }
       }
     },
-    "Chapter %lld" : {
+    "Chapter %lld/?" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kapitel %lld"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Capítulo %lld"
+            "value" : "Kapitel %lld/?"
           }
         }
       }
@@ -1146,6 +1173,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comédia"
+          }
+        }
+      }
+    },
+    "Comments" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommentare"
           }
         }
       }
@@ -1518,6 +1555,16 @@
         }
       }
     },
+    "Enddate" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enddatum"
+          }
+        }
+      }
+    },
     "English" : {
       "comment" : "Supported language",
       "localizations" : {
@@ -1551,18 +1598,12 @@
         }
       }
     },
-    "Episode %lld" : {
+    "Episode %lld/?" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Folge %lld"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Episódio %lld"
+            "value" : "Folge %lld/?"
           }
         }
       }
@@ -2655,6 +2696,16 @@
         }
       }
     },
+    "Mode" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modus"
+          }
+        }
+      }
+    },
     "Most Favorited" : {
       "comment" : "Sort by",
       "localizations" : {
@@ -2761,7 +2812,14 @@
       }
     },
     "Name" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
     },
     "No %@ animes found" : {
       "localizations" : {
@@ -3234,6 +3292,16 @@
         }
       }
     },
+    "Progress" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortschritt"
+          }
+        }
+      }
+    },
     "Progress updated" : {
       "localizations" : {
         "de" : {
@@ -3499,6 +3567,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Relacionado"
+          }
+        }
+      }
+    },
+    "Remove comments" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommentare entfernen"
+          }
+        }
+      }
+    },
+    "Remove dates" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitraum entfernen"
           }
         }
       }
@@ -4044,6 +4132,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esportes"
+          }
+        }
+      }
+    },
+    "Startdate" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startdatum"
           }
         }
       }
@@ -4885,6 +4983,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Artes visuais"
+          }
+        }
+      }
+    },
+    "Volume" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Band"
+          }
+        }
+      }
+    },
+    "Volume %lld/?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Band %lld/?"
           }
         }
       }

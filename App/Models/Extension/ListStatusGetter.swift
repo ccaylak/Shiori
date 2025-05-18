@@ -10,12 +10,28 @@ extension ListStatus {
         rating ?? 0
     }
     
+    var getComments: String {
+        comments ?? ""
+    }
+    
     var getWatchedEpisodes: Int {
         watchedEpisodes ?? 0
     }
     
     var getReadChapters: Int {
         readChapters ?? 0
+    }
+    
+    var getReadVolumes: Int {
+        readVolumes ?? 0
+    }
+    
+    var getStartDate: String? {
+        startDate ?? nil
+    }
+    
+    var getEndDate: String? {
+        finishDate ?? nil
     }
     
     private var getStatusString: String {
