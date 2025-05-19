@@ -142,9 +142,9 @@ struct SettingsView: View {
                     Link(destination: URL(string: "mailto:shiori.app@icloud.com")!) {
                         Label("Mail", systemImage: "envelope")
                     }
-                    Link(destination: URL(string: "https://discordapp.com/users/239715812506599424")!) {
+                    Link(destination: URL(string: "https://discord.gg/4ajqv3aMdd")!) {
                         Label {
-                            Text("Discord")
+                            Text("Discord Community Server")
                         } icon: {
                             Image("discord_icon")
                                 .resizable()

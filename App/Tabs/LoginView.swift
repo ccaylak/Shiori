@@ -136,27 +136,27 @@ struct LoginView: View {
                         let animeStatistics: [Statistics] = [
                             Statistics(
                                 title: ProgressStatus.Anime.completed.displayName,
-                                icon: AnyView(ProgressStatus.Anime.completed.profileIcon),
+                                icon: AnyView(ProgressStatus.Anime.completed.libraryIcon),
                                 value: animeStatistics?.completed ?? 0
                             ),
                             Statistics(
                                 title: ProgressStatus.Anime.watching.displayName,
-                                icon: AnyView(ProgressStatus.Anime.watching.profileIcon),
+                                icon: AnyView(ProgressStatus.Anime.watching.libraryIcon),
                                 value: animeStatistics?.watching ?? 0
                             ),
                             Statistics(
                                 title: ProgressStatus.Anime.onHold.displayName,
-                                icon: AnyView(ProgressStatus.Anime.onHold.profileIcon),
+                                icon: AnyView(ProgressStatus.Anime.onHold.libraryIcon),
                                 value: animeStatistics?.onHold ?? 0
                             ),
                             Statistics(
                                 title: ProgressStatus.Anime.dropped.displayName,
-                                icon: AnyView(ProgressStatus.Anime.dropped.profileIcon),
+                                icon: AnyView(ProgressStatus.Anime.dropped.libraryIcon),
                                 value: animeStatistics?.dropped ?? 0
                             ),
                             Statistics(
                                 title: ProgressStatus.Anime.planToWatch.displayName,
-                                icon: AnyView(ProgressStatus.Anime.planToWatch.profileIcon),
+                                icon: AnyView(ProgressStatus.Anime.planToWatch.libraryIcon),
                                 value: animeStatistics?.planToWatch ?? 0
                             ),
                         ]
@@ -169,27 +169,27 @@ struct LoginView: View {
                         let mangaStatistics: [Statistics] = [
                             Statistics(
                                 title: ProgressStatus.Manga.completed.displayName,
-                                icon: AnyView(ProgressStatus.Manga.completed.profileIcon),
+                                icon: AnyView(ProgressStatus.Manga.completed.libraryIcon),
                                 value: mangaStatistics?.completed ?? 0
                             ),
                             Statistics(
                                 title: ProgressStatus.Manga.reading.displayName,
-                                icon: AnyView(ProgressStatus.Manga.reading.profileIcon),
+                                icon: AnyView(ProgressStatus.Manga.reading.libraryIcon),
                                 value: mangaStatistics?.reading ?? 0
                             ),
                             Statistics(
                                 title: ProgressStatus.Manga.onHold.displayName,
-                                icon: AnyView(ProgressStatus.Manga.onHold.profileIcon),
+                                icon: AnyView(ProgressStatus.Manga.onHold.libraryIcon),
                                 value: mangaStatistics?.onHold ?? 0
                             ),
                             Statistics(
                                 title: ProgressStatus.Manga.dropped.displayName,
-                                icon: AnyView(ProgressStatus.Manga.dropped.profileIcon),
+                                icon: AnyView(ProgressStatus.Manga.dropped.libraryIcon),
                                 value: mangaStatistics?.dropped ?? 0
                             ),
                             Statistics(
                                 title: ProgressStatus.Manga.planToRead.displayName,
-                                icon: AnyView(ProgressStatus.Manga.planToRead.profileIcon),
+                                icon: AnyView(ProgressStatus.Manga.planToRead.libraryIcon),
                                 value: mangaStatistics?.planToRead ?? 0
                             ),
                         ]

@@ -1,10 +1,10 @@
 What's New:
 
-- PillPicker Redesign – cleaner look with outline‑style selection
-- Library Entry Editing – fully revamped, more intuitive workflow
-- Auto‑Fill Feature – marking an entry as “Completed” now fills all episodes/chapters/volumes automatically
-- Smart Status Sync – setting counts to their maximum toggles status to “Completed” (and updates missing counts)
-- Comments & Ranges – add notes or define custom reading/watching ranges per entry
+- Enable all sections by default (they were accidentally disabled)
+- Set default AccentColor to red
+- Remove circles from icons in profile
+- Fix button in SearchView
+- Fix accent colors in LibraryView and DetailsView for updating anime and manga entries
 
 What's Next?
-- More sections to anime and manga detail pages
+- Code-Free for major refactoring

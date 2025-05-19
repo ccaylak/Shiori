@@ -439,10 +439,13 @@ struct DetailsView: View {
                                         }
                                     }
                                     ){
-                                        Label(
-                                            showComments ? "Remove comments" : "Add comments",
-                                            systemImage: showComments ? "minus.circle.fill" : "plus.circle.fill"
-                                        )
+                                        Label {
+                                            Text(showComments ? "Remove comments" : "Add comments")
+                                        } icon: {
+                                            Image(systemName: showComments ? "minus.circle.fill" : "plus.circle.fill")
+                                                .symbolRenderingMode(.monochrome)
+                                                .foregroundStyle(showComments ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        }
                                     }
                                     .buttonStyle(.plain)
                                     
@@ -462,10 +465,12 @@ struct DetailsView: View {
                                             }
                                         }
                                     }) {
-                                        Label(
-                                            showDates ? "Remove dates" : "Add dates",
-                                            systemImage: showDates ? "calendar.badge.minus" : "calendar.badge.plus"
-                                        )
+                                        Label {
+                                            Text(showDates ? "Remove dates" : "Add dates")
+                                        } icon: {
+                                            Image(systemName: showDates ? "calendar.badge.minus" : "calendar.badge.plus")
+                                                .foregroundStyle(showDates ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        }
                                     }
                                     .buttonStyle(.plain)
                                     
@@ -532,6 +537,7 @@ struct DetailsView: View {
                                             }
                                         }
                                     }
+                                    .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
                                 }
                                 ToolbarItem(placement: .principal) {
                                     Text(resultManager.mediaType == .manga ? "Edit Reading Progress" : "Edit Watch Progress")

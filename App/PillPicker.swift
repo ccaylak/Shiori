@@ -38,7 +38,7 @@ struct PillPicker<T: Hashable>: View {
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(
                                 isSelected
-                                ? Color.getByColorString(settingsManager.accentColor.rawValue)
+                                ? Color.accentColor
                                 : Color.clear,
                                 lineWidth: 5
                             )

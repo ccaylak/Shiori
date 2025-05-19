@@ -48,17 +48,14 @@ struct ResultView: View {
                     }) {
                         if isLoading {
                             ProgressView()
-                                .frame(width: 370, height: 50)
-                                .background(Color.getByColorString(settingsManager.accentColor.rawValue))
-                                .cornerRadius(10)
                         } else {
                             Text("Load more")
-                                .frame(width: 370, height: 50)
-                                .background(Color.getByColorString(settingsManager.accentColor.rawValue))
                                 .foregroundColor(.white)
-                                .cornerRadius(10)
                         }
                     }
+                    .frame(maxWidth: .infinity, minHeight: 50)
+                    .background(Color.getByColorString(settingsManager.accentColor.rawValue))
+                    .cornerRadius(10)
                 }
             }
             .padding(.horizontal)

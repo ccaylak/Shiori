@@ -1374,8 +1374,15 @@
         }
       }
     },
-    "Discord" : {
-      "shouldTranslate" : false
+    "Discord Community Server" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discord Community Server"
+          }
+        }
+      }
     },
     "Display options" : {
 

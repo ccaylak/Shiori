@@ -23,46 +23,16 @@ enum ProgressStatus: Equatable {
         }
         
         @ViewBuilder
-        var profileIcon: some View {
-            switch self {
-            case .all:
-                Image(systemName: "tv.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.green)
-            case .watching:
-                Image(systemName: "play.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.accentColor, Color.primary)
-            case .completed:
-                Image(systemName: "checkmark.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.green, Color.primary)
-            case .onHold:
-                Image(systemName: "pause.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.yellow, Color.primary)
-            case .dropped:
-                Image(systemName: "trash.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.red, Color.primary)
-            case .planToWatch:
-                Image(systemName: "calendar.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.gray, Color.primary)
-            }
-        }
-        
-        @ViewBuilder
         var libraryIcon: some View {
             switch self {
             case .all:
                 Image(systemName: "rectangle.stack.fill")
                     .symbolRenderingMode(.monochrome)
-                    .foregroundStyle(Color.primary)
+                    .foregroundStyle(Color.indigo)
             case .watching:
                 Image(systemName: "play.tv.fill")
                     .symbolRenderingMode(.monochrome)
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(Color.primary)
             case .completed:
                 Image(systemName: "checkmark")
                     .fontWeight(.bold)
@@ -99,37 +69,7 @@ enum ProgressStatus: Equatable {
             case .planToRead: return String(localized: "Plan To Read")
             }
         }
-        
-        @ViewBuilder
-        var profileIcon: some View {
-            switch self {
-            case .all:
-                Image(systemName: "tv.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.primary)
-            case .reading:
-                Image(systemName: "book.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.accentColor, Color.primary)
-            case .completed:
-                Image(systemName: "checkmark.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.green, Color.primary)
-            case .onHold:
-                Image(systemName: "book.closed.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.yellow, Color.primary)
-            case .dropped:
-                Image(systemName: "trash.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.red, Color.primary)
-            case .planToRead:
-                Image(systemName: "calendar.circle")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.gray, Color.primary)
-            }
-        }
-        
+                
         @ViewBuilder
         var libraryIcon: some View {
             switch self {
@@ -140,7 +80,7 @@ enum ProgressStatus: Equatable {
             case .reading:
                 Image(systemName: "book.fill")
                     .symbolRenderingMode(.monochrome)
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(Color.primary)
             case .completed:
                 Image(systemName: "checkmark")
                     .fontWeight(.bold)

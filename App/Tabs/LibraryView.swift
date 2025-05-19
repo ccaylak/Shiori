@@ -73,6 +73,7 @@ struct LibraryView: View {
     @StateObject private var libraryManager: LibraryManager = .shared
     @EnvironmentObject private var alertManager: AlertManager
     @ObservedObject private var tokenHandler: TokenHandler = .shared
+    @ObservedObject private var settingsManager: SettingsManager = .shared
     
     
     private var filteredLibraryData: [MediaNode] {
@@ -511,10 +512,13 @@ struct LibraryView: View {
                                 }
                             }
                             ){
-                                Label(
-                                    showComments ? "Remove comments" : "Add comments",
-                                    systemImage: showComments ? "minus.circle.fill" : "plus.circle.fill"
-                                )
+                                Label {
+                                    Text(showComments ? "Remove comments" : "Add comments")
+                                } icon: {
+                                    Image(systemName: showComments ? "minus.circle.fill" : "plus.circle.fill")
+                                        .symbolRenderingMode(.monochrome)
+                                        .foregroundStyle(showComments ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                }
                             }
                             .buttonStyle(.plain)
                             
@@ -539,10 +543,12 @@ struct LibraryView: View {
                                     }
                                 }
                             }) {
-                                Label(
-                                    showDates ? "Remove dates" : "Add dates",
-                                    systemImage: showDates ? "calendar.badge.minus" : "calendar.badge.plus"
-                                )
+                                Label {
+                                    Text(showDates ? "Remove dates" : "Add dates")
+                                } icon: {
+                                    Image(systemName: showDates ? "calendar.badge.minus" : "calendar.badge.plus")
+                                        .foregroundStyle(showDates ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                }
                             }
                             .buttonStyle(.plain)
                             
@@ -610,6 +616,7 @@ struct LibraryView: View {
                                     selectedMedia = nil
                                 }
                             }
+                            .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
                         }
                         ToolbarItem(placement: .principal) {
                             Text(media.node.getTitle)
