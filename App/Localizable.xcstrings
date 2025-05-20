@@ -547,12 +547,22 @@
         }
       }
     },
-    "Add dates" : {
+    "Add finish date" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zeitraum hinzufügen"
+            "value" : "Startdatum hinzufügen"
+          }
+        }
+      }
+    },
+    "Add start date" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abschlussdatum hinzufügen"
           }
         }
       }
@@ -3588,16 +3598,6 @@
         }
       }
     },
-    "Remove dates" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zeitraum entfernen"
-          }
-        }
-      }
-    },
     "Remove entry" : {
       "localizations" : {
         "de" : {
@@ -3610,6 +3610,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remover entrada"
+          }
+        }
+      }
+    },
+    "Remove finish date" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startdatum entfernen"
+          }
+        }
+      }
+    },
+    "Remove start date" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startdatum entfernen"
           }
         }
       }

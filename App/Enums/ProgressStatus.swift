@@ -76,7 +76,7 @@ enum ProgressStatus: Equatable {
             case .all:
                 Image(systemName: "books.vertical.fill")
                     .symbolRenderingMode(.monochrome)
-                    .foregroundStyle(Color.primary)
+                    .foregroundStyle(Color.indigo)
             case .reading:
                 Image(systemName: "book.fill")
                     .symbolRenderingMode(.monochrome)

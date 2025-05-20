@@ -1,10 +1,8 @@
 What's New:
 
-- Enable all sections by default (they were accidentally disabled)
-- Set default AccentColor to red
-- Remove circles from icons in profile
-- Fix button in SearchView
-- Fix accent colors in LibraryView and DetailsView for updating anime and manga entries
+- Removed automatic switch when episodes/chapters/volumes are set to the last possible value
+- Split start and finishdate
+- Added global method save if volumes and chapters, chapters or only volumes are selected while editing entry
 
 What's Next?
 - Code-Free for major refactoring

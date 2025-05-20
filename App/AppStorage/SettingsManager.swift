@@ -9,6 +9,7 @@ import SwiftUI
     @AppStorage("nsfw") var showNsfwContent = false
     @AppStorage("titleLanguage") var titleLanguage = TitleLanguage.english
     @AppStorage("airingSoon") var showAiringSoonBanner = true
+    @AppStorage("mangaMode") var mangaMode = "all"
     
     private init() {}
 }

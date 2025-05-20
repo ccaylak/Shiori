@@ -52,12 +52,10 @@ struct LibraryView: View {
     @State private var showAlert = false
     @State private var searchTerm = ""
     
-    @State private var mangaMode = "all"
-    
     @State private var showComments = false
 
-    
-    @State private var showDates = false
+    @State private var showStartDate = false
+    @State private var showFinishDate = false
     
     @State private var setStartDate = false
     @State private var startDate: Date?
@@ -242,7 +240,8 @@ struct LibraryView: View {
             .sheet(item: $selectedMedia, onDismiss: {
                 showComments = false
                 
-                showDates = false
+                showStartDate = false
+                showFinishDate = false
                 
                 startDate = nil
                 endDate = nil
@@ -270,16 +269,6 @@ struct LibraryView: View {
                                         Text(mangaSelection.displayName).tag(mangaSelection)
                                     }
                                 }
-                                .onChange(of: mangaEntry.progressStatus) {
-                                    if mangaEntry.progressStatus == .completed {
-                                        if mangaEntry.totalVolumes != 0 {
-                                            mangaEntry.currentVolume = mangaEntry.totalVolumes
-                                        }
-                                        if mangaEntry.totalChapters != 0 {
-                                            mangaEntry.currentChapter = mangaEntry.totalChapters
-                                        }
-                                    }
-                                }
                                 
                                 Picker("Rating", selection: $mangaEntry.score) {
                                     ForEach(0...10, id: \.self) { rating in
@@ -294,15 +283,15 @@ struct LibraryView: View {
                                 VStack(alignment: .leading, spacing: 6) {
                                     Text("Mode")
                                     
-                                    Picker("", selection: $mangaMode) {
+                                    Picker("", selection: $settingsManager.mangaMode) {
                                         Text("All").tag("all")
-                                        Text("Chapter").tag("chapters")
-                                        Text("Volume").tag("volumes")
+                                        Text("Chapter").tag("chapter")
+                                        Text("Volume").tag("volume")
                                     }
                                     .pickerStyle(.segmented)
                                 }
                                 
-                                if (mangaMode == "all") {
+                                if (settingsManager.mangaMode == "all") {
                                     if mangaEntry.totalChapters != 0 {
                                         HStack {
                                             Text("Chapter")
@@ -321,14 +310,6 @@ struct LibraryView: View {
                                                     Image(systemName: "chevron.up.chevron.down")
                                                         .imageScale(.small)
                                                         .foregroundColor(.secondary)
-                                                }
-                                            }
-                                            .onChange(of: mangaEntry.currentChapter) {
-                                                if mangaEntry.totalChapters == mangaEntry.currentChapter {
-                                                    mangaEntry.progressStatus = .completed
-                                                }
-                                                if mangaEntry.totalVolumes != 0 {
-                                                    mangaEntry.currentVolume = mangaEntry.totalVolumes
                                                 }
                                             }
                                         }
@@ -353,14 +334,6 @@ struct LibraryView: View {
                                                     Image(systemName: "chevron.up.chevron.down")
                                                         .imageScale(.small)
                                                         .foregroundColor(.secondary)
-                                                }
-                                            }
-                                            .onChange(of: mangaEntry.currentVolume) {
-                                                if mangaEntry.totalVolumes == mangaEntry.currentVolume {
-                                                    mangaEntry.progressStatus = .completed
-                                                }
-                                                if mangaEntry.totalChapters != 0 {
-                                                    mangaEntry.currentChapter = mangaEntry.totalChapters
                                                 }
                                             }
                                         }
@@ -369,7 +342,7 @@ struct LibraryView: View {
                                     }
                                 }
                                 
-                                if (mangaMode == "chapters") {
+                                if (settingsManager.mangaMode == "chapter") {
                                     if mangaEntry.totalChapters != 0 {
                                         HStack {
                                             Text("Chapter")
@@ -390,20 +363,12 @@ struct LibraryView: View {
                                                         .foregroundColor(.secondary)
                                                 }
                                             }
-                                            .onChange(of: mangaEntry.currentChapter) {
-                                                if mangaEntry.totalChapters == mangaEntry.currentChapter {
-                                                    mangaEntry.progressStatus = .completed
-                                                }
-                                                if mangaEntry.totalVolumes != 0 {
-                                                    mangaEntry.currentChapter = mangaEntry.totalChapters
-                                                }
-                                            }
                                         }
                                     } else {
                                         Stepper("Chapter \(mangaEntry.currentChapter)/?", value: $mangaEntry.currentChapter, in: 0...Int.max)
                                     }
                                 }
-                                if (mangaMode == "volumes") {
+                                if (settingsManager.mangaMode == "volume") {
                                     if mangaEntry.totalVolumes != 0 {
                                         HStack {
                                             Text("Volume")
@@ -422,14 +387,6 @@ struct LibraryView: View {
                                                     Image(systemName: "chevron.up.chevron.down")
                                                         .imageScale(.small)
                                                         .foregroundColor(.secondary)
-                                                }
-                                            }
-                                            .onChange(of: mangaEntry.currentVolume) {
-                                                if mangaEntry.totalVolumes == mangaEntry.currentVolume {
-                                                    mangaEntry.progressStatus = .completed
-                                                }
-                                                if mangaEntry.totalChapters != 0 {
-                                                    mangaEntry.currentVolume = mangaEntry.totalVolumes
                                                 }
                                             }
                                         }
@@ -444,13 +401,6 @@ struct LibraryView: View {
                                 Picker("Status", selection: $animeEntry.progressStatus) {
                                     ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
                                         Text(animeSelection.displayName).tag(animeSelection)
-                                    }
-                                }
-                                .onChange(of: animeEntry.progressStatus) {
-                                    if animeEntry.progressStatus == .completed {
-                                        if animeEntry.totalEpisodes != 0 {
-                                            animeEntry.currentEpisode = animeEntry.totalEpisodes
-                                        }
                                     }
                                 }
                                 
@@ -482,13 +432,6 @@ struct LibraryView: View {
                                                 Image(systemName: "chevron.up.chevron.down")
                                                     .imageScale(.small)
                                                     .foregroundColor(.secondary)
-                                            }
-                                        }
-                                        .onChange(of: animeEntry.currentEpisode) {
-                                            if animeEntry.totalEpisodes != 0 {
-                                                if animeEntry.currentEpisode == animeEntry.totalEpisodes {
-                                                    animeEntry.progressStatus = .completed
-                                                }
                                             }
                                         }
                                     }
@@ -536,41 +479,58 @@ struct LibraryView: View {
                         Section {
                             Button(action: {
                                 withAnimation {
-                                    showDates.toggle()
-                                    if !showDates {
+                                    showStartDate.toggle()
+                                    if !showStartDate {
                                         startDate = nil
+                                    }
+                                }
+                            }) {
+                                Label {
+                                    Text(showStartDate ? "Remove start date" : "Add start date")
+                                } icon: {
+                                    Image(systemName: showStartDate ? "calendar.badge.minus" : "calendar.badge.plus")
+                                        .foregroundStyle(showStartDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            
+                            if showStartDate {
+                                DatePicker(
+                                    "Startdate",
+                                    selection: Binding(
+                                        get: { startDate ?? Date() },
+                                        set: { startDate = $0 }
+                                    ),
+                                    displayedComponents: .date
+                                ).transition(.opacity.combined(with: .move(edge: .top)))
+                            }
+                            
+                            Button(action: {
+                                withAnimation {
+                                    showFinishDate.toggle()
+                                    if !showFinishDate {
                                         endDate = nil
                                     }
                                 }
                             }) {
                                 Label {
-                                    Text(showDates ? "Remove dates" : "Add dates")
+                                    Text(showFinishDate ? "Remove finish date" : "Add finish date")
                                 } icon: {
-                                    Image(systemName: showDates ? "calendar.badge.minus" : "calendar.badge.plus")
-                                        .foregroundStyle(showDates ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                    Image(systemName: showFinishDate ? "calendar.badge.minus" : "calendar.badge.plus")
+                                        .foregroundStyle(showFinishDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
                                 }
                             }
                             .buttonStyle(.plain)
                             
-                            if showDates {
-                                VStack {
-                                    DatePicker(
-                                        "Startdate",
-                                        selection: Binding(
-                                            get: { startDate ?? Date() },
-                                            set: { startDate = $0 }
-                                        ),
-                                        displayedComponents: .date
-                                    )
-                                    DatePicker(
-                                        "Enddate",
-                                        selection: Binding(
-                                            get: { endDate ?? Date() },
-                                            set: { endDate = $0 }
-                                        ),
-                                        displayedComponents: .date
-                                    )
-                                }
+                            if showFinishDate {
+                                DatePicker(
+                                    "Enddate",
+                                    selection: Binding(
+                                        get: { endDate ?? Date() },
+                                        set: { endDate = $0 }
+                                    ),
+                                    displayedComponents: .date
+                                )
                                 .transition(.opacity.combined(with: .move(edge: .top)))
                             }
                         }
@@ -688,9 +648,12 @@ struct LibraryView: View {
                         showComments = true
                     }
                     
-                    if mangaEntry.startDate != "" || mangaEntry.finishDate != "" {
-                        showDates = true
+                    if mangaEntry.startDate != "" {
+                        showStartDate = true
                         startDate = stringToDate(mangaEntry.startDate)
+                    }
+                    if  mangaEntry.finishDate != "" {
+                        showFinishDate = true
                         endDate = stringToDate(mangaEntry.finishDate)
                     }
                 }
@@ -707,9 +670,12 @@ struct LibraryView: View {
                     if animeEntry.comments != "" {
                         showComments = true
                     }
-                    if animeEntry.startDate != "" || animeEntry.finishDate != "" {
-                        showDates = true
+                    if animeEntry.startDate != ""{
+                        showStartDate = true
                         startDate = stringToDate(animeEntry.startDate)
+                    }
+                    if animeEntry.finishDate != "" {
+                        showFinishDate = true
                         endDate = stringToDate(animeEntry.finishDate)
                     }
                 }

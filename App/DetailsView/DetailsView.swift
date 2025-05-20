@@ -36,9 +36,9 @@ struct DetailsView: View {
     
     @State private var showAlert = false
     
-    @State private var mangaMode = "all"
     @State private var showComments = false
-    @State private var showDates = false
+    @State private var showStartDate = false
+    @State private var showFinishDate = false
     
     @ObservedObject private var tokenHandler: TokenHandler = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
@@ -195,16 +195,6 @@ struct DetailsView: View {
                                                 Text(mangaSelection.displayName).tag(mangaSelection)
                                             }
                                         }
-                                        .onChange(of: userProgress.mangaProgress) {
-                                            if userProgress.mangaProgress == .completed {
-                                                if userProgress.volumes != 0 {
-                                                    userProgress.currentVolume = userProgress.volumes
-                                                }
-                                                if userProgress.end != 0 {
-                                                    userProgress.progress = userProgress.end
-                                                }
-                                            }
-                                        }
                                         
                                         Picker("Rating", selection: $userProgress.rating) {
                                             ForEach(0...10, id: \.self) { rating in
@@ -219,15 +209,15 @@ struct DetailsView: View {
                                         VStack(alignment: .leading, spacing: 6) {
                                             Text("Mode")
                                             
-                                            Picker("", selection: $mangaMode) {
+                                            Picker("", selection: $settingsManager.mangaMode) {
                                                 Text("All").tag("all")
-                                                Text("Chapter").tag("chapters")
-                                                Text("Volume").tag("volumes")
+                                                Text("Chapter").tag("chapter")
+                                                Text("Volume").tag("volume")
                                             }
                                             .pickerStyle(.segmented)
                                         }
                                         
-                                        if (mangaMode == "all") {
+                                        if (settingsManager.mangaMode == "all") {
                                             if userProgress.end != 0 {
                                                 HStack {
                                                     Text("Chapter")
@@ -246,19 +236,6 @@ struct DetailsView: View {
                                                             Image(systemName: "chevron.up.chevron.down")
                                                                 .imageScale(.small)
                                                                 .foregroundColor(.secondary)
-                                                        }
-                                                    }
-                                                    .onChange(of: userProgress.progress) {
-                                                        if userProgress.end != 0 {
-                                                            if userProgress.progress == userProgress.end {
-                                                                userProgress.mangaProgress = .completed
-                                                            }
-                                                        }
-                                                        
-                                                        if userProgress.volumes != 0 {
-                                                            if userProgress.progress == userProgress.end {
-                                                                userProgress.currentVolume = userProgress.volumes
-                                                            }
                                                         }
                                                     }
                                                 }
@@ -286,26 +263,13 @@ struct DetailsView: View {
                                                                 .foregroundColor(.secondary)
                                                         }
                                                     }
-                                                    .onChange(of: userProgress.currentVolume) {
-                                                        if userProgress.volumes != 0 {
-                                                            if userProgress.currentVolume == userProgress.volumes {
-                                                                userProgress.mangaProgress = .completed
-                                                            }
-                                                        }
-                                                        
-                                                        if userProgress.end != 0 {
-                                                            if userProgress.currentVolume == userProgress.volumes {
-                                                                userProgress.progress = userProgress.end
-                                                            }
-                                                        }
-                                                    }
                                                 }
                                             } else {
                                                 Stepper("Volume \(userProgress.currentVolume)/?", value: $userProgress.currentVolume, in: 0...Int.max)
                                             }
                                         }
                                         
-                                        if (mangaMode == "chapters") {
+                                        if (settingsManager.mangaMode == "chapter") {
                                             if userProgress.end != 0 {
                                                 HStack {
                                                     Text("Chapter")
@@ -326,25 +290,12 @@ struct DetailsView: View {
                                                                 .foregroundColor(.secondary)
                                                         }
                                                     }
-                                                    .onChange(of: userProgress.progress) {
-                                                        if userProgress.end != 0 {
-                                                            if userProgress.progress == userProgress.end {
-                                                                userProgress.mangaProgress = .completed
-                                                            }
-                                                        }
-                                                        
-                                                        if userProgress.volumes != 0 {
-                                                            if userProgress.progress == userProgress.volumes {
-                                                                userProgress.currentVolume = userProgress.volumes
-                                                            }
-                                                        }
-                                                    }
                                                 }
                                             } else {
                                                 Stepper("Chapter \(userProgress.progress)/?", value: $userProgress.progress, in: 0...Int.max)
                                             }
                                         }
-                                        if (mangaMode == "volumes") {
+                                        if (settingsManager.mangaMode == "volume") {
                                             if userProgress.volumes != 0 {
                                                 HStack {
                                                     Text("Volume")
@@ -363,19 +314,6 @@ struct DetailsView: View {
                                                             Image(systemName: "chevron.up.chevron.down")
                                                                 .imageScale(.small)
                                                                 .foregroundColor(.secondary)
-                                                        }
-                                                    }
-                                                    .onChange(of: userProgress.volumes) {
-                                                        if userProgress.volumes != 0 {
-                                                            if userProgress.volumes == userProgress.currentVolume {
-                                                                userProgress.mangaProgress = .completed
-                                                            }
-                                                        }
-                                                        
-                                                        if userProgress.end != 0 {
-                                                            if userProgress.end == userProgress.progress {
-                                                                userProgress.progress = userProgress.end
-                                                            }
                                                         }
                                                     }
                                                 }
@@ -458,45 +396,62 @@ struct DetailsView: View {
                                 Section {
                                     Button(action: {
                                         withAnimation {
-                                            showDates.toggle()
-                                            if !showDates {
+                                            showStartDate.toggle()
+                                            if !showStartDate {
                                                 userProgress.startDate = nil
+                                            }
+                                        }
+                                    }) {
+                                        Label {
+                                            Text(showStartDate ? "Remove start date" : "Add start date")
+                                        } icon: {
+                                            Image(systemName: showStartDate ? "calendar.badge.minus" : "calendar.badge.plus")
+                                                .foregroundStyle(showStartDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    if showStartDate {
+                                        DatePicker(
+                                            "Startdate",
+                                            selection: Binding(
+                                                get: { userProgress.startDate ?? Date() },
+                                                set: { userProgress.startDate = $0 }
+                                            ),
+                                            displayedComponents: .date
+                                        )
+                                        .transition(.opacity.combined(with: .move(edge: .top)))
+                                    }
+                                    
+                                    Button(action: {
+                                        withAnimation {
+                                            showFinishDate.toggle()
+                                            if !showFinishDate {
                                                 userProgress.endDate = nil
                                             }
                                         }
                                     }) {
                                         Label {
-                                            Text(showDates ? "Remove dates" : "Add dates")
+                                            Text(showFinishDate ? "Remove finish date" : "Add finish date")
                                         } icon: {
-                                            Image(systemName: showDates ? "calendar.badge.minus" : "calendar.badge.plus")
-                                                .foregroundStyle(showDates ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                            Image(systemName: showFinishDate ? "calendar.badge.minus" : "calendar.badge.plus")
+                                                .foregroundStyle(showFinishDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
                                         }
                                     }
                                     .buttonStyle(.plain)
                                     
-                                    if showDates {
-                                        VStack {
-                                            DatePicker(
-                                                "Startdate",
-                                                selection: Binding(
-                                                    get: { userProgress.startDate ?? Date() },
-                                                    set: { userProgress.startDate = $0 }
-                                                ),
-                                                displayedComponents: .date
-                                            )
-                                            DatePicker(
-                                                "Enddate",
-                                                selection: Binding(
-                                                    get: { userProgress.endDate ?? Date() },
-                                                    set: { userProgress.endDate = $0 }
-                                                ),
-                                                displayedComponents: .date
-                                            )
-                                        }
+                                    if showFinishDate {
+                                        DatePicker(
+                                            "Enddate",
+                                            selection: Binding(
+                                                get: { userProgress.endDate ?? Date() },
+                                                set: { userProgress.endDate = $0 }
+                                            ),
+                                            displayedComponents: .date
+                                        )
                                         .transition(.opacity.combined(with: .move(edge: .top)))
                                     }
                                 }
-                                
                             }
                             .scrollIndicators(.hidden)
                             .padding(.horizontal)
