@@ -37,7 +37,7 @@ extension Media {
 
     
     var getStartDate: String {
-        startDate ?? String(localized: "Unknown startDate")
+        startDate ?? String(localized: "Unknown start date")
     }
     
     var getEpisodes: Int {

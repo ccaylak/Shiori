@@ -88,20 +88,46 @@ struct DetailsView: View {
                                                 .font(.caption)
                                                 .bold()
                                             Text(media.getListStatus.getProgressStatus.displayName)
-                                              .accentColor(.primary)
+                                                .accentColor(.primary)
                                         }
-                                        Spacer()
-                                        VStack {
-                                            Text(resultManager.mediaType == .anime ? "Episodes" : "Chapters")
-                                                .font(.caption)
-                                                .bold()
-                                            Label(
-                                                resultManager.mediaType == .anime
-                                                        ? "\(media.getListStatus.getWatchedEpisodes)/\((media.getEpisodes != 0) ? "\(media.getEpisodes)" : "?")"
-                                                        : "\(media.getListStatus.getReadChapters)/\((media.getChapters != 0) ? "\(media.getChapters)" : "?")",
-                                                    systemImage: resultManager.mediaType == .anime ? "tv.fill" : "book.pages"
-                                            )
-                                            .accentColor(.primary)
+                                        if (resultManager.mediaType == .anime && media.getListStatus.getWatchedEpisodes != 0) {
+                                            Spacer()
+                                            VStack {
+                                                Text("Episode")
+                                                    .font(.caption)
+                                                    .bold()
+                                                Label("\(media.getListStatus.getWatchedEpisodes)\(media.getEpisodes != 0 ? "/\(media.getEpisodes)" : "")", systemImage: "tv")
+                                                    .accentColor(.primary)
+                                                
+                                            }
+                                        }
+                                        if (resultManager.mediaType == .manga && media.getListStatus.getReadVolumes != 0) {
+                                            Spacer()
+                                            VStack {
+                                                Text("Volume")
+                                                    .font(.caption)
+                                                    .bold()
+                                                
+                                                Label(
+                                                    "\(media.getListStatus.getReadVolumes)\(media.getVolumes != 0 ? "/\(media.getVolumes)" : "")",
+                                                    systemImage: "character.book.closed.ja"
+                                                )
+                                                .accentColor(.primary)
+                                            }
+                                        }
+                                        if (resultManager.mediaType == .manga && media.getListStatus.getReadChapters != 0) {
+                                            Spacer()
+                                            VStack {
+                                                Text("Chapter")
+                                                    .font(.caption)
+                                                    .bold()
+                                                
+                                                Label(
+                                                    "\(media.getListStatus.getReadChapters)\(media.getChapters != 0 ? "/\(media.getChapters)" : "")",
+                                                    systemImage: "character.book.closed.ja"
+                                                )
+                                                .accentColor(.primary)
+                                            }
                                         }
                                     } else {
                                         Button("Add to Library") {
@@ -219,106 +245,116 @@ struct DetailsView: View {
                                         
                                         if (settingsManager.mangaMode == "all") {
                                             if userProgress.end != 0 {
-                                                HStack {
-                                                    Text("Chapter")
-                                                        .foregroundStyle(Color.primary)
-                                                    Spacer()
-                                                    Menu {
-                                                        ForEach(0...userProgress.end, id: \.self) { chapter in
-                                                            Button("\(chapter)") {
-                                                                userProgress.progress = chapter
+                                                Picker(selection: $userProgress.progress, label:
+                                                        VStack(alignment: .leading, spacing: 4) {
+                                                                Text("Chapter")
+                                                    Text("\(userProgress.progress)/\(userProgress.end)")
+                                                                    .foregroundStyle(.secondary)
+                                                                    .font(.caption)
+                                                                    .fontWeight(.bold)
+                                                            }
+                                                        ) {
+                                                            ForEach(0...userProgress.end, id: \.self) { chapter in
+                                                                Text("\(chapter)").tag(chapter)
                                                             }
                                                         }
-                                                    } label: {
-                                                        HStack(spacing: 4) {
-                                                            Text("\(userProgress.progress)/\(userProgress.end)")
-                                                                .foregroundColor(.secondary)
-                                                            Image(systemName: "chevron.up.chevron.down")
-                                                                .imageScale(.small)
-                                                                .foregroundColor(.secondary)
-                                                        }
+                                            } else {
+                                                Stepper(value: $userProgress.progress, in: 0...Int.max) {
+                                                    VStack(alignment: .leading, spacing: 4) {
+                                                        Text("Chapter")
+                                                                
+                                                        Text("\(userProgress.progress)")
+                                                                        .foregroundStyle(.secondary)
+                                                                        .font(.caption)
+                                                                        .fontWeight(.bold)
+
                                                     }
                                                 }
-                                            } else {
-                                                Stepper("Chapter \(userProgress.progress)/?", value: $userProgress.progress, in: 0...Int.max)
                                             }
                                             
                                             if userProgress.volumes != 0 {
-                                                HStack {
-                                                    Text("Volume")
-                                                        .foregroundStyle(Color.primary)
-                                                    Spacer()
-                                                    Menu {
-                                                        ForEach(0...userProgress.volumes, id: \.self) { volume in
-                                                            Button("\(volume)") {
-                                                                userProgress.volumes = volume
+                                                Picker(selection: $userProgress.currentVolume, label:
+                                                        VStack(alignment: .leading, spacing: 4) {
+                                                                Text("Volume")
+                                                    Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
+                                                                    .foregroundStyle(.secondary)
+                                                                    .font(.caption)
+                                                                    .fontWeight(.bold)
+                                                            }
+                                                        ) {
+                                                            ForEach(0...userProgress.volumes, id: \.self) { volume in
+                                                                Text("\(volume)").tag(volume)
                                                             }
                                                         }
-                                                    } label: {
-                                                        HStack(spacing: 4) {
-                                                            Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
-                                                                .foregroundColor(.secondary)
-                                                            Image(systemName: "chevron.up.chevron.down")
-                                                                .imageScale(.small)
-                                                                .foregroundColor(.secondary)
-                                                        }
+                                            } else {
+                                                Stepper(value: $userProgress.currentVolume, in: 0...Int.max) {
+                                                    VStack(alignment: .leading, spacing: 4) {
+                                                        Text("Volume")
+                                                                
+                                                        Text("\(userProgress.currentVolume)")
+                                                                        .foregroundStyle(.secondary)
+                                                                        .font(.caption)
+                                                                        .fontWeight(.bold)
                                                     }
                                                 }
-                                            } else {
-                                                Stepper("Volume \(userProgress.currentVolume)/?", value: $userProgress.currentVolume, in: 0...Int.max)
                                             }
                                         }
                                         
                                         if (settingsManager.mangaMode == "chapter") {
                                             if userProgress.end != 0 {
-                                                HStack {
-                                                    Text("Chapter")
-                                                        .foregroundStyle(Color.primary)
-                                                    Spacer()
-                                                    Menu {
-                                                        ForEach(0...userProgress.end, id: \.self) { chapter in
-                                                            Button("\(chapter)") {
-                                                                userProgress.progress = chapter
+                                                Picker(selection: $userProgress.progress, label:
+                                                        VStack(alignment: .leading, spacing: 4) {
+                                                                Text("Chapter")
+                                                    Text("\(userProgress.progress)/\(userProgress.end)")
+                                                                    .foregroundStyle(.secondary)
+                                                                    .font(.caption)
+                                                                    .fontWeight(.bold)
+                                                            }
+                                                        ) {
+                                                            ForEach(0...userProgress.end, id: \.self) { chapter in
+                                                                Text("\(chapter)").tag(chapter)
                                                             }
                                                         }
-                                                    } label: {
-                                                        HStack(spacing: 4) {
-                                                            Text("\(userProgress.progress)/\(userProgress.end)")
-                                                                .foregroundColor(.secondary)
-                                                            Image(systemName: "chevron.up.chevron.down")
-                                                                .imageScale(.small)
-                                                                .foregroundColor(.secondary)
-                                                        }
+                                            } else {
+                                                Stepper(value: $userProgress.progress, in: 0...Int.max) {
+                                                    VStack(alignment: .leading, spacing: 4) {
+                                                        Text("Chapter")
+                                                                
+                                                        Text("\(userProgress.progress)")
+                                                                        .foregroundStyle(.secondary)
+                                                                        .font(.caption)
+                                                                        .fontWeight(.bold)
+
                                                     }
                                                 }
-                                            } else {
-                                                Stepper("Chapter \(userProgress.progress)/?", value: $userProgress.progress, in: 0...Int.max)
                                             }
                                         }
                                         if (settingsManager.mangaMode == "volume") {
                                             if userProgress.volumes != 0 {
-                                                HStack {
-                                                    Text("Volume")
-                                                        .foregroundStyle(Color.primary)
-                                                    Spacer()
-                                                    Menu {
-                                                        ForEach(0...userProgress.volumes, id: \.self) { volume in
-                                                            Button("\(volume)") {
-                                                                userProgress.volumes = volume
+                                                Picker(selection: $userProgress.currentVolume, label:
+                                                        VStack(alignment: .leading, spacing: 4) {
+                                                                Text("Volume")
+                                                    Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
+                                                                    .foregroundStyle(.secondary)
+                                                                    .font(.caption)
+                                                                    .fontWeight(.bold)
+                                                            }
+                                                        ) {
+                                                            ForEach(0...userProgress.volumes, id: \.self) { volume in
+                                                                Text("\(volume)").tag(volume)
                                                             }
                                                         }
-                                                    } label: {
-                                                        HStack(spacing: 4) {
-                                                            Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
-                                                                .foregroundColor(.secondary)
-                                                            Image(systemName: "chevron.up.chevron.down")
-                                                                .imageScale(.small)
-                                                                .foregroundColor(.secondary)
-                                                        }
+                                            } else {
+                                                Stepper(value: $userProgress.currentVolume, in: 0...Int.max) {
+                                                    VStack(alignment: .leading, spacing: 4) {
+                                                        Text("Volume")
+                                                                
+                                                        Text("\(userProgress.currentVolume)")
+                                                                        .foregroundStyle(.secondary)
+                                                                        .font(.caption)
+                                                                        .fontWeight(.bold)
                                                     }
                                                 }
-                                            } else {
-                                                Stepper("Volume \(userProgress.currentVolume)/?", value: $userProgress.currentVolume, in: 0...Int.max)
                                             }
                                         }
                                     }
@@ -363,7 +399,7 @@ struct DetailsView: View {
                                             }
                                         }
                                     } else {
-                                        Stepper("Episode \(userProgress.progress)/?", value: $userProgress.progress, in: 0...Int.max)
+                                        Stepper("Episode \(userProgress.progress)", value: $userProgress.progress, in: 0...Int.max)
                                     }
                                 }
                                 
@@ -413,7 +449,7 @@ struct DetailsView: View {
                                     
                                     if showStartDate {
                                         DatePicker(
-                                            "Startdate",
+                                            "Start date",
                                             selection: Binding(
                                                 get: { userProgress.startDate ?? Date() },
                                                 set: { userProgress.startDate = $0 }
@@ -442,7 +478,7 @@ struct DetailsView: View {
                                     
                                     if showFinishDate {
                                         DatePicker(
-                                            "Enddate",
+                                            "Finish date",
                                             selection: Binding(
                                                 get: { userProgress.endDate ?? Date() },
                                                 set: { userProgress.endDate = $0 }
@@ -494,9 +530,6 @@ struct DetailsView: View {
                                     }
                                     .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
                                 }
-                                ToolbarItem(placement: .principal) {
-                                    Text(resultManager.mediaType == .manga ? "Edit Reading Progress" : "Edit Watch Progress")
-                                }
                                 ToolbarItem(placement: .cancellationAction) {
                                     Button(action: {
                                         showAlert = true
@@ -528,6 +561,7 @@ struct DetailsView: View {
                                     }
                                 }
                             }
+                            .navigationTitle(resultManager.mediaType == .manga ? "Edit Reading Progress" : "Edit Watch Progress")
                             .navigationBarTitleDisplayMode(.inline)
                             .presentationDetents([.fraction(0.8)])
                             .presentationBackgroundInteraction(.disabled)
@@ -630,15 +664,16 @@ private struct Sections: View {
             case .general:
                 return sectionsManager.showGeneral
             case .genres:
-                return sectionsManager.showGenres
+                return sectionsManager.showGenres && !media.getGenres.isEmpty
             case .score:
                 return sectionsManager.showScore
             case .related:
-                return sectionsManager.showRelated
+                return sectionsManager.showRelated && (!media.getRelatedAnimes.isEmpty || !media.getRelatedMangas.isEmpty)
+
             case .recommendations:
-                return sectionsManager.showRecommendations
+                return sectionsManager.showRecommendations && !media.getRecommendations.isEmpty
             case .characters:
-                return sectionsManager.showCharacters
+                return sectionsManager.showCharacters && !jikanCharacters.data.isEmpty
             }
         }
     }

@@ -8,6 +8,8 @@ struct SettingsView: View {
     
     private let resultOptions = [10, 20, 50, 100]
     
+    private let nameOptions = ["First Name Last Name", "Last Name, First Name"]
+    
     @State private var showConfirmationDialog: Bool = false
     
     var body: some View {
@@ -60,6 +62,12 @@ struct SettingsView: View {
                         .sensoryFeedback(.selection, trigger: settingsManager.showNsfwContent)
                         .buttonStyle(.borderless)
                     }
+                    
+                    Picker("Name presentation", systemImage: "textformat.characters.arrow.left.and.right", selection: $settingsManager.namePresentation) {
+                        ForEach(nameOptions, id: \.self) { nameOption in
+                            Text(nameOption).tag(nameOption)
+                        }
+                    }
                 }
                 Section("List") {
                     Picker("Results per page", systemImage: "list.bullet.rectangle", selection: $settingsManager.resultsPerPage) {
@@ -98,7 +106,8 @@ struct SettingsView: View {
                 
                 let icons: [(name: String, title: String)] = [
                     (name: "AppIcon", title: String(localized: "Default")),
-                    (name: "ShioriIcon", title: String(localized: "Shiori-chan"))
+                    (name: "ShioriIcon", title: String(localized: "Shiori-chan")),
+                    (name: "ShioriRealisticIcon", title: String(localized: "Shiori-chan"))
                 ]
                 
                 Section(
@@ -119,6 +128,10 @@ struct SettingsView: View {
                                     .scaledToFit()
                                     .frame(width: 70, height: 70)
                                     .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                                    )
                                     .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
                                     .onTapGesture {
                                         changeAppIcon(to: icon.name == "AppIcon" ? nil : icon.name)
@@ -144,7 +157,7 @@ struct SettingsView: View {
                     }
                     Link(destination: URL(string: "https://discord.gg/4ajqv3aMdd")!) {
                         Label {
-                            Text("Discord Community Server")
+                            Text("Discord")
                         } icon: {
                             Image("discord_icon")
                                 .resizable()
@@ -199,7 +212,7 @@ private struct AboutView: View {
                 
                 Link(destination: URL(string: "https://github.com/ccaylak/Shiori")!) {
                     Label {
-                        Text("Repository")
+                        Text("GitHub Repository")
                     } icon: {
                         Image("github_icon")
                             .resizable()
@@ -209,10 +222,6 @@ private struct AboutView: View {
                     }
                 }
                 .foregroundStyle(.primary)
-                
-                NavigationLink(destination: ShioriChanView()) {
-                    Label("Shiori-chan", systemImage: "character.ja")
-                }
             }
             
             Section (
@@ -250,21 +259,6 @@ private struct AboutView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("About Shiori")
-    }
-}
-
-private struct ShioriChanView: View {
-    var body: some View {
-        Form {
-            Section(
-                header: Text("Shiori-chan"),
-                footer: Text("Illustrated by Lara Prüß")
-            ) {
-                Image("shiori_chan")
-                    .resizable()
-                    .scaledToFill()
-            }
-        }
     }
 }
 

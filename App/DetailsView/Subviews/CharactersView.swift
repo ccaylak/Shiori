@@ -23,7 +23,7 @@ struct CharactersView: View {
                                     .frame(width: 60, height: 90)
                                     .cornerRadius(12)
                                     .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
-                                Text(character.metaData.name)
+                                Text(character.metaData.formattedName)
                                     .font(.caption)
                                     .frame(width: 60, alignment: .leading)
                                     .lineLimit(1)
@@ -98,7 +98,7 @@ private struct CharactersListView: View {
                             }
                         
                         VStack (alignment: .leading){
-                            Text(character.metaData.name)
+                            Text(character.metaData.formattedName)
                                 .frame(width: 100, alignment: .leading)
                                 .lineLimit(1)
                                 .truncationMode(.tail)

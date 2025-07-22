@@ -1,8 +1,19 @@
 What's New:
 
-- Removed automatic switch when episodes/chapters/volumes are set to the last possible value
-- Split start and finishdate
-- Added global method save if volumes and chapters, chapters or only volumes are selected while editing entry
+New Features
+- Added function to display names in a different way
+- Added a new realistic Shiori-chan icon as an optional avatar
+- Added a Discord popup on first launch
+
+Bug Fixes
+- Fixed a bug where dividers were shown that shouldn’t be there
+- Fixed a bug where long anime/manga titles overlapped the save button in the edit sheet
+- Fixed some translation issues
+
+Reworks
+- Redesigned the structure of the library entries
+- Reworked how anime/manga are edited in the library view
+- Removed unnecessary Shiori-chan page, since she is now used as an icon
 
 What's Next?
-- Code-Free for major refactoring
+- Idk

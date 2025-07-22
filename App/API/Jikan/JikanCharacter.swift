@@ -45,3 +45,25 @@ struct CharacterJPG: Decodable {
     
     let imageUrl: String
 }
+
+@MainActor
+extension MetaData {
+    var formattedName: String {
+        let nameFormat = SettingsManager.shared.namePresentation
+        
+        switch nameFormat {
+        case "Last Name, First Name":
+            return name
+            
+        default:
+            
+            let parts = name.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+            guard parts.count == 2 else {
+                return name
+            }
+            return "\(parts[1]) \(parts[0])"
+        }
+    }
+}
+
+

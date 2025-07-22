@@ -249,10 +249,116 @@ struct LibraryView: View {
                 NavigationStack {
                     List {
                         Section {
-                            AsyncImageView(imageUrl: media.node.getCover)
-                                .frame(width: 146, height: 230)
-                                .cornerRadius(12)
-                                .listRowBackground(Color.clear)
+                            HStack(spacing: 16) {
+                                if (libraryManager.mediaType == .anime || settingsManager.mangaMode != "all") {
+                                    Button(action: {
+                                        if (libraryManager.mediaType == .anime) {
+                                            animeEntry.currentEpisode -= 1
+                                        }
+                                        if (libraryManager.mediaType == .manga) {
+                                            if (settingsManager.mangaMode == "chapter") {
+                                                mangaEntry.currentChapter -= 1
+                                            }
+                                            if (settingsManager.mangaMode == "volume") {
+                                                mangaEntry.currentVolume -= 1
+                                            }
+                                        }
+                                        
+                                    }) {
+                                        Image(systemName: "minus")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 16, height: 16)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .controlSize(.large)
+                                    .disabled(
+                                        (libraryManager.mediaType == .anime && animeEntry.currentEpisode <= 0) ||
+                                        (libraryManager.mediaType == .manga &&
+                                         ((settingsManager.mangaMode == "chapter" && mangaEntry.currentChapter <= 0) ||
+                                          (settingsManager.mangaMode == "volume" && mangaEntry.currentVolume <= 0)))
+                                    )
+                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                }
+                                
+                                if (libraryManager.mediaType == .manga && settingsManager.mangaMode == "all") {
+                                    Menu {
+                                        Button("Decrease volume") {
+                                            mangaEntry.currentVolume -= 1
+                                        }
+                                        .disabled(settingsManager.mangaMode == "volume" && mangaEntry.currentVolume <= 0)
+                                        Button("Decrease chapter") {
+                                            mangaEntry.currentChapter -= 1
+                                        }
+                                        .disabled(settingsManager.mangaMode == "chapter" && mangaEntry.currentChapter <= 0)
+                                    } label: {
+                                        Image(systemName: "minus")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 16, height: 16)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .controlSize(.large)
+                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                }
+
+                                AsyncImageView(imageUrl: media.node.getCover)
+                                    .frame(width: 146, height: 230)
+                                    .cornerRadius(12)
+
+                                if (libraryManager.mediaType == .anime || settingsManager.mangaMode != "all") {
+                                    Button(action: {
+                                        if (libraryManager.mediaType == .anime) {
+                                            animeEntry.currentEpisode += 1
+                                        }
+                                        if (libraryManager.mediaType == .manga) {
+                                            if (settingsManager.mangaMode == "chapter") {
+                                                mangaEntry.currentChapter += 1
+                                            }
+                                            if (settingsManager.mangaMode == "volume") {
+                                                mangaEntry.currentVolume += 1
+                                            }
+                                        }
+                                    }) {
+                                        Image(systemName: "plus")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 16, height: 16)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .controlSize(.large)
+                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                    .disabled(
+                                        (libraryManager.mediaType == .anime && animeEntry.totalEpisodes != 0 && animeEntry.currentEpisode == animeEntry.totalEpisodes ) ||
+                                        (libraryManager.mediaType == .manga &&
+                                         ((settingsManager.mangaMode == "chapter" && mangaEntry.totalChapters != 0 && mangaEntry.currentChapter == mangaEntry.totalChapters) ||
+                                          (settingsManager.mangaMode == "volume" && mangaEntry.totalVolumes != 0 && mangaEntry.currentVolume == mangaEntry.totalVolumes)))
+                                    )
+                                }
+                                if (libraryManager.mediaType == .manga && settingsManager.mangaMode == "all") {
+                                    Menu {
+                                        Button("Increase volume") {
+                                            mangaEntry.currentVolume += 1
+                                        }
+                                        .disabled(settingsManager.mangaMode == "volume" && mangaEntry.totalVolumes != 0 && mangaEntry.currentVolume == mangaEntry.totalVolumes)
+                                        
+                                        Button("Increase chapter") {
+                                            mangaEntry.currentChapter += 1
+                                        }
+                                        .disabled(settingsManager.mangaMode == "chapter" && mangaEntry.totalChapters != 0 && mangaEntry.currentChapter == mangaEntry.totalChapters)
+                                    } label: {
+                                        Image(systemName: "plus")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 16, height: 16)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .controlSize(.large)
+                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .listRowBackground(Color.clear)
                         }
                         .listRowInsets(EdgeInsets(
                             top: 0,
@@ -260,7 +366,7 @@ struct LibraryView: View {
                             bottom: 0,
                             trailing: 16
                         ))
-                        .frame(maxWidth: .infinity, alignment: .center)
+
                         
                         Section {
                             if (libraryManager.mediaType == .manga) {
@@ -293,105 +399,85 @@ struct LibraryView: View {
                                 
                                 if (settingsManager.mangaMode == "all") {
                                     if mangaEntry.totalChapters != 0 {
-                                        HStack {
-                                            Text("Chapter")
-                                                .foregroundStyle(Color.primary)
-                                            Spacer()
-                                            Menu {
-                                                ForEach(0...mangaEntry.totalChapters, id: \.self) { chapter in
-                                                    Button("\(chapter)") {
-                                                        mangaEntry.currentChapter = chapter
+                                        Picker(selection: $mangaEntry.currentChapter, label:
+                                                VStack(alignment: .leading, spacing: 4) {
+                                                        Text("Chapter")
+                                                        Text("\(mangaEntry.currentChapter)/\(mangaEntry.totalChapters)")
+                                                            .foregroundStyle(.secondary)
+                                                            .font(.caption)
+                                                            .fontWeight(.bold)
+                                                    }
+                                                ) {
+                                                    ForEach(0...mangaEntry.totalChapters, id: \.self) { chapter in
+                                                        Text("\(chapter)").tag(chapter)
                                                     }
                                                 }
-                                            } label: {
-                                                HStack(spacing: 4) {
-                                                    Text("\(mangaEntry.currentChapter)/\(mangaEntry.totalChapters)")
-                                                        .foregroundColor(.secondary)
-                                                    Image(systemName: "chevron.up.chevron.down")
-                                                        .imageScale(.small)
-                                                        .foregroundColor(.secondary)
-                                                }
-                                            }
-                                        }
                                     } else {
-                                        Stepper("Chapter \(mangaEntry.currentChapter)/?", value: $mangaEntry.currentChapter, in: 0...Int.max)
+                                        LabeledContent("Chapter") {
+                                            Text("\(mangaEntry.currentChapter)")
+                                        }
                                     }
                                     if mangaEntry.totalVolumes != 0 {
-                                        HStack {
-                                            Text("Volume")
-                                                .foregroundStyle(Color.primary)
-                                            Spacer()
-                                            Menu {
-                                                ForEach(0...mangaEntry.totalVolumes, id: \.self) { volume in
-                                                    Button("\(volume)") {
-                                                        mangaEntry.currentVolume = volume
+                                        Picker(selection: $mangaEntry.currentVolume, label:
+                                                VStack(alignment: .leading, spacing: 4) {
+                                                        Text("Volume")
+                                            Text("\(mangaEntry.currentVolume)/\(mangaEntry.totalVolumes)")
+                                                            .foregroundStyle(.secondary)
+                                                            .font(.caption)
+                                                            .fontWeight(.bold)
+                                                    }
+                                                ) {
+                                                    ForEach(0...mangaEntry.totalVolumes, id: \.self) { volume in
+                                                        Text("\(volume)").tag(volume)
                                                     }
                                                 }
-                                            } label: {
-                                                HStack(spacing: 4) {
-                                                    Text("\(mangaEntry.currentVolume)/\(mangaEntry.totalVolumes)")
-                                                        .foregroundColor(.secondary)
-                                                    Image(systemName: "chevron.up.chevron.down")
-                                                        .imageScale(.small)
-                                                        .foregroundColor(.secondary)
-                                                }
-                                            }
-                                        }
                                     } else {
-                                        Stepper("Volume \(mangaEntry.currentVolume)/?", value: $mangaEntry.currentVolume, in: 0...Int.max)
+                                        LabeledContent("Volume") {
+                                            Text("\(mangaEntry.currentVolume)")
+                                        }
                                     }
                                 }
                                 
                                 if (settingsManager.mangaMode == "chapter") {
                                     if mangaEntry.totalChapters != 0 {
-                                        HStack {
-                                            Text("Chapter")
-                                                .foregroundStyle(Color.primary)
-                                            Spacer()
-                                            Menu {
-                                                ForEach(0...mangaEntry.totalChapters, id: \.self) { chapter in
-                                                    Button("\(chapter)") {
-                                                        mangaEntry.currentChapter = chapter
+                                        Picker(selection: $mangaEntry.currentChapter, label:
+                                                VStack(alignment: .leading, spacing: 4) {
+                                                        Text("Chapter")
+                                                        Text("\(mangaEntry.currentChapter)/\(mangaEntry.totalChapters)")
+                                                            .foregroundStyle(.secondary)
+                                                            .font(.caption)
+                                                            .fontWeight(.bold)
+                                                    }
+                                                ) {
+                                                    ForEach(0...mangaEntry.totalChapters, id: \.self) { chapter in
+                                                        Text("\(chapter)").tag(chapter)
                                                     }
                                                 }
-                                            } label: {
-                                                HStack(spacing: 4) {
-                                                    Text("\(mangaEntry.currentChapter)/\(mangaEntry.totalChapters)")
-                                                        .foregroundColor(.secondary)
-                                                    Image(systemName: "chevron.up.chevron.down")
-                                                        .imageScale(.small)
-                                                        .foregroundColor(.secondary)
-                                                }
-                                            }
-                                        }
                                     } else {
-                                        Stepper("Chapter \(mangaEntry.currentChapter)/?", value: $mangaEntry.currentChapter, in: 0...Int.max)
+                                        LabeledContent("Chapter") {
+                                            Text("\(mangaEntry.currentChapter)")
+                                        }
                                     }
                                 }
                                 if (settingsManager.mangaMode == "volume") {
                                     if mangaEntry.totalVolumes != 0 {
-                                        HStack {
-                                            Text("Volume")
-                                                .foregroundStyle(Color.primary)
-                                            Spacer()
-                                            Menu {
-                                                ForEach(0...mangaEntry.totalVolumes, id: \.self) { volume in
-                                                    Button("\(volume)") {
-                                                        mangaEntry.currentVolume = volume
+                                        Picker(selection: $mangaEntry.currentVolume, label:
+                                                VStack(alignment: .leading, spacing: 4) {
+                                                        Text("Volume")
+                                            Text("\(mangaEntry.currentVolume)/\(mangaEntry.totalVolumes)")
+                                                            .foregroundStyle(.secondary)
+                                                            .font(.caption)
+                                                            .fontWeight(.bold)
+                                                    }
+                                                ) {
+                                                    ForEach(0...mangaEntry.totalVolumes, id: \.self) { volume in
+                                                        Text("\(volume)").tag(volume)
                                                     }
                                                 }
-                                            } label: {
-                                                HStack(spacing: 4) {
-                                                    Text("\(mangaEntry.currentVolume)/\(mangaEntry.totalVolumes)")
-                                                        .foregroundColor(.secondary)
-                                                    Image(systemName: "chevron.up.chevron.down")
-                                                        .imageScale(.small)
-                                                        .foregroundColor(.secondary)
-                                                }
-                                            }
-                                        }
                                     } else {
-                                        Stepper("Volume \(mangaEntry.currentVolume)/?", value: $mangaEntry.currentVolume, in: 0...Int.max)
+                                        LabeledContent("Volume") {
+                                            Text("\(mangaEntry.currentVolume)")
+                                        }
                                     }
                                 }
                                 
@@ -415,28 +501,23 @@ struct LibraryView: View {
                                 }
                                 
                                 if animeEntry.totalEpisodes != 0 {
-                                    HStack {
-                                        Text("Episode")
-                                            .foregroundStyle(Color.primary)
-                                        Spacer()
-                                        Menu {
-                                            ForEach(0...animeEntry.totalEpisodes, id: \.self) { episode in
-                                                Button("\(episode)") {
-                                                    animeEntry.currentEpisode = episode
+                                    Picker(selection: $animeEntry.currentEpisode, label:
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                    Text("Episode")
+                                        Text("\(animeEntry.currentEpisode)/\(animeEntry.totalEpisodes)")
+                                                        .foregroundStyle(.secondary)
+                                                        .font(.caption)
+                                                        .fontWeight(.bold)
+                                                }
+                                            ) {
+                                                ForEach(0...animeEntry.totalEpisodes, id: \.self) { episode in
+                                                    Text("\(episode)").tag(episode)
                                                 }
                                             }
-                                        } label: {
-                                            HStack(spacing: 4) {
-                                                Text("\(animeEntry.currentEpisode)/\(animeEntry.totalEpisodes)")
-                                                    .foregroundColor(.secondary)
-                                                Image(systemName: "chevron.up.chevron.down")
-                                                    .imageScale(.small)
-                                                    .foregroundColor(.secondary)
-                                            }
-                                        }
-                                    }
                                 } else {
-                                    Stepper("Episode \(animeEntry.currentEpisode)/?", value: $animeEntry.currentEpisode, in: 0...Int.max)
+                                    LabeledContent("Episode") {
+                                        Text("\(animeEntry.currentEpisode)")
+                                    }
                                 }
                             }
                         }
@@ -496,7 +577,7 @@ struct LibraryView: View {
                             
                             if showStartDate {
                                 DatePicker(
-                                    "Startdate",
+                                    "Start date",
                                     selection: Binding(
                                         get: { startDate ?? Date() },
                                         set: { startDate = $0 }
@@ -524,7 +605,7 @@ struct LibraryView: View {
                             
                             if showFinishDate {
                                 DatePicker(
-                                    "Enddate",
+                                    "Finish date",
                                     selection: Binding(
                                         get: { endDate ?? Date() },
                                         set: { endDate = $0 }
@@ -578,10 +659,7 @@ struct LibraryView: View {
                             }
                             .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
                         }
-                        ToolbarItem(placement: .principal) {
-                            Text(media.node.getTitle)
-                                .lineLimit(1)
-                        }
+                        
                         ToolbarItem(placement: .cancellationAction) {
                             Button(action: {
                                 showAlert = true
@@ -614,6 +692,7 @@ struct LibraryView: View {
                             }
                         }
                     }
+                    .navigationTitle(media.node.getTitle)
                     .navigationBarTitleDisplayMode(.inline)
                     .presentationDetents([.fraction(0.8)])
                     .presentationBackgroundInteraction(.disabled)

@@ -233,23 +233,6 @@
         }
       }
     },
-    "%lld/%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld/%2$@"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld/%2$@"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
     "%lld/%lld" : {
       "localizations" : {
         "en" : {
@@ -260,6 +243,16 @@
         }
       },
       "shouldTranslate" : false
+    },
+    "%lld%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld%2$@"
+          }
+        }
+      }
     },
     "🇩🇪 German" : {
       "comment" : "Supported language",
@@ -293,9 +286,6 @@
           }
         }
       }
-    },
-    "1" : {
-      "shouldTranslate" : false
     },
     "1 (Appalling)" : {
       "comment" : "Rating",
@@ -552,7 +542,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Startdatum hinzufügen"
+            "value" : "Abschlussdatum hinzufügen"
           }
         }
       }
@@ -562,7 +552,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abschlussdatum hinzufügen"
+            "value" : "Startdatum hinzufügen"
           }
         }
       }
@@ -950,7 +940,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geburtsdatum"
+            "value" : "Geburtsdatum:"
           }
         },
         "pt-BR" : {
@@ -1056,32 +1046,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Capítulo"
-          }
-        }
-      }
-    },
-    "Chapter %lld/?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kapitel %lld/?"
-          }
-        }
-      }
-    },
-    "Chapters" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kapitel"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Capítulos"
           }
         }
       }
@@ -1247,7 +1211,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wird veröffentlich"
+            "value" : "Wird veröffentlicht"
           }
         },
         "pt-BR" : {
@@ -1271,6 +1235,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escuro"
+          }
+        }
+      }
+    },
+    "Decrease chapter" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorheriges Kapitel"
+          }
+        }
+      }
+    },
+    "Decrease volume" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorheriger Band"
           }
         }
       }
@@ -1384,15 +1368,8 @@
         }
       }
     },
-    "Discord Community Server" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Discord Community Server"
-          }
-        }
-      }
+    "Discord" : {
+      "shouldTranslate" : false
     },
     "Display options" : {
 
@@ -1572,16 +1549,6 @@
         }
       }
     },
-    "Enddate" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enddatum"
-          }
-        }
-      }
-    },
     "English" : {
       "comment" : "Supported language",
       "localizations" : {
@@ -1615,28 +1582,12 @@
         }
       }
     },
-    "Episode %lld/?" : {
+    "Episode %lld" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Folge %lld/?"
-          }
-        }
-      }
-    },
-    "Episodes" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Folgen"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Episódios"
+            "value" : "Folge %lld"
           }
         }
       }
@@ -1736,6 +1687,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Feminino"
+          }
+        }
+      }
+    },
+    "Finish date" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abschlussdatum"
           }
         }
       }
@@ -1854,6 +1815,16 @@
         }
       }
     },
+    "Get the latest app news, explore the roadmap, share feature ideas, report bugs, or just hang out – all on Discord!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalte die neuesten App News, wirf einen Blick auf die Roadmap, teile Feature-Ideen, melde Bugs – oder chatte einfach auf Discord!"
+          }
+        }
+      }
+    },
     "Girls Love" : {
       "comment" : "Genre",
       "localizations" : {
@@ -1870,6 +1841,9 @@
           }
         }
       }
+    },
+    "GitHub Repository" : {
+      "shouldTranslate" : false
     },
     "Gore" : {
       "comment" : "Genre",
@@ -2050,12 +2024,22 @@
         }
       }
     },
-    "Illustrated by Lara Prüß" : {
+    "Increase chapter" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Illustriert von Lara Prüß"
+            "value" : "Nächstes Kapitel"
+          }
+        }
+      }
+    },
+    "Increase volume" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nächster Band"
           }
         }
       }
@@ -2076,18 +2060,12 @@
         }
       }
     },
-    "Invalid Date" : {
+    "Invalid date" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ungültiges Datum"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Data inválida."
           }
         }
       }
@@ -2161,18 +2139,22 @@
     "Jikan" : {
       "shouldTranslate" : false
     },
-    "Join Date:" : {
+    "Join date:" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Registrierungsdatum:"
+            "value" : "Beitrittsdatum:"
           }
-        },
-        "pt-BR" : {
+        }
+      }
+    },
+    "Join Server" : {
+      "localizations" : {
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Data de entrada:"
+            "value" : "Server beitreten"
           }
         }
       }
@@ -2838,6 +2820,16 @@
         }
       }
     },
+    "Name presentation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Namensdarstellung"
+          }
+        }
+      }
+    },
     "No %@ animes found" : {
       "localizations" : {
         "de" : {
@@ -2882,6 +2874,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nenhum resumo disponível."
+          }
+        }
+      }
+    },
+    "No Thanks" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nein, danke"
           }
         }
       }
@@ -3629,7 +3631,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Startdatum entfernen"
+            "value" : "Abschlussdatum entfernen"
           }
         }
       }
@@ -3649,9 +3651,6 @@
           }
         }
       }
-    },
-    "Repository" : {
-      "shouldTranslate" : false
     },
     "Results per page" : {
       "localizations" : {
@@ -4163,12 +4162,12 @@
         }
       }
     },
-    "Startdate" : {
+    "Start date" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Startdatum"
+            "value" : "Anfangsdatum"
           }
         }
       }
@@ -4876,18 +4875,12 @@
         }
       }
     },
-    "Unknown startDate" : {
+    "Unknown start date" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unbekanntes Startdatum"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Data de início desconhecida"
+            "value" : "Unbekanntes Anfangsdatum"
           }
         }
       }
@@ -5020,16 +5013,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Band"
-          }
-        }
-      }
-    },
-    "Volume %lld/?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Band %lld/?"
           }
         }
       }

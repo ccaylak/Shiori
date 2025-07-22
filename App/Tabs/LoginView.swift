@@ -57,7 +57,7 @@ struct LoginView: View {
                                                     .font(.subheadline)
                                                     .foregroundColor(.primary)
                                             } else {
-                                                Text("Invalid Date")
+                                                Text("Invalid date")
                                                     .font(.subheadline)
                                                     .foregroundColor(.primary)
                                             }
@@ -78,7 +78,7 @@ struct LoginView: View {
                                     
                                     if let joinDate = profileDetails?.joinDate {
                                         HStack {
-                                            Text("Join Date:")
+                                            Text("Join date:")
                                                 .font(.subheadline)
                                                 .foregroundColor(.secondary)
                                             if let formattedDate = String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ") {
@@ -86,7 +86,7 @@ struct LoginView: View {
                                                     .font(.subheadline)
                                                     .foregroundColor(.primary)
                                             } else {
-                                                Text("Invalid Date")
+                                                Text("Invalid date")
                                             }
                                             
                                         }
@@ -115,6 +115,11 @@ struct LoginView: View {
                                             VStack {
                                                 AsyncImageView(imageUrl: friend.user.images.jpg.imageUrl ?? "")
                                                     .frame(width: 50, height: 50)
+                                                    .cornerRadius(12)
+                                                    .overlay(
+                                                        RoundedRectangle(cornerRadius: 12)
+                                                            .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                                                    )
                                                     .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
 
                                                 Text(friend.user.username)

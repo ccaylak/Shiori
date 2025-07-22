@@ -39,7 +39,6 @@ struct MediaView: View {
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
-                
                 Text(formattedOtherDetails(year: releaseYear))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)

@@ -40,30 +40,55 @@ struct LibraryMediaView: View {
                     .foregroundColor(.secondary)
                 
                 
-                HStack(alignment: .center, spacing: 8) {
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
                     HStack(spacing: 4) {
-                        Image(systemName: "star.fill")
-                            .foregroundColor(.yellow)
-                            .font(.system(size: 14, weight: .bold))
-                        Text("\(rating)")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.primary)
+                        if rating > 1 {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                                .font(.system(size: 14, weight: .bold))
+                                
+                            Text("\(rating)")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.primary)
+                        }
+                        else {
+                            Image(systemName: "star")
+                                .foregroundColor(Color.secondary)
+                                .font(.system(size: 14, weight: .bold))
+                                
+                            Text("?")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(Color.secondary)
+                        }
                     }
                 }
                 .padding(.vertical, 4)
                 
-                
-                let clampedCompletedUnits = min(max(Double(completedUnits), 1), Double(totalUnits > 0 ? totalUnits : 1))
-                
-                Gauge(value: clampedCompletedUnits, in: 1...Double(totalUnits > 0 ? totalUnits : 1)) {
-                } currentValueLabel: {
-                    Text("\(completedUnits)")
-                } minimumValueLabel: {
-                    Text("1")
-                } maximumValueLabel: {
-                    Text(totalUnits == 0 ? "?" : "\(totalUnits)")
+                Spacer()
+                HStack {
+                    let icon = {
+                        if case .manga = type { return "character.book.closed.fill.ja" }
+                        else { return "tv" }
+                    }()
+                    
+                    Label(totalUnits > 0
+                          ? "\(completedUnits)/\(totalUnits)"
+                          : "\(completedUnits)", systemImage: icon)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .fontWeight(.semibold)
+                    
+                    if totalUnits > 0 {
+                        Gauge(value: Double(completedUnits), in: 0...Double(totalUnits)) { }
+                            .gaugeStyle(.accessoryLinearCapacity)
+                    } else {
+                        Gauge(value: 1, in: 0...1) { }
+                            .gaugeStyle(.accessoryLinearCapacity)
+                            .tint(Color.secondary)
+                    }
+                    
                 }
-                .gaugeStyle(.accessoryLinear)
+                
                 
             }
             .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
