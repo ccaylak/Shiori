@@ -6,42 +6,41 @@ struct RecommendationsView: View {
     
     var body: some View {
         if !recommendations.isEmpty {
-            NavigationStack {
-                VStack(alignment: .leading) {
-                    NavigationLink(destination: RecommendationsListView(recommendations: recommendations)) {
-                        HStack {
-                            Text("Recommendations")
-                                .font(.headline)
-                            Image(systemName: "chevron.forward")
-                                .foregroundStyle(.secondary)
-                        }
+            VStack(alignment: .leading) {
+                NavigationLink(destination: RecommendationsListView(recommendations: recommendations)) {
+                    HStack {
+                        Text("Recommendations")
+                            .font(.headline)
+                        
+                        Image(systemName: "chevron.forward")
+                            .foregroundStyle(.secondary)
+                            .fontWeight(.bold)
                     }
-                    .buttonStyle(.plain)
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 10) {
-                            ForEach(recommendations, id: \.node.id) { recommendation in
-                                NavigationLink(destination: DetailsView(media: recommendation.node)) {
-                                    VStack {
-                                        AsyncImageView(imageUrl: recommendation.node.getCover)
-                                            .frame(width: 95, height: 150)
-                                            .cornerRadius(12)
-                                            .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
-                                        Text(recommendation.node.getTitle)
-                                            .font(.caption2)
-                                            .frame(width: 95, alignment: .leading)
-                                            .lineLimit(1)
-                                            .truncationMode(.tail)
-                                    }
-                                }
-                                .buttonStyle(.plain)
-                                
-                            }
-                        }
-                        .scrollTargetLayout()
-                    }
-                    .scrollTargetBehavior(.viewAligned)
-                    .scrollClipDisabled()
                 }
+                .buttonStyle(.plain)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(recommendations, id: \.node.id) { recommendation in
+                            NavigationLink(destination: DetailsView(media: recommendation.node)) {
+                                VStack {
+                                    AsyncImageView(imageUrl: recommendation.node.getCover)
+                                        .frame(width: 95, height: 150)
+                                        .cornerRadius(12)
+                                    Text(recommendation.node.getTitle)
+                                        .font(.caption2)
+                                        .frame(width: 95, alignment: .leading)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            
+                        }
+                    }
+                    .scrollTargetLayout()
+                }
+                .scrollTargetBehavior(.viewAligned)
+                .scrollClipDisabled()
             }
         }
     }
@@ -52,18 +51,18 @@ private struct RecommendationsListView: View {
     @State private var sortingOptions = "Default"
     
     private var sortedRecommendations: [MediaNode] {
-            switch sortingOptions {
-            case "Title":
-                return recommendations
-                    .sorted { $0.node.getTitle.localizedCaseInsensitiveCompare($1.node.getTitle) == .orderedAscending }
-            case "Score":
-                return recommendations
-                    .sorted { $0.node.getScore > $1.node.getScore }
-            default:
-                return recommendations
-            }
+        switch sortingOptions {
+        case "Title":
+            return recommendations
+                .sorted { $0.node.getTitle.localizedCaseInsensitiveCompare($1.node.getTitle) == .orderedAscending }
+        case "Score":
+            return recommendations
+                .sorted { $0.node.getScore > $1.node.getScore }
+        default:
+            return recommendations
         }
-
+    }
+    
     
     var body: some View {
         ScrollView (.vertical) {

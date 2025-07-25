@@ -16,51 +16,52 @@ struct ResultView: View {
     @EnvironmentObject private var alertManager: AlertManager
     
     var body: some View {
-        
-        ScrollView {
-            LazyVStack(alignment: .leading) {
-                ForEach(mediaResponse.results, id: \.node.id) { media in
-                    NavigationLink(destination: DetailsView(media: media.node)) {
-                        MediaView(
-                            title: media.node.getTitle,
-                            image: media.node.getCover,
-                            releaseYear: media.node.getReleaseYear,
-                            type: media.node.getType,
-                            mediaCount: (resultManager.mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters),
-                            status: media.node.getMediaStatus
-                        )
-                    }
-                }
-                if !mediaResponse.results.isEmpty, let nextPage = mediaResponse.page?.next, !nextPage.isEmpty {
-                    Button(action: {
-                        Task {
-                            guard !isLoading else { return }
-                            isLoading = true
-                            do {
-                                let newMediaResponse = try await profileController.fetchNextPage(nextPage)
-                                mediaResponse.results.append(contentsOf: newMediaResponse.results)
-                                mediaResponse.page = newMediaResponse.page
-                            } catch {
-                                print("Failed to load next page of results: \(error.localizedDescription)")
-                            }
-                            isLoading = false
-                        }
-                    }) {
-                        if isLoading {
-                            ProgressView()
-                        } else {
-                            Text("Load more")
-                                .foregroundColor(.white)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 50)
-                    .background(Color.getByColorString(settingsManager.accentColor.rawValue))
-                    .cornerRadius(10)
+        List {
+            ForEach(mediaResponse.results, id: \.node.id) { media in
+                NavigationLink(destination: DetailsView(media: media.node)) {
+                    MediaView(
+                        title: media.node.getTitle,
+                        image: media.node.getCover,
+                        releaseYear: media.node.getReleaseYear,
+                        type: media.node.getType,
+                        mediaCount: (resultManager.mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters),
+                        status: media.node.getMediaStatus
+                    )
                 }
             }
-            .padding(.horizontal)
+            if !mediaResponse.results.isEmpty, let nextPage = mediaResponse.page?.next, !nextPage.isEmpty {
+                Button(action: {
+                    Task {
+                        guard !isLoading else { return }
+                        isLoading = true
+                        do {
+                            let newMediaResponse = try await profileController.fetchNextPage(nextPage)
+                            mediaResponse.results.append(contentsOf: newMediaResponse.results)
+                            mediaResponse.page = newMediaResponse.page
+                        } catch {
+                            print("Failed to load next page of results: \(error.localizedDescription)")
+                        }
+                        isLoading = false
+                    }
+                }) {
+                    if isLoading {
+                        ProgressView()
+                    } else {
+                        Text("Load more")
+                            .foregroundColor(.white)
+                    }
+                }
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(Color.getByColorString(settingsManager.accentColor.rawValue))
+                .cornerRadius(10)
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+            }
         }
         .scrollIndicators(.automatic)
+        .listStyle(.automatic)
+        .listRowSpacing(10)
+        .contentMargins(.top, 0)
         .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))
         .onSubmit(of: .search) {
             Task {

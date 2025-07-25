@@ -109,4 +109,17 @@ enum ProgressStatus: Equatable {
         case .unknown: return String("Unknown progress status")
         }
     }
+    
+    @ViewBuilder
+    var libraryIcon: some View {
+        switch self {
+        case .anime(let animeStatus):
+            animeStatus.libraryIcon
+        case .manga(let mangaStatus):
+            mangaStatus.libraryIcon
+        case .unknown:
+            Image(systemName: "questionmark")
+                .foregroundColor(.gray)
+        }
+    }
 }

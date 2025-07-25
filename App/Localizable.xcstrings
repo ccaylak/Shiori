@@ -557,18 +557,12 @@
         }
       }
     },
-    "Add to Library" : {
+    "Add to library" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zur Bibliothek hinzufügen"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adicionar à Biblioteca"
           }
         }
       }
@@ -830,6 +824,16 @@
         }
       }
     },
+    "App icon made by Nicole Knutas" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-Icon von N"
+          }
+        }
+      }
+    },
     "App icons" : {
       "shouldTranslate" : false
     },
@@ -935,18 +939,12 @@
         }
       }
     },
-    "Birthdate:" : {
+    "Birthdate" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geburtsdatum:"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Data de nascimento:"
+            "value" : "Geburtsdatum"
           }
         }
       }
@@ -964,6 +962,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Azul"
+          }
+        }
+      }
+    },
+    "Both" : {
+      "comment" : "Manga mode",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beides"
           }
         }
       }
@@ -1035,6 +1044,7 @@
       }
     },
     "Chapter" : {
+      "comment" : "Manga mode",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1374,6 +1384,16 @@
     "Display options" : {
 
     },
+    "Displaying mode" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Darstellung"
+          }
+        }
+      }
+    },
     "Do you really want to delete your progress for %@?" : {
       "localizations" : {
         "de" : {
@@ -1674,19 +1694,13 @@
         }
       }
     },
-    "Female" : {
+    "Female ♀" : {
       "comment" : "Gender",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Weiblich"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feminino"
+            "value" : "Weiblich ♀"
           }
         }
       }
@@ -1751,18 +1765,12 @@
         }
       }
     },
-    "Gender:" : {
+    "Gender" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geschlecht:"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gênero:"
+            "value" : "Geschlecht"
           }
         }
       }
@@ -1964,22 +1972,6 @@
         }
       }
     },
-    "Icons made by Nicole Knutas" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Icons erstellt von Nicole Knutas"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ícones feitos por Nicole Knutas"
-          }
-        }
-      }
-    },
     "Idols (Female)" : {
       "comment" : "Genre",
       "localizations" : {
@@ -2139,12 +2131,12 @@
     "Jikan" : {
       "shouldTranslate" : false
     },
-    "Join date:" : {
+    "Join date" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beitrittsdatum:"
+            "value" : "Beitrittsdatum"
           }
         }
       }
@@ -2310,18 +2302,12 @@
         }
       }
     },
-    "Location:" : {
+    "Location" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Standort:"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Localização:"
+            "value" : "Standort"
           }
         }
       }
@@ -2526,19 +2512,13 @@
         }
       }
     },
-    "Male" : {
+    "Male ♂" : {
       "comment" : "Gender",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Männlich"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Masculino"
+            "value" : "Männlich ♂"
           }
         }
       }
@@ -2820,16 +2800,6 @@
         }
       }
     },
-    "Name presentation" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Namensdarstellung"
-          }
-        }
-      }
-    },
     "No %@ animes found" : {
       "localizations" : {
         "de" : {
@@ -2888,19 +2858,13 @@
         }
       }
     },
-    "Non-binary" : {
+    "Non-binary ⚧" : {
       "comment" : "Gender",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nonbinär"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Não-binário"
+            "value" : "Nicht-binär ⚧"
           }
         }
       }
@@ -3075,6 +3039,9 @@
           }
         }
       }
+    },
+    "Order" : {
+
     },
     "Organized Crime" : {
       "comment" : "Genre",
@@ -5008,6 +4975,7 @@
       }
     },
     "Volume" : {
+      "comment" : "Manga mode",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5109,16 +5077,6 @@
         }
       }
     },
-    "You can contact me for feedback, bugs or feature requests" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du kannst mich für Feedback, Bugs oder Feature-Ideen kontaktieren"
-          }
-        }
-      }
-    },
     "You will be redirected to the MyAnimeList account deletion page." : {
       "localizations" : {
         "de" : {
@@ -5131,22 +5089,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você será redirecionado para a página de exclusão da conta MyAnimeList."
-          }
-        }
-      }
-    },
-    "Your statistics" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dein Fortschritt"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suas estatísticas"
           }
         }
       }

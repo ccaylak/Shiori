@@ -8,38 +8,57 @@ struct StatisticsView: View {
     let users: Int
     
     var body: some View {
-        VStack(alignment: .center, spacing: 15) {
-            Text("Based on \(users) user ratings")
-                .font(.caption)
-                .bold()
+        VStack(alignment: .center, spacing: 8) {
+            if (users != 0) {
+                Text("Based on \(users) user ratings")
+                    .font(.caption2)
+                    .bold()
+            }
             
-            HStack (alignment: .center){
+            HStack (alignment: .center, spacing: 20){
                 if(score != 0.0){
-                    VStack {
+                    VStack(spacing: 3) {
+                        Image(systemName: "star.fill")
+                            .font(.subheadline)
+                        
                         Text("Score")
                             .font(.caption)
-                            .bold()
-                        Label("\(score.formatted())", systemImage: "star.fill")
-                    }}
-                Spacer()
+                        
+                        Text("\(score.formatted())")
+                            .font(.body)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                Divider()
                 if(rank != 0){
-                    VStack {
+                    VStack(spacing: 3) {
+                        Image(systemName: "number")
+                            .font(.subheadline)
+                        
                         Text("Rank")
                             .font(.caption)
-                            .bold()
-                        Label("\(rank)", systemImage: "number")
-                    }}
-                Spacer()
-                VStack {
+                        
+                        Text("\(rank)")
+                            .font(.body)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                Divider()
+                VStack(spacing: 3) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.subheadline)
+                    
                     Text("Popularity")
                         .font(.caption)
-                        .bold()
-                    Label("\(popularity)", systemImage: "chart.line.uptrend.xyaxis")
+                    
+                    Text("\(popularity)")
+                        .font(.body)
                 }
+                .frame(maxWidth: .infinity)
             }
         }
-        .padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
-        .background(Color.gray.opacity(0.15))
+        .padding([.top, .bottom], 8)
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
     }
 }

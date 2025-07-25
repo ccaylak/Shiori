@@ -10,8 +10,14 @@ struct LibraryMediaView: View {
     let releaseYear: String
     let type: FormatType
     let rating: Int
-    let completedUnits: Int
-    let totalUnits: Int
+    
+    let completedEpisodes: Int?
+    let totalEpisodes: Int?
+    
+    let completedChapters: Int?
+    let totalChapters: Int?
+    let completedVolumes: Int?
+    let totalVolumes: Int?
     
     private var isDarkMode: Bool {
         if settingsManager.appearance == .system {
@@ -46,7 +52,7 @@ struct LibraryMediaView: View {
                             Image(systemName: "star.fill")
                                 .foregroundColor(.yellow)
                                 .font(.system(size: 14, weight: .bold))
-                                
+                            
                             Text("\(rating)")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.primary)
@@ -55,7 +61,7 @@ struct LibraryMediaView: View {
                             Image(systemName: "star")
                                 .foregroundColor(Color.secondary)
                                 .font(.system(size: 14, weight: .bold))
-                                
+                            
                             Text("?")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(Color.secondary)
@@ -64,32 +70,107 @@ struct LibraryMediaView: View {
                 }
                 .padding(.vertical, 4)
                 
-                Spacer()
-                HStack {
-                    let icon = {
-                        if case .manga = type { return "character.book.closed.fill.ja" }
-                        else { return "tv" }
-                    }()
-                    
-                    Label(totalUnits > 0
-                          ? "\(completedUnits)/\(totalUnits)"
-                          : "\(completedUnits)", systemImage: icon)
+                if(settingsManager.mangaMode != .all) {
+                    Spacer()
+                }
+                switch type {
+                case .anime(_):
+                    HStack {
+                        Label(totalEpisodes ?? 0 > 0
+                              ? "\(completedEpisodes ?? 0)/\(totalEpisodes ?? 0)"
+                              : "\(completedEpisodes ?? 0)", systemImage: "tv")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .fontWeight(.semibold)
-                    
-                    if totalUnits > 0 {
-                        Gauge(value: Double(completedUnits), in: 0...Double(totalUnits)) { }
-                            .gaugeStyle(.accessoryLinearCapacity)
-                    } else {
-                        Gauge(value: 1, in: 0...1) { }
-                            .gaugeStyle(.accessoryLinearCapacity)
-                            .tint(Color.secondary)
+                        
+                        if totalEpisodes ?? 0 > 0 {
+                            Gauge(value: Double(completedEpisodes ?? 0), in: 0...Double(totalEpisodes!)) { }
+                                .gaugeStyle(.accessoryLinearCapacity)
+                        } else {
+                            Gauge(value: 1, in: 0...1) { }
+                                .gaugeStyle(.accessoryLinearCapacity)
+                                .tint(Color.secondary)
+                        }
                     }
                     
+                case .manga(_):
+                    if (settingsManager.mangaMode == .all) {
+                        VStack(alignment: .leading, spacing: 3) {
+                            HStack {
+                                Label(totalVolumes ?? 0 > 0
+                                      ? "\(completedVolumes ?? 0)/\(totalVolumes ?? 0)"
+                                      : "\(completedVolumes ?? 0)", systemImage: "character.book.closed.fill.ja")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .fontWeight(.semibold)
+                                Spacer()
+                                
+                                let total = max(totalVolumes ?? 0, 1)
+                                let completed = min(completedVolumes ?? 0, total)
+                                Gauge(value: Double(completed), in: 0...Double(total)) {}
+                                    .gaugeStyle(.accessoryLinearCapacity)
+                                    .tint(totalVolumes ?? 0 > 0 ? .accentColor : .secondary)
+                                    .frame(maxWidth: 160)
+                            }
+                            
+                            HStack {
+                                Label(totalChapters ?? 0 > 0
+                                      ? "\(completedChapters ?? 0)/\(totalChapters ?? 0)"
+                                      : "\(completedChapters ?? 0)", systemImage: "book.pages.fill")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .fontWeight(.semibold)
+                                
+                                Spacer()
+                                let total = max(totalChapters ?? 0, 1)
+                                let completed = min(completedChapters ?? 0, total)
+                                Gauge(value: Double(completed), in: 0...Double(total)) {}
+                                    .gaugeStyle(.accessoryLinearCapacity)
+                                    .tint(totalChapters ?? 0 > 0 ? .accentColor : .secondary)
+                                    .frame(maxWidth: 160)
+                            }
+                        }
+                    }
+                    
+                    if (settingsManager.mangaMode == .volume) {
+                        HStack {
+                            Label(totalVolumes ?? 0 > 0
+                                  ? "\(completedVolumes ?? 0)/\(totalVolumes ?? 0)"
+                                  : "\(completedVolumes ?? 0)", systemImage: "character.book.closed.fill.ja")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .fontWeight(.semibold)
+                            
+                            if totalVolumes ?? 0 > 0 {
+                                Gauge(value: Double(completedVolumes ?? 0), in: 0...Double(totalVolumes ?? 0)) { }
+                                    .gaugeStyle(.accessoryLinearCapacity)
+                            } else {
+                                Gauge(value: 1, in: 0...1) { }
+                                    .gaugeStyle(.accessoryLinearCapacity)
+                                    .tint(Color.secondary)
+                            }
+                        }
+                    }
+                    if (settingsManager.mangaMode == .chapter) {
+                        HStack {
+                            Label(totalChapters ?? 0 > 0
+                                  ? "\(completedChapters ?? 0)/\(totalChapters ?? 0)"
+                                  : "\(completedChapters ?? 0)", systemImage: "book.pages.fill")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .fontWeight(.semibold)
+                            
+                            if totalChapters ?? 0 > 0 {
+                                Gauge(value: Double(completedChapters ?? 0), in: 0...Double(totalChapters ?? 0)) { }
+                                    .gaugeStyle(.accessoryLinearCapacity)
+                            } else {
+                                Gauge(value: 1, in: 0...1) { }
+                                    .gaugeStyle(.accessoryLinearCapacity)
+                                    .tint(Color.secondary)
+                            }
+                        }
+                    }
                 }
-                
-                
             }
             .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
         }
@@ -130,7 +211,11 @@ struct LibraryMediaView: View {
         releaseYear: "2020-01-01",
         type: .manga(.manga),
         rating: 4,
-        completedUnits: 5,
-        totalUnits: 0
+        completedEpisodes: 5,
+        totalEpisodes: 12,
+        completedChapters: nil,
+        totalChapters: nil,
+        completedVolumes: nil,
+        totalVolumes: nil
     )
 }

@@ -9,7 +9,7 @@ import SwiftUI
     @AppStorage("nsfw") var showNsfwContent = false
     @AppStorage("titleLanguage") var titleLanguage = TitleLanguage.english
     @AppStorage("airingSoon") var showAiringSoonBanner = true
-    @AppStorage("mangaMode") var mangaMode = "all"
+    @AppStorage("mangaMode") var mangaMode = MangaMode.all
     @AppStorage("namePresentation") var namePresentation = "First Name Last Name"
     
     private init() {}

@@ -13,7 +13,7 @@ struct GeneralOverviewView: View {
     let status: Status
     
     var body: some View {
-        LazyVStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 10) {
             Text("General information")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 4) {
@@ -26,7 +26,8 @@ struct GeneralOverviewView: View {
                 
                 StudiosView(studios: studios)
                 AuthorsView(authorInfos: authorInfos)
-            }.padding(.bottom, 10)
+            }
+            .padding(.bottom, 10)
         }
     }
     

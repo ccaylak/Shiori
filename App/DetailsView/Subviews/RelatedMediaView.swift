@@ -35,8 +35,14 @@ struct RelatedMediaView: View {
     var body: some View {
         if !relevantItems.isEmpty {
             VStack(alignment: .leading) {
-                Text("Related")
-                    .font(.headline)
+                HStack(alignment: .center) {
+                    Text("Related")
+                        .font(.headline)
+                    
+                    Image(systemName: "chevron.forward")
+                        .foregroundStyle(.secondary)
+                        .fontWeight(.bold)
+                }
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack {
@@ -49,17 +55,13 @@ struct RelatedMediaView: View {
                                         .cornerRadius(12)
                                 }
                                 .padding(8)
-                                .background(Color.gray.opacity(0.15))
+                                .background(Color(.secondarySystemGroupedBackground))
                                 .cornerRadius(12)
-                                .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
                             }
                         }
                     }
                     .scrollTargetLayout()
                     .frame(height: 250)
-                }
-                .onAppear {
-                    print(media.getRelatedAnimes)
                 }
                 .scrollTargetBehavior(.viewAligned)
                 .scrollClipDisabled()

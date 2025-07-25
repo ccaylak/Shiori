@@ -27,7 +27,6 @@ struct MediaView: View {
                 .cornerRadius(12)
                 .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
             
-            
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
                     .lineLimit(3)
@@ -43,17 +42,10 @@ struct MediaView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-            .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
-            Image(systemName: "chevron.right")
-                .foregroundColor(.secondary)
+            .frame(maxWidth: .infinity, maxHeight: 110, alignment: .leading)
+        
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(isDarkMode ? Color.gray.opacity(0.15) : Color(.systemBackground))
-                .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
-        )
+        .frame(maxWidth: .infinity, maxHeight: 110, alignment: .leading)
     }
     
     func formattedDetails(year: String) -> String {

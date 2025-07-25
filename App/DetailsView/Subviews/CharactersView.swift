@@ -4,25 +4,27 @@ struct CharactersView: View {
     let characters: [Character]
     
     var body: some View {
-        NavigationStack {
+        if !characters.isEmpty {
             VStack (alignment: .leading){
                 NavigationLink(destination: CharactersListView(characters: characters)) {
-                    HStack {
+                    HStack(alignment: .center) {
                         Text("Characters")
                             .font(.headline)
+                        
                         Image(systemName: "chevron.forward")
+                            .font(.subheadline)
                             .foregroundStyle(.secondary)
+                            .fontWeight(.heavy)
                     }
                 }
                 .buttonStyle(.plain)
-                ScrollView(.horizontal) {
+                ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 10) {
                         ForEach(characters, id: \.id) { character in
                             VStack(alignment: .leading) {
                                 AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
                                     .frame(width: 60, height: 90)
                                     .cornerRadius(12)
-                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
                                 Text(character.metaData.formattedName)
                                     .font(.caption)
                                     .frame(width: 60, alignment: .leading)
@@ -45,32 +47,32 @@ private struct CharactersListView: View {
     @State private var showRole = "All"
     
     private var filteredCharacters: [Character] {
-            
-            var result = characters
-            if !searchText.isEmpty {
-                result = result.filter { $0.metaData.name.localizedCaseInsensitiveContains(searchText) }
-            }
-
-            switch showRole {
-            case "Main":
-                result = result.filter { $0.role.lowercased() == "main" }
-            case "Supporting":
-                result = result.filter { $0.role.lowercased() == "supporting" }
-            default:
-                break
-            }
-
-            switch sortingOptiongs {
-            case "Name":
-                result = result.sorted { $0.metaData.name.localizedCompare($1.metaData.name) == .orderedAscending }
-            case "Role":
-                result = result.sorted { $0.role.localizedCompare($1.role) == .orderedAscending }
-            default:
-                break
-            }
-
-            return result
+        
+        var result = characters
+        if !searchText.isEmpty {
+            result = result.filter { $0.metaData.name.localizedCaseInsensitiveContains(searchText) }
         }
+        
+        switch showRole {
+        case "Main":
+            result = result.filter { $0.role.lowercased() == "main" }
+        case "Supporting":
+            result = result.filter { $0.role.lowercased() == "supporting" }
+        default:
+            break
+        }
+        
+        switch sortingOptiongs {
+        case "Name":
+            result = result.sorted { $0.metaData.name.localizedCompare($1.metaData.name) == .orderedAscending }
+        case "Role":
+            result = result.sorted { $0.role.localizedCompare($1.role) == .orderedAscending }
+        default:
+            break
+        }
+        
+        return result
+    }
     
     var body: some View {
         ScrollView(.vertical) {

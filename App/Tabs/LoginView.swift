@@ -47,59 +47,78 @@ struct LoginView: View {
                                             .foregroundColor(.primary)
                                     }
                                     
-                                    if let birthDate = profileDetails?.birthDate {
-                                        HStack {
-                                            Text("Birthdate:")
-                                                .font(.subheadline)
-                                                .foregroundColor(.secondary)
-                                            if let formattedDate = String.formatDateStringWithLocale(birthDate, fromFormat: "yyyy-MM-dd") {
-                                                Text(formattedDate)
+                                    HStack(alignment: .center, spacing: 20) {
+                                        VStack(alignment: .leading, spacing: 3) {
+                                            HStack(spacing: 4) {
+                                                Image(systemName: "calendar")
+                                                    .imageScale(.small)
+                                                    .foregroundStyle(Color.secondary)
+                                                Text("Birthdate")
                                                     .font(.subheadline)
-                                                    .foregroundColor(.primary)
-                                            } else {
-                                                Text("Invalid date")
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.primary)
-                                            }
-                                        }
-                                    }
-                                    
-                                    
-                                    HStack {
-                                        Text("Gender:")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                        Text(Gender(rawValue: profileDetails?.gender ?? "")?.displayName ?? String(localized: "Not specified"))
-                                            .font(.subheadline)
-                                            .foregroundColor(.primary)
-                                    }
-                                    
-                                    
-                                    
-                                    if let joinDate = profileDetails?.joinDate {
-                                        HStack {
-                                            Text("Join date:")
-                                                .font(.subheadline)
-                                                .foregroundColor(.secondary)
-                                            if let formattedDate = String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ") {
-                                                Text(formattedDate)
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.primary)
-                                            } else {
-                                                Text("Invalid date")
+                                                    .foregroundStyle(Color.secondary)
                                             }
                                             
+                                            HStack(spacing: 4) {
+                                                Image(systemName: "person.fill")
+                                                    .imageScale(.small)
+                                                    .foregroundStyle(Color.secondary)
+                                                Text("Gender")
+                                                    .font(.subheadline)
+                                                    .foregroundStyle(Color.secondary)
+                                            }
+                                            
+                                            HStack(spacing: 4) {
+                                                Image(systemName: "calendar.and.person")
+                                                    .imageScale(.small)
+                                                    .foregroundStyle(Color.secondary)
+                                                Text("Join date")
+                                                    .font(.subheadline)
+                                                    .foregroundStyle(Color.secondary)
+                                            }
+                                            
+                                            HStack(spacing: 4){
+                                                Image(systemName: "mappin.and.ellipse")
+                                                    .imageScale(.small)
+                                                    .foregroundStyle(Color.secondary)
+                                                Text("Location")
+                                                    .font(.subheadline)
+                                                    .foregroundStyle(Color.secondary)
+                                            }
                                         }
-                                    }
-                                    
-                                    if let location = profileDetails?.location {
-                                        HStack {
-                                            Text("Location:")
-                                                .font(.subheadline)
-                                                .foregroundColor(.secondary)
-                                            Text(location)
-                                                .font(.subheadline)
-                                                .foregroundColor(.primary)
+                                        
+                                        if let birthDate = profileDetails?.birthDate,
+                                           let joinDate = profileDetails?.joinDate,
+                                           let gender = profileDetails?.gender,
+                                           let location = profileDetails?.location
+                                            
+                                        {
+                                            VStack(alignment: .leading, spacing: 3) {
+                                                if let formattedDate = String.formatDateStringWithLocale(birthDate, fromFormat: "yyyy-MM-dd") {
+                                                    Text(formattedDate)
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.primary)
+                                                } else {
+                                                    Text("Invalid date")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.primary)
+                                                }
+                                                
+                                                Text(Gender(rawValue: gender)?.displayName ?? String(localized: "Not specified"))
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.primary)
+                                                
+                                                if let formattedDate = String.formatDateStringWithLocale(joinDate, fromFormat: "yyyy-MM-dd'T'HH:mm:ssZ") {
+                                                    Text(formattedDate)
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.primary)
+                                                } else {
+                                                    Text("Invalid date")
+                                                }
+                                                
+                                                Text(location)
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.primary)
+                                            }
                                         }
                                     }
                                 }
@@ -121,7 +140,7 @@ struct LoginView: View {
                                                             .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                                                     )
                                                     .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
-
+                                                
                                                 Text(friend.user.username)
                                                     .font(.caption)
                                                     .frame(alignment: .center)
@@ -216,7 +235,7 @@ struct LoginView: View {
                                                     .frame(width: 100, height: 156)
                                                     .cornerRadius(12)
                                                     .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
-
+                                                
                                                 Text(manga.title ?? "–")
                                                     .font(.caption)
                                                     .frame(width: 100, alignment: .leading)
@@ -244,7 +263,7 @@ struct LoginView: View {
                                                     .frame(width: 100, height: 156)
                                                     .cornerRadius(12)
                                                     .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 5)
-
+                                                
                                                 Text(anime.title ?? "–")
                                                     .font(.caption)
                                                     .frame(width: 100, alignment: .leading)
@@ -272,7 +291,7 @@ struct LoginView: View {
                                                     .frame(width: 100, height: 156)
                                                     .cornerRadius(12)
                                                     .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
-                                                Text(character.name ?? "Test")
+                                                Text(character.formattedName)
                                                     .font(.caption)
                                                     .frame(width: 100, alignment: .leading)
                                                     .lineLimit(1)
@@ -414,19 +433,17 @@ struct LoginView: View {
             let value: Int
             
             var body: some View {
-                HStack {
+                LabeledContent {
+                    Text("\(value)")
+                        .foregroundColor(.primary)
+                } label: {
                     Label {
                         Text(title)
-                            .foregroundColor(.primary)
                     } icon: {
                         icon
                     }
-                    
-                    Spacer()
-                    
-                    Text("\(value)")
-                        .foregroundColor(.primary)
                 }
+
             }
         }
         

@@ -108,8 +108,12 @@ struct LibraryView: View {
                                             releaseYear: manga.node.getReleaseYear,
                                             type: manga.node.getType,
                                             rating: manga.node.getListStatus.getRating,
-                                            completedUnits: manga.node.getListStatus.getReadChapters,
-                                            totalUnits: manga.node.getChapters
+                                            completedEpisodes: nil,
+                                            totalEpisodes: nil,
+                                            completedChapters: manga.node.getListStatus.getReadChapters,
+                                            totalChapters: manga.node.getChapters,
+                                            completedVolumes: manga.node.getListStatus.getReadVolumes,
+                                            totalVolumes: manga.node.getVolumes
                                         ).overlay(
                                             Group {
                                                 if loadingMediaID == manga.node.id {
@@ -144,8 +148,12 @@ struct LibraryView: View {
                                             releaseYear: anime.node.getReleaseYear,
                                             type: anime.node.getType,
                                             rating: anime.node.getListStatus.getRating,
-                                            completedUnits: anime.node.getListStatus.getWatchedEpisodes,
-                                            totalUnits: anime.node.getEpisodes
+                                            completedEpisodes: anime.node.getListStatus.getWatchedEpisodes,
+                                            totalEpisodes: anime.node.getEpisodes,
+                                            completedChapters: nil,
+                                            totalChapters: nil,
+                                            completedVolumes: nil,
+                                            totalVolumes: nil
                                         )
                                         .overlay(
                                             Group {
@@ -204,9 +212,8 @@ struct LibraryView: View {
                     Button {
                         libraryManager.mediaType = (libraryManager.mediaType == .manga) ? .anime : .manga
                     } label: {
-                        Image(systemName: libraryManager.mediaType == .manga ? "book" : "tv")
+                        Image(systemName: libraryManager.mediaType == .manga ? "character.book.closed.ja" : "tv")
                             .contentTransition(.symbolEffect(.replace))
-                            .imageScale(.large)
                             .foregroundColor(.accentColor)
                             .symbolRenderingMode(.monochrome)
                     }
@@ -231,6 +238,7 @@ struct LibraryView: View {
                         }
                     } label: {
                         Image(systemName: "arrow.up.arrow.down")
+                            .fontWeight(.regular)
                     }
                 }
             }
@@ -250,16 +258,18 @@ struct LibraryView: View {
                     List {
                         Section {
                             HStack(spacing: 16) {
-                                if (libraryManager.mediaType == .anime || settingsManager.mangaMode != "all") {
+                                if (libraryManager.mediaType == .anime || settingsManager.mangaMode != MangaMode.all) {
                                     Button(action: {
+                                        let generator = UIImpactFeedbackGenerator(style: .soft)
+                                        generator.impactOccurred(intensity: 1.0)
                                         if (libraryManager.mediaType == .anime) {
                                             animeEntry.currentEpisode -= 1
                                         }
                                         if (libraryManager.mediaType == .manga) {
-                                            if (settingsManager.mangaMode == "chapter") {
+                                            if (settingsManager.mangaMode == MangaMode.chapter) {
                                                 mangaEntry.currentChapter -= 1
                                             }
-                                            if (settingsManager.mangaMode == "volume") {
+                                            if (settingsManager.mangaMode == MangaMode.volume) {
                                                 mangaEntry.currentVolume -= 1
                                             }
                                         }
@@ -275,22 +285,22 @@ struct LibraryView: View {
                                     .disabled(
                                         (libraryManager.mediaType == .anime && animeEntry.currentEpisode <= 0) ||
                                         (libraryManager.mediaType == .manga &&
-                                         ((settingsManager.mangaMode == "chapter" && mangaEntry.currentChapter <= 0) ||
-                                          (settingsManager.mangaMode == "volume" && mangaEntry.currentVolume <= 0)))
+                                         ((settingsManager.mangaMode == MangaMode.chapter && mangaEntry.currentChapter <= 0) ||
+                                          (settingsManager.mangaMode == MangaMode.volume && mangaEntry.currentVolume <= 0)))
                                     )
                                     .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
                                 }
                                 
-                                if (libraryManager.mediaType == .manga && settingsManager.mangaMode == "all") {
+                                if (libraryManager.mediaType == .manga && settingsManager.mangaMode == MangaMode.all) {
                                     Menu {
                                         Button("Decrease volume") {
                                             mangaEntry.currentVolume -= 1
                                         }
-                                        .disabled(settingsManager.mangaMode == "volume" && mangaEntry.currentVolume <= 0)
+                                        .disabled(settingsManager.mangaMode == MangaMode.volume && mangaEntry.currentVolume <= 0)
                                         Button("Decrease chapter") {
                                             mangaEntry.currentChapter -= 1
                                         }
-                                        .disabled(settingsManager.mangaMode == "chapter" && mangaEntry.currentChapter <= 0)
+                                        .disabled(settingsManager.mangaMode == MangaMode.chapter && mangaEntry.currentChapter <= 0)
                                     } label: {
                                         Image(systemName: "minus")
                                             .resizable()
@@ -306,16 +316,18 @@ struct LibraryView: View {
                                     .frame(width: 146, height: 230)
                                     .cornerRadius(12)
 
-                                if (libraryManager.mediaType == .anime || settingsManager.mangaMode != "all") {
+                                if (libraryManager.mediaType == .anime || settingsManager.mangaMode != MangaMode.all) {
                                     Button(action: {
+                                        let generator = UIImpactFeedbackGenerator(style: .soft)
+                                        generator.impactOccurred(intensity: 1.0)
                                         if (libraryManager.mediaType == .anime) {
                                             animeEntry.currentEpisode += 1
                                         }
                                         if (libraryManager.mediaType == .manga) {
-                                            if (settingsManager.mangaMode == "chapter") {
+                                            if (settingsManager.mangaMode == MangaMode.chapter) {
                                                 mangaEntry.currentChapter += 1
                                             }
-                                            if (settingsManager.mangaMode == "volume") {
+                                            if (settingsManager.mangaMode == MangaMode.volume) {
                                                 mangaEntry.currentVolume += 1
                                             }
                                         }
@@ -331,21 +343,21 @@ struct LibraryView: View {
                                     .disabled(
                                         (libraryManager.mediaType == .anime && animeEntry.totalEpisodes != 0 && animeEntry.currentEpisode == animeEntry.totalEpisodes ) ||
                                         (libraryManager.mediaType == .manga &&
-                                         ((settingsManager.mangaMode == "chapter" && mangaEntry.totalChapters != 0 && mangaEntry.currentChapter == mangaEntry.totalChapters) ||
-                                          (settingsManager.mangaMode == "volume" && mangaEntry.totalVolumes != 0 && mangaEntry.currentVolume == mangaEntry.totalVolumes)))
+                                         ((settingsManager.mangaMode == MangaMode.chapter && mangaEntry.totalChapters != 0 && mangaEntry.currentChapter == mangaEntry.totalChapters) ||
+                                          (settingsManager.mangaMode == MangaMode.volume && mangaEntry.totalVolumes != 0 && mangaEntry.currentVolume == mangaEntry.totalVolumes)))
                                     )
                                 }
-                                if (libraryManager.mediaType == .manga && settingsManager.mangaMode == "all") {
+                                if (libraryManager.mediaType == .manga && settingsManager.mangaMode == MangaMode.all) {
                                     Menu {
                                         Button("Increase volume") {
                                             mangaEntry.currentVolume += 1
                                         }
-                                        .disabled(settingsManager.mangaMode == "volume" && mangaEntry.totalVolumes != 0 && mangaEntry.currentVolume == mangaEntry.totalVolumes)
+                                        .disabled(settingsManager.mangaMode == MangaMode.volume && mangaEntry.totalVolumes != 0 && mangaEntry.currentVolume == mangaEntry.totalVolumes)
                                         
                                         Button("Increase chapter") {
                                             mangaEntry.currentChapter += 1
                                         }
-                                        .disabled(settingsManager.mangaMode == "chapter" && mangaEntry.totalChapters != 0 && mangaEntry.currentChapter == mangaEntry.totalChapters)
+                                        .disabled(settingsManager.mangaMode == MangaMode.chapter && mangaEntry.totalChapters != 0 && mangaEntry.currentChapter == mangaEntry.totalChapters)
                                     } label: {
                                         Image(systemName: "plus")
                                             .resizable()
@@ -389,15 +401,15 @@ struct LibraryView: View {
                                 VStack(alignment: .leading, spacing: 6) {
                                     Text("Mode")
                                     
-                                    Picker("", selection: $settingsManager.mangaMode) {
-                                        Text("All").tag("all")
-                                        Text("Chapter").tag("chapter")
-                                        Text("Volume").tag("volume")
+                                    Picker("Mode", selection: $settingsManager.mangaMode) {
+                                        ForEach(MangaMode.allCases, id: \.self) { mode in
+                                            Text(mode.displayName).tag(mode)
+                                        }
                                     }
                                     .pickerStyle(.segmented)
                                 }
                                 
-                                if (settingsManager.mangaMode == "all") {
+                                if (settingsManager.mangaMode == MangaMode.all) {
                                     if mangaEntry.totalChapters != 0 {
                                         Picker(selection: $mangaEntry.currentChapter, label:
                                                 VStack(alignment: .leading, spacing: 4) {
@@ -438,7 +450,7 @@ struct LibraryView: View {
                                     }
                                 }
                                 
-                                if (settingsManager.mangaMode == "chapter") {
+                                if (settingsManager.mangaMode == MangaMode.chapter) {
                                     if mangaEntry.totalChapters != 0 {
                                         Picker(selection: $mangaEntry.currentChapter, label:
                                                 VStack(alignment: .leading, spacing: 4) {
@@ -459,7 +471,7 @@ struct LibraryView: View {
                                         }
                                     }
                                 }
-                                if (settingsManager.mangaMode == "volume") {
+                                if (settingsManager.mangaMode == MangaMode.volume) {
                                     if mangaEntry.totalVolumes != 0 {
                                         Picker(selection: $mangaEntry.currentVolume, label:
                                                 VStack(alignment: .leading, spacing: 4) {

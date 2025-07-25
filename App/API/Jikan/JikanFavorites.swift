@@ -48,3 +48,27 @@ struct FavoriteJPG: Decodable, Hashable {
     let smallImageUrl: String?
     let largeImageUrl: String?
 }
+
+@MainActor
+extension FavoriteEntries {
+    var getName: String {
+        name ?? "?"
+    }
+    
+    var formattedName: String {
+        let nameFormat = SettingsManager.shared.namePresentation
+        
+        switch nameFormat {
+        case "Last Name, First Name":
+            return getName
+            
+        default:
+            
+            let parts = getName.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+            guard parts.count == 2 else {
+                return getName
+            }
+            return "\(parts[1]) \(parts[0])"
+        }
+    }
+}

@@ -63,7 +63,7 @@ struct SettingsView: View {
                         .buttonStyle(.borderless)
                     }
                     
-                    Picker("Name presentation", systemImage: "textformat.characters.arrow.left.and.right", selection: $settingsManager.namePresentation) {
+                    Picker("Name", systemImage: "textformat.characters.arrow.left.and.right", selection: $settingsManager.namePresentation) {
                         ForEach(nameOptions, id: \.self) { nameOption in
                             Text(nameOption).tag(nameOption)
                         }
@@ -80,29 +80,16 @@ struct SettingsView: View {
                             Text(selectedLanguage.rawValue.capitalized).tag(selectedLanguage)
                         }
                     }
-                    
-                    /* todo
-                     HStack {
-                     Label("Show airing banner", systemImage: "flag")
-                     Spacer()
-                     Button {
-                     settingsManager.showAiringSoonBanner.toggle()
-                     } label: {
-                     ZStack(alignment: .centerFirstTextBaseline) {
-                     Image(systemName: "flag.slash")
-                     .hidden()
-                     .imageScale(.large)
-                     Image(systemName: settingsManager.showAiringSoonBanner ? "flag" : "flag.slash")
-                     .contentTransition(.symbolEffect(.replace))
-                     .imageScale(.large)
-                     }
-                     .foregroundColor(.accentColor)
-                     .symbolRenderingMode(.hierarchical)
-                     }
-                     .buttonStyle(.borderless)
-                     }
-                     */
                 }
+                
+                Section("Library") {
+                    Picker(selection: $settingsManager.mangaMode, label: Label("Displaying mode", image: "custom.character.book.closed.badge.gearshape.fill")) {
+                        ForEach(MangaMode.allCases, id: \.self) { mode in
+                            Text(mode.displayName)
+                        }
+                    }
+                }
+
                 
                 let icons: [(name: String, title: String)] = [
                     (name: "AppIcon", title: String(localized: "Default")),
@@ -114,7 +101,7 @@ struct SettingsView: View {
                     header: Text("App icons"),
                     footer:
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Icons made by Nicole Knutas")
+                            Text("App icon made by Nicole Knutas")
                             Text("Shiori-chan illustrated by Lara Prüß")
                                 .font(.footnote)
                                 .foregroundColor(.secondary)
@@ -132,7 +119,6 @@ struct SettingsView: View {
                                         RoundedRectangle(cornerRadius: 12)
                                             .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                                     )
-                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
                                     .onTapGesture {
                                         changeAppIcon(to: icon.name == "AppIcon" ? nil : icon.name)
                                     }
@@ -146,12 +132,7 @@ struct SettingsView: View {
                     }
                 }
                 
-                Section (
-                    header: Text("Contact"),
-                    footer: Text("You can contact me for feedback, bugs or feature requests")
-                )
-                {
-                    
+                Section ("Contact"){
                     Link(destination: URL(string: "mailto:shiori.app@icloud.com")!) {
                         Label("Mail", systemImage: "envelope")
                     }

@@ -14,7 +14,7 @@ struct MainView: View {
                 .tag("search")
             LibraryView()
                 .tabItem {
-                    Label("Library", systemImage: "book")
+                    Label("Library", systemImage: "books.vertical")
                 }
                 .tag("library")
             LoginView()

@@ -10,6 +10,7 @@ struct SearchView: View {
         NavigationStack {
             ResultView()
                 .navigationTitle(resultManager.mediaType.rawValue.capitalized)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     selectionMenu
                     sortMenu
@@ -22,10 +23,9 @@ struct SearchView: View {
             Button {
                 resultManager.mediaType = (resultManager.mediaType == .manga) ? .anime : .manga
             } label: {
-                Image(systemName: resultManager.mediaType == .manga ? "book" : "tv")
+                Image(systemName: resultManager.mediaType == .manga ? "character.book.closed.ja" : "tv")
                     .contentTransition(.symbolEffect(.replace))
-                    .imageScale(.large)
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(Color.accentColor)
                     .symbolRenderingMode(.monochrome)
             }
             .sensoryFeedback(.selection, trigger: resultManager.mediaType)
@@ -45,6 +45,7 @@ struct SearchView: View {
                 }
             } label: {
                 Image(systemName: "arrow.up.arrow.down")
+                    .fontWeight(.regular)
             }
         }
     }

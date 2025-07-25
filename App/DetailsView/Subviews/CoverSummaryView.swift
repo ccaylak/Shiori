@@ -33,7 +33,6 @@ private struct CoverView: View {
             AsyncImageView(imageUrl: imageUrl)
                 .frame(width: 159, height: 250)
                 .cornerRadius(12)
-                .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
         }
         .overlay(alignment: .topTrailing) {
             ScoreBadgeView(score: score)

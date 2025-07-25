@@ -6,31 +6,30 @@ struct GenresView: View {
     
     var body: some View {
         if !genres.isEmpty {
-            NavigationStack {
-                VStack(alignment: .leading) {
-                    NavigationLink(destination: GenresListView(genres: genres)) {
-                        HStack {
-                            Text("Genres")
-                                .font(.headline)
-                            Image(systemName: "chevron.forward")
-                                .foregroundStyle(.secondary)
-                        }
+            VStack(alignment: .leading) {
+                NavigationLink(destination: GenresListView(genres: genres)) {
+                    HStack {
+                        Text("Genres")
+                            .font(.headline)
+                        Image(systemName: "chevron.forward")
+                            .foregroundStyle(.secondary)
+                            .fontWeight(.bold)
                     }
-                    .buttonStyle(.plain)
-                    ScrollView(.horizontal) {
-                        LazyHStack(spacing: 10) {
-                            ForEach(genres, id: \.self) { genre in
-                                Text(genre.displayName)
-                                    .font(.caption)
-                                    .padding(9)
-                                    .background(Color.gray.opacity(0.15))
-                                    .cornerRadius(12)
-                                    .foregroundStyle(.primary)
-                            }
-                        }
-                    }
-                    .scrollClipDisabled()
                 }
+                .buttonStyle(.plain)
+                ScrollView(.horizontal) {
+                    LazyHStack(spacing: 10) {
+                        ForEach(genres, id: \.self) { genre in
+                            Text(genre.displayName)
+                                .font(.caption)
+                                .padding(9)
+                                .background(Color(.secondarySystemGroupedBackground))
+                                .cornerRadius(12)
+                                .foregroundStyle(.primary)
+                        }
+                    }
+                }
+                .scrollClipDisabled()
             }
         }
     }
