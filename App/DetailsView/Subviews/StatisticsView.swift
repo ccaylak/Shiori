@@ -10,12 +10,12 @@ struct StatisticsView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
             if (users != 0) {
-                Text("Based on \(users) user ratings")
+                Text("Based on \(users.formatted()) user ratings")
                     .font(.caption2)
                     .bold()
             }
             
-            HStack (alignment: .center, spacing: 20){
+            HStack (alignment: .center){
                 if(score != 0.0){
                     VStack(spacing: 3) {
                         Image(systemName: "star.fill")
@@ -60,14 +60,6 @@ struct StatisticsView: View {
         .padding([.top, .bottom], 8)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
+        .padding(.horizontal)
     }
-}
-
-#Preview {
-    StatisticsView(
-        score: 8.0,
-        rank: 1,
-        popularity: 1000,
-        users: 10000
-    )
 }

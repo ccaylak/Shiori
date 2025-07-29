@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 enum SupportedLanguages: String, CaseIterable {
     case german, english, portuguese
@@ -8,6 +9,15 @@ enum SupportedLanguages: String, CaseIterable {
         case .german: String(localized: "🇩🇪 German", comment: "Supported language")
         case .english: String(localized: "🇬🇧 English", comment: "Supported language")
         case .portuguese: String(localized: "🇵🇹 Portuguese", comment: "Supported language")
+        }
+    }
+    
+    @ViewBuilder
+    var additionalInfoView: some View {
+        if self == .portuguese {
+            Link("Thanks to Alex Madeira", destination: URL(string: "https://alexandremadeira.dev")!)
+        } else {
+            EmptyView()
         }
     }
 }

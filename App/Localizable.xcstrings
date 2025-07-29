@@ -829,7 +829,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "App-Icon von N"
+            "value" : "App-Icon erstellt von Nicole Knutas"
           }
         }
       }
@@ -923,18 +923,12 @@
         }
       }
     },
-    "Based on %lld user ratings" : {
+    "Based on %@ user ratings" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Basierend auf %lld Benutzerbewertungen"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Baseado em %lld avaliações de usuários."
+            "value" : "Basierend auf %@ Benutzerbewertungen"
           }
         }
       }
@@ -1056,6 +1050,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Capítulo"
+          }
+        }
+      }
+    },
+    "Chapter +1" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kapitel +1"
           }
         }
       }
@@ -1612,6 +1616,16 @@
         }
       }
     },
+    "Episode +1" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folge +1"
+          }
+        }
+      }
+    },
     "Erotica" : {
       "comment" : "Genre",
       "localizations" : {
@@ -1646,18 +1660,12 @@
         }
       }
     },
-    "Favorite animes" : {
+    "Favorite anime" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lieblingsanime"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Animes favoritos"
           }
         }
       }
@@ -1728,6 +1736,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finalizado"
+          }
+        }
+      }
+    },
+    "First Name Last Name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorname Nachname"
           }
         }
       }
@@ -1849,9 +1867,6 @@
           }
         }
       }
-    },
-    "GitHub Repository" : {
-      "shouldTranslate" : false
     },
     "Gore" : {
       "comment" : "Genre",
@@ -2184,6 +2199,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Infantil"
+          }
+        }
+      }
+    },
+    "Last Name, First Name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nachname, Vorname"
           }
         }
       }
@@ -2800,34 +2825,12 @@
         }
       }
     },
-    "No %@ animes found" : {
+    "No %@ found" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keine %@ Anime gefunden"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nenhum anime %@ encontrado."
-          }
-        }
-      }
-    },
-    "No %@ mangas found" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine %@ Manga gefunden"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nenhum mangá %@ encontrado."
+            "value" : "Keine %@ gefunden"
           }
         }
       }
@@ -3040,9 +3043,6 @@
         }
       }
     },
-    "Order" : {
-
-    },
     "Organized Crime" : {
       "comment" : "Genre",
       "localizations" : {
@@ -3244,6 +3244,9 @@
           }
         }
       }
+    },
+    "Pow" : {
+      "shouldTranslate" : false
     },
     "Prequel" : {
       "comment" : "Relation type of detailview",
@@ -4314,6 +4317,9 @@
     "TelemetryDeck" : {
       "shouldTranslate" : false
     },
+    "Thanks to Alex Madeira" : {
+
+    },
     "There was an error loading the image." : {
       "localizations" : {
         "de" : {
@@ -4660,18 +4666,12 @@
         }
       }
     },
-    "Try a different filter category." : {
+    "Try a different category." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Probier einen anderen Filter aus"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tente uma categoria de filtro diferente."
+            "value" : "Probiere einen anderen Filter aus."
           }
         }
       }
@@ -4981,6 +4981,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Band"
+          }
+        }
+      }
+    },
+    "Volume +1" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Band +1"
           }
         }
       }

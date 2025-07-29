@@ -6,18 +6,13 @@ struct CharactersView: View {
     var body: some View {
         if !characters.isEmpty {
             VStack (alignment: .leading){
+                
                 NavigationLink(destination: CharactersListView(characters: characters)) {
-                    HStack(alignment: .center) {
-                        Text("Characters")
-                            .font(.headline)
-                        
-                        Image(systemName: "chevron.forward")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.heavy)
-                    }
+                    LabelWithChevron(text: "Characters")
+                    .padding(.horizontal)
                 }
                 .buttonStyle(.plain)
+                
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 10) {
                         ForEach(characters, id: \.id) { character in
@@ -25,6 +20,9 @@ struct CharactersView: View {
                                 AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
                                     .frame(width: 60, height: 90)
                                     .cornerRadius(12)
+                                    .showFullTitleContextMenu(character.metaData.formattedName)
+                                    .strokedBorder()
+                                
                                 Text(character.metaData.formattedName)
                                     .font(.caption)
                                     .frame(width: 60, alignment: .leading)
@@ -33,6 +31,7 @@ struct CharactersView: View {
                             }
                         }
                     }
+                    .padding(.horizontal)
                 }
                 .scrollClipDisabled()
             }
@@ -82,7 +81,6 @@ private struct CharactersListView: View {
                         AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
                             .frame(width: 100, height: 156)
                             .cornerRadius(12)
-                            .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
                             .overlay(alignment: .bottom) {
                                 Text(character.role)
                                     .font(.caption2).bold()

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F36329482D94AD1300329F11 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = F36329472D94AD1300329F11 /* NukeUI */; };
+		F36CBA112E35B5D6002385D5 /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = F36CBA102E35B5D6002385D5 /* Pow */; };
 		F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37EA6182CFFC19700CD994E /* KeychainSwift */; };
 		F38579932DCB5AAF00CB4D14 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = F38579922DCB5AAF00CB4D14 /* TelemetryDeck */; };
 		F3DE62ED2CF140BC00CD77EF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F3DE62EC2CF140BC00CD77EF /* README.md */; };
@@ -71,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F36CBA112E35B5D6002385D5 /* Pow in Frameworks */,
 				F3E27BBB2DBF743C00BB1AE4 /* AlertToast in Frameworks */,
 				F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */,
 				F36329482D94AD1300329F11 /* NukeUI in Frameworks */,
@@ -135,6 +137,7 @@
 				F36329472D94AD1300329F11 /* NukeUI */,
 				F3E27BBA2DBF743C00BB1AE4 /* AlertToast */,
 				F38579922DCB5AAF00CB4D14 /* TelemetryDeck */,
+				F36CBA102E35B5D6002385D5 /* Pow */,
 			);
 			productName = MALytics;
 			productReference = F365CCE32CE74B3F0027F040 /* Shiori.app */;
@@ -171,6 +174,7 @@
 				F36329462D94AA4700329F11 /* XCRemoteSwiftPackageReference "Nuke" */,
 				F3E27BB92DBF743C00BB1AE4 /* XCRemoteSwiftPackageReference "AlertToast" */,
 				F38579912DCB5AAF00CB4D14 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
+				F36CBA0F2E35B5D6002385D5 /* XCRemoteSwiftPackageReference "Pow" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F365CCE42CE74B3F0027F040 /* Products */;
@@ -549,6 +553,14 @@
 				minimumVersion = 12.8.0;
 			};
 		};
+		F36CBA0F2E35B5D6002385D5 /* XCRemoteSwiftPackageReference "Pow" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EmergeTools/Pow";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.5;
+			};
+		};
 		F37EA6172CFFC19700CD994E /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
@@ -580,6 +592,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F36329462D94AA4700329F11 /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = NukeUI;
+		};
+		F36CBA102E35B5D6002385D5 /* Pow */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F36CBA0F2E35B5D6002385D5 /* XCRemoteSwiftPackageReference "Pow" */;
+			productName = Pow;
 		};
 		F37EA6182CFFC19700CD994E /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;

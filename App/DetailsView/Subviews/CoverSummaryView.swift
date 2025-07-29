@@ -16,6 +16,7 @@ struct CoverSummaryView: View {
             CoverView(imageUrl: imageUrl, score: score, type: type, chapters: chapters, volumes: volumes, episodes: episodes)
             SummaryView(summary: summary, title: title)
         }
+        .padding(.horizontal)
     }
 }
 
@@ -33,6 +34,7 @@ private struct CoverView: View {
             AsyncImageView(imageUrl: imageUrl)
                 .frame(width: 159, height: 250)
                 .cornerRadius(12)
+                .strokedBorder()
         }
         .overlay(alignment: .topTrailing) {
             ScoreBadgeView(score: score)
@@ -40,7 +42,7 @@ private struct CoverView: View {
         .overlay(alignment: .bottomTrailing) {
             CountBadgeView(chapters: chapters, volumes: volumes,episodes: episodes, type: type)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: 159)
     }
 }
 
@@ -80,7 +82,7 @@ private struct SummaryView: View {
                 .scrollIndicators(.automatic)
             }
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: 159)
     }
 }
 

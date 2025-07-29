@@ -8,7 +8,7 @@ struct ShioriApp: App {
     @AppStorage("isFirstLaunch") private var isFirstLaunch: Bool = true
     @AppStorage("showDiscordSheet") private var showDiscordSheet: Bool = true
     @ObservedObject private var settingsManager: SettingsManager = .shared
-    @StateObject private var alertManager: AlertManager = .shared   // ← hier
+    @StateObject private var alertManager: AlertManager = .shared
     private var tokenHandler: TokenHandler = .shared
     
     init() {
@@ -44,7 +44,7 @@ struct ShioriApp: App {
                             if let url = URL(string: "https://discord.gg/4ajqv3aMdd") {
                                 UIApplication.shared.open(url)
                             }
-                            showDiscordSheet.toggle()
+                            showDiscordSheet = false
                         }
                         .buttonStyle(.borderedProminent)
                         .tint(Color(red: 88/255, green: 101/255, blue: 242/255))
@@ -52,7 +52,7 @@ struct ShioriApp: App {
                         .frame(maxWidth: 150)
 
                         Button("No Thanks", role: .destructive) {
-                            showDiscordSheet.toggle()
+                            showDiscordSheet = false
                         }
                         .buttonStyle(.bordered)
                         .controlSize(.mini)

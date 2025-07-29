@@ -119,6 +119,56 @@ import SwiftUI
         }
     }
     
+    func completeEntry(id: Int) async throws {
+        let components = URLComponents(string: MALEndpoints.Anime.update(id: id))!
+        
+        let parameters = ["status": ProgressStatus.Anime.completed.rawValue]
+        let bodyData = parameters
+            .map { "\($0.key)=\($0.value)" }
+            .joined(separator: "&")
+        
+        guard let url = components.url else {
+            throw URLError(.badURL)
+        }
+        
+        var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
+        request.httpBody = bodyData.data(using: .utf8)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        var (_, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (_, response) = try await URLSession.shared.data(for: request)
+        }
+    }
+    
+    func increaseEpisodes(id: Int, episode: Int) async throws {
+        let components = URLComponents(string: MALEndpoints.Anime.update(id: id))!
+        
+        let parameters = ["num_watched_episodes": String(episode)]
+        let bodyData = parameters
+            .map { "\($0.key)=\($0.value)" }
+            .joined(separator: "&")
+        
+        guard let url = components.url else {
+            throw URLError(.badURL)
+        }
+        
+        var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
+        request.httpBody = bodyData.data(using: .utf8)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        var (_, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (_, response) = try await URLSession.shared.data(for: request)
+        }
+    }
+    
     func fetchLibrary() async throws -> LibraryResponse {
         var components = URLComponents(string: MALEndpoints.Anime.library)!
         

@@ -1,19 +1,16 @@
 What's New:
 
 New Features
-- Added function to display names in a different way
-- Added a new realistic Shiori-chan icon as an optional avatar
-- Added a Discord popup on first launch
+- Changed the design of Library and added swipeActions
+- Added contextMenu for related media, characters and recommendations
+- Added haptic feedback when increasing or decreasing entries episode/chapter/volume
 
 Bug Fixes
-- Fixed a bug where dividers were shown that shouldn’t be there
-- Fixed a bug where long anime/manga titles overlapped the save button in the edit sheet
-- Fixed some translation issues
+- Fixed popping issues related to: related media, recommendations and characters inside of details
+- Fixed all covers having the wrong padding to the left
+- Fixed some translation typos
 
 Reworks
-- Redesigned the structure of the library entries
+- Removed all shadows and replaced with border stroke on light stuff
 - Reworked how anime/manga are edited in the library view
 - Removed unnecessary Shiori-chan page, since she is now used as an icon
-
-What's Next?
-- Idk

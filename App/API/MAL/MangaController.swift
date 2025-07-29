@@ -65,6 +65,77 @@ import SwiftUI
         }
     }
     
+    func completEntry(id: Int) async throws {
+        let urlComponents = URLComponents(string: MALEndpoints.Manga.update(id: id))
+        guard let url = urlComponents?.url else {
+            throw URLError(.badURL)
+        }
+
+        let parameters: [String: String] = [
+            "status": ProgressStatus.Manga.completed.rawValue,
+        ]
+        let formBody = parameters.map { "\($0.key)=\($0.value)" }
+                                 .joined(separator: "&")
+
+        var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
+        request.httpBody = formBody.data(using: .utf8)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        var (_, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (_, response) = try await URLSession.shared.data(for: request)
+        }
+    }
+    
+    func increaseVolumes(id: Int, volume: Int) async throws {
+        let urlComponents = URLComponents(string: MALEndpoints.Manga.update(id: id))
+        guard let url = urlComponents?.url else {
+            throw URLError(.badURL)
+        }
+
+        let parameters: [String: String] = ["num_volumes_read": String(volume)]
+        let formBody = parameters.map { "\($0.key)=\($0.value)" }
+                                 .joined(separator: "&")
+
+        var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
+        request.httpBody = formBody.data(using: .utf8)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        var (_, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (_, response) = try await URLSession.shared.data(for: request)
+        }
+    }
+    
+    func increaseChapters(id: Int, chapter: Int) async throws {
+        let urlComponents = URLComponents(string: MALEndpoints.Manga.update(id: id))
+        guard let url = urlComponents?.url else {
+            throw URLError(.badURL)
+        }
+
+        let parameters: [String: String] = ["num_chapters_read": String(chapter)]
+        let formBody = parameters.map { "\($0.key)=\($0.value)" }
+                                 .joined(separator: "&")
+
+        var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
+        request.httpBody = formBody.data(using: .utf8)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        var (_, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (_, response) = try await URLSession.shared.data(for: request)
+        }
+    }
+    
     func fetchDetails(id: Int) async throws -> Media {
         var components = URLComponents(string: MALEndpoints.Manga.details(id: id))!
         

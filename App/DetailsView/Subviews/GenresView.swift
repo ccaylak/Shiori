@@ -8,13 +8,7 @@ struct GenresView: View {
         if !genres.isEmpty {
             VStack(alignment: .leading) {
                 NavigationLink(destination: GenresListView(genres: genres)) {
-                    HStack {
-                        Text("Genres")
-                            .font(.headline)
-                        Image(systemName: "chevron.forward")
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.bold)
-                    }
+                    LabelWithChevron(text: "Genres")
                 }
                 .buttonStyle(.plain)
                 ScrollView(.horizontal) {
@@ -31,6 +25,7 @@ struct GenresView: View {
                 }
                 .scrollClipDisabled()
             }
+            .padding(.horizontal)
         }
     }
 }

@@ -54,8 +54,7 @@ struct ResultView: View {
                 .frame(maxWidth: .infinity, minHeight: 50)
                 .background(Color.getByColorString(settingsManager.accentColor.rawValue))
                 .cornerRadius(10)
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
             }
         }
         .scrollIndicators(.automatic)

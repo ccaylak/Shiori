@@ -35,24 +35,21 @@ struct RelatedMediaView: View {
     var body: some View {
         if !relevantItems.isEmpty {
             VStack(alignment: .leading) {
-                HStack(alignment: .center) {
-                    Text("Related")
-                        .font(.headline)
-                    
-                    Image(systemName: "chevron.forward")
-                        .foregroundStyle(.secondary)
-                        .fontWeight(.bold)
-                }
+                Text("Related")
+                    .font(.headline)
+                    .padding(.horizontal)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack {
+                    LazyHStack(spacing: 10) {
                         ForEach(sortedMediaItems, id: \.node.id) { relatedMedia in
                             NavigationLink(destination: DetailsView(media: relatedMedia.node)) {
                                 VStack(alignment: .center) {
                                     Text(relatedMedia.getRelationType.displayName)
+                                    
                                     AsyncImageView(imageUrl: relatedMedia.node.getCover)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .cornerRadius(12)
+                                        .showFullTitleContextMenu(relatedMedia.node.getTitle)
                                 }
                                 .padding(8)
                                 .background(Color(.secondarySystemGroupedBackground))
@@ -62,9 +59,9 @@ struct RelatedMediaView: View {
                     }
                     .scrollTargetLayout()
                     .frame(height: 250)
+                    .padding(.horizontal)
                 }
                 .scrollTargetBehavior(.viewAligned)
-                .scrollClipDisabled()
             }
         }
     }

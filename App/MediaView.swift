@@ -12,20 +12,13 @@ struct MediaView: View {
     let mediaCount: Int
     let status: Status
     
-    private var isDarkMode: Bool {
-        if settingsManager.appearance == .system {
-            return colorScheme == .dark
-        }
-        return settingsManager.appearance == .dark
-    }
-    
     var body: some View {
         HStack(spacing: 20) {
             AsyncImageView(imageUrl: image)
                 .frame(width: 70, height: 110)
                 .clipped()
                 .cornerRadius(12)
-                .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
+                .strokedBorder()
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)

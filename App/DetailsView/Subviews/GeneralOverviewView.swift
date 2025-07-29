@@ -29,6 +29,7 @@ struct GeneralOverviewView: View {
             }
             .padding(.bottom, 10)
         }
+        .padding(.horizontal)
     }
     
     func formattedDetails(chapters: Int, volumes: Int, episodes: Int) -> String {

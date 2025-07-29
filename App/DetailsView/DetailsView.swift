@@ -143,13 +143,13 @@ struct DetailsView: View {
                             .padding([.top, .bottom], 8)
                             .background(Color(.secondarySystemGroupedBackground))
                             .cornerRadius(12)
+                            .padding(.horizontal)
                             .onTapGesture(perform: {
                                 if media.getListStatus.getProgressStatus != .unknown {
                                     isSheetPresented = true
                                 }
                             })
                         } else {
-                            
                             Button {
                                 didTap.toggle()
                                 Task {
@@ -170,11 +170,12 @@ struct DetailsView: View {
                             } label : {
                                 Label("Add to library", systemImage: "plus.circle.fill")
                                     .frame(maxWidth: .infinity)
-                                    .font(.title2)
+                                    .font(.title3)
                                     .padding(.vertical, 4)
                                 
                             }
                             .frame(maxWidth: .infinity)
+                            .padding(.horizontal)
                             .buttonStyle(.borderedProminent)
                             .sensoryFeedback(.success, trigger: didTap)
                         }
@@ -188,13 +189,14 @@ struct DetailsView: View {
                             Label("Info", systemImage: "info.circle")
                                 .font(.headline)
                         }
+                        .padding(.horizontal)
+                        .backgroundStyle(Color(.secondarySystemGroupedBackground))
                     }
                     Sections(media: media, jikanCharacters: jikanCharacters)
                 }
             }
             .scrollIndicators(.hidden)
             .scrollClipDisabled()
-            .padding(.horizontal)
             .toolbar {
                 if media.getListStatus.getProgressStatus != .unknown {
                     ToolbarItem(placement: .navigationBarTrailing) {

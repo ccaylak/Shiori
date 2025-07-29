@@ -19,20 +19,13 @@ struct LibraryMediaView: View {
     let completedVolumes: Int?
     let totalVolumes: Int?
     
-    private var isDarkMode: Bool {
-        if settingsManager.appearance == .system {
-            return colorScheme == .dark
-        }
-        return settingsManager.appearance == .dark
-    }
-    
     var body: some View {
         HStack(spacing: 20) {
             AsyncImageView(imageUrl: image)
                 .frame(width: 70, height: 110)
                 .clipped()
                 .cornerRadius(12)
-                .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
+                .strokedBorder()
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
@@ -175,12 +168,6 @@ struct LibraryMediaView: View {
             .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(isDarkMode ? Color.gray.opacity(0.15) : Color(.systemBackground))
-                .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
-        )
     }
     
     func formattedDetails(year: String) -> String {

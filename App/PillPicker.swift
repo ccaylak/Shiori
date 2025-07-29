@@ -8,13 +8,6 @@ struct PillPicker<T: Hashable>: View {
     let displayName: (T) -> String
     let icon: (T) -> AnyView
     
-    private var isDarkMode: Bool {
-        if settingsManager.appearance == .system {
-            return colorScheme == .dark
-        }
-        return settingsManager.appearance == .dark
-    }
-    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
@@ -29,11 +22,7 @@ struct PillPicker<T: Hashable>: View {
                     }
                     .padding(.vertical, 8)
                     .padding(.horizontal, 10)
-                    .background(
-                        isDarkMode
-                        ? Color.gray.opacity(0.15)
-                        : Color(.systemBackground)
-                    )
+                    .background(Color(.secondarySystemGroupedBackground))
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(
@@ -44,7 +33,6 @@ struct PillPicker<T: Hashable>: View {
                             )
                     )
                     .cornerRadius(8)
-                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
                     .onTapGesture {
                         withAnimation {
                             selectedOption = option

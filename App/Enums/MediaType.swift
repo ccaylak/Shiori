@@ -10,4 +10,12 @@ enum MediaType: String {
         case .unknown: return String(localized: "Unknown")
         }
     }
+    
+    var icon: String {
+        switch self {
+        case .anime: return "tv"
+        case .manga: return "character.book.closed.ja"
+        default: return "questionmark.circle"
+        }
+    }
 }

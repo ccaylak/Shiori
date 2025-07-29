@@ -8,7 +8,7 @@ struct SettingsView: View {
     
     private let resultOptions = [10, 20, 50, 100]
     
-    private let nameOptions = ["First Name Last Name", "Last Name, First Name"]
+    private let nameOptions = [String(localized: "First Name Last Name"), String(localized: "Last Name, First Name")]
     
     @State private var showConfirmationDialog: Bool = false
     
@@ -24,7 +24,7 @@ struct SettingsView: View {
                 Section("General") {
                     Picker("Appearance", systemImage: "circle.lefthalf.filled", selection: $settingsManager.appearance) {
                         ForEach(Appearance.allCases, id: \.self) { appearance in
-                            Text(appearance.rawValue.capitalized).tag(appearance)
+                            Text(appearance.displayName).tag(appearance)
                         }
                     }
                     .pickerStyle(.navigationLink)
@@ -77,7 +77,7 @@ struct SettingsView: View {
                     }
                     Picker("Title language", systemImage: "translate", selection: $settingsManager.titleLanguage) {
                         ForEach(TitleLanguage.allCases, id: \.self) { selectedLanguage in
-                            Text(selectedLanguage.rawValue.capitalized).tag(selectedLanguage)
+                            Text(selectedLanguage.displayName).tag(selectedLanguage)
                         }
                     }
                 }
@@ -102,9 +102,8 @@ struct SettingsView: View {
                     footer:
                         VStack(alignment: .leading, spacing: 2) {
                             Text("App icon made by Nicole Knutas")
-                            Text("Shiori-chan illustrated by Lara Prüß")
+                            Link("Shiori-chan illustrated by Lara Prüß", destination: URL(string: "https://x.com/larakistar")!)
                                 .font(.footnote)
-                                .foregroundColor(.secondary)
                         }
                 ) {
                     HStack (spacing: 13){
@@ -115,10 +114,7 @@ struct SettingsView: View {
                                     .scaledToFit()
                                     .frame(width: 70, height: 70)
                                     .cornerRadius(12)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                                    )
+                                    .strokedBorder()
                                     .onTapGesture {
                                         changeAppIcon(to: icon.name == "AppIcon" ? nil : icon.name)
                                     }
@@ -190,19 +186,6 @@ private struct AboutView: View {
         Form {
             Section("Info") {
                 LabeledContent("App version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "–")
-                
-                Link(destination: URL(string: "https://github.com/ccaylak/Shiori")!) {
-                    Label {
-                        Text("GitHub Repository")
-                    } icon: {
-                        Image("github_icon")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.accentColor)
-                    }
-                }
-                .foregroundStyle(.primary)
             }
             
             Section (
@@ -222,7 +205,10 @@ private struct AboutView: View {
                     }
             ) {
                 ForEach(SupportedLanguages.allCases, id: \.self) { language in
-                    Text(language.displayName)
+                    VStack {
+                        Text(language.displayName)
+                        language.additionalInfoView
+                    }
                 }
             }
             
@@ -236,6 +222,7 @@ private struct AboutView: View {
                 Link("KeychainSwift", destination: URL(string: "https://github.com/evgenyneu/keychain-swift")!)
                 Link("Nuke", destination: URL(string: "https://github.com/kean/Nuke")!)
                 Link("TelemetryDeck", destination: URL(string: "https://telemetrydeck.com")!)
+                Link("Pow", destination: URL(string: "https://movingparts.io/pow")!)
             }
         }
         .navigationBarTitleDisplayMode(.inline)

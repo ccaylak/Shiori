@@ -36,10 +36,8 @@ struct LoginView: View {
                                 AsyncImageView(imageUrl: profileDetails?.profilePicture ?? "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg")
                                     .frame(width: 80, height: 100)
                                     .cornerRadius(12)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                                    )
+                                    .strokedBorder()
+                                
                                 VStack(alignment: .leading, spacing: 6) {
                                     if let name = profileDetails?.name {
                                         Text(name)
@@ -135,11 +133,7 @@ struct LoginView: View {
                                                 AsyncImageView(imageUrl: friend.user.images.jpg.imageUrl ?? "")
                                                     .frame(width: 50, height: 50)
                                                     .cornerRadius(12)
-                                                    .overlay(
-                                                        RoundedRectangle(cornerRadius: 12)
-                                                            .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                                                    )
-                                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+                                                    .strokedBorder()
                                                 
                                                 Text(friend.user.username)
                                                     .font(.caption)
@@ -227,14 +221,14 @@ struct LoginView: View {
                         let favoriteMangas = jikanFavorites.data.mangas
                         if !favoriteMangas.isEmpty {
                             Section(header: Label("Favorite manga", systemImage: "heart")) {
-                                ScrollView(.horizontal) {
+                                ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(favoriteMangas, id: \.self) { manga in
                                             VStack {
                                                 AsyncImageView(imageUrl: manga.images.jpg.imageUrl)
                                                     .frame(width: 100, height: 156)
                                                     .cornerRadius(12)
-                                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+                                                    .strokedBorder()
                                                 
                                                 Text(manga.title ?? "–")
                                                     .font(.caption)
@@ -247,14 +241,13 @@ struct LoginView: View {
                                     .scrollTargetLayout()
                                 }
                                 .scrollTargetBehavior(.viewAligned)
-                                .scrollIndicators(.hidden)
                                 .scrollClipDisabled()
                             }
                         }
                         
                         let favoriteAnimes = jikanFavorites.data.animes
                         if !favoriteAnimes.isEmpty {
-                            Section(header: Label("Favorite animes", systemImage: "heart")) {
+                            Section(header: Label("Favorite anime", systemImage: "heart")) {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(jikanFavorites.data.animes, id: \.self) { anime in
@@ -262,7 +255,7 @@ struct LoginView: View {
                                                 AsyncImageView(imageUrl: anime.images.jpg.imageUrl)
                                                     .frame(width: 100, height: 156)
                                                     .cornerRadius(12)
-                                                    .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 5)
+                                                    .strokedBorder()
                                                 
                                                 Text(anime.title ?? "–")
                                                     .font(.caption)
@@ -275,7 +268,6 @@ struct LoginView: View {
                                     .scrollTargetLayout()
                                 }
                                 .scrollTargetBehavior(.viewAligned)
-                                .scrollIndicators(.hidden)
                                 .scrollClipDisabled()
                             }
                         }
@@ -283,14 +275,15 @@ struct LoginView: View {
                         let favoriteCharacters = jikanFavorites.data.characters
                         if !favoriteCharacters.isEmpty {
                             Section(header: Label("Favorite characters", systemImage: "person.3.sequence")) {
-                                ScrollView(.horizontal) {
+                                ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(jikanFavorites.data.characters, id: \.self) { character in
                                             VStack {
                                                 AsyncImageView(imageUrl: character.images.jpg.imageUrl)
                                                     .frame(width: 100, height: 156)
                                                     .cornerRadius(12)
-                                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
+                                                    .strokedBorder()
+                                                
                                                 Text(character.formattedName)
                                                     .font(.caption)
                                                     .frame(width: 100, alignment: .leading)
@@ -302,7 +295,6 @@ struct LoginView: View {
                                     .scrollTargetLayout()
                                 }
                                 .scrollTargetBehavior(.viewAligned)
-                                .scrollIndicators(.hidden)
                                 .scrollClipDisabled()
                             }
                         }

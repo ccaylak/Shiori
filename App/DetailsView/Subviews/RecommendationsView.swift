@@ -8,24 +8,21 @@ struct RecommendationsView: View {
         if !recommendations.isEmpty {
             VStack(alignment: .leading) {
                 NavigationLink(destination: RecommendationsListView(recommendations: recommendations)) {
-                    HStack {
-                        Text("Recommendations")
-                            .font(.headline)
-                        
-                        Image(systemName: "chevron.forward")
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.bold)
-                    }
+                    LabelWithChevron(text: "Recommendations")
+                        .padding(.horizontal)
                 }
                 .buttonStyle(.plain)
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
+                    LazyHStack(spacing: 10) {
                         ForEach(recommendations, id: \.node.id) { recommendation in
                             NavigationLink(destination: DetailsView(media: recommendation.node)) {
                                 VStack {
                                     AsyncImageView(imageUrl: recommendation.node.getCover)
                                         .frame(width: 95, height: 150)
                                         .cornerRadius(12)
+                                        .showFullTitleContextMenu(recommendation.node.getTitle)
+                                        .strokedBorder()
+                                    
                                     Text(recommendation.node.getTitle)
                                         .font(.caption2)
                                         .frame(width: 95, alignment: .leading)
@@ -34,10 +31,10 @@ struct RecommendationsView: View {
                                 }
                             }
                             .buttonStyle(.plain)
-                            
                         }
                     }
                     .scrollTargetLayout()
+                    .padding(.horizontal)
                 }
                 .scrollTargetBehavior(.viewAligned)
                 .scrollClipDisabled()
@@ -74,7 +71,6 @@ private struct RecommendationsListView: View {
                                 AsyncImageView(imageUrl: recommendation.node.getCover)
                                     .frame(width: 150, height: 238)
                                     .cornerRadius(12)
-                                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 5)
                             }
                             .overlay(alignment: .topTrailing) {
                                 if (recommendation.node.getScore > 0 && recommendation.node.getScore <= 10){
