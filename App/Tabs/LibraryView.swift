@@ -257,7 +257,7 @@ struct LibraryView: View {
                                 }
                             }
                             .swipeActions(edge: .trailing) {
-                                if anime.node.getListStatus.getWatchedEpisodes != anime.node.getEpisodes {
+                                if anime.node.getEpisodes == 0 || anime.node.getListStatus.getWatchedEpisodes != anime.node.getEpisodes {
                                     Button {
                                         Task {
                                             let current = anime.node.getListStatus.getWatchedEpisodes
