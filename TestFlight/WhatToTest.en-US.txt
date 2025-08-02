@@ -1,16 +1,17 @@
 What's New:
 
 New Features
-- Changed the design of Library and added swipeActions
-- Added contextMenu for related media, characters and recommendations
-- Added haptic feedback when increasing or decreasing entries episode/chapter/volume
+- Added build info in settings
+- Added adaption/source section into details
 
 Bug Fixes
-- Fixed popping issues related to: related media, recommendations and characters inside of details
+- Fixed swipeAction "completed" which was not working for manga
 - Fixed all covers having the wrong padding to the left
-- Fixed some translation typos
+- Fixed more translation problems
 
 Reworks
-- Removed all shadows and replaced with border stroke on light stuff
-- Reworked how anime/manga are edited in the library view
-- Removed unnecessary Shiori-chan page, since she is now used as an icon
+- Improved characters section with voice actors and general improvement
+
+What's next?
+- CharacterDetailView, PeopleDetailView and FriendView
+
