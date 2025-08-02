@@ -378,7 +378,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "6 (Fine)"
+            "value" : "6 (Okay)"
           }
         },
         "pt-BR" : {
@@ -429,7 +429,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "9 (Gut)"
+            "value" : "9 (Großartig)"
           }
         },
         "pt-BR" : {
@@ -526,6 +526,9 @@
           }
         }
       }
+    },
+    "Adaption/Source" : {
+
     },
     "Add comments" : {
       "localizations" : {
@@ -988,6 +991,9 @@
         }
       }
     },
+    "Build number" : {
+
+    },
     "By" : {
       "localizations" : {
         "de" : {
@@ -1000,6 +1006,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Por"
+          }
+        }
+      }
+    },
+    "By Alex Madeira" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von Alex Madeira"
           }
         }
       }
@@ -1097,6 +1113,16 @@
         }
       }
     },
+    "Characters and voice actors" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Charaktere und Synchronsprecher"
+          }
+        }
+      }
+    },
     "Childcare" : {
       "comment" : "Genre",
       "localizations" : {
@@ -1110,6 +1136,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cuidado Infantil"
+          }
+        }
+      }
+    },
+    "Chinese" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chinesisch"
           }
         }
       }
@@ -1702,6 +1738,9 @@
         }
       }
     },
+    "Favorites" : {
+
+    },
     "Female ♀" : {
       "comment" : "Gender",
       "localizations" : {
@@ -1746,6 +1785,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vorname Nachname"
+          }
+        }
+      }
+    },
+    "French" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Franzözisch"
           }
         }
       }
@@ -1837,6 +1886,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gêneros"
+          }
+        }
+      }
+    },
+    "German" : {
+      "comment" : "Supported language",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch"
           }
         }
       }
@@ -2110,6 +2170,16 @@
         }
       }
     },
+    "Italian" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Italienisch"
+          }
+        }
+      }
+    },
     "Iyashikei" : {
       "comment" : "Genre",
       "localizations" : {
@@ -2199,6 +2269,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Infantil"
+          }
+        }
+      }
+    },
+    "Korean" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koreanisch"
+          }
+        }
+      }
+    },
+    "Language" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache"
           }
         }
       }
@@ -4064,6 +4154,16 @@
     "Sorting options" : {
 
     },
+    "Source" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlage"
+          }
+        }
+      }
+    },
     "Space" : {
       "comment" : "Genre",
       "localizations" : {
@@ -4077,6 +4177,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Espaço"
+          }
+        }
+      }
+    },
+    "Spanish" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spanisch"
           }
         }
       }
@@ -4316,9 +4426,6 @@
     },
     "TelemetryDeck" : {
       "shouldTranslate" : false
-    },
-    "Thanks to Alex Madeira" : {
-
     },
     "There was an error loading the image." : {
       "localizations" : {

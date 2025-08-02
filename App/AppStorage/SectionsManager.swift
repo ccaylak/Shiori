@@ -9,6 +9,7 @@ import SwiftUI
     @AppStorage("sections.score") var showScore = true
     @AppStorage("sections.related") var showRelated = true
     @AppStorage("sections.recommendations") var showRecommendations = true
+    @AppStorage("sections.origin") var showOrigin = true
     @AppStorage("sections.characters") var showCharacters = true
     
     private init() {}

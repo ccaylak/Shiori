@@ -3,7 +3,7 @@ import SwiftUI
 
 enum EditSections: String, CaseIterable, Hashable {
     
-    case general, genres, score, related, recommendations, characters
+    case general, genres, score, related, recommendations, characters, origin
     
     @MainActor
     var toggleComponent: some View {
@@ -22,6 +22,9 @@ enum EditSections: String, CaseIterable, Hashable {
                 .toggleStyle(.switch)
         case .recommendations:
             Toggle("Recommendations", isOn: SectionsManager.shared.$showRecommendations)
+                .toggleStyle(.switch)
+        case .origin:
+            Toggle("Adaption/Source", isOn: SectionsManager.shared.$showOrigin)
                 .toggleStyle(.switch)
         case .characters:
             Toggle("Characters", isOn: SectionsManager.shared.$showCharacters)

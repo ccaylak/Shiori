@@ -251,18 +251,18 @@ struct LoginView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(jikanFavorites.data.animes, id: \.self) { anime in
-                                            VStack {
-                                                AsyncImageView(imageUrl: anime.images.jpg.imageUrl)
-                                                    .frame(width: 100, height: 156)
-                                                    .cornerRadius(12)
-                                                    .strokedBorder()
-                                                
-                                                Text(anime.title ?? "–")
-                                                    .font(.caption)
-                                                    .frame(width: 100, alignment: .leading)
-                                                    .lineLimit(1)
-                                                    .truncationMode(.tail)
-                                            }
+                                                VStack {
+                                                    AsyncImageView(imageUrl: anime.images.jpg.imageUrl)
+                                                        .frame(width: 100, height: 156)
+                                                        .cornerRadius(12)
+                                                        .strokedBorder()
+                                                    
+                                                    Text(anime.title ?? "–")
+                                                        .font(.caption)
+                                                        .frame(width: 100, alignment: .leading)
+                                                        .lineLimit(1)
+                                                        .truncationMode(.tail)
+                                                }
                                         }
                                     }
                                     .scrollTargetLayout()

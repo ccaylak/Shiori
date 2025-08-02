@@ -30,4 +30,28 @@ struct JikanEndpoints {
             "\(baseURL)/manga/\(id)/characters"
         }
     }
+    
+    struct Relations {
+        let id: Int
+        
+        var animeRelations: String {
+            "\(baseURL)/anime/\(id)/relations"
+        }
+        
+        var mangaRelations: String {
+            "\(baseURL)/manga/\(id)/relations"
+        }
+    }
+    
+    struct Pictures {
+        let id: Int
+        
+        var mangaPictures: String {
+            "\(baseURL)/manga/\(id)/pictures"
+        }
+        
+        var animePictures: String {
+            "\(baseURL)/anime/\(id)/pictures"
+        }
+    }
 }

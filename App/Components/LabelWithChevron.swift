@@ -5,7 +5,7 @@ struct LabelWithChevron: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 3) {
-            Text(text)
+            Text(LocalizedStringKey(text))
                 .font(.headline)
             
             Image(systemName: "chevron.forward")

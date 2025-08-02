@@ -10,13 +10,16 @@ struct JikanCharacter: Decodable {
 
 struct Character: Decodable, Identifiable {
     enum CodingKeys: String, CodingKey {
-        case role
+        case role, favorites
         case metaData = "character"
+        case voiceActors = "voice_actors"
     }
     
     let id: String = UUID().uuidString
     let role: String
+    let favorites: Int?
     let metaData: MetaData
+    let voiceActors: [VoiceActor]?
 }
 
 struct MetaData: Decodable {
@@ -26,6 +29,27 @@ struct MetaData: Decodable {
     }
     
     let malId: Int
+    let name: String
+    let images: CharacterImage
+}
+
+struct VoiceActor: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case person, language
+    }
+    
+    let person: Person
+    let language: String
+}
+
+struct Person: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case malId = "mal_id"
+        case url, name, images
+    }
+    
+    let malId: Int
+    let url: String
     let name: String
     let images: CharacterImage
 }
@@ -47,16 +71,15 @@ struct CharacterJPG: Decodable {
 }
 
 @MainActor
-extension MetaData {
+extension Person {
     var formattedName: String {
         let nameFormat = SettingsManager.shared.namePresentation
         
         switch nameFormat {
-        case "Last Name, First Name":
+        case .lastFirst:
             return name
             
-        default:
-            
+        case .firstLast:
             let parts = name.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
             guard parts.count == 2 else {
                 return name
@@ -66,4 +89,21 @@ extension MetaData {
     }
 }
 
-
+@MainActor
+extension MetaData {
+    var formattedName: String {
+        let nameFormat = SettingsManager.shared.namePresentation
+        
+        switch nameFormat {
+        case .lastFirst:
+            return name
+            
+        case .firstLast:
+            let parts = name.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+            guard parts.count == 2 else {
+                return name
+            }
+            return "\(parts[1]) \(parts[0])"
+        }
+    }
+}

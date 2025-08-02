@@ -15,7 +15,8 @@ enum SupportedLanguages: String, CaseIterable {
     @ViewBuilder
     var additionalInfoView: some View {
         if self == .portuguese {
-            Link("Thanks to Alex Madeira", destination: URL(string: "https://alexandremadeira.dev")!)
+            Link("By Alex Madeira", destination: URL(string: "https://alexandremadeira.dev")!)
+                .font(.caption)
         } else {
             EmptyView()
         }

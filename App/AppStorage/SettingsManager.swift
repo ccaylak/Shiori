@@ -10,7 +10,7 @@ import SwiftUI
     @AppStorage("titleLanguage") var titleLanguage = TitleLanguage.english
     @AppStorage("airingSoon") var showAiringSoonBanner = true
     @AppStorage("mangaMode") var mangaMode = MangaMode.all
-    @AppStorage("namePresentation") var namePresentation = "First Name Last Name"
+    @AppStorage("namePresentation") var namePresentation = NamePresentation.firstLast
     
     private init() {}
 }

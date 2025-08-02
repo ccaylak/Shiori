@@ -7,6 +7,7 @@ struct DetailsView: View {
     @State private var isSheetPresented = false
     
     @State private var jikanCharacters: JikanCharacter = JikanCharacter(data: [])
+    @State private var jikanRelations: [RelationEntry] = []
     
     struct UserProgress {
         var mangaProgress: ProgressStatus.Manga
@@ -50,6 +51,7 @@ struct DetailsView: View {
     let animeController = AnimeController()
     let mangaController = MangaController()
     let jikanCharacterController = JikanCharacterController()
+    let jikanRelationsController = JikanRelationsController()
     
     var body: some View {
         NavigationStack {
@@ -93,7 +95,7 @@ struct DetailsView: View {
                                         .accentColor(.primary)
                                 }
                                 .frame(maxWidth: .infinity)
-                                if (resultManager.mediaType == .anime && media.getListStatus.getWatchedEpisodes != 0) {
+                                if (media.getMediaType == .anime && media.getListStatus.getWatchedEpisodes != 0) {
                                     Divider()
                                     VStack(spacing: 3) {
                                         Image(systemName: "tv.fill")
@@ -108,7 +110,7 @@ struct DetailsView: View {
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
-                                if (resultManager.mediaType == .manga && media.getListStatus.getReadVolumes != 0) {
+                                if (media.getMediaType == .manga && media.getListStatus.getReadVolumes != 0) {
                                     Divider()
                                     VStack(spacing: 3) {
                                         Image(systemName: "character.book.closed.fill.ja")
@@ -123,7 +125,7 @@ struct DetailsView: View {
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
-                                if (resultManager.mediaType == .manga && media.getListStatus.getReadChapters != 0) {
+                                if (media.getMediaType == .manga && media.getListStatus.getReadChapters != 0) {
                                     Divider()
                                     VStack(spacing: 3) {
                                         Image(systemName: "book.pages.fill")
@@ -158,11 +160,11 @@ struct DetailsView: View {
                                     defer {
                                         alertManager.isLoading = false
                                     }
-                                    if (resultManager.mediaType == .anime) {
+                                    if (media.getMediaType == .anime) {
                                         try await animeController.addToWatchList(id: media.id)
                                         media = try await animeController.fetchDetails(id: media.id)
                                     }
-                                    if (resultManager.mediaType == .manga) {
+                                    if (media.getMediaType == .manga) {
                                         try await mangaController.addToReadingList(id: media.id)
                                         media = try await mangaController.fetchDetails(id: media.id)
                                     }
@@ -181,7 +183,7 @@ struct DetailsView: View {
                         }
                     } else {
                         GroupBox {
-                            Text("Log in with your MyAnimeList account to see your \(resultManager.mediaType.displayName) progress, rating, and status.")
+                            Text("Log in with your MyAnimeList account to see your \(media.getMediaType.displayName) progress, rating, and status.")
                                 .font(.body)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.leading)
@@ -192,7 +194,7 @@ struct DetailsView: View {
                         .padding(.horizontal)
                         .backgroundStyle(Color(.secondarySystemGroupedBackground))
                     }
-                    Sections(media: media, jikanCharacters: jikanCharacters)
+                    Sections(media: media, jikanCharacters: jikanCharacters, jikanRelations: jikanRelations)
                 }
             }
             .scrollIndicators(.hidden)
@@ -210,7 +212,7 @@ struct DetailsView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     let escapedTitle = media.getTitle.replacingOccurrences(of: " ", with: "_")
                     
-                    if let url = URL(string: "https://myanimelist.net/\(resultManager.mediaType.rawValue)/\(media.id)/\(escapedTitle)") {
+                    if let url = URL(string: "https://myanimelist.net/\(media.getMediaType.rawValue)/\(media.id)/\(escapedTitle)") {
                         Menu {
                             ShareLink(item: url) {
                                 Label("Share", systemImage: "square.and.arrow.up")
@@ -233,7 +235,7 @@ struct DetailsView: View {
                 if (tokenHandler.isAuthenticated) {
                     NavigationStack {
                         List {
-                            if (resultManager.mediaType == .manga) {
+                            if (media.getMediaType == .manga) {
                                 Section {
                                     Picker("Progress", selection: $userProgress.mangaProgress) {
                                         ForEach([ProgressStatus.Manga.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
@@ -379,7 +381,7 @@ struct DetailsView: View {
                                 }
                             }
                             
-                            if (resultManager.mediaType == .anime){
+                            if (media.getMediaType == .anime){
                                 Picker("Status", selection: $userProgress.animeProgress) {
                                     ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
                                         Text(animeSelection.displayName).tag(animeSelection)
@@ -516,7 +518,7 @@ struct DetailsView: View {
                             ToolbarItem(placement: .primaryAction) {
                                 Button("Save") {
                                     Task {
-                                        if (resultManager.mediaType == .manga) {
+                                        if (media.getMediaType == .manga) {
                                             try await mangaController.saveProgress(
                                                 id: media.id,
                                                 status: userProgress.mangaProgress.rawValue,
@@ -531,7 +533,7 @@ struct DetailsView: View {
                                             media = try await mangaController.fetchDetails(id: media.id)
                                             isSheetPresented = false
                                         }
-                                        if (resultManager.mediaType == .anime) {
+                                        if (media.getMediaType == .anime) {
                                             try await animeController.saveProgress(
                                                 id: media.id,
                                                 status: userProgress.animeProgress.rawValue,
@@ -561,12 +563,12 @@ struct DetailsView: View {
                                     Button("Delete", role: .destructive) {
                                         didTap.toggle()
                                         Task {
-                                            if(resultManager.mediaType == .manga) {
+                                            if(media.getMediaType == .manga) {
                                                 try await mangaController.deleteEntry(id: media.id)
                                                 alertManager.showRemovedAlert = true
                                                 media = try await mangaController.fetchDetails(id: media.id)
                                             }
-                                            if(resultManager.mediaType == .anime) {
+                                            if(media.getMediaType == .anime) {
                                                 try await animeController.deleteEntry(id: media.id)
                                                 alertManager.showRemovedAlert = true
                                                 media = try await animeController.fetchDetails(id: media.id)
@@ -581,7 +583,7 @@ struct DetailsView: View {
                                 }.sensoryFeedback(.warning, trigger: didTap)
                             }
                         }
-                        .navigationTitle(resultManager.mediaType == .manga ? "Edit Reading Progress" : "Edit Watch Progress")
+                        .navigationTitle(media.getMediaType == .manga ? "Edit Reading Progress" : "Edit Watch Progress")
                         .navigationBarTitleDisplayMode(.inline)
                         .presentationDetents([.fraction(0.8)])
                         .presentationBackgroundInteraction(.disabled)
@@ -609,9 +611,10 @@ struct DetailsView: View {
                 alertManager.isLoading = true
                 defer { alertManager.isLoading = false }
                 do {
-                    if resultManager.mediaType == .anime {
+                    if media.getMediaType == .anime {
                         media = try await animeController.fetchDetails(id: media.id)
                         jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
+                        jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id)
                         
                         userProgress.progress = media.getListStatus.getWatchedEpisodes
                         userProgress.rating = media.getListStatus.getRating
@@ -626,9 +629,10 @@ struct DetailsView: View {
                         }
                     }
                     
-                    if resultManager.mediaType == .manga {
+                    if media.getMediaType == .manga {
                         media = try await mangaController.fetchDetails(id: media.id)
                         jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id)
+                        jikanRelations = try await jikanRelationsController.fetchMangaRelations(id: media.id)
                         
                         userProgress.progress = media.getListStatus.getReadChapters
                         userProgress.rating = media.getListStatus.getRating
@@ -674,6 +678,7 @@ struct DetailsView: View {
 private struct Sections: View {
     let media: Media
     let jikanCharacters: JikanCharacter
+    let jikanRelations: [RelationEntry]
     @ObservedObject private var sectionsManager: SectionsManager = .shared
     
     private var activeSections: [EditSections] {
@@ -687,9 +692,10 @@ private struct Sections: View {
                 return sectionsManager.showScore
             case .related:
                 return sectionsManager.showRelated && (!media.getRelatedAnimes.isEmpty || !media.getRelatedMangas.isEmpty)
-                
             case .recommendations:
                 return sectionsManager.showRecommendations && !media.getRecommendations.isEmpty
+            case .origin:
+                return sectionsManager.showOrigin && !jikanRelations.isEmpty
             case .characters:
                 return sectionsManager.showCharacters && !jikanCharacters.data.isEmpty
             }
@@ -733,8 +739,10 @@ private struct Sections: View {
             RelatedMediaView(media: media, mediaType: media.getMediaType)
         case .recommendations:
             RecommendationsView(recommendations: media.getRecommendations)
+        case .origin:
+            OriginView(relations: jikanRelations)
         case .characters:
-            CharactersView(characters: jikanCharacters.data)
+            CharactersView(characters: jikanCharacters.data, mediaType: media.getMediaType)
         }
     }
 }

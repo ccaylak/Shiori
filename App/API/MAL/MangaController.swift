@@ -140,7 +140,7 @@ import SwiftUI
         var components = URLComponents(string: MALEndpoints.Manga.details(id: id))!
         
         components.queryItems = [
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.otherTitles, .authors, .chapters, .volumes, .mediaType, .startDate, .status,.endDate, .summary, .mean, .rank, .popularity, .genres, .mediaType, .recommendations, .relatedManga, .entryStatus, .scoredUsers]))
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.otherTitles, .authors, .chapters, .volumes, .mediaType, .startDate, .status, .endDate, .summary, .mean, .rank, .popularity, .genres, .mediaType, .recommendations, .relatedManga, .entryStatus, .scoredUsers]))
         ]
         
         guard let url = components.url else {

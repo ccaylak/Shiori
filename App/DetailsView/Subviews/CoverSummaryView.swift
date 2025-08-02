@@ -82,7 +82,7 @@ private struct SummaryView: View {
                 .scrollIndicators(.automatic)
             }
         }
-        .frame(maxWidth: 159)
+        .frame(maxWidth: .infinity)
     }
 }
 

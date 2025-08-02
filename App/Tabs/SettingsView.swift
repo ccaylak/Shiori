@@ -8,8 +8,6 @@ struct SettingsView: View {
     
     private let resultOptions = [10, 20, 50, 100]
     
-    private let nameOptions = [String(localized: "First Name Last Name"), String(localized: "Last Name, First Name")]
-    
     @State private var showConfirmationDialog: Bool = false
     
     var body: some View {
@@ -64,8 +62,8 @@ struct SettingsView: View {
                     }
                     
                     Picker("Name", systemImage: "textformat.characters.arrow.left.and.right", selection: $settingsManager.namePresentation) {
-                        ForEach(nameOptions, id: \.self) { nameOption in
-                            Text(nameOption).tag(nameOption)
+                        ForEach(NamePresentation.allCases, id: \.self) { mode in
+                            Text(mode.displayName).tag(mode)
                         }
                     }
                 }
@@ -185,7 +183,8 @@ private struct AboutView: View {
     var body: some View {
         Form {
             Section("Info") {
-                LabeledContent("App version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "–")
+                LabeledContent("App version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
+                LabeledContent("Build number", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
             }
             
             Section (
@@ -205,7 +204,7 @@ private struct AboutView: View {
                     }
             ) {
                 ForEach(SupportedLanguages.allCases, id: \.self) { language in
-                    VStack {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text(language.displayName)
                         language.additionalInfoView
                     }

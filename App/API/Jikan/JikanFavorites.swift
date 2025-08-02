@@ -59,10 +59,10 @@ extension FavoriteEntries {
         let nameFormat = SettingsManager.shared.namePresentation
         
         switch nameFormat {
-        case "Last Name, First Name":
+        case .lastFirst:
             return getName
             
-        default:
+        case .firstLast:
             
             let parts = getName.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
             guard parts.count == 2 else {
