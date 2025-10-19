@@ -91,6 +91,8 @@ struct DetailsView: View {
                                         .font(.caption)
                                     
                                     Text(media.getListStatus.getProgressStatus.displayName)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
                                         .font(.callout)
                                         .accentColor(.primary)
                                 }
@@ -690,12 +692,12 @@ private struct Sections: View {
                 return sectionsManager.showGenres && !media.getGenres.isEmpty
             case .score:
                 return sectionsManager.showScore
+            case .origin:
+                return sectionsManager.showOrigin && !jikanRelations.isEmpty
             case .related:
                 return sectionsManager.showRelated && (!media.getRelatedAnimes.isEmpty || !media.getRelatedMangas.isEmpty)
             case .recommendations:
                 return sectionsManager.showRecommendations && !media.getRecommendations.isEmpty
-            case .origin:
-                return sectionsManager.showOrigin && !jikanRelations.isEmpty
             case .characters:
                 return sectionsManager.showCharacters && !jikanCharacters.data.isEmpty
             }
@@ -735,12 +737,12 @@ private struct Sections: View {
                 popularity: media.getPopularity,
                 users: media.getUsers
             )
+        case .origin:
+            OriginView(relations: jikanRelations)
         case .related:
             RelatedMediaView(media: media, mediaType: media.getMediaType)
         case .recommendations:
             RecommendationsView(recommendations: media.getRecommendations)
-        case .origin:
-            OriginView(relations: jikanRelations)
         case .characters:
             CharactersView(characters: jikanCharacters.data, mediaType: media.getMediaType)
         }

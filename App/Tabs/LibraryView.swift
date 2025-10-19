@@ -127,7 +127,7 @@ struct LibraryView: View {
                                 )
                             }
                             .swipeActions(edge: .leading) {
-                                if manga.node.getListStatus.getProgressStatus != ProgressStatus.manga(.completed) {
+                                if manga.node.getListStatus.getProgressStatus != ProgressStatus.manga(.completed) { // geht noch nicht
                                     Button {
                                         Task {
                                             try await mangaController.completEntry(id: manga.node.id)

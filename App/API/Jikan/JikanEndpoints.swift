@@ -29,6 +29,10 @@ struct JikanEndpoints {
         var manga: String {
             "\(baseURL)/manga/\(id)/characters"
         }
+        
+        var full: String {
+            "\(baseURL)/characters/\(id)/full"
+        }
     }
     
     struct Relations {
@@ -52,6 +56,14 @@ struct JikanEndpoints {
         
         var animePictures: String {
             "\(baseURL)/anime/\(id)/pictures"
+        }
+    }
+    
+    struct Person {
+        let id: Int
+        
+        var full: String {
+            "\(baseURL)/people/\(id)/full"
         }
     }
 }

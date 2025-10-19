@@ -201,6 +201,9 @@
         }
       }
     },
+    "%lld favorites" : {
+
+    },
     "%lld parts" : {
       "localizations" : {
         "de" : {
@@ -555,7 +558,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Startdatum hinzufügen"
+            "value" : "Anfangsdatum hinzufügen"
           }
         }
       }
@@ -892,6 +895,9 @@
         }
       }
     },
+    "as %@" : {
+
+    },
     "Avant Garde" : {
       "comment" : "Genre",
       "localizations" : {
@@ -945,6 +951,9 @@
           }
         }
       }
+    },
+    "Birthday" : {
+
     },
     "Blue" : {
       "comment" : "Accent color",
@@ -1626,6 +1635,9 @@
         }
       }
     },
+    "Entdecken" : {
+
+    },
     "Episode" : {
       "localizations" : {
         "de" : {
@@ -2128,6 +2140,7 @@
       }
     },
     "Invalid date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3116,6 +3129,9 @@
         }
       }
     },
+    "Optionen" : {
+
+    },
     "Orange" : {
       "comment" : "Accent color",
       "localizations" : {
@@ -3320,6 +3336,7 @@
       }
     },
     "Popularity" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3537,6 +3554,7 @@
       }
     },
     "Rank" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3681,7 +3699,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Startdatum entfernen"
+            "value" : "Abschlussdatum entfernen"
           }
         }
       }
@@ -3691,7 +3709,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abschlussdatum entfernen"
+            "value" : "Anfangsdatum entfernen"
           }
         }
       }

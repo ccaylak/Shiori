@@ -49,6 +49,7 @@ struct RelatedMediaView: View {
                                     AsyncImageView(imageUrl: relatedMedia.node.getCover)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .cornerRadius(12)
+                                        .strokedBorder()
                                         .showFullTitleContextMenu(relatedMedia.node.getTitle)
                                 }
                                 .padding(8)

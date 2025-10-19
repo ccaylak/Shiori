@@ -41,7 +41,6 @@ struct PillPicker<T: Hashable>: View {
                 }
             }
         }
-        .scrollClipDisabled()
     }
 }
 

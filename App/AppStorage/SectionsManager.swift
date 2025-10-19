@@ -7,9 +7,9 @@ import SwiftUI
     @AppStorage("sections.general") var showGeneral = true
     @AppStorage("sections.genres") var showGenres = true
     @AppStorage("sections.score") var showScore = true
+    @AppStorage("sections.origin") var showOrigin = true
     @AppStorage("sections.related") var showRelated = true
     @AppStorage("sections.recommendations") var showRecommendations = true
-    @AppStorage("sections.origin") var showOrigin = true
     @AppStorage("sections.characters") var showCharacters = true
     
     private init() {}

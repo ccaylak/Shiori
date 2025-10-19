@@ -19,22 +19,25 @@ struct CharactersView: View {
                         ForEach(
                             mediaType == .anime
                             ? characters.sorted { ($0.favorites ?? 0) > ($1.favorites ?? 0) }
-                                : characters,
-                                id: \.id
+                            : characters,
+                            id: \.id
                         ) { character in
-                            VStack(alignment: .leading) {
-                                AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
-                                    .frame(width: 72, height: 108)
-                                    .cornerRadius(12)
-                                    .showFullTitleContextMenu(character.metaData.formattedName)
-                                    .strokedBorder()
-                                
-                                Text(character.metaData.formattedName)
-                                    .font(.caption)
-                                    .frame(width: 72, alignment: .leading)
-                                    .lineLimit(1)
-                                    .truncationMode(.tail)
+                            NavigationLink(destination: CharacterDetailsView(character: character, role: character.role)) {
+                                VStack(alignment: .leading) {
+                                    AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
+                                        .frame(width: 72, height: 108)
+                                        .cornerRadius(12)
+                                        .showFullTitleContextMenu(character.metaData.formattedName)
+                                        .strokedBorder()
+                                    
+                                    Text(character.metaData.formattedName)
+                                        .font(.caption)
+                                        .frame(width: 72, alignment: .leading)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
+                                }
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(.horizontal)
@@ -83,29 +86,28 @@ private struct CharactersListView: View {
                 }
             }
         }
-
         
         if mediaType == .anime {
-                switch animeSortingOptions {
-                case "Name":
-                    result = result.sorted { $0.metaData.name.localizedCompare($1.metaData.name) == .orderedAscending }
-                case "Role":
-                    result = result.sorted { $0.role.localizedCompare($1.role) == .orderedAscending }
-                case "Favorite":
-                    result = result.sorted { ($0.favorites ?? 0) > ($1.favorites ?? 0) }
-                default:
-                    break
-                }
-            } else {
-                switch mangaSortingOptions {
-                case "Name":
-                    result = result.sorted { $0.metaData.name.localizedCompare($1.metaData.name) == .orderedAscending }
-                case "Role":
-                    result = result.sorted { $0.role.localizedCompare($1.role) == .orderedAscending }
-                default:
-                    break
-                }
+            switch animeSortingOptions {
+            case "Name":
+                result = result.sorted { $0.metaData.name.localizedCompare($1.metaData.name) == .orderedAscending }
+            case "Role":
+                result = result.sorted { $0.role.localizedCompare($1.role) == .orderedAscending }
+            case "Favorite":
+                result = result.sorted { ($0.favorites ?? 0) > ($1.favorites ?? 0) }
+            default:
+                break
             }
+        } else {
+            switch mangaSortingOptions {
+            case "Name":
+                result = result.sorted { $0.metaData.name.localizedCompare($1.metaData.name) == .orderedAscending }
+            case "Role":
+                result = result.sorted { $0.role.localizedCompare($1.role) == .orderedAscending }
+            default:
+                break
+            }
+        }
         
         return result
     }
@@ -120,75 +122,59 @@ private struct CharactersListView: View {
         return Array(Set(languages)).sorted()
     }
     
+    @State private var selectedCharacter: Character?
+    @State private var selectedVoiceActorName: String?
+    @State private var selectedVoiceActorImageURL: String?
+    @State private var selectedVoiceActorLanguage: String?
+    @State private var selectedVoiceActorId: Int?
+    @State private var selectedDestination: CharacterVoiceActorRow.Destination?
     
     var body: some View {
-        List {
-            ForEach(filteredCharacters, id: \.id) { character in
-                HStack {
-                    HStack {
-                        AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
-                            .frame(width: 50, height: 78)
-                            .cornerRadius(12)
-                            .strokedBorder()
-                        
-                        VStack (alignment: .leading){
-                            Text(character.metaData.formattedName)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .lineLimit(2)
-                                .truncationMode(.tail)
-                                .font(.caption)
-                                .bold()
-                            Spacer()
-                            
-                            HStack(alignment: .center, spacing: 2) {
-                                if let role = CharacterRole(rawValue: character.role.lowercased()) {
-                                    Image(systemName: role.icon)
-                                        .font(.caption)
-                                        .foregroundStyle(Color.secondary)
-                                }
-                                if let role = CharacterRole(rawValue: character.role.lowercased()) {
-                                    Text(role.displayName)
-                                        .font(.caption)
-                                }
-                            }
-                            .lineLimit(1)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
+        List(filteredCharacters, id: \.id) { character in
+            CharacterVoiceActorRow(
+                character: character,
+                mediaType: mediaType,
+                selectedLanguage: selectedLanguage.rawValue,
+                onSelectDestination: { dest in
+                    if dest == .character {
+                        selectedCharacter = character
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    if mediaType == .anime {
-                        HStack {
-                            let matchingVA = character.voiceActors?.first(where: {
-                                $0.language.lowercased() == selectedLanguage.rawValue
-                            })
-
-                            VStack {
-                                Text(matchingVA?.person.formattedName ?? "Kein Sprecher")
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .lineLimit(2)
-                                    .truncationMode(.tail)
-                                    .font(.caption)
-                                    .bold()
-                                Spacer()
-                                Text(
-                                    VoiceActorLanguage(rawValue: matchingVA?.language.lowercased() ?? "")?.displayName
-                                    ?? "Unbekannt"
-                                )
-                                    .font(.caption)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
-                            AsyncImageView(imageUrl: matchingVA?.person.images.jpg.imageUrl ?? "")
-                                .frame(width: 50, height: 78)
-                                .cornerRadius(12)
-                                .strokedBorder()
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    if dest == .voiceActor,
+                       let matchingVA = character.voiceActors?.first(where: {
+                           $0.language.lowercased() == selectedLanguage.rawValue.lowercased()
+                       }) {
+                        selectedVoiceActorName = matchingVA.person.formattedName
+                        selectedVoiceActorImageURL = matchingVA.person.images.jpg.imageUrl
+                        selectedVoiceActorLanguage = matchingVA.language
+                        selectedVoiceActorId = matchingVA.person.malId
                     }
-                    
+                    selectedDestination = dest
                 }
-                .frame(maxHeight: 78)
-            }
+            )
         }
+        .navigationDestination(item: $selectedDestination) { destination in
+                switch destination {
+                case .character:
+                    if let selectedCharacter {
+                        CharacterDetailsView(
+                            character: selectedCharacter,
+                            role: CharacterRole(rawValue: selectedCharacter.role.lowercased())?.displayName ?? "Unbekannt"
+                        )
+                    }
+                case .voiceActor:
+                    if let id = selectedVoiceActorId,
+                       let image = selectedVoiceActorImageURL,
+                       let name = selectedVoiceActorName,
+                       let language = selectedVoiceActorLanguage {
+                        VoiceActorDetailsView(
+                            id: id,
+                            language: language,
+                            image: image,
+                            name: name
+                        )
+                    }
+                }
+            }
         .contentMargins(.top, 0)
         .listRowSpacing(10)
         .toolbar {
@@ -202,7 +188,7 @@ private struct CharactersListView: View {
                     }
                     
                     let sortingOptions = mediaType == .anime ? $animeSortingOptions : $mangaSortingOptions
-
+                    
                     Picker(selection: sortingOptions, label: Text("Sorting options")) {
                         if mediaType == .anime {
                             Label("Favorites", systemImage: "heart.fill")
@@ -235,5 +221,82 @@ private struct CharactersListView: View {
         .navigationTitle("Characters and voice actors")
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search characters")
+    }
+}
+
+private struct CharacterVoiceActorRow: View {
+    let character: Character
+    let mediaType: MediaType
+    let selectedLanguage: String
+    let onSelectDestination: (Destination) -> Void
+    
+    enum Destination: Hashable {
+        case character
+        case voiceActor
+    }
+    
+    var body: some View {
+        HStack {
+            HStack {
+                AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
+                    .frame(width: 50, height: 78)
+                    .cornerRadius(12)
+                    .strokedBorder()
+                
+                VStack(alignment: .leading) {
+                    Text(character.metaData.formattedName)
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                        .font(.caption)
+                        .bold()
+                    Spacer()
+                    HStack(spacing: 2) {
+                        if let role = CharacterRole(rawValue: character.role.lowercased()) {
+                            Image(systemName: role.icon)
+                                .font(.caption)
+                                .foregroundStyle(Color.secondary)
+                            Text(role.displayName)
+                                .font(.caption)
+                        }
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .onTapGesture {
+                onSelectDestination(.character)
+            }
+            
+            if mediaType == .anime,
+               let matchingVA = character.voiceActors?.first(where: {
+                   print(mediaType)
+                   print($0.language.lowercased())
+                   print(selectedLanguage.lowercased())
+                   return $0.language.lowercased() == selectedLanguage.lowercased()
+               }) {
+                HStack {
+                    VStack {
+                        Text(matchingVA.person.formattedName)
+                            .lineLimit(2)
+                            .truncationMode(.tail)
+                            .font(.caption)
+                            .bold()
+                        Spacer()
+                        Text(
+                            VoiceActorLanguage(rawValue: matchingVA.language.lowercased())?.displayName ?? "Unbekannt"
+                        )
+                        .font(.caption)
+                    }
+                    AsyncImageView(imageUrl: matchingVA.person.images.jpg.imageUrl)
+                        .frame(width: 50, height: 78)
+                        .cornerRadius(12)
+                        .strokedBorder()
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .onTapGesture {
+                    onSelectDestination(.voiceActor)
+                }
+            }
+        }
+        .frame(maxHeight: 78)
     }
 }

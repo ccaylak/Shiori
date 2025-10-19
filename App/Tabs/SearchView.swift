@@ -14,6 +14,7 @@ struct SearchView: View {
                 .toolbar {
                     selectionMenu
                     sortMenu
+                    exploreGenres
                 }
         }
     }
@@ -49,6 +50,15 @@ struct SearchView: View {
             }
         }
     }
+    
+    private var exploreGenres: some ToolbarContent {
+        ToolbarItem(placement: .primaryAction) {
+            NavigationLink(destination: GenreMediaListView()) {
+                Image(systemName: "magnifyingglass")
+            }
+        }
+    }
+
     
     private var animeSortPicker: some View {
         Picker("Sort by", selection: $resultManager.animeRankingType) {

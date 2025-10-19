@@ -132,9 +132,10 @@ private struct StudiosView: View {
             Spacer()
             HStack(spacing: 5) {
                 Text("Made by")
-                    .bold()
+                    
                 ForEach(studios, id: \.id) {studio in
                     Text(studio.name)
+                        .bold()
                 }
             }
         }
@@ -148,10 +149,11 @@ private struct AuthorsView: View {
         if(!authorInfos.isEmpty) {
             Spacer()
             Text("By")
-                .bold()
+            
             VStack (alignment: .leading) {
                 ForEach(authorInfos, id: \.self) { authorElement in
                     Text(authorElement.getAuthor)
+                        .bold()
                 }
             }
         }

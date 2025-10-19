@@ -22,9 +22,11 @@ struct FavoriteData: Decodable {
 
 struct FavoriteEntries: Decodable, Hashable {
     enum CodingKeys: String, CodingKey {
+        case malId = "mal_id"
         case title, images, name
     }
     
+    let malId: Int
     let title: String?
     let name: String?
     let images: FavoriteImage

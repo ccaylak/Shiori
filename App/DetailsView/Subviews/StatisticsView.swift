@@ -9,57 +9,44 @@ struct StatisticsView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
-            if (users != 0) {
+            if users != 0 {
                 Text("Based on \(users.formatted()) user ratings")
                     .font(.caption2)
                     .bold()
             }
             
-            HStack (alignment: .center){
-                if(score != 0.0){
-                    VStack(spacing: 3) {
-                        Image(systemName: "star.fill")
-                            .font(.subheadline)
-                        
-                        Text("Score")
-                            .font(.caption)
-                        
-                        Text("\(score.formatted())")
-                            .font(.body)
+            HStack(alignment: .center, spacing: 0) {
+                let sections: [AnyView] = [
+                    score != 0.0 ?
+                        AnyView(statSection(icon: "star.fill", label: "Score", value: score.formatted())) : nil,
+                    rank != 0 ?
+                        AnyView(statSection(icon: "number", label: "Rank", value: "\(rank)")) : nil,
+                    AnyView(statSection(icon: "chart.line.uptrend.xyaxis", label: "Popularity", value: "\(popularity)"))
+                ].compactMap { $0 }
+
+                ForEach(sections.indices, id: \.self) { index in
+                    if index != 0 {
+                        Divider()
                     }
-                    .frame(maxWidth: .infinity)
+                    sections[index]
+                        .frame(maxWidth: .infinity)
                 }
-                Divider()
-                if(rank != 0){
-                    VStack(spacing: 3) {
-                        Image(systemName: "number")
-                            .font(.subheadline)
-                        
-                        Text("Rank")
-                            .font(.caption)
-                        
-                        Text("\(rank)")
-                            .font(.body)
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                Divider()
-                VStack(spacing: 3) {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .font(.subheadline)
-                    
-                    Text("Popularity")
-                        .font(.caption)
-                    
-                    Text("\(popularity)")
-                        .font(.body)
-                }
-                .frame(maxWidth: .infinity)
             }
         }
         .padding([.top, .bottom], 8)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
         .padding(.horizontal)
+    }
+
+    private func statSection(icon: String, label: String, value: String) -> some View {
+        VStack(spacing: 3) {
+            Image(systemName: icon)
+                .font(.subheadline)
+            Text(label)
+                .font(.caption)
+            Text(value)
+                .font(.body)
+        }
     }
 }
