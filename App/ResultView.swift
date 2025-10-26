@@ -18,16 +18,20 @@ struct ResultView: View {
     var body: some View {
         List {
             ForEach(mediaResponse.results, id: \.node.id) { media in
-                NavigationLink(destination: DetailsView(media: media.node)) {
-                    MediaView(
-                        title: media.node.getTitle,
-                        image: media.node.getCover,
-                        releaseYear: media.node.getReleaseYear,
-                        type: media.node.getType,
-                        mediaCount: (resultManager.mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters),
-                        status: media.node.getMediaStatus
-                    )
-                }
+                ZStack(alignment: .topTrailing) {
+                            NavigationLink(destination: DetailsView(media: media.node)) {
+                                MediaView(
+                                    title: media.node.getTitle,
+                                    image: media.node.getCover,
+                                    releaseYear: media.node.getReleaseYear,
+                                    type: media.node.getType,
+                                    mediaCount: (resultManager.mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters),
+                                    status: media.node.getMediaStatus
+                                )
+                            }
+
+                    AnyView(media.node.getEntryStatus.libraryIcon)
+                        }
             }
             if !mediaResponse.results.isEmpty, let nextPage = mediaResponse.page?.next, !nextPage.isEmpty {
                 Button(action: {

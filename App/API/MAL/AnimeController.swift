@@ -10,7 +10,7 @@ import SwiftUI
     private var resultManager: ResultManager = .shared
     
     func saveProgress(id: Int, status: String, score: Int, episodes: Int, comments: String, startDate: Date?, finishDate: Date?) async throws {
-        let url = URL(string: MALEndpoints.Anime.update(id: id))!
+        let url = URL(string: MALEndpoints.Anime(id: id).update)!
         
         let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -49,9 +49,9 @@ import SwiftUI
         
         components.queryItems = [
             URLQueryItem(name: "ranking_type", value: resultManager.animeRankingType.rawValue),
-            URLQueryItem(name: "limit", value: String(settingsManager.resultsPerPage)),
+            URLQueryItem(name: "limit", value: "10"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent)),
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .otherTitles, .cover, .episodes, .mediaType, .startDate, .status])),
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .otherTitles, .cover, .episodes, .mediaType, .startDate, .status, .entryStatus])),
             URLQueryItem(name: "q", value: searchTerm)
         ]
         
@@ -71,11 +71,11 @@ import SwiftUI
     }
     
     func fetchDetails(id: Int) async throws -> Media {
-        var components = URLComponents(string: MALEndpoints.Anime.details(id: id))!
+        var components = URLComponents(string: MALEndpoints.Anime(id: id).details)!
         
         components.queryItems = [
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [
-                .otherTitles, .episodes, .mediaType, .startDate, .status, .mean, .summary, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .entryStatus, .scoredUsers,]))
+                .otherTitles, .episodes, .mediaType, .startDate, .status, .mean, .summary, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .scoredUsers, .minutes]))
         ]
         
         
@@ -95,7 +95,7 @@ import SwiftUI
     }
     
     func addToWatchList(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime.update(id: id))!
+        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
         
         let parameters = ["status": ProgressStatus.Anime.planToWatch.rawValue]
         let bodyData = parameters
@@ -120,7 +120,7 @@ import SwiftUI
     }
     
     func completeEntry(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime.update(id: id))!
+        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
         
         let parameters = ["status": ProgressStatus.Anime.completed.rawValue]
         let bodyData = parameters
@@ -145,7 +145,7 @@ import SwiftUI
     }
     
     func increaseEpisodes(id: Int, episode: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime.update(id: id))!
+        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
         
         let parameters = ["num_watched_episodes": String(episode)]
         let bodyData = parameters
@@ -206,7 +206,7 @@ import SwiftUI
     }
     
     func deleteEntry(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime.update(id: id))!
+        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
         
         guard let url = components.url else {
             throw URLError(.badURL)

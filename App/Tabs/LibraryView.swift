@@ -90,14 +90,6 @@ struct LibraryView: View {
             List {
                 if tokenHandler.isAuthenticated {
                     if libraryManager.mediaType == .manga {
-                        PillPicker(
-                            options: ProgressStatus.Manga.allCases,
-                            selectedOption: $libraryManager.mangaProgressStatus,
-                            displayName: { $0.displayName },
-                            icon: { AnyView($0.libraryIcon) }
-                        )
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.clear)
                         
                         ForEach(filteredLibraryData, id: \ .self) { manga in
                             Button(action: {
@@ -203,15 +195,6 @@ struct LibraryView: View {
                         }
                     }
                     if libraryManager.mediaType == .anime {
-                        PillPicker(
-                            options: ProgressStatus.Anime.allCases,
-                            selectedOption: $libraryManager.animeProgressStatus,
-                            displayName: { $0.displayName },
-                            icon: { AnyView($0.libraryIcon) },
-                        )
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.clear)
-                        
                         ForEach(filteredLibraryData, id: \ .self) { anime in
                             Button(action: {
                                 selectedMedia = anime
@@ -312,6 +295,58 @@ struct LibraryView: View {
                     .backgroundStyle(Color(.secondarySystemGroupedBackground))
                 }
             }
+            .safeAreaInset(edge: .top) {
+                if tokenHandler.isAuthenticated {
+                    if libraryManager.mediaType == .manga {
+                        if #available(iOS 26, *) {
+                            PillPicker(
+                                options: ProgressStatus.Manga.allCases,
+                                selectedOption: $libraryManager.mangaProgressStatus,
+                                displayName: { $0.displayName },
+                                icon: { AnyView($0.libraryIcon) }
+                            )
+                            .padding(.horizontal)
+                            .padding(.bottom, 6)
+                            .padding(.top, -4)
+                        } else {
+                            PillPicker(
+                                options: ProgressStatus.Manga.allCases,
+                                selectedOption: $libraryManager.mangaProgressStatus,
+                                displayName: { $0.displayName },
+                                icon: { AnyView($0.libraryIcon) }
+                            )
+                            .padding(.horizontal)
+                            .padding(.bottom, 6)
+                            .padding(.top, -4)
+                        }
+                        
+                    }
+                    if libraryManager.mediaType == .anime {
+                        if #available(iOS 26, *) {
+                            PillPicker(
+                                options: ProgressStatus.Anime.allCases,
+                                selectedOption: $libraryManager.animeProgressStatus,
+                                displayName: { $0.displayName },
+                                icon: { AnyView($0.libraryIcon) }
+                            )
+                            .padding(.horizontal)
+                            .padding(.bottom, 6)
+                            .padding(.top, -4)
+                        } else {
+                            PillPicker(
+                                options: ProgressStatus.Anime.allCases,
+                                selectedOption: $libraryManager.animeProgressStatus,
+                                displayName: { $0.displayName },
+                                icon: { AnyView($0.libraryIcon) }
+                            )
+                            .padding(.horizontal)
+                            .padding(.bottom, 6)
+                            .padding(.top, -4)
+                            .background(.ultraThinMaterial)
+                        }
+                    }
+                }
+            }
             .listStyle(.automatic)
             .listRowSpacing(10)
             .contentMargins(.top, 0)
@@ -350,6 +385,7 @@ struct LibraryView: View {
                     } label: {
                         Image(systemName: "arrow.up.arrow.down")
                             .fontWeight(.regular)
+                            .foregroundColor(.accentColor)
                     }
                 }
             }
@@ -421,9 +457,9 @@ struct LibraryView: View {
                                     .controlSize(.large)
                                     .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
                                 }
-                                
+                                    
                                 AsyncImageView(imageUrl: media.node.getCover)
-                                    .frame(width: 146, height: 230)
+                                    .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                     .cornerRadius(12)
                                 
                                 if (libraryManager.mediaType == .anime || settingsManager.mangaMode != MangaMode.all) {
@@ -744,75 +780,47 @@ struct LibraryView: View {
                     .padding(.horizontal)
                     .scrollIndicators(.hidden)
                     .toolbar {
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Save") {
-                                Task {
-                                    if (libraryManager.mediaType == .manga) {
-                                        try await mangaController.saveProgress(
-                                            id: media.node.id,
-                                            status: mangaEntry.progressStatus.rawValue,
-                                            score: mangaEntry.score,
-                                            chapters: mangaEntry.currentChapter,
-                                            volumes: mangaEntry.currentVolume,
-                                            comments: mangaEntry.comments,
-                                            startDate: startDate,
-                                            finishDate: endDate
-                                        )
-                                        alertManager.showUpdatedAlert = true
-                                        libraryResponse = try await mangaController.fetchLibrary()
-                                    }
-                                    if (libraryManager.mediaType == .anime) {
-                                        try await animeController.saveProgress(
-                                            id: media.node.id,
-                                            status: animeEntry.progressStatus.rawValue,
-                                            score: animeEntry.score,
-                                            episodes: animeEntry.currentEpisode,
-                                            comments: animeEntry.comments,
-                                            startDate: startDate,
-                                            finishDate: endDate
-                                        )
-                                        alertManager.showUpdatedAlert = true
-                                        libraryResponse = try await animeController.fetchLibrary()
-                                        
-                                    }
-                                    loadingMediaID = nil
-                                    selectedMedia = nil
+                        ToolbarItem(placement: .confirmationAction) {
+                            if #available(iOS 26, *) {
+                                Button(role: .confirm) {
+                                    saveEntry(media.node.id)
                                 }
+                                .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .buttonStyle(.glassProminent)
+                            } else {
+                                Button("Save") {
+                                    saveEntry(media.node.id)
+                                }
+                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
                             }
-                            .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
                         }
                         
                         ToolbarItem(placement: .cancellationAction) {
-                            Button(action: {
-                                showAlert = true
-                            }) {
-                                Image(systemName: "trash")
-                                    .symbolRenderingMode(.palette)
-                                    .foregroundColor(.red)
-                            }
-                            .alert("Remove entry", isPresented: $showAlert) {
-                                Button("Delete", role: .destructive) {
-                                    Task {
-                                        if(libraryManager.mediaType == .manga) {
-                                            try await mangaController.deleteEntry(id: media.node.id)
-                                            alertManager.showRemovedAlert = true
-                                            libraryResponse = try await mangaController.fetchLibrary()
-                                        }
-                                        if(libraryManager.mediaType == .anime) {
-                                            try await animeController.deleteEntry(id: media.node.id)
-                                            alertManager.showRemovedAlert = true
-                                            libraryResponse = try await animeController.fetchLibrary()
-                                        }
-                                        showAlert = false
-                                        selectedMedia = nil
-                                        loadingMediaID = nil
+                            Group {
+                                if #available(iOS 26, *) {
+                                    Button(role: .destructive) {
+                                        showAlert = true
+                                    }
+                                } else {
+                                    Button(action: {
+                                        showAlert = true
+                                    }) {
+                                        Image(systemName: "trash")
+                                            .symbolRenderingMode(.palette)
+                                            .foregroundColor(.red)
                                     }
                                 }
-                                Button("Cancel", role: .cancel) {}
+                            }
+                            .alert("Remove entry", isPresented: $showAlert) {
+                                Button("Yes", role: .destructive) {
+                                    deleteEntry(media.node.id)
+                                }
+                                Button("No", role: .cancel) {}
                             } message: {
                                 Text("Are you sure you want to remove \(media.node.getTitle) from your library?")
                             }
                         }
+                        
                     }
                     .navigationTitle(media.node.getTitle)
                     .navigationBarTitleDisplayMode(.inline)
@@ -904,6 +912,61 @@ struct LibraryView: View {
                     print("Error fetching library: \(error)")
                 }
                 alertManager.isLoading = false
+            }
+        }
+    }
+    
+    var saveEntry: (Int) -> Void {
+        return { id in
+            Task {
+                if libraryManager.mediaType == .manga {
+                    try await mangaController.saveProgress(
+                        id: id,
+                        status: mangaEntry.progressStatus.rawValue,
+                        score: mangaEntry.score,
+                        chapters: mangaEntry.currentChapter,
+                        volumes: mangaEntry.currentVolume,
+                        comments: mangaEntry.comments,
+                        startDate: startDate,
+                        finishDate: endDate
+                    )
+                    alertManager.showUpdatedAlert = true
+                    libraryResponse = try await mangaController.fetchLibrary()
+                } else if libraryManager.mediaType == .anime {
+                    try await animeController.saveProgress(
+                        id: id,
+                        status: animeEntry.progressStatus.rawValue,
+                        score: animeEntry.score,
+                        episodes: animeEntry.currentEpisode,
+                        comments: animeEntry.comments,
+                        startDate: startDate,
+                        finishDate: endDate
+                    )
+                    alertManager.showUpdatedAlert = true
+                    libraryResponse = try await animeController.fetchLibrary()
+                }
+                loadingMediaID = nil
+                selectedMedia = nil
+            }
+        }
+    }
+    
+    var deleteEntry: (Int) -> Void {
+        return { id in
+            Task {
+                if(libraryManager.mediaType == .manga) {
+                    try await mangaController.deleteEntry(id: id)
+                    alertManager.showRemovedAlert = true
+                    libraryResponse = try await mangaController.fetchLibrary()
+                }
+                if(libraryManager.mediaType == .anime) {
+                    try await animeController.deleteEntry(id: id)
+                    alertManager.showRemovedAlert = true
+                    libraryResponse = try await animeController.fetchLibrary()
+                }
+                showAlert = false
+                selectedMedia = nil
+                loadingMediaID = nil
             }
         }
     }

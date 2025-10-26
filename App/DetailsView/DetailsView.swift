@@ -723,6 +723,7 @@ private struct Sections: View {
                 numberOfChapters: media.getChapters,
                 numberOfVolumes: media.getVolumes,
                 startDate: media.getStartDate,
+                minutes: media.getMinutes,
                 endDate: media.getEndDate,
                 studios: media.getStudios,
                 authorInfos: media.getAuthors,

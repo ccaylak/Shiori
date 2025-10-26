@@ -10,7 +10,7 @@ import SwiftUI
     private var resultManager: ResultManager = .shared
     
     func saveProgress(id: Int, status: String, score: Int, chapters: Int, volumes: Int, comments: String, startDate: Date?, finishDate: Date?) async throws {
-        let url = URL(string: MALEndpoints.Manga.update(id: id))!
+        let url = URL(string: MALEndpoints.Manga(id: id).update)!
         
         let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -41,7 +41,7 @@ import SwiftUI
     }
     
     func addToReadingList(id: Int) async throws {
-        let urlComponents = URLComponents(string: MALEndpoints.Manga.update(id: id))
+        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
         guard let url = urlComponents?.url else {
             throw URLError(.badURL)
         }
@@ -66,7 +66,7 @@ import SwiftUI
     }
     
     func completEntry(id: Int) async throws {
-        let urlComponents = URLComponents(string: MALEndpoints.Manga.update(id: id))
+        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
         guard let url = urlComponents?.url else {
             throw URLError(.badURL)
         }
@@ -91,7 +91,7 @@ import SwiftUI
     }
     
     func increaseVolumes(id: Int, volume: Int) async throws {
-        let urlComponents = URLComponents(string: MALEndpoints.Manga.update(id: id))
+        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
         guard let url = urlComponents?.url else {
             throw URLError(.badURL)
         }
@@ -114,7 +114,7 @@ import SwiftUI
     }
     
     func increaseChapters(id: Int, chapter: Int) async throws {
-        let urlComponents = URLComponents(string: MALEndpoints.Manga.update(id: id))
+        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
         guard let url = urlComponents?.url else {
             throw URLError(.badURL)
         }
@@ -137,7 +137,7 @@ import SwiftUI
     }
     
     func fetchDetails(id: Int) async throws -> Media {
-        var components = URLComponents(string: MALEndpoints.Manga.details(id: id))!
+        var components = URLComponents(string: MALEndpoints.Manga(id: id).details)!
         
         components.queryItems = [
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.otherTitles, .authors, .chapters, .volumes, .mediaType, .startDate, .status, .endDate, .summary, .mean, .rank, .popularity, .genres, .mediaType, .recommendations, .relatedManga, .entryStatus, .scoredUsers]))
@@ -169,8 +169,8 @@ import SwiftUI
         
         components.queryItems = [
             URLQueryItem(name: "ranking_type", value: resultManager.mangaRankingType.rawValue),
-            URLQueryItem(name: "limit", value: String(settingsManager.resultsPerPage)),
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .otherTitles, .cover, .chapters, .volumes, .mediaType, .startDate, .status])),
+            URLQueryItem(name: "limit", value: "10"),
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .otherTitles, .cover, .chapters, .volumes, .mediaType, .startDate, .status, .entryStatus])),
             URLQueryItem(name: "q", value: searchTerm),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent)),
         ]
@@ -227,7 +227,7 @@ import SwiftUI
     }
     
     func deleteEntry(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Manga.update(id: id))!
+        let components = URLComponents(string: MALEndpoints.Manga(id:id).update)!
         
         guard let url = components.url else {
             throw URLError(.badURL)

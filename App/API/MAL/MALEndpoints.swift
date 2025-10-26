@@ -4,34 +4,60 @@ struct MALEndpoints {
     private static let baseURL = "https://api.myanimelist.net/v2"
     
     struct Anime {
-        private static let animeURL = "\(baseURL)/anime"
+        let id: Int
+
+        var details: String {
+            "\(baseURL)/anime/\(id)"
+        }
         
-        static let list = animeURL
-        static let ranking = "\(animeURL)/ranking"
-        static func details(id: Int) -> String {
-            "\(animeURL)/\(id)"
+        var update: String {
+            "\(baseURL)/anime/\(id)/my_list_status"
         }
-        static func update(id: Int) -> String {
-            "\(animeURL)/\(id)/my_list_status"
+        
+        static var ranking: String {
+            "\(baseURL)/anime/ranking"
         }
-        static let library = "\(baseURL)/users/@me/animelist"
+        
+        static var list: String {
+            "\(baseURL)/anime"
+        }
+        
+        static func season(year: Int, seasonName: String) -> String {
+            "\(baseURL)/anime/season/\(year)/\(seasonName)"
+        }
+        
+        static var library: String {
+            "\(baseURL)/users/@me/animelist"
+        }
     }
     
     struct Manga {
-        private static let mangaURL = "\(baseURL)/manga"
+        let id: Int
         
-        static let list = mangaURL
-        static let ranking = "\(mangaURL)/ranking"
-        static func details(id: Int) -> String {
-            "\(mangaURL)/\(id)"
+        var details: String {
+            "\(baseURL)/manga/\(id)"
         }
-        static func update(id: Int) -> String {
-            "\(mangaURL)/\(id)/my_list_status"
+        
+        var update: String {
+            "\(baseURL)/manga/\(id)/my_list_status"
         }
-        static let library = "\(baseURL)/users/@me/mangalist"
+        
+        static var list: String {
+            "\(baseURL)/manga"
+        }
+        
+        static var ranking: String {
+            "\(baseURL)/manga/ranking"
+        }
+        
+        static var library: String {
+            "\(baseURL)/users/@me/mangalist"
+        }
     }
     
     struct Profile {
-        static let information = "\(baseURL)/users/@me"
+        static var information: String {
+            "\(baseURL)/users/@me"
+        }
     }
 }

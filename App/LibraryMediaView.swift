@@ -22,7 +22,7 @@ struct LibraryMediaView: View {
     var body: some View {
         HStack(spacing: 20) {
             AsyncImageView(imageUrl: image)
-                .frame(width: 70, height: 110)
+                .frame(width: CoverSize.small.size.width, height: CoverSize.small.size.height)
                 .clipped()
                 .cornerRadius(12)
                 .strokedBorder()

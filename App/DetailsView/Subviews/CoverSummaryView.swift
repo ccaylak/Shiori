@@ -30,19 +30,17 @@ private struct CoverView: View {
     let episodes: Int
     
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            AsyncImageView(imageUrl: imageUrl)
-                .frame(width: 159, height: 250)
-                .cornerRadius(12)
-                .strokedBorder()
-        }
+        AsyncImageView(imageUrl: imageUrl)
+            .frame(width: CoverSize.extraLarge.size.width, height: CoverSize.extraLarge.size.height)
+            .cornerRadius(12)
+            .strokedBorder()
         .overlay(alignment: .topTrailing) {
             ScoreBadgeView(score: score)
         }
         .overlay(alignment: .bottomTrailing) {
             CountBadgeView(chapters: chapters, volumes: volumes,episodes: episodes, type: type)
         }
-        .frame(maxWidth: 159)
+        .frame(maxWidth: CoverSize.extraLarge.size.width)
     }
 }
 

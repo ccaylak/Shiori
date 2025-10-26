@@ -40,6 +40,10 @@ extension Media {
         startDate ?? String(localized: "Unknown start date")
     }
     
+    var getMinutes: Int {
+        (minutes ?? 0) / 60
+    }
+    
     var getEpisodes: Int {
         episodes ?? 0
     }
@@ -89,6 +93,29 @@ extension Media {
         case .manga:
             let mangaStatus = Status.Manga(rawValue: status ?? "") ?? .unknown
             return .manga(mangaStatus)
+        case .unknown:
+            return .unknown
+        }
+    }
+    
+    var getEntryStatus: ProgressStatus {
+        switch isMangaOrAnime(from: type ?? "") {
+            
+        case .anime:
+            if let raw = listStatus?.status,
+               let animeStatus = ProgressStatus.Anime(rawValue: raw) {
+                return .anime(animeStatus)
+            } else {
+                return .unknown
+            }
+            
+        case .manga:
+            if let raw = listStatus?.status,
+               let mangaStatus = ProgressStatus.Manga(rawValue: raw) {
+                return .manga(mangaStatus)
+            } else {
+                return .unknown
+            }
         case .unknown:
             return .unknown
         }

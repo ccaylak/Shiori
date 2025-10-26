@@ -45,21 +45,40 @@ struct RelatedMediaView: View {
                             NavigationLink(destination: DetailsView(media: relatedMedia.node)) {
                                 VStack(alignment: .center) {
                                     Text(relatedMedia.getRelationType.displayName)
+                                        .frame(maxWidth: CoverSize.large.size.width, alignment: .center)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
+                                        .foregroundColor(.accentColor)
                                     
                                     AsyncImageView(imageUrl: relatedMedia.node.getCover)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                         .cornerRadius(12)
                                         .strokedBorder()
                                         .showFullTitleContextMenu(relatedMedia.node.getTitle)
+                                        .padding(.bottom, 2)
+                                        .overlay(alignment: .topTrailing) {
+                                            if relatedMedia.node.getEntryStatus != .unknown {
+                                                relatedMedia.node.getEntryStatus.libraryIcon
+                                                    .padding(7)
+                                                    .background(Material.ultraThin)
+                                                    .cornerRadius(12)
+                                            }
+                                        }
+                                    
+                                    Text(relatedMedia.node.getTitle)
+                                        .font(.caption)
+                                        .frame(maxWidth: CoverSize.large.size.width, alignment: .leading)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
                                 }
                                 .padding(8)
                                 .background(Color(.secondarySystemGroupedBackground))
                                 .cornerRadius(12)
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                     .scrollTargetLayout()
-                    .frame(height: 250)
                     .padding(.horizontal)
                 }
                 .scrollTargetBehavior(.viewAligned)

@@ -15,7 +15,7 @@ struct MediaView: View {
     var body: some View {
         HStack(spacing: 20) {
             AsyncImageView(imageUrl: image)
-                .frame(width: 70, height: 110)
+                .frame(width: CoverSize.small.size.width, height: CoverSize.small.size.height)
                 .clipped()
                 .cornerRadius(12)
                 .strokedBorder()
@@ -35,10 +35,10 @@ struct MediaView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-            .frame(maxWidth: .infinity, maxHeight: 110, alignment: .leading)
+            .frame(maxWidth: .infinity, maxHeight: CoverSize.small.size.height, alignment: .leading)
         
         }
-        .frame(maxWidth: .infinity, maxHeight: 110, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: CoverSize.small.size.height, alignment: .leading)
     }
     
     func formattedDetails(year: String) -> String {

@@ -47,6 +47,7 @@ struct SearchView: View {
             } label: {
                 Image(systemName: "arrow.up.arrow.down")
                     .fontWeight(.regular)
+                    .foregroundColor(.accentColor)
             }
         }
     }
@@ -54,7 +55,8 @@ struct SearchView: View {
     private var exploreGenres: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             NavigationLink(destination: GenreMediaListView()) {
-                Image(systemName: "magnifyingglass")
+                Image(systemName: "square.stack")
+                    .foregroundColor(.accentColor)
             }
         }
     }

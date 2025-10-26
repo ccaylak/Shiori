@@ -35,7 +35,7 @@ struct LoginView: View {
                            let profilePicture = profileDetails?.profilePicture {
                             VStack {
                                 AsyncImageView(imageUrl: profilePicture)
-                                    .frame(width: 80, height: 100)
+                                    .frame(width: CoverSize.small.size.width, height: CoverSize.small.size.height)
                                     .cornerRadius(12)
                                     .strokedBorder()
                                 
@@ -46,7 +46,7 @@ struct LoginView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                             .listRowInsets(EdgeInsets())
                         }
-                        Section(header: Label("Profile", systemImage: "person.text.rectangle")) {
+                        Section {
                             LabeledContent {
                                 Text(
                                     {
@@ -216,13 +216,13 @@ struct LoginView: View {
                                         ForEach(favoriteMangas, id: \.self) { manga in
                                             VStack {
                                                 AsyncImageView(imageUrl: manga.images.jpg.imageUrl)
-                                                    .frame(width: 100, height: 156)
+                                                    .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
                                                     .cornerRadius(12)
                                                     .strokedBorder()
                                                 
                                                 Text(manga.title ?? "–")
                                                     .font(.caption)
-                                                    .frame(width: 100, alignment: .leading)
+                                                    .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
                                                     .lineLimit(1)
                                                     .truncationMode(.tail)
                                             }
@@ -243,13 +243,13 @@ struct LoginView: View {
                                         ForEach(jikanFavorites.data.animes, id: \.self) { anime in
                                                 VStack {
                                                     AsyncImageView(imageUrl: anime.images.jpg.imageUrl)
-                                                        .frame(width: 100, height: 156)
+                                                        .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
                                                         .cornerRadius(12)
                                                         .strokedBorder()
                                                     
                                                     Text(anime.title ?? "–")
                                                         .font(.caption)
-                                                        .frame(width: 100, alignment: .leading)
+                                                        .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
                                                         .lineLimit(1)
                                                         .truncationMode(.tail)
                                                 }
@@ -270,13 +270,13 @@ struct LoginView: View {
                                         ForEach(jikanFavorites.data.characters, id: \.self) { character in
                                             VStack {
                                                 AsyncImageView(imageUrl: character.images.jpg.imageUrl)
-                                                    .frame(width: 100, height: 156)
+                                                    .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
                                                     .cornerRadius(12)
                                                     .strokedBorder()
                                                 
                                                 Text(character.formattedName)
                                                     .font(.caption)
-                                                    .frame(width: 100, alignment: .leading)
+                                                    .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
                                                     .lineLimit(1)
                                                     .truncationMode(.tail)
                                             }
@@ -359,12 +359,14 @@ struct LoginView: View {
                        let url = URL(string: "https://myanimelist.net/profile/\(profileName)") {
                         ShareLink(item: url) {
                             Image(systemName: "square.and.arrow.up")
+                                .foregroundColor(.accentColor)
                         }
                     }
                 }
                 ToolbarItem(placement: .primaryAction) {
                     NavigationLink(destination: SettingsView()) {
                         Image(systemName: "gearshape.fill")
+                            .foregroundColor(.accentColor)
                     }
                 }
                 
@@ -374,6 +376,7 @@ struct LoginView: View {
                             showLogoutConfirmationDialog = true
                         } label: {
                             Image(systemName: "rectangle.portrait.and.arrow.right")
+                                .foregroundColor(.accentColor)
                         }
                         .confirmationDialog(
                             Text("Do you really want to logout of your MAL-Account?"),

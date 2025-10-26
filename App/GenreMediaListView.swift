@@ -2,7 +2,7 @@ import SwiftUI
 
 struct GenreMediaListView: View {
     @State private var selectedOption = "Anime"
-    let options = ["Anime", "Manga"]
+    let options = [MediaType.anime.displayName, MediaType.manga.displayName]
     var body: some View {
         NavigationStack {
             Picker("Optionen", selection: $selectedOption) {
@@ -10,16 +10,16 @@ struct GenreMediaListView: View {
                     Text(option)
                 }
             }
-            .pickerStyle(SegmentedPickerStyle()) // wichtig für Toolbar
+            .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
             
             ScrollView {
                 VStack {
-                    
+                    Text("")
                 }
             }
         }
-        .navigationTitle("Entdecken")
+        .navigationTitle("Explore")
         .navigationBarTitleDisplayMode(.automatic)
     }
 }

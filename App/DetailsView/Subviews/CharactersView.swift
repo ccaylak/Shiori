@@ -25,14 +25,14 @@ struct CharactersView: View {
                             NavigationLink(destination: CharacterDetailsView(character: character, role: character.role)) {
                                 VStack(alignment: .leading) {
                                     AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
-                                        .frame(width: 72, height: 108)
+                                        .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
                                         .cornerRadius(12)
                                         .showFullTitleContextMenu(character.metaData.formattedName)
                                         .strokedBorder()
                                     
                                     Text(character.metaData.formattedName)
                                         .font(.caption)
-                                        .frame(width: 72, alignment: .leading)
+                                        .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
                                         .lineLimit(1)
                                         .truncationMode(.tail)
                                 }

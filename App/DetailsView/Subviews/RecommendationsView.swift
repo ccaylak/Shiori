@@ -18,14 +18,22 @@ struct RecommendationsView: View {
                             NavigationLink(destination: DetailsView(media: recommendation.node)) {
                                 VStack {
                                     AsyncImageView(imageUrl: recommendation.node.getCover)
-                                        .frame(width: 95, height: 150)
+                                        .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                         .cornerRadius(12)
                                         .showFullTitleContextMenu(recommendation.node.getTitle)
                                         .strokedBorder()
+                                        .overlay(alignment: .topTrailing) {
+                                            if recommendation.node.getEntryStatus != .unknown {
+                                                recommendation.node.getEntryStatus.libraryIcon
+                                                    .padding(7)
+                                                    .background(Material.ultraThin)
+                                                    .cornerRadius(12)
+                                            }
+                                        }
                                     
                                     Text(recommendation.node.getTitle)
                                         .font(.caption2)
-                                        .frame(width: 95, alignment: .leading)
+                                        .frame(maxWidth: CoverSize.large.size.width, alignment: .leading)
                                         .lineLimit(1)
                                         .truncationMode(.tail)
                                 }

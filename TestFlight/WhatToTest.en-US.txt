@@ -1,17 +1,24 @@
 What's New:
 
 New Features
-- Added build info in settings
-- Added adaption/source section into details
-
-Bug Fixes
-- Fixed swipeAction "completed" which was not working for manga
-- Fixed all covers having the wrong padding to the left
-- Fixed more translation problems
+- Accidentally added iOS 26 / Liquid Glass support
+- Added an option to view anime progress data in a periodic rather than episode-based way (toggle available, feature not yet functional)
+- ProgressStatus picker is now always visible in LibraryView
+- Added SeasonView in the navigation bar — dynamically switches icons based on the current season
+- Added total watch time for anime in DetailsView (displayed next to the average playtime per episode)
+- ProgressStatus icons are now displayed in SearchView, SeasonView, and DetailsView (recommendations/related sections)
 
 Reworks
-- Improved characters section with voice actors and general improvement
+- Removed the option to change the result set amount in SearchView
+- Removed Shiori-chan icons due to circumstances
+- Restructured MyAnimeList profile data in ProfileView (profile picture, birthdate, gender, join date, and location)
+
 
 What's next?
-- CharacterDetailView, PeopleDetailView and FriendView
+- Change the app icon to Liquid Glass
+- Update app screenshots
+- Add a way to list all anime from a specific studio
+- Add a genre explorer to browse through the full catalog
+- Fix not working CharacterDetailsView
+- Structure Character- and VoiceActorView better
 

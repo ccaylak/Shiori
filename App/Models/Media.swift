@@ -18,6 +18,7 @@ struct Media: Decodable, Hashable {
         case numberOfChapters = "num_chapters"
         case listStatus = "my_list_status"
         case users = "num_scoring_users"
+        case minutes = "average_episode_duration"
     }
     
     // Pflichtfelder
@@ -49,8 +50,9 @@ struct Media: Decodable, Hashable {
     let popularity: Int?
     let moreImages: [Images]?
     let listStatus: ListStatus?
+    let minutes: Int?
     
-    init(id: Int, title: String, alternativeTitles: OtherTitles? = nil, images: Images, startDate: String? = nil, type: String? = nil, status: String? = nil, episodes: Int? = nil, numberOfVolumes: Int? = nil, numberOfChapters: Int? = nil, authors: [AuthorInfos]? = nil, summary: String? = nil, score: Double? = nil, genres: [MediaGenre]? = nil, endDate: String? = nil, recommendations: [MediaNode]? = nil, studios: [Studio]? = nil, relatedAnimes: [MediaNode]? = nil, relatedMangas: [MediaNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil, listStatus: ListStatus? = nil, users: Int? = nil) {
+    init(id: Int, title: String, alternativeTitles: OtherTitles? = nil, images: Images, startDate: String? = nil, type: String? = nil, status: String? = nil, episodes: Int? = nil, numberOfVolumes: Int? = nil, numberOfChapters: Int? = nil, authors: [AuthorInfos]? = nil, summary: String? = nil, score: Double? = nil, genres: [MediaGenre]? = nil, endDate: String? = nil, recommendations: [MediaNode]? = nil, studios: [Studio]? = nil, relatedAnimes: [MediaNode]? = nil, relatedMangas: [MediaNode]? = nil, rank: Int? = nil, popularity: Int? = nil, moreImages: [Images]? = nil, listStatus: ListStatus? = nil, users: Int? = nil, minutes: Int? = nil) {
         self.id = id
         self.title = title
         self.alternativeTitles = alternativeTitles
@@ -75,5 +77,6 @@ struct Media: Decodable, Hashable {
         self.moreImages = moreImages
         self.listStatus = listStatus
         self.users = users
+        self.minutes = minutes
     }
 }

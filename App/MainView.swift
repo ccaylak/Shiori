@@ -6,12 +6,18 @@ struct MainView: View {
     @ObservedObject private var settingsManager: SettingsManager = .shared
     
     var body: some View {
+        
         TabView(selection: $selectedTab) {
             SearchView()
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }
                 .tag("search")
+            SeasonView()
+                .tabItem {
+                    Label("Season", systemImage: Season.current.icon)
+                }
+                .tag("season")
             LibraryView()
                 .tabItem {
                     Label("Library", systemImage: "books.vertical")

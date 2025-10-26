@@ -118,8 +118,7 @@ enum ProgressStatus: Equatable {
         case .manga(let mangaStatus):
             mangaStatus.libraryIcon
         case .unknown:
-            Image(systemName: "questionmark")
-                .foregroundColor(.gray)
+            EmptyView()
         }
     }
 }

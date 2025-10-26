@@ -15,7 +15,7 @@ struct CharacterDetailsView: View {
             VStack {
                 HStack(alignment: .top, spacing: 8) {
                     AsyncImageView(imageUrl: character.metaData.images.jpg.imageUrl)
-                        .frame(width: 72*1.5, height: 108*1.5)
+                        .frame(width: CoverSize.extraLarge.size.width, height: CoverSize.extraLarge.size.height)
                         .cornerRadius(12)
                         .strokedBorder()
                     VStack(alignment: .leading, spacing: 10) {
@@ -64,7 +64,7 @@ struct CharacterDetailsView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .frame(maxHeight: 110 * 1.5)
+                .frame(maxHeight: CoverSize.extraLarge.size.height)
                 .padding(.horizontal)
                 Divider()
                 if let voices = details?.data.voices, !voices.isEmpty {

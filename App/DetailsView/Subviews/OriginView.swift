@@ -22,17 +22,18 @@ struct OriginView: View {
                             NavigationLink(destination: DetailsView(media: media)) {
                                 VStack(alignment: .leading) {
                                     AsyncImageView(imageUrl: media.getCover)
-                                        .frame(width: 120, height: 180)
+                                        .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                         .cornerRadius(10)
                                         .strokedBorder()
                                     
                                     Text(media.getTitle)
                                         .font(.caption)
-                                        .frame(width: 120, alignment: .leading)
+                                        .frame(maxWidth: CoverSize.large.size.width, alignment: .leading)
                                         .lineLimit(1)
                                         .truncationMode(.tail)
                                 }
-                            }.buttonStyle(.plain)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(.horizontal)

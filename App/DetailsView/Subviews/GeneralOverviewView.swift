@@ -7,6 +7,7 @@ struct GeneralOverviewView: View {
     let numberOfChapters: Int
     let numberOfVolumes: Int
     let startDate: String
+    let minutes: Int
     let endDate: String
     let studios: [Studio]
     let authorInfos: [AuthorInfos]
@@ -18,7 +19,7 @@ struct GeneralOverviewView: View {
                 .font(.headline)
             VStack(alignment: .leading, spacing: 4) {
                 
-                Text(formattedDetails(chapters: numberOfChapters, volumes: numberOfVolumes, episodes: episodes))
+                Text(formattedDetails(chapters: numberOfChapters, volumes: numberOfVolumes, episodes: episodes, minutes: minutes))
                     .font(.body)
                 
                 Text(formattedRelease(startDate: startDate, endDate: endDate))
@@ -32,27 +33,40 @@ struct GeneralOverviewView: View {
         .padding(.horizontal)
     }
     
-    func formattedDetails(chapters: Int, volumes: Int, episodes: Int) -> String {
+    func formattedDetails(chapters: Int, volumes: Int, episodes: Int, minutes: Int) -> String {
         switch type {
         case .manga(let manga):
             return formattedMangaDetails(type: manga, chapters: chapters, volumes: volumes)
         case .anime(let anime):
-            return formattedAnimeDetails(type: anime, episodes: episodes)
+            return formattedAnimeDetails(type: anime, episodes: episodes, minutes: minutes)
         }
     }
     
-    private func formattedAnimeDetails(type: FormatType.Anime, episodes: Int) -> String {
+    private func formattedAnimeDetails(type: FormatType.Anime, episodes: Int, minutes: Int) -> String {
         switch (type, episodes) {
         case (.movie, 1):
             return type.displayName
         case (.movie, let episodes) where episodes > 1:
-            return String(localized: "\(type.displayName), \(episodes) parts")
+            return String(localized: "\(type.displayName), \(episodes) parts • \(minutes) minutes (≈\(formattedDuration(from: episodes*minutes)))")
         case (.tv, 0):
             return type.displayName
         case (.tv, let episodes):
-            return String(localized: "\(type.displayName), \(episodes) episodes")
+            return String(localized: "\(type.displayName), \(episodes) episodes • \(minutes) minutes (≈\(formattedDuration(from: episodes*minutes)))")
         default:
             return type.displayName
+        }
+    }
+    
+    private func formattedDuration(from totalMinutes: Int) -> String {
+        let hours = totalMinutes / 60
+        let minutes = totalMinutes % 60
+        
+        if hours > 0 && minutes > 0 {
+            return "\(hours)h \(minutes)m"
+        } else if hours > 0 {
+            return "\(hours)h"
+        } else {
+            return "\(minutes)m"
         }
     }
     
@@ -172,6 +186,7 @@ private struct AuthorsView: View {
         numberOfChapters: 10,
         numberOfVolumes: 0,
         startDate: "2024-10-10",
+        minutes: 21,
         endDate: "2025-10-10",
         studios: exampleStudios,
         authorInfos: [],

@@ -61,18 +61,13 @@ struct SettingsView: View {
                         .buttonStyle(.borderless)
                     }
                     
-                    Picker("Name", systemImage: "textformat.characters.arrow.left.and.right", selection: $settingsManager.namePresentation) {
+                    Picker("Name order", systemImage: "textformat.characters.arrow.left.and.right",selection: $settingsManager.namePresentation) {
                         ForEach(NamePresentation.allCases, id: \.self) { mode in
                             Text(mode.displayName).tag(mode)
                         }
                     }
                 }
                 Section("List") {
-                    Picker("Results per page", systemImage: "list.bullet.rectangle", selection: $settingsManager.resultsPerPage) {
-                        ForEach(resultOptions, id: \.self) { resultOption in
-                            Text(String(resultOption)).tag(resultOption)
-                        }
-                    }
                     Picker("Title language", systemImage: "translate", selection: $settingsManager.titleLanguage) {
                         ForEach(TitleLanguage.allCases, id: \.self) { selectedLanguage in
                             Text(selectedLanguage.displayName).tag(selectedLanguage)
@@ -81,47 +76,15 @@ struct SettingsView: View {
                 }
                 
                 Section("Library") {
-                    Picker(selection: $settingsManager.mangaMode, label: Label("Displaying mode", image: "custom.character.book.closed.badge.gearshape.fill")) {
+                    Picker(selection: $settingsManager.mangaMode, label: Label("Manga progress", systemImage: MediaType.manga.icon)) {
                         ForEach(MangaMode.allCases, id: \.self) { mode in
                             Text(mode.displayName)
                         }
                     }
-                }
-
-                
-                let icons: [(name: String, title: String)] = [
-                    (name: "AppIcon", title: String(localized: "Default")),
-                    (name: "ShioriIcon", title: String(localized: "Shiori-chan")),
-                    (name: "ShioriRealisticIcon", title: String(localized: "Shiori-chan"))
-                ]
-                
-                Section(
-                    header: Text("App icons"),
-                    footer:
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("App icon made by Nicole Knutas")
-                            Link("Shiori-chan illustrated by Lara Prüß", destination: URL(string: "https://x.com/larakistar")!)
-                                .font(.footnote)
-                        }
-                ) {
-                    HStack (spacing: 13){
-                        ForEach(icons, id: \.name) { icon in
-                            VStack{
-                                Image(uiImage: UIImage(named: icon.name)!)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 70, height: 70)
-                                    .cornerRadius(12)
-                                    .strokedBorder()
-                                    .onTapGesture {
-                                        changeAppIcon(to: icon.name == "AppIcon" ? nil : icon.name)
-                                    }
-                                Text(icon.title)
-                                    .font(.caption2)
-                                    .frame(width: 70, alignment: .leading)
-                                    .lineLimit(1)
-                                    .truncationMode(.tail)
-                            }
+                    
+                    Picker(selection: $settingsManager.animeMode, label: Label("Anime progress", systemImage: MediaType.anime.icon)) {
+                        ForEach(AnimeMode.allCases, id: \.self) { mode in
+                            Text(mode.displayName)
                         }
                     }
                 }
@@ -170,32 +133,45 @@ struct SettingsView: View {
     }
 }
 
-private func changeAppIcon(to iconName: String?) {
-    
-    UIApplication.shared.setAlternateIconName(iconName) { error in
-        if let error = error {
-            print("Error setting alternate icon \(error.localizedDescription)")
-        }
-    }
-}
-
 private struct AboutView: View {
     var body: some View {
         Form {
+            VStack(spacing: 10) {
+                    VStack(spacing: 10) {
+                        Image(uiImage: UIImage(named: "AppIcon")!)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(12)
+                            .strokedBorder()
+                        
+                        Text("Icon made by Nicole Knutas")
+                            .font(.caption)
+                            .bold()
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 40)
+                            .fill(Color(.secondarySystemBackground))
+                    )
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .listRowBackground(Color.clear)
+            
             Section("Info") {
                 LabeledContent("App version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
                 LabeledContent("Build number", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
             }
             
             Section (
-                header: Text("Supported languages"),
+                header: Text("Languages"),
                 footer:
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Translations are added through community contributions.")
                             .font(.footnote)
                         
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("If you want to contribute, please send me a mail:")
+                            Text("If you want to contribute, please send a mail to:")
                                 .font(.footnote)
                             Link("shiori.app@icloud.com", destination: URL(string: "mailto:shiori.app@icloud.com")!)
                                 .font(.footnote)
@@ -211,12 +187,12 @@ private struct AboutView: View {
                 }
             }
             
-            Section ("Used Third-Party Services") {
+            Section ("Third-Party Services") {
                 Link("MyAnimeList", destination: URL(string: "https://MyAnimeList.net")!)
                 Link("Jikan", destination: URL(string: "https://jikan.moe")!)
             }
             
-            Section ("Used Third-Party libraries") {
+            Section ("Third-Party libraries") {
                 Link("AlertToast", destination: URL(string: "https://github.com/elai950/AlertToast")!)
                 Link("KeychainSwift", destination: URL(string: "https://github.com/evgenyneu/keychain-swift")!)
                 Link("Nuke", destination: URL(string: "https://github.com/kean/Nuke")!)
@@ -232,3 +208,4 @@ private struct AboutView: View {
 #Preview {
     SettingsView()
 }
+
