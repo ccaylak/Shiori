@@ -34,9 +34,8 @@ struct RelatedMediaView: View {
     
     var body: some View {
         if !relevantItems.isEmpty {
-            VStack(alignment: .leading) {
-                Text("Related")
-                    .font(.headline)
+            VStack(alignment: .leading, spacing: 5) {
+                LabelWithChevron(text: "Related")
                     .padding(.horizontal)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -60,7 +59,7 @@ struct RelatedMediaView: View {
                                             if relatedMedia.node.getEntryStatus != .unknown {
                                                 relatedMedia.node.getEntryStatus.libraryIcon
                                                     .padding(7)
-                                                    .background(Material.ultraThin)
+                                                    .glassEffectOrMaterial()
                                                     .cornerRadius(12)
                                             }
                                         }
@@ -74,6 +73,7 @@ struct RelatedMediaView: View {
                                 .padding(8)
                                 .background(Color(.secondarySystemGroupedBackground))
                                 .cornerRadius(12)
+                                .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
                         }

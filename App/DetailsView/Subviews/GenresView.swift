@@ -2,20 +2,21 @@ import SwiftUI
 
 struct GenresView: View {
     
-    let genres: [Genre]
+    let genres: [MediaGenre]
+    let mode: String
     
     var body: some View {
         if !genres.isEmpty {
-            VStack(alignment: .leading) {
-                NavigationLink(destination: GenresListView(genres: genres)) {
+            VStack(alignment: .leading, spacing: 5) {
+                NavigationLink(destination: GenresListView(genres: genres, mode: mode)) {
                     LabelWithChevron(text: "Genres")
                 }
                 .buttonStyle(.plain)
                 ScrollView(.horizontal) {
                     LazyHStack(spacing: 10) {
                         ForEach(genres, id: \.self) { genre in
-                            Text(genre.displayName)
-                                .font(.caption)
+                            Text((Genre(rawValue: genre.name) ?? .unknown).displayName)
+                                .font(.body)
                                 .padding(9)
                                 .background(Color(.secondarySystemGroupedBackground))
                                 .cornerRadius(12)
@@ -31,39 +32,22 @@ struct GenresView: View {
 }
 
 private struct GenresListView: View {
-    let genres: [Genre]
-    @State private var sortingOptions = "Default"
-    
-    private var sortedGenres: [Genre] {
-        switch sortingOptions {
-        case "Title":
-            return genres.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
-        default:
-            return genres
-        }
-    }
+    let genres: [MediaGenre]
+    let mode: String
     
     var body: some View {
-        NavigationStack {
-            List(sortedGenres, id: \.self) { genre in
-                Text(genre.displayName)
-            }
-            .navigationTitle("Genres")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Picker("Sort", selection: $sortingOptions) {
-                            Label("Default", systemImage: "circle")
-                                .tag("Default")
-                            Label("Title", systemImage: "textformat.characters")
-                                .tag("Title")
-                        }
-                    } label: {
-                        Label("Sort", systemImage: "ellipsis")
-                    }
-                }
+        List(genres, id: \.self) { genre in
+            NavigationLink(
+                destination: MediaGenresView(
+                    genreId: genre.id,
+                    mode: mode,
+                    navigationTitle: (Genre(rawValue: genre.name) ?? .unknown).displayName
+                ))
+            {
+                Text((Genre(rawValue: genre.name) ?? .unknown).displayName)
             }
         }
+        .navigationTitle("Genres")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

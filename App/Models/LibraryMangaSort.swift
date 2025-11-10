@@ -15,5 +15,14 @@ enum LibraryMangaSort: String, CaseIterable {
         case .startDate: return String(localized: "Serialization date")
         }
     }
+    
+    var icon: String {
+        switch self {
+        case .score: return "star.fill"
+        case .lastUpdated: return "clock.arrow.trianglehead.2.counterclockwise.rotate.90"
+        case .title: return "textformat.characters"
+        case .startDate: return "calendar"
+        }
+    }
 }
 

@@ -119,7 +119,7 @@ struct LibraryView: View {
                                 )
                             }
                             .swipeActions(edge: .leading) {
-                                if manga.node.getListStatus.getProgressStatus != ProgressStatus.manga(.completed) { // geht noch nicht
+                                if manga.node.getListStatus.getProgressStatus != ProgressStatus.anime(.completed) { // das ist noch falsch
                                     Button {
                                         Task {
                                             try await mangaController.completEntry(id: manga.node.id)
@@ -129,6 +129,9 @@ struct LibraryView: View {
                                         }
                                     } label : {
                                         Label("Completed", systemImage: "checkmark")
+                                    }
+                                    .onAppear {
+                                        print("\(manga.node.getListStatus.getProgressStatus)")
                                     }
                                     .tint(.green)
                                 }
@@ -275,7 +278,7 @@ struct LibraryView: View {
                             ContentUnavailableView.search
                         } else {
                             ContentUnavailableView {
-                                Label("No \(libraryManager.mediaType.rawValue) found", systemImage: libraryManager.mediaType.icon)
+                                Label("No entries found", systemImage: libraryManager.mediaType.icon)
                             } description: {
                                 Text("Try a different category.")
                             }
@@ -366,24 +369,43 @@ struct LibraryView: View {
                     .sensoryFeedback(.selection, trigger: libraryManager.mediaType)
                     .buttonStyle(.borderless)
                 }
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItem {
                     Menu {
-                        Text("Sort by")
+                        Picker("Sort by", selection: $settingsManager.titleLanguage) {
+                            ForEach(TitleLanguage.allCases, id: \.self) { language in
+                                Text(language.displayName)
+                                    .tag(language.rawValue)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "globe")
+                            .fontWeight(.regular)
+                            .foregroundColor(.accentColor)
+                    }
+                }
+                if #available(iOS 26.0, *) {
+                    ToolbarSpacer(.fixed)
+                }
+                ToolbarItem {
+                    Menu {
                         if libraryManager.mediaType == .anime {
                             Picker("Sort by", selection: $libraryManager.animeSortOrder) {
-                                ForEach(LibraryAnimeSort.allCases, id: \ .self) { sortSelection in
-                                    Text(sortSelection.displayName).tag(sortSelection.rawValue)
+                                ForEach(LibraryAnimeSort.allCases, id: \.self) { sortSelection in
+                                    Label(sortSelection.displayName, systemImage: sortSelection.icon)
+                                        .tag(sortSelection.rawValue)
                                 }
                             }
                         } else {
                             Picker("Sort by", selection: $libraryManager.mangaSortOrder) {
-                                ForEach(LibraryMangaSort.allCases, id: \ .self) { sortSelection in
-                                    Text(sortSelection.displayName).tag(sortSelection.rawValue)
+                                ForEach(LibraryMangaSort.allCases, id: \.self) { sortSelection in
+                                    Label(sortSelection.displayName, systemImage: sortSelection.icon)
+                                        .tag(sortSelection.rawValue)
                                 }
                             }
                         }
+                        
                     } label: {
-                        Image(systemName: "arrow.up.arrow.down")
+                        Image(systemName: "line.3.horizontal.decrease")
                             .fontWeight(.regular)
                             .foregroundColor(.accentColor)
                     }
@@ -457,7 +479,7 @@ struct LibraryView: View {
                                     .controlSize(.large)
                                     .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
                                 }
-                                    
+                                
                                 AsyncImageView(imageUrl: media.node.getCover)
                                     .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                     .cornerRadius(12)
@@ -530,7 +552,8 @@ struct LibraryView: View {
                             if (libraryManager.mediaType == .manga) {
                                 Picker("Progress", selection: $mangaEntry.progressStatus) {
                                     ForEach([ProgressStatus.Manga.completed, .reading, .onHold, .dropped, .planToRead], id: \.self) { mangaSelection in
-                                        Text(mangaSelection.displayName).tag(mangaSelection)
+                                        Text(mangaSelection.displayName)
+                                            .tag(mangaSelection)
                                     }
                                 }
                                 
@@ -786,7 +809,7 @@ struct LibraryView: View {
                                     saveEntry(media.node.id)
                                 }
                                 .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
-                                .buttonStyle(.glassProminent)
+                                
                             } else {
                                 Button("Save") {
                                     saveEntry(media.node.id)

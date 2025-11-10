@@ -14,6 +14,9 @@ struct SearchView: View {
                 .toolbar {
                     selectionMenu
                     sortMenu
+                    if #available(iOS 26.0, *) {
+                        ToolbarSpacer(.fixed)
+                    }
                     exploreGenres
                 }
         }
@@ -34,18 +37,16 @@ struct SearchView: View {
         }
     }
     
-    
     private var sortMenu: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
+        ToolbarItem {
             Menu {
-                Text("Sort by")
                 if resultManager.mediaType == .anime {
                     animeSortPicker
                 } else {
                     mangaSortPicker
                 }
             } label: {
-                Image(systemName: "arrow.up.arrow.down")
+                Image(systemName: "line.3.horizontal.decrease")
                     .fontWeight(.regular)
                     .foregroundColor(.accentColor)
             }
@@ -54,16 +55,32 @@ struct SearchView: View {
     
     private var exploreGenres: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            NavigationLink(destination: GenreMediaListView()) {
-                Image(systemName: "square.stack")
-                    .foregroundColor(.accentColor)
+            if (resultManager.mediaType == .manga) {
+                NavigationLink(destination: GenreListView(mode: "manga")) {
+                    Image(systemName: "square.stack")
+                        .foregroundColor(.accentColor)
+                }
+            }
+            
+            if (resultManager.mediaType == .anime) {
+                Menu {
+                    NavigationLink(destination: GenreListView(mode: "anime")) {
+                        Label("Explore anime tags", systemImage: "tag")
+                    }
+                    NavigationLink(destination: StudiosView()) {
+                        Label("Explore anime studios", systemImage: "film")
+                    }
+                } label : {
+                    Image(systemName: "square.stack")
+                        .foregroundColor(.accentColor)
+                }
             }
         }
     }
 
     
     private var animeSortPicker: some View {
-        Picker("Sort by", selection: $resultManager.animeRankingType) {
+        Picker("Sort anime", selection: $resultManager.animeRankingType) {
             ForEach(SortType.Anime.allCases, id: \.self) { type in
                 Label(type.displayName, systemImage: type.icon).tag(type)
             }
@@ -71,9 +88,10 @@ struct SearchView: View {
     }
     
     private var mangaSortPicker: some View {
-        Picker("Sort by", selection: $resultManager.mangaRankingType) {
+        Picker("Sort manga", selection: $resultManager.mangaRankingType) {
             ForEach(SortType.Manga.allCases, id: \.self) { type in
-                Text(type.displayName).tag(type)
+                Label(type.displayName, systemImage: type.icon)
+                    .tag(type)
             }
         }
     }

@@ -10,14 +10,16 @@ struct VoiceActorDetailsView: View {
     @State private var details: JikanPersonFull? = nil
     @State private var isDescriptionExpanded = false
     
+    @EnvironmentObject private var alertManager: AlertManager
+    
     let jikanPersonFullController = JikanPersonController()
     
     var body: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: 12) {
                 HStack(alignment: .top, spacing: 8) {
                     AsyncImageView(imageUrl: image)
-                        .frame(width: 72*1.5, height: 108*1.5)
+                        .frame(width: CoverSize.extraLarge.size.width, height: CoverSize.extraLarge.size.height)
                         .cornerRadius(12)
                         .strokedBorder()
                     VStack(alignment: .leading, spacing: 10) {
@@ -56,9 +58,8 @@ struct VoiceActorDetailsView: View {
                         if let birthDate = details?.data.birthday,
                            !birthDate.isEmpty,
                            let formattedDate = formattedBirthDate(from: birthDate) {
-                            HStack {
-                                Text("Birthday")
-                                    .fontWeight(.bold)
+                            HStack(alignment: .center) {
+                                Image(systemName: "birthday.cake")
                                     .foregroundStyle(.secondary)
                                     .font(.caption)
                                 Text(formattedDate)
@@ -71,7 +72,7 @@ struct VoiceActorDetailsView: View {
                         VStack(alignment: .leading, spacing: 5) {
                             Text(details?.data.about ?? "")
                                 .font(.subheadline)
-                                .lineLimit(7)
+                                .lineLimit(9)
                                 .truncationMode(.tail)
                             Button(isDescriptionExpanded ? "Show less" : "Show more") {
                                 isDescriptionExpanded.toggle()
@@ -93,44 +94,61 @@ struct VoiceActorDetailsView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .frame(maxHeight: 110 * 1.5)
+                .frame(maxHeight: CoverSize.extraLarge.size.height)
                 .padding(.horizontal)
-                Divider()
+                
                 VStack(alignment: .leading) {
-                    LabelWithChevron(text: "Anime appearances")
+                    LabelWithChevron(text: String(localized: "Characters"))
                         .padding(.horizontal)
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(spacing: 10) {
                             ForEach(details?.data.voices ?? [], id: \.id) { voiceactor in
-                                
-                                VStack {
-                                    AsyncImageView(imageUrl: voiceactor.character.images.jpg.imageUrl)
-                                        .frame(width: 75, height: 117)
-                                        .cornerRadius(12)
-                                        .strokedBorder()
-                                    Text("As \(voiceactor.character.formattedName)")
-                                        .font(.caption)
-                                        .frame(maxWidth: 75, alignment: .leading)
-                                        .lineLimit(1)
-                                        .truncationMode(.tail)
+                                NavigationLink(destination: CharacterDetailsView(character: Character(metaData: MetaData(
+                                    malId: voiceactor.character.malId,
+                                    name: voiceactor.character.formattedName,
+                                    images: CharacterImage(jpg: CharacterJPG(imageUrl: voiceactor.character.images.jpg.imageUrl))
+                                )), role: "")) {
+                                    VStack {
+                                        AsyncImageView(imageUrl: voiceactor.character.images.jpg.imageUrl)
+                                            .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                            .cornerRadius(12)
+                                            .strokedBorder()
+                                        Text("\(voiceactor.character.formattedName)")
+                                            .font(.caption)
+                                            .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
+                                            .lineLimit(1)
+                                            .truncationMode(.tail)
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
+                                .buttonStyle(.plain)
                             }
                         }
+                        .padding(.horizontal)
                     }
                 }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                ShareLink(item: URL(string: details?.data.url ?? "myanimelist.net")!) {
+                    Image(systemName: "square.and.arrow.up")
+                        .foregroundColor(.accentColor)
+                }
+            }
+        }
+        .noScrollEdgeEffect()
         .background(Color(.systemGroupedBackground))
         .navigationTitle(name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            if details == nil {
-                Task {
-                    details = try? await jikanPersonFullController.fetchPersonFull(id: id)
-                }
+            
+            Task {
+                alertManager.isLoading = true
+                defer { alertManager.isLoading = false }
+                details = try? await jikanPersonFullController.fetchPersonFull(id: id)
             }
+            
         }
     }
     

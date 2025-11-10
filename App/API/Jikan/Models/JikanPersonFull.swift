@@ -16,11 +16,12 @@ struct PersonDetails: Decodable {
         case givenName = "given_name"
         case familyName = "family_name"
         case alternateNames = "alternate_names"
-        case birthday, favorites, about, voices
+        case birthday, favorites, about, voices, url
     }
     
     let malId: Int
     let websiteUrl: String?
+    let url: String
     let images: CharacterImage
     let name: String
     let givenName: String?

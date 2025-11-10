@@ -6,13 +6,13 @@ struct CharactersView: View {
     
     var body: some View {
         if !characters.isEmpty {
-            VStack (alignment: .leading){
+            VStack (alignment: .leading, spacing: 5) {
                 
-                NavigationLink(destination: CharactersListView(characters: characters, mediaType: mediaType)) {
+                //NavigationLink(destination: CharactersListView(characters: characters, mediaType: mediaType)) {
                     LabelWithChevron(text: "Characters")
                         .padding(.horizontal)
-                }
-                .buttonStyle(.plain)
+                //}
+                //.buttonStyle(.plain)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 10) {
@@ -44,6 +44,7 @@ struct CharactersView: View {
                 }
                 .scrollClipDisabled()
             }
+            .padding(.bottom)
         }
     }
 }
@@ -180,24 +181,32 @@ private struct CharactersListView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu{
-                    Picker(selection: $showRole, label: Text("Display options")) {
-                        ForEach(CharacterRole.allCases, id: \.self) { role in
-                            Label(role.displayName, systemImage: role.icon)
-                                .tag(role)
+                    Menu {
+                        Picker(selection: $showRole, label: Text("Display options")) {
+                            ForEach(CharacterRole.allCases, id: \.self) { role in
+                                Label(role.displayName, systemImage: role.icon)
+                                    .tag(role)
+                            }
                         }
+                    } label: {
+                        Label("Role", systemImage: "person.crop.rectangle")
                     }
                     
                     let sortingOptions = mediaType == .anime ? $animeSortingOptions : $mangaSortingOptions
                     
-                    Picker(selection: sortingOptions, label: Text("Sorting options")) {
-                        if mediaType == .anime {
-                            Label("Favorites", systemImage: "heart.fill")
-                                .tag("Favorite")
+                    Menu {
+                        Picker(selection: sortingOptions, label: Text("Sorting options")) {
+                            if mediaType == .anime {
+                                Label("Favorites", systemImage: "heart.fill")
+                                    .tag("Favorite")
+                            }
+                            Label("Role", systemImage: "person.crop.square.on.square.angled.fill")
+                                .tag("Role")
+                            Label("Name", systemImage: "textformat.characters")
+                                .tag("Name")
                         }
-                        Label("Role", systemImage: "person.crop.square.on.square.angled.fill")
-                            .tag("Role")
-                        Label("Name", systemImage: "textformat.characters")
-                            .tag("Name")
+                    } label : {
+                        Label("Sort by", systemImage: "arrow.up.arrow.down")
                     }
                     
                     if mediaType == .anime {
@@ -268,9 +277,6 @@ private struct CharacterVoiceActorRow: View {
             
             if mediaType == .anime,
                let matchingVA = character.voiceActors?.first(where: {
-                   print(mediaType)
-                   print($0.language.lowercased())
-                   print(selectedLanguage.lowercased())
                    return $0.language.lowercased() == selectedLanguage.lowercased()
                }) {
                 HStack {

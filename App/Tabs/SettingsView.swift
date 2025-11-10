@@ -6,8 +6,6 @@ struct SettingsView: View {
     
     private var tokenHandler: TokenHandler = .shared
     
-    private let resultOptions = [10, 20, 50, 100]
-    
     @State private var showConfirmationDialog: Bool = false
     
     var body: some View {
@@ -61,18 +59,12 @@ struct SettingsView: View {
                         .buttonStyle(.borderless)
                     }
                     
-                    Picker("Name order", systemImage: "textformat.characters.arrow.left.and.right",selection: $settingsManager.namePresentation) {
+                    Picker("Name order", systemImage: "textformat.characters.arrow.left.and.right", selection: $settingsManager.namePresentation) {
                         ForEach(NamePresentation.allCases, id: \.self) { mode in
-                            Text(mode.displayName).tag(mode)
+                            Text(mode.displayName)
+                                .tag(mode)
                         }
-                    }
-                }
-                Section("List") {
-                    Picker("Title language", systemImage: "translate", selection: $settingsManager.titleLanguage) {
-                        ForEach(TitleLanguage.allCases, id: \.self) { selectedLanguage in
-                            Text(selectedLanguage.displayName).tag(selectedLanguage)
-                        }
-                    }
+                    }.pickerStyle(.navigationLink)
                 }
                 
                 Section("Library") {
@@ -82,11 +74,11 @@ struct SettingsView: View {
                         }
                     }
                     
-                    Picker(selection: $settingsManager.animeMode, label: Label("Anime progress", systemImage: MediaType.anime.icon)) {
-                        ForEach(AnimeMode.allCases, id: \.self) { mode in
-                            Text(mode.displayName)
-                        }
-                    }
+//                    Picker(selection: $settingsManager.animeMode, label: Label("Anime progress", systemImage: MediaType.anime.icon)) {
+//                        ForEach(AnimeMode.allCases, id: \.self) { mode in
+//                            Text(mode.displayName)
+//                        }
+//                    }
                 }
                 
                 Section ("Contact"){
@@ -157,6 +149,7 @@ private struct AboutView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .listRowBackground(Color.clear)
+                .padding(.bottom, -30)
             
             Section("Info") {
                 LabeledContent("App version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
@@ -200,6 +193,8 @@ private struct AboutView: View {
                 Link("Pow", destination: URL(string: "https://movingparts.io/pow")!)
             }
         }
+        .noScrollEdgeEffect()
+        .contentMargins(.top, -30)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("About Shiori")
     }

@@ -56,7 +56,7 @@ struct DetailsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 15) {
                     CoverSummaryView(
                         title: media.getTitle,
                         imageUrl: media.getCover,
@@ -173,6 +173,7 @@ struct DetailsView: View {
                                 }
                             } label : {
                                 Label("Add to library", systemImage: "plus.circle.fill")
+                                    .foregroundStyle(.primary)
                                     .frame(maxWidth: .infinity)
                                     .font(.title3)
                                     .padding(.vertical, 4)
@@ -180,7 +181,7 @@ struct DetailsView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal)
-                            .buttonStyle(.borderedProminent)
+                            .borderedProminentOrGlassProminent()
                             .sensoryFeedback(.success, trigger: didTap)
                         }
                     } else {
@@ -199,34 +200,39 @@ struct DetailsView: View {
                     Sections(media: media, jikanCharacters: jikanCharacters, jikanRelations: jikanRelations)
                 }
             }
+            .noScrollEdgeEffect()
             .scrollIndicators(.hidden)
             .scrollClipDisabled()
             .toolbar {
                 if media.getListStatus.getProgressStatus != .unknown {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            isSheetPresented = true
-                        }) {
-                            Text("Edit")
+                    ToolbarItem {
+                        if #available(iOS 26.0, *) {
+                            Button(role: .close, action: {
+                                isSheetPresented = true
+                            }) {
+                                Image(systemName: "pencil")
+                            }
+
+                        } else {
+                            Button(action: {
+                                isSheetPresented = true
+                            }) {
+                                Text("Edit")
+                            }
                         }
                     }
+                    
+                    if #available(iOS 26.0, *) {
+                        ToolbarSpacer(.fixed)
+                    }
                 }
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItem {
                     let escapedTitle = media.getTitle.replacingOccurrences(of: " ", with: "_")
                     
                     if let url = URL(string: "https://myanimelist.net/\(media.getMediaType.rawValue)/\(media.id)/\(escapedTitle)") {
-                        Menu {
-                            ShareLink(item: url) {
-                                Label("Share", systemImage: "square.and.arrow.up")
-                            }
-                            
-                            NavigationLink {
-                                EditDetailsView()
-                            } label: {
-                                Label("Edit layout", systemImage: "slider.horizontal.3")
-                            }
-                        } label: {
-                            Image(systemName: "ellipsis")
+                        
+                        ShareLink(item: url) {
+                            Image(systemName: "square.and.arrow.up")
                         }
                     } else {
                         Text("Invalid URL")
@@ -401,24 +407,16 @@ struct DetailsView: View {
                                 }
                                 
                                 if userProgress.end != 0 {
-                                    HStack {
+                                    Picker(selection: $userProgress.progress, label:
+                                            VStack(alignment: .leading, spacing: 4) {
                                         Text("Episode")
-                                            .foregroundStyle(Color.primary)
-                                        Spacer()
-                                        Menu {
-                                            ForEach(0...userProgress.end, id: \.self) { episode in
-                                                Button("\(episode)") {
-                                                    userProgress.progress = episode
-                                                }
-                                            }
-                                        } label: {
-                                            HStack(spacing: 4) {
-                                                Text("\(userProgress.progress)/\(userProgress.end)")
-                                                    .foregroundColor(.secondary)
-                                                Image(systemName: "chevron.up.chevron.down")
-                                                    .imageScale(.small)
-                                                    .foregroundColor(.secondary)
-                                            }
+                                        Text("\(userProgress.progress)/\(userProgress.end)")
+                                            .foregroundStyle(.secondary)
+                                            .font(.caption)
+                                            .fontWeight(.bold)
+                                    }) {
+                                        ForEach(0...userProgress.end, id: \.self) { episode in
+                                            Text("\(episode)").tag(episode)
                                         }
                                     }
                                 } else {
@@ -518,48 +516,93 @@ struct DetailsView: View {
                         .scrollBounceBehavior(.basedOnSize)
                         .toolbar {
                             ToolbarItem(placement: .primaryAction) {
-                                Button("Save") {
-                                    Task {
-                                        if (media.getMediaType == .manga) {
-                                            try await mangaController.saveProgress(
-                                                id: media.id,
-                                                status: userProgress.mangaProgress.rawValue,
-                                                score: userProgress.rating,
-                                                chapters: userProgress.progress,
-                                                volumes: userProgress.currentVolume,
-                                                comments: userProgress.comments,
-                                                startDate: userProgress.startDate,
-                                                finishDate: userProgress.endDate
-                                            )
-                                            alertManager.showUpdatedAlert = true
-                                            media = try await mangaController.fetchDetails(id: media.id)
-                                            isSheetPresented = false
-                                        }
-                                        if (media.getMediaType == .anime) {
-                                            try await animeController.saveProgress(
-                                                id: media.id,
-                                                status: userProgress.animeProgress.rawValue,
-                                                score: userProgress.rating,
-                                                episodes: userProgress.progress,
-                                                comments: userProgress.comments,
-                                                startDate: userProgress.startDate,
-                                                finishDate: userProgress.endDate
-                                            )
-                                            alertManager.showUpdatedAlert = true
-                                            media = try await animeController.fetchDetails(id: media.id)
-                                            isSheetPresented = false
+                                if #available(iOS 26.0, *) {
+                                    Button(role: .confirm) {
+                                        Task {
+                                            if (media.getMediaType == .manga) {
+                                                try await mangaController.saveProgress(
+                                                    id: media.id,
+                                                    status: userProgress.mangaProgress.rawValue,
+                                                    score: userProgress.rating,
+                                                    chapters: userProgress.progress,
+                                                    volumes: userProgress.currentVolume,
+                                                    comments: userProgress.comments,
+                                                    startDate: userProgress.startDate,
+                                                    finishDate: userProgress.endDate
+                                                )
+                                                alertManager.showUpdatedAlert = true
+                                                media = try await mangaController.fetchDetails(id: media.id)
+                                                isSheetPresented = false
+                                            }
+                                            if (media.getMediaType == .anime) {
+                                                try await animeController.saveProgress(
+                                                    id: media.id,
+                                                    status: userProgress.animeProgress.rawValue,
+                                                    score: userProgress.rating,
+                                                    episodes: userProgress.progress,
+                                                    comments: userProgress.comments,
+                                                    startDate: userProgress.startDate,
+                                                    finishDate: userProgress.endDate
+                                                )
+                                                alertManager.showUpdatedAlert = true
+                                                media = try await animeController.fetchDetails(id: media.id)
+                                                isSheetPresented = false
+                                            }
                                         }
                                     }
+                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                } else {
+                                    Button("Save") {
+                                        Task {
+                                            if (media.getMediaType == .manga) {
+                                                try await mangaController.saveProgress(
+                                                    id: media.id,
+                                                    status: userProgress.mangaProgress.rawValue,
+                                                    score: userProgress.rating,
+                                                    chapters: userProgress.progress,
+                                                    volumes: userProgress.currentVolume,
+                                                    comments: userProgress.comments,
+                                                    startDate: userProgress.startDate,
+                                                    finishDate: userProgress.endDate
+                                                )
+                                                alertManager.showUpdatedAlert = true
+                                                media = try await mangaController.fetchDetails(id: media.id)
+                                                isSheetPresented = false
+                                            }
+                                            if (media.getMediaType == .anime) {
+                                                try await animeController.saveProgress(
+                                                    id: media.id,
+                                                    status: userProgress.animeProgress.rawValue,
+                                                    score: userProgress.rating,
+                                                    episodes: userProgress.progress,
+                                                    comments: userProgress.comments,
+                                                    startDate: userProgress.startDate,
+                                                    finishDate: userProgress.endDate
+                                                )
+                                                alertManager.showUpdatedAlert = true
+                                                media = try await animeController.fetchDetails(id: media.id)
+                                                isSheetPresented = false
+                                            }
+                                        }
+                                    }
+                                    .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
                                 }
-                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
                             }
                             ToolbarItem(placement: .cancellationAction) {
-                                Button(action: {
-                                    showAlert = true
-                                }) {
-                                    Image(systemName: "trash")
-                                        .symbolRenderingMode(.palette)
-                                        .foregroundColor(.red)
+                                Group {
+                                    if #available(iOS 26.0, *) {
+                                        Button(role: .destructive) {
+                                            showAlert = true
+                                        }
+                                    } else {
+                                        Button(action: {
+                                            showAlert = true
+                                        }) {
+                                            Image(systemName: "trash")
+                                                .symbolRenderingMode(.palette)
+                                                .foregroundColor(.red)
+                                        }
+                                    }
                                 }
                                 .alert("Delete progress", isPresented: $showAlert) {
                                     Button("Delete", role: .destructive) {
@@ -615,6 +658,7 @@ struct DetailsView: View {
                 do {
                     if media.getMediaType == .anime {
                         media = try await animeController.fetchDetails(id: media.id)
+                        
                         jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
                         jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id)
                         
@@ -706,9 +750,6 @@ private struct Sections: View {
     
     var body: some View {
         ForEach(Array(activeSections.enumerated()), id: \.element) { index, type in
-            if index > 0 {
-                Divider()
-            }
             sectionView(for: type)
         }
     }
@@ -730,7 +771,7 @@ private struct Sections: View {
                 status: media.getMediaStatus
             )
         case .genres:
-            GenresView(genres: media.getGenres)
+            GenresView(genres: media.getMediaGenres, mode: media.getMediaType.displayName.lowercased())
         case .score:
             StatisticsView(
                 score: media.getScore,
@@ -756,7 +797,6 @@ private struct Sections: View {
             id: 1,
             title: "Tokyo Ghoul",
             images: Images(
-                medium: "https://cdn.myanimelist.net/images/anime/9/74398.jpg",
                 large: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg"
             ),
             startDate: "2020-01-01",

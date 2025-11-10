@@ -31,20 +31,20 @@ struct LoginView: View {
             VStack (alignment: .leading, spacing: 30) {
                 if tokenHandler.isAuthenticated {
                     Form {
-                        if let username = profileDetails?.name,
-                           let profilePicture = profileDetails?.profilePicture {
-                            VStack {
-                                AsyncImageView(imageUrl: profilePicture)
-                                    .frame(width: CoverSize.small.size.width, height: CoverSize.small.size.height)
-                                    .cornerRadius(12)
-                                    .strokedBorder()
-                                
-                                Text(username)
-                                    .bold()
-                            }
-                            .listRowBackground(Color.clear)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .listRowInsets(EdgeInsets())
+                        if let username = profileDetails?.name {
+                           VStack {
+                               AsyncImageView(imageUrl: profileDetails?.profilePicture ?? "https://upload.wikimedia.org/wikipedia/commons/7/7a/MyAnimeList_Logo.png")
+                                   .frame(width: CoverSize.medium.size.width, height: CoverSize.small.size.height)
+                                   .cornerRadius(12)
+                                   .strokedBorder()
+                               
+                               Text(username)
+                                   .font(.title2)
+                                   .bold()
+                           }
+                           .listRowBackground(Color.clear)
+                           .frame(maxWidth: .infinity, alignment: .center)
+                           .listRowInsets(EdgeInsets())
                         }
                         Section {
                             LabeledContent {
@@ -98,7 +98,7 @@ struct LoginView: View {
                             }
                             .foregroundStyle(.secondary)
                             
-                            if let location = profileDetails?.location {
+                            if let location = profileDetails?.location, !location.isEmpty {
                                 LabeledContent {
                                     Text(location)
                                         .foregroundStyle(.primary)
@@ -121,13 +121,13 @@ struct LoginView: View {
                                         ForEach(friends, id: \.self) { friend in
                                             VStack {
                                                 AsyncImageView(imageUrl: friend.user.images.jpg.imageUrl ?? "")
-                                                    .frame(width: 50, height: 50)
+                                                    .frame(width: 60, height: 60)
                                                     .cornerRadius(12)
                                                     .strokedBorder()
                                                 
                                                 Text(friend.user.username)
-                                                    .font(.caption)
-                                                    .frame(alignment: .center)
+                                                    .font(.caption2)
+                                                    .frame(maxWidth: 60, alignment: .center)
                                                     .lineLimit(1)
                                                     .truncationMode(.tail)
                                             }
@@ -214,18 +214,26 @@ struct LoginView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(favoriteMangas, id: \.self) { manga in
-                                            VStack {
-                                                AsyncImageView(imageUrl: manga.images.jpg.imageUrl)
-                                                    .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
-                                                    .cornerRadius(12)
-                                                    .strokedBorder()
-                                                
-                                                Text(manga.title ?? "–")
-                                                    .font(.caption)
-                                                    .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
-                                                    .lineLimit(1)
-                                                    .truncationMode(.tail)
+                                            NavigationLink(destination: DetailsView(media: Media(
+                                                id: manga.malId,
+                                                title: manga.title ?? "-",
+                                                images: Images(large: manga.images.jpg.imageUrl),
+                                                type: manga.type?.lowercased() ?? "Unknown"
+                                            ))){
+                                                VStack {
+                                                    AsyncImageView(imageUrl: manga.images.jpg.imageUrl)
+                                                        .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                                        .cornerRadius(12)
+                                                        .strokedBorder()
+                                                    
+                                                    Text(manga.title ?? "–")
+                                                        .font(.caption)
+                                                        .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
+                                                        .lineLimit(1)
+                                                        .truncationMode(.tail)
+                                                }
                                             }
+                                            .buttonStyle(.plain)
                                         }
                                     }
                                     .scrollTargetLayout()
@@ -241,6 +249,12 @@ struct LoginView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(jikanFavorites.data.animes, id: \.self) { anime in
+                                            NavigationLink(destination: DetailsView(media: Media(
+                                                id: anime.malId,
+                                                title: anime.title ?? "-",
+                                                images: Images(large: anime.images.jpg.imageUrl),
+                                                type: anime.type?.lowercased() ?? "Unknown"
+                                            ))) {
                                                 VStack {
                                                     AsyncImageView(imageUrl: anime.images.jpg.imageUrl)
                                                         .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
@@ -253,6 +267,8 @@ struct LoginView: View {
                                                         .lineLimit(1)
                                                         .truncationMode(.tail)
                                                 }
+                                            }
+                                            .buttonStyle(.plain)
                                         }
                                     }
                                     .scrollTargetLayout()
@@ -268,18 +284,25 @@ struct LoginView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(jikanFavorites.data.characters, id: \.self) { character in
-                                            VStack {
-                                                AsyncImageView(imageUrl: character.images.jpg.imageUrl)
-                                                    .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
-                                                    .cornerRadius(12)
-                                                    .strokedBorder()
-                                                
-                                                Text(character.formattedName)
-                                                    .font(.caption)
-                                                    .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
-                                                    .lineLimit(1)
-                                                    .truncationMode(.tail)
+                                            NavigationLink(destination: CharacterDetailsView(character: Character(metaData: MetaData(
+                                                malId: character.malId,
+                                                name: character.formattedName,
+                                                images: CharacterImage(jpg: CharacterJPG(imageUrl: character.images.jpg.imageUrl))
+                                            )), role: "")) {
+                                                VStack {
+                                                    AsyncImageView(imageUrl: character.images.jpg.imageUrl)
+                                                        .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                                        .cornerRadius(12)
+                                                        .strokedBorder()
+                                                    
+                                                    Text(character.formattedName)
+                                                        .font(.caption)
+                                                        .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
+                                                        .lineLimit(1)
+                                                        .truncationMode(.tail)
+                                                }
                                             }
+                                            .buttonStyle(.plain)
                                         }
                                     }
                                     .scrollTargetLayout()
@@ -292,13 +315,13 @@ struct LoginView: View {
                     .onAppear {
                         Task {
                             alertManager.isLoading = true
+                            defer { alertManager.isLoading = false }
                             profileDetails = try await profileController.fetchUserProfile()
                             jikanFavorites = try await jikanProfileController.fetchProfileFavorites(username: profileDetails?.name ?? "test")
                             jikanFriends = try await jikanProfileController.fetchFriends(username: profileDetails?.name ?? "test")
                             let response = try await jikanProfileController.fetchProfileStatistics(username: profileDetails?.name ?? "test")
                             animeStatistics = response.data.anime
                             mangaStatistics = response.data.manga
-                            alertManager.isLoading = false
                         }
                     }
                 }
@@ -315,7 +338,7 @@ struct LoginView: View {
                                 .font(.headline)
                         }
                         
-                        Button(action: {
+                        Button {
                             Task {
                                 isAuthenticating = true
                                 do {
@@ -326,12 +349,12 @@ struct LoginView: View {
                                 }
                                 isAuthenticating = false
                             }
-                        }) {
+                        } label: {
                             Text("Log in with MyAnimeList")
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.borderedProminent)
+                        .borderedProminentOrGlassProminent()
                         .disabled(isAuthenticating)
                         .overlay {
                             if isAuthenticating {
@@ -350,11 +373,12 @@ struct LoginView: View {
                     .padding()
                 }
             }
+            .noScrollEdgeEffect()
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .navigationTitle(tokenHandler.isAuthenticated ? "" : "Login")
             .navigationBarTitleDisplayMode(tokenHandler.isAuthenticated ? .inline : .large)
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
+                ToolbarItem {
                     if tokenHandler.isAuthenticated, let profileName = profileDetails?.name,
                        let url = URL(string: "https://myanimelist.net/profile/\(profileName)") {
                         ShareLink(item: url) {
@@ -363,7 +387,12 @@ struct LoginView: View {
                         }
                     }
                 }
-                ToolbarItem(placement: .primaryAction) {
+                
+                if #available(iOS 26.0, *) {
+                    ToolbarSpacer(.fixed)
+                }
+                
+                ToolbarItem {
                     NavigationLink(destination: SettingsView()) {
                         Image(systemName: "gearshape.fill")
                             .foregroundColor(.accentColor)

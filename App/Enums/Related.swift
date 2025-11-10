@@ -12,6 +12,7 @@ enum Related: String {
     case unknown = "Unknown"
     case parentStory = "Parent story"
     case novel = "Novel"
+    case fullStory = "Full story"
     
     var displayName: String {
         switch self {
@@ -19,6 +20,7 @@ enum Related: String {
         case .sequel: return String(localized: "Sequel", comment: "Relation type of detailview")
         case .other: return String(localized: "Other", comment: "Relation type of detailview")
         case .spinOff: return String(localized: "Spin-off", comment: "Relation type of detailview")
+        case .fullStory: return String(localized: "Full story", comment: "Relation type of detailview")
         case .alternativeVersion: return String(localized: "Alternative version", comment: "Relation type of detailview")
         case .sideStory: return String(localized: "Side story", comment: "Relation type of detailview")
         case .adaptation: return String(localized: "Adaptation", comment: "Relation type of detailview")

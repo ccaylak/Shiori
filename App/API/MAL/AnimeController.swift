@@ -41,7 +41,7 @@ import SwiftUI
     
     func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
         var components: URLComponents
-        if searchTerm == "" {
+        if searchTerm.isEmpty {
             components = URLComponents(string: MALEndpoints.Anime.ranking)!
         } else {
             components = URLComponents(string: MALEndpoints.Anime.list)!
@@ -51,7 +51,9 @@ import SwiftUI
             URLQueryItem(name: "ranking_type", value: resultManager.animeRankingType.rawValue),
             URLQueryItem(name: "limit", value: "10"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent)),
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .otherTitles, .cover, .episodes, .mediaType, .startDate, .status, .entryStatus])),
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [
+                .id, .title, .cover,.otherTitles, .cover, .episodes, .mediaType, .startDate, .status, .entryStatus
+            ])),
             URLQueryItem(name: "q", value: searchTerm)
         ]
         
@@ -75,7 +77,7 @@ import SwiftUI
         
         components.queryItems = [
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [
-                .otherTitles, .episodes, .mediaType, .startDate, .status, .mean, .summary, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .scoredUsers, .minutes]))
+                .otherTitles, .episodes, .mediaType, .startDate, .status, .mean, .summary, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .scoredUsers, .minutes, .entryStatus]))
         ]
         
         

@@ -34,10 +34,12 @@ struct ResultView: View {
                         }
             }
             if !mediaResponse.results.isEmpty, let nextPage = mediaResponse.page?.next, !nextPage.isEmpty {
-                Button(action: {
+                Button{
                     Task {
                         guard !isLoading else { return }
                         isLoading = true
+                        defer { isLoading = false }
+                        
                         do {
                             let newMediaResponse = try await profileController.fetchNextPage(nextPage)
                             mediaResponse.results.append(contentsOf: newMediaResponse.results)
@@ -45,28 +47,33 @@ struct ResultView: View {
                         } catch {
                             print("Failed to load next page of results: \(error.localizedDescription)")
                         }
-                        isLoading = false
                     }
-                }) {
-                    if isLoading {
-                        ProgressView()
-                    } else {
-                        Text("Load more")
-                            .foregroundColor(.white)
+                } label: {
+                    Group {
+                        if isLoading {
+                            ProgressView()
+                        } else {
+                            Text("Load more")
+                        }
                     }
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 4)
                 }
+                .borderedProminentOrGlassProminent()
                 .frame(maxWidth: .infinity, minHeight: 50)
-                .background(Color.getByColorString(settingsManager.accentColor.rawValue))
-                .cornerRadius(10)
                 .listRowInsets(EdgeInsets())
             }
         }
+        .softScrollEdgeEffect(for: .top)
+        .noScrollEdgeEffect(for: .bottom)
         .scrollIndicators(.automatic)
         .listStyle(.automatic)
         .listRowSpacing(10)
         .contentMargins(.top, 0)
         .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))
         .onSubmit(of: .search) {
+            guard searchTerm.count >= 3 else { return }
             Task {
                 await loadMediaData()
             }
@@ -93,6 +100,7 @@ struct ResultView: View {
         do {
             switch resultManager.mediaType {
             case .anime:
+                print("hier")
                 mediaResponse = try await animeController.fetchPreviews(searchTerm: searchTerm)
             case .manga:
                 mediaResponse = try await mangaController.fetchPreviews(searchTerm: searchTerm)

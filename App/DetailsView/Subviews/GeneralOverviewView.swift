@@ -16,16 +16,17 @@ struct GeneralOverviewView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("General information")
-                .font(.headline)
+                .font(.title2)
+                .bold()
+            
             VStack(alignment: .leading, spacing: 4) {
-                
                 Text(formattedDetails(chapters: numberOfChapters, volumes: numberOfVolumes, episodes: episodes, minutes: minutes))
                     .font(.body)
                 
                 Text(formattedRelease(startDate: startDate, endDate: endDate))
                     .font(.body)
                 
-                StudiosView(studios: studios)
+                StudioInfoView(studios: studios)
                 AuthorsView(authorInfos: authorInfos)
             }
             .padding(.bottom, 10)
@@ -45,13 +46,21 @@ struct GeneralOverviewView: View {
     private func formattedAnimeDetails(type: FormatType.Anime, episodes: Int, minutes: Int) -> String {
         switch (type, episodes) {
         case (.movie, 1):
-            return type.displayName
+            return String(localized: "\(type.displayName), \(episodes) part • \(minutes) minutes")
         case (.movie, let episodes) where episodes > 1:
             return String(localized: "\(type.displayName), \(episodes) parts • \(minutes) minutes (≈\(formattedDuration(from: episodes*minutes)))")
-        case (.tv, 0):
-            return type.displayName
-        case (.tv, let episodes):
+        case (.tv, let episodes) where episodes > 1,
+            (.special, let episodes) where episodes > 1,
+            (.tvSpecial, let episodes) where episodes > 1,
+            (.ona, let episodes) where episodes > 1,
+            (.ova, let episodes) where episodes > 1:
             return String(localized: "\(type.displayName), \(episodes) episodes • \(minutes) minutes (≈\(formattedDuration(from: episodes*minutes)))")
+        case (.tv, let episodes) where episodes == 1,
+            (.special, let episodes) where episodes == 1,
+            (.tvSpecial, let episodes) where episodes == 1,
+            (.ona, let episodes) where episodes == 1,
+            (.ova, let episodes) where episodes == 1:
+            return String(localized: "\(type.displayName), \(episodes) episode • \(minutes) minutes")
         default:
             return type.displayName
         }
@@ -138,7 +147,7 @@ struct GeneralOverviewView: View {
     }
 }
 
-private struct StudiosView: View {
+private struct StudioInfoView: View {
     let studios: [Studio]
     
     var body: some View {
@@ -148,8 +157,10 @@ private struct StudiosView: View {
                 Text("Made by")
                     
                 ForEach(studios, id: \.id) {studio in
-                    Text(studio.name)
-                        .bold()
+                    NavigationLink(destination: StudioDetailsView(malId: studio.id, initialStudio: nil)) {
+                        Text(studio.name)
+                            .bold()
+                    }
                 }
             }
         }

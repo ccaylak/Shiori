@@ -25,7 +25,7 @@ struct Media: Decodable, Hashable {
     let id: Int
     let title: String
     let alternativeTitles: OtherTitles?
-    let images: Images
+    let images: Images?
     
     // Pflichtfelder optional
     let startDate: String?
@@ -78,5 +78,36 @@ struct Media: Decodable, Hashable {
         self.listStatus = listStatus
         self.users = users
         self.minutes = minutes
+    }
+    
+    init(id: Int, title: String, images: Images, type: String) {
+        self.init(
+            id: id,
+            title: title,
+            
+            alternativeTitles: nil,
+            images: images,
+            startDate: nil,
+            type: type,
+            status: nil,
+            episodes: nil,
+            numberOfVolumes: nil,
+            numberOfChapters: nil,
+            authors: nil,
+            summary: nil,
+            score: nil,
+            genres: nil,
+            endDate: nil,
+            recommendations: nil,
+            studios: nil,
+            relatedAnimes: nil,
+            relatedMangas: nil,
+            rank: nil,
+            popularity: nil,
+            moreImages: nil,
+            listStatus: nil,
+            users: nil,
+            minutes: nil
+        )
     }
 }

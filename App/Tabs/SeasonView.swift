@@ -17,15 +17,7 @@ struct SeasonView: View {
                     if let items = groupedMedia[animeType], !items.isEmpty {
                         VStack(alignment: .leading, spacing: 5) {
                         
-                            HStack(alignment: .center, spacing: 3) {
-                                Text(LocalizedStringKey(animeType.displayName))
-                                    .font(.title3)
-                                    .bold()
-                                
-                                Image(systemName: "chevron.forward")
-                                    .foregroundStyle(.secondary)
-                                    .fontWeight(.bold)
-                            }
+                            LabelWithChevron(text: animeType.displayName)
                             .padding(.horizontal)
                             
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -61,6 +53,7 @@ struct SeasonView: View {
                     }
                 }
             }
+            .noScrollEdgeEffect()
             .onAppear {
                 fetchSeason()
             }
@@ -71,42 +64,45 @@ struct SeasonView: View {
                 fetchSeason()
             }
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Picker("Please choose an anime season", selection: $seasonManager.selectedSeason) {
-                        ForEach(Season.allCases, id: \.self) { season in
-                            Label(season.displayName, systemImage: season.icon)
-                                .tag(season)
+                ToolbarItem {
+                    Menu {
+                        Picker("Select season", selection: $seasonManager.selectedSeason) {
+                            ForEach(Season.allCases, id: \.self) { season in
+                                Label(season.displayName, systemImage: season.icon)
+                                    .tag(season)
+                            }
                         }
+                    } label: {
+                        Image(systemName: seasonManager.selectedSeason.icon)
+                            .foregroundColor(.accentColor)
                     }
-                    .fixedSize()
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Picker("Please choose an anime season year", selection: $seasonManager.selectedYear) {
-                        ForEach(1980...Calendar.current.component(.year, from: Date()), id: \.self) { year in
-                            Text(String(year)).tag(year)
+                if #available(iOS 26.0, *) {
+                    ToolbarSpacer(.fixed)
+                }
+                ToolbarItem {
+                    Menu {
+                        Picker("Select year", selection: $seasonManager.selectedYear) {
+                            ForEach((1980...Calendar.current.component(.year, from: Date()) + 1).reversed(), id: \.self) { year in
+                                Text(String(year)).tag(year)
+                            }
                         }
+                    } label : {
+                        Text(String(seasonManager.selectedYear))
+                                .foregroundColor(.accentColor)
                     }
-                    .fixedSize()
                 }
             }
             .navigationTitle("Anime season")
-            .navigationBarTitleDisplayMode(.inline)
+            .toolbarTitleDisplayMode(.inlineLarge)
         }
     }
     
-    @State private var lastLoadedYear: Int?
-    @State private var lastLoadedSeason: Season?
-    
     private func fetchSeason() {
-        // Prüfen, ob die aktuelle Season schon geladen ist
-        guard lastLoadedYear != seasonManager.selectedYear ||
-                lastLoadedSeason != seasonManager.selectedSeason else {
-            return
-        }
-        
         Task {
             alertManager.isLoading = true
+            defer { alertManager.isLoading = false }
+            
             do {
                 let season = try await seasonController.fetchSeason(
                     year: seasonManager.selectedYear,
@@ -126,13 +122,9 @@ struct SeasonView: View {
                     }
                 )
                 
-                lastLoadedYear = seasonManager.selectedYear
-                lastLoadedSeason = seasonManager.selectedSeason
-                
             } catch {
                 print("Error fetching library: \(error)")
             }
-            alertManager.isLoading = false
         }
     }
 }

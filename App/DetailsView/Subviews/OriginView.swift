@@ -13,7 +13,8 @@ struct OriginView: View {
         if !relations.isEmpty {
             VStack(alignment: .leading) {
                 Text(relations[0].type == "anime" ? "Adaption" : "Source")
-                    .font(.headline)
+                    .font(.title2)
+                    .bold()
                     .padding(.horizontal)
                 
                 ScrollView(.horizontal, showsIndicators: false) {

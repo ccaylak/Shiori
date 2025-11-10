@@ -1,7 +1,16 @@
 import Foundation
 
 enum VoiceActorLanguage: String, CaseIterable, Comparable, Hashable {
-    case japanese, english, german, french, spanish, italian, chinese, korean, unknown
+    case japanese = "Japanese"
+    case english = "English"
+    case german = "German"
+    case french = "French"
+    case spanish = "Spanish"
+    case portuguese = "Portuguese (BR)"
+    case italian = "Italian"
+    case chinese = "Mandarin"
+    case korean = "Korean"
+    case unknown
     
     var displayName: String {
         switch self {
@@ -23,6 +32,8 @@ enum VoiceActorLanguage: String, CaseIterable, Comparable, Hashable {
             return String(localized: "Korean")
         case .unknown:
             return String(localized: "Unknown")
+        case .portuguese:
+            return String(localized: "Portuguese (BR)")
         }
     }
     

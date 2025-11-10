@@ -34,13 +34,13 @@ private struct CoverView: View {
             .frame(width: CoverSize.extraLarge.size.width, height: CoverSize.extraLarge.size.height)
             .cornerRadius(12)
             .strokedBorder()
-        .overlay(alignment: .topTrailing) {
-            ScoreBadgeView(score: score)
-        }
-        .overlay(alignment: .bottomTrailing) {
-            CountBadgeView(chapters: chapters, volumes: volumes,episodes: episodes, type: type)
-        }
-        .frame(maxWidth: CoverSize.extraLarge.size.width)
+            .overlay(alignment: .topTrailing) {
+                ScoreBadgeView(score: score)
+            }
+            .overlay(alignment: .bottomTrailing) {
+                CountBadgeView(chapters: chapters, volumes: volumes,episodes: episodes, type: type)
+            }
+            .frame(maxWidth: CoverSize.extraLarge.size.width)
     }
 }
 
@@ -93,13 +93,12 @@ private struct ScoreBadgeView: View {
                 Text("\(score.formatted())")
                     .font(.title3)
                     .bold()
-                    .foregroundStyle(.white)
                 
                 Image(systemName: "star.fill")
-                    .foregroundStyle(.white)
             }
+            .foregroundStyle(Color.primary)
             .padding(4)
-            .background(Material.ultraThin)
+            .glassEffectOrMaterial()
             .cornerRadius(12)
         }
     }
@@ -113,13 +112,18 @@ private struct CountBadgeView: View {
     
     var body: some View {
         if let formattedText = formatMediaInfo(type: type, episodes: episodes, chapters: chapters, volumes: volumes) {
-            Text(formattedText)
-                .bold()
-                .font(.title3)
-                .padding(4)
-                .foregroundStyle(.white)
-                .background(Material.ultraThin)
-                .cornerRadius(12)
+            HStack {
+                Text(formattedText)
+                    .bold()
+                    .font(.title3)
+                
+                Image(systemName: "tv.fill")
+            }
+            .padding(4)
+            .foregroundStyle(.primary)
+            .glassEffectOrMaterial()
+            .cornerRadius(12)
+            
         }
     }
     
@@ -128,6 +132,8 @@ private struct CountBadgeView: View {
         switch type {
         case .anime(let animeType):
             switch animeType {
+            case .movie where episodes == 1:
+                return String(localized: "\(episodes) part")
             case .movie where episodes > 1:
                 return String(localized: "\(episodes) parts")
             case .tv where episodes > 1,
@@ -135,6 +141,11 @@ private struct CountBadgeView: View {
                     .tvSpecial where episodes > 1,
                     .special where episodes > 1:
                 return String(localized: "\(episodes) episodes")
+            case .tv where episodes == 1,
+                    .ova where episodes == 1,
+                    .tvSpecial where episodes == 1,
+                    .special where episodes == 1:
+                return String(localized: "\(episodes) episode")
             default:
                 return nil
             }
@@ -179,3 +190,4 @@ more to stop their and nefarious goals from becoming a concrete reality.
         type: .anime(.tv),
     )
 }
+

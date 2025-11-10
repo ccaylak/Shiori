@@ -72,7 +72,7 @@ extension Media {
         studios ?? []
     }
     
-    private var getMediaGenres: [MediaGenre] {
+    var getMediaGenres: [MediaGenre] {
         genres ?? []
     }
 
@@ -81,7 +81,7 @@ extension Media {
     }
     
     var getCover: String {
-        images.large
+        images?.large ?? "https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
     }
     
     var getMediaStatus: Status {

@@ -19,6 +19,18 @@ import SwiftUI
         }
     }
     
+    @AppStorage("animeStudioSort") var animeStudioSort = StudiosView.SortOrder.desc {
+        didSet {
+            settingsChanged()
+        }
+    }
+    
+    @AppStorage("animeStudioOption") var animeStudioOption = StudiosView.SortOption.favorites {
+        didSet {
+            settingsChanged()
+        }
+    }
+    
     @Published var needsToLoadData = false
     
     private init() {}

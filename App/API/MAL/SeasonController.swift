@@ -4,6 +4,8 @@ import Foundation
     
     private var settingsManager: SettingsManager = .shared
     
+    private var malService: MALService = .shared
+    
     func fetchSeason(year: Int, season: String) async throws -> SeasonResponse {
         var components: URLComponents = URLComponents(string: MALEndpoints.Anime.season(year: year, seasonName: season))!
         
@@ -18,13 +20,12 @@ import Foundation
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
-        let (data, _) = try await URLSession.shared.data(for: request)
+        var (data, response) = try await URLSession.shared.data(for: request)
         
-        do {
-            let json = try JSONSerialization.jsonObject(with: data)
-            print("JSON Response:", json)
-        } catch {
-            print("JSON parsing error:", error)
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            try await malService.refreshToken()
+            
+            (data, response) = try await URLSession.shared.data(for: request)
         }
         
         return try JSONDecoder().decode(SeasonResponse.self, from: data)

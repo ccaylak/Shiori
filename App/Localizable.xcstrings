@@ -78,52 +78,82 @@
         }
       }
     },
-    "%@, %lld episodes" : {
+    "%@, %lld episode • %lld minutes" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@, %2$lld Folgen"
+            "value" : "%1$@, %2$lld Folge • %3$lld Minuten"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@, %2$lld episodes"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@, %2$lld episódios"
+            "value" : "%1$@, %2$lld episode • %3$lld minutes"
           }
         }
       }
     },
-    "%@, %lld parts" : {
+    "%@, %lld episodes • %lld minutes (≈%@)" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@, %2$lld Teile"
+            "value" : "%1$@, %2$lld Folgen • %3$lld Minuten (≈%4$@)"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@, %2$lld parts"
+            "value" : "%1$@, %2$lld episodes • %3$lld minutes (≈%4$@)"
           }
-        },
-        "pt-BR" : {
+        }
+      }
+    },
+    "%@, %lld part • %lld minutes" : {
+      "localizations" : {
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@, %2$lld partes"
+            "value" : "%1$@, %2$lld Teil • %3$lld Minuten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$lld part • %3$lld minutes"
+          }
+        }
+      }
+    },
+    "%@, %lld parts • %lld minutes (≈%@)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld Teile • %3$lld Minuten (≈%4$@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$lld parts • %3$lld minutes (≈%4$@)"
           }
         }
       }
     },
     "%lld" : {
       "shouldTranslate" : false
+    },
+    "%lld anime" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Anime"
+          }
+        }
+      }
     },
     "%lld chapters" : {
       "localizations" : {
@@ -159,6 +189,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$lld capítulos (%2$@)"
+          }
+        }
+      }
+    },
+    "%lld episode" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Folge"
           }
         }
       }
@@ -202,7 +242,34 @@
       }
     },
     "%lld favorites" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Favoriten"
+          }
+        }
+      }
+    },
+    "%lld favorites " : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Favoriten"
+          }
+        }
+      }
+    },
+    "%lld part" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Teil"
+          }
+        }
+      }
     },
     "%lld parts" : {
       "localizations" : {
@@ -216,6 +283,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld partes"
+          }
+        }
+      }
+    },
+    "%lld productions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Produktionen"
           }
         }
       }
@@ -513,6 +590,9 @@
         }
       }
     },
+    "Adaptation" : {
+      "comment" : "Relation type of detailview"
+    },
     "Adaption" : {
       "comment" : "Relation type of detailview",
       "localizations" : {
@@ -797,6 +877,46 @@
         }
       }
     },
+    "Anime appearances" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime-Auftritte"
+          }
+        }
+      }
+    },
+    "Anime genres" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime-Genres"
+          }
+        }
+      }
+    },
+    "Anime progress" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime-Fortschritt"
+          }
+        }
+      }
+    },
+    "Anime season" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime-Saison"
+          }
+        }
+      }
+    },
     "Anime statistics" : {
       "localizations" : {
         "de" : {
@@ -809,6 +929,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estatísticas de anime"
+          }
+        }
+      }
+    },
+    "Anime studios" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime-Studios"
           }
         }
       }
@@ -829,19 +959,6 @@
           }
         }
       }
-    },
-    "App icon made by Nicole Knutas" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App-Icon erstellt von Nicole Knutas"
-          }
-        }
-      }
-    },
-    "App icons" : {
-      "shouldTranslate" : false
     },
     "App Info" : {
       "localizations" : {
@@ -895,8 +1012,15 @@
         }
       }
     },
-    "as %@" : {
-
+    "Ascending" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufsteigend"
+          }
+        }
+      }
     },
     "Avant Garde" : {
       "comment" : "Genre",
@@ -952,9 +1076,6 @@
         }
       }
     },
-    "Birthday" : {
-
-    },
     "Blue" : {
       "comment" : "Accent color",
       "localizations" : {
@@ -1001,7 +1122,14 @@
       }
     },
     "Build number" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buildnummer"
+          }
+        }
+      }
     },
     "By" : {
       "localizations" : {
@@ -1158,6 +1286,12 @@
           }
         }
       }
+    },
+    "Choose a sort option" : {
+
+    },
+    "Choose a sort order" : {
+
     },
     "CM" : {
       "comment" : "Anime type",
@@ -1393,6 +1527,16 @@
         }
       }
     },
+    "Descending" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Absteigend"
+          }
+        }
+      }
+    },
     "Detective" : {
       "comment" : "Genre",
       "localizations" : {
@@ -1432,16 +1576,6 @@
     },
     "Display options" : {
 
-    },
-    "Displaying mode" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Darstellung"
-          }
-        }
-      }
     },
     "Do you really want to delete your progress for %@?" : {
       "localizations" : {
@@ -1559,16 +1693,6 @@
         }
       }
     },
-    "Edit layout" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bereiche anpassen"
-          }
-        }
-      }
-    },
     "Edit Reading Progress" : {
       "localizations" : {
         "de" : {
@@ -1635,9 +1759,6 @@
         }
       }
     },
-    "Entdecken" : {
-
-    },
     "Episode" : {
       "localizations" : {
         "de" : {
@@ -1687,6 +1808,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erótica"
+          }
+        }
+      }
+    },
+    "Established" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gründungsdatum"
+          }
+        }
+      }
+    },
+    "Explore anime studios" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime-Studios durchsuchen"
+          }
+        }
+      }
+    },
+    "Explore anime tags" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime-Genres durchsuchen"
+          }
+        }
+      }
+    },
+    "Fall" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herbst"
           }
         }
       }
@@ -1751,7 +1912,14 @@
       }
     },
     "Favorites" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favoriten"
+          }
+        }
+      }
     },
     "Female ♀" : {
       "comment" : "Gender",
@@ -1823,6 +1991,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Amigos"
+          }
+        }
+      }
+    },
+    "Full story" : {
+      "comment" : "Relation type of detailview",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ganze Story"
           }
         }
       }
@@ -2059,6 +2238,19 @@
         }
       }
     },
+    "Icon made by Nicole Knutas" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icon erstellt von Nicole Knutas"
+          }
+        }
+      }
+    },
+    "Id" : {
+      "shouldTranslate" : false
+    },
     "Idols (Female)" : {
       "comment" : "Genre",
       "localizations" : {
@@ -2093,12 +2285,56 @@
         }
       }
     },
-    "If you want to contribute, please send me a mail:" : {
+    "If you want to contribute, please send a mail to:" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bei Interesse bitte eine Mail an:"
+            "value" : "Wenn du dich beteiligen möchtest, kontaktiere mich unter:"
+          }
+        }
+      }
+    },
+    "In chapters" : {
+      "comment" : "Manga mode",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Kapiteln"
+          }
+        }
+      }
+    },
+    "In episodes" : {
+      "comment" : "Anime mode",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Folgen"
+          }
+        }
+      }
+    },
+    "In time" : {
+      "comment" : "Anime mode",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Zeit"
+          }
+        }
+      }
+    },
+    "In volumes" : {
+      "comment" : "Manga mode",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Bänden"
           }
         }
       }
@@ -2135,17 +2371,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Informação"
-          }
-        }
-      }
-    },
-    "Invalid date" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ungültiges Datum"
           }
         }
       }
@@ -2306,6 +2531,16 @@
         }
       }
     },
+    "Languages" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprachen"
+          }
+        }
+      }
+    },
     "Last Name, First Name" : {
       "localizations" : {
         "de" : {
@@ -2378,22 +2613,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Light Novel"
-          }
-        }
-      }
-    },
-    "List" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Liste"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lista"
           }
         }
       }
@@ -2668,6 +2887,36 @@
         }
       }
     },
+    "Manga appearances" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manga-Auftritte"
+          }
+        }
+      }
+    },
+    "Manga genres" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manga-Genres"
+          }
+        }
+      }
+    },
+    "Manga progress" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manga-Fortschritt"
+          }
+        }
+      }
+    },
     "Manga statistics" : {
       "localizations" : {
         "de" : {
@@ -2928,12 +3177,32 @@
         }
       }
     },
-    "No %@ found" : {
+    "Name order" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keine %@ gefunden"
+            "value" : "Namensdarstellung"
+          }
+        }
+      }
+    },
+    "No" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nein"
+          }
+        }
+      }
+    },
+    "No entries found" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Einträge gefunden"
           }
         }
       }
@@ -3009,7 +3278,7 @@
       }
     },
     "Novel" : {
-      "comment" : "Manga type",
+      "comment" : "Manga type\nRelation type of detailview",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3128,9 +3397,6 @@
           }
         }
       }
-    },
-    "Optionen" : {
-
     },
     "Orange" : {
       "comment" : "Accent color",
@@ -3335,19 +3601,12 @@
         }
       }
     },
-    "Popularity" : {
-      "extractionState" : "stale",
+    "Portuguese (BR)" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Popularität"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Popularidade"
+            "value" : "Portugiesisch (BR)"
           }
         }
       }
@@ -3368,6 +3627,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prequela"
+          }
+        }
+      }
+    },
+    "Productions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Produktionen"
           }
         }
       }
@@ -3553,23 +3822,6 @@
         }
       }
     },
-    "Rank" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rang"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Classificação"
-          }
-        }
-      }
-    },
     "Rating" : {
       "localizations" : {
         "de" : {
@@ -3726,22 +3978,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Removido da biblioteca"
-          }
-        }
-      }
-    },
-    "Results per page" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ergebnisse pro Seite"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Resultados por página"
           }
         }
       }
@@ -3915,12 +4151,12 @@
         }
       }
     },
-    "Sections" : {
+    "Season" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bereiche"
+            "value" : "Saison"
           }
         }
       }
@@ -3941,6 +4177,12 @@
           }
         }
       }
+    },
+    "Select season" : {
+
+    },
+    "Select year" : {
+
     },
     "Sequel" : {
       "comment" : "Relation type of detailview",
@@ -3987,29 +4229,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Configurações"
-          }
-        }
-      }
-    },
-    "Share" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Teilen"
-          }
-        }
-      }
-    },
-    "Shiori-chan" : {
-      "shouldTranslate" : false
-    },
-    "Shiori-chan illustrated by Lara Prüß" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shiori-chan, illustriert von Lara Prüß"
           }
         }
       }
@@ -4153,6 +4372,9 @@
     "Sort" : {
 
     },
+    "Sort anime" : {
+
+    },
     "Sort by" : {
       "localizations" : {
         "de" : {
@@ -4168,6 +4390,9 @@
           }
         }
       }
+    },
+    "Sort manga" : {
+
     },
     "Sorting options" : {
 
@@ -4260,6 +4485,16 @@
         }
       }
     },
+    "Spring" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frühling"
+          }
+        }
+      }
+    },
     "Start date" : {
       "localizations" : {
         "de" : {
@@ -4320,6 +4555,16 @@
         }
       }
     },
+    "Summer" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommer"
+          }
+        }
+      }
+    },
     "Super Power" : {
       "comment" : "Genre",
       "localizations" : {
@@ -4350,16 +4595,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sobrenatural"
-          }
-        }
-      }
-    },
-    "Supported languages" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unterstützte Sprachen"
           }
         }
       }
@@ -4461,6 +4696,26 @@
         }
       }
     },
+    "Third-Party libraries" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drittanbieter-Bibliotheken"
+          }
+        }
+      }
+    },
+    "Third-Party Services" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drittanbieter-Services"
+          }
+        }
+      }
+    },
     "Time Travel" : {
       "comment" : "Genre",
       "localizations" : {
@@ -4490,22 +4745,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Título"
-          }
-        }
-      }
-    },
-    "Title language" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Titelsprache"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Idioma do título"
           }
         }
       }
@@ -5011,26 +5250,6 @@
         }
       }
     },
-    "Used Third-Party libraries" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwendete Drittanbieter-Bibliotheken"
-          }
-        }
-      }
-    },
-    "Used Third-Party Services" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwendete Drittanbieter-Services"
-          }
-        }
-      }
-    },
     "Vampire" : {
       "comment" : "Genre",
       "localizations" : {
@@ -5095,6 +5314,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Artes visuais"
+          }
+        }
+      }
+    },
+    "Voice actors" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronsprecher"
           }
         }
       }
@@ -5169,6 +5398,16 @@
         }
       }
     },
+    "Winter" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Winter"
+          }
+        }
+      }
+    },
     "Workplace" : {
       "comment" : "Genre",
       "localizations" : {
@@ -5198,16 +5437,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sim"
-          }
-        }
-      }
-    },
-    "You can choose which sections of an anime or manga to show or hide." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du kannst entscheiden welche Bereiche angezeigt werden sollen."
           }
         }
       }

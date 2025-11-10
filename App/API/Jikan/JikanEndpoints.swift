@@ -66,4 +66,30 @@ struct JikanEndpoints {
             "\(baseURL)/people/\(id)/full"
         }
     }
+    
+    struct Studio {
+        let id: Int
+        
+        var studio: String {
+            "\(baseURL)/producers/\(id)"
+        }
+        
+        static var all: String {
+            "\(baseURL)/producers"
+        }
+        
+        static var animes: String {
+            "\(baseURL)/anime"
+        }
+    }
+    
+    struct Genres {
+        var anime: String {
+            "\(baseURL)/genres/anime"
+        }
+        
+        var manga: String {
+            "\(baseURL)/genres/manga"
+        }
+    }
 }

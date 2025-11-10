@@ -20,6 +20,13 @@ struct Character: Decodable, Identifiable {
     let favorites: Int?
     let metaData: MetaData
     let voiceActors: [VoiceActor]?
+    
+    init(role: String = "", favorites: Int? = nil, metaData: MetaData, voiceActors: [VoiceActor]? = nil) {
+        self.role = role
+        self.favorites = favorites
+        self.metaData = metaData
+        self.voiceActors = voiceActors
+    }
 }
 
 struct MetaData: Decodable {

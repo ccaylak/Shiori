@@ -53,6 +53,20 @@ enum SortType {
             case .favorite: return String(localized: "Most Favorited", comment: "Sort by")
             }
         }
+        
+        var icon: String {
+            switch self {
+            case .all: return "books.vertical"
+            case .manga: return "character.book.closed.ja"
+            case .novels: return "book.closed"
+            case .oneshots: return "book.pages"
+            case .doujin: return "person.crop.square"
+            case .manhwa: return "character.book.closed.ko"
+            case .manhua: return "character.book.closed.zh"
+            case .bypopularity: return "chart.xyaxis.line"
+            case .favorite: return "heart"
+            }
+        }
     }
     
     var displayName: String {
