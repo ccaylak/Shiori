@@ -9,7 +9,7 @@ struct CoverSummaryView: View {
     let volumes: Int
     let episodes: Int
     let summary: String
-    let type: FormatType
+    let type: MediaType
     
     var body: some View {
         HStack (alignment: .top, spacing: 10) {
@@ -24,7 +24,7 @@ private struct CoverView: View {
     
     let imageUrl: String
     let score: Double
-    let type: FormatType
+    let type: MediaType
     let chapters: Int
     let volumes: Int
     let episodes: Int
@@ -108,7 +108,7 @@ private struct CountBadgeView: View {
     let chapters: Int
     let volumes: Int
     let episodes: Int
-    let type: FormatType
+    let type: MediaType
     
     var body: some View {
         if let formattedText = formatMediaInfo(type: type, episodes: episodes, chapters: chapters, volumes: volumes) {
@@ -127,7 +127,7 @@ private struct CountBadgeView: View {
         }
     }
     
-    func formatMediaInfo(type: FormatType, episodes: Int, chapters: Int, volumes: Int) -> String? {
+    func formatMediaInfo(type: MediaType, episodes: Int, chapters: Int, volumes: Int) -> String? {
         
         switch type {
         case .anime(let animeType):

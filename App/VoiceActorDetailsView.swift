@@ -7,7 +7,7 @@ struct VoiceActorDetailsView: View {
     let image: String
     let name: String
     
-    @State private var details: JikanPersonFull? = nil
+    @State private var details: JikanPerson? = nil
     @State private var isDescriptionExpanded = false
     
     @EnvironmentObject private var alertManager: AlertManager
@@ -19,7 +19,8 @@ struct VoiceActorDetailsView: View {
             VStack(spacing: 12) {
                 HStack(alignment: .top, spacing: 8) {
                     AsyncImageView(imageUrl: image)
-                        .frame(width: CoverSize.extraLarge.size.width, height: CoverSize.extraLarge.size.height)
+                        .frame(width: CoverSize.extraLarge.size.width,
+                               height: CoverSize.extraLarge.size.height)
                         .cornerRadius(12)
                         .strokedBorder()
                     VStack(alignment: .leading, spacing: 10) {
@@ -101,12 +102,12 @@ struct VoiceActorDetailsView: View {
                     LabelWithChevron(text: String(localized: "Characters"))
                         .padding(.horizontal)
                     ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(spacing: 10) {
+                        /*LazyHStack(spacing: 10) {
                             ForEach(details?.data.voices ?? [], id: \.id) { voiceactor in
                                 NavigationLink(destination: CharacterDetailsView(character: Character(metaData: MetaData(
                                     malId: voiceactor.character.malId,
                                     name: voiceactor.character.formattedName,
-                                    images: CharacterImage(jpg: CharacterJPG(imageUrl: voiceactor.character.images.jpg.imageUrl))
+                                    images: JikanImages()
                                 )), role: "")) {
                                     VStack {
                                         AsyncImageView(imageUrl: voiceactor.character.images.jpg.imageUrl)
@@ -125,6 +126,7 @@ struct VoiceActorDetailsView: View {
                             }
                         }
                         .padding(.horizontal)
+                         */
                     }
                 }
             }
@@ -146,7 +148,14 @@ struct VoiceActorDetailsView: View {
             Task {
                 alertManager.isLoading = true
                 defer { alertManager.isLoading = false }
-                details = try? await jikanPersonFullController.fetchPersonFull(id: id)
+                
+                
+                do {
+                    details = try await jikanPersonFullController.fetchPersonFull(id: id)
+                    print("Details loaded:", details?.data.name ?? "nil")
+                } catch {
+                    print("Failed to load voice actor details:", error)
+                }
             }
             
         }
@@ -162,7 +171,7 @@ struct VoiceActorDetailsView: View {
         
         let displayFormatter = DateFormatter()
         displayFormatter.locale = Locale.current
-        displayFormatter.dateFormat = "dd.MM.yyyy"  // z.B. 30.04.2023
+        displayFormatter.dateFormat = "dd.MM.yyyy"
         
         return displayFormatter.string(from: date)
     }

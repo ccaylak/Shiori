@@ -16,7 +16,9 @@ import Foundation
         
         let (data, _) = try await URLSession.shared.data(for: request)
         
-        let content = try JSONDecoder().decode(TokenResponse.self, from: data)
+        let content = try JSONDecoder
+            .snakeCaseDecoder
+            .decode(TokenResponse.self, from: data)
         
         tokenHandler.setTokens(from: content)
     }

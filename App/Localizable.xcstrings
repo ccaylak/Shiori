@@ -7,6 +7,9 @@
     "?" : {
       "shouldTranslate" : false
     },
+    "(%@)" : {
+
+    },
     "%@" : {
       "localizations" : {
         "pt-BR" : {
@@ -610,9 +613,6 @@
         }
       }
     },
-    "Adaption/Source" : {
-
-    },
     "Add comments" : {
       "localizations" : {
         "de" : {
@@ -861,6 +861,9 @@
         }
       }
     },
+    "Animated by" : {
+
+    },
     "Anime" : {
       "localizations" : {
         "de" : {
@@ -878,6 +881,7 @@
       }
     },
     "Anime appearances" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -898,6 +902,7 @@
       }
     },
     "Anime progress" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1132,6 +1137,7 @@
       }
     },
     "By" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1251,6 +1257,7 @@
       }
     },
     "Characters and voice actors" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1380,6 +1387,9 @@
           }
         }
       }
+    },
+    "Created by" : {
+
     },
     "Crossdressing" : {
       "comment" : "Genre",
@@ -1573,9 +1583,6 @@
     },
     "Discord" : {
       "shouldTranslate" : false
-    },
-    "Display options" : {
-
     },
     "Do you really want to delete your progress for %@?" : {
       "localizations" : {
@@ -2522,6 +2529,7 @@
       }
     },
     "Language" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2790,6 +2798,7 @@
       }
     },
     "Made by" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2888,6 +2897,7 @@
       }
     },
     "Manga appearances" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3168,6 +3178,7 @@
       }
     },
     "Name" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3208,6 +3219,7 @@
       }
     },
     "No summary available" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3262,6 +3274,7 @@
       }
     },
     "Not specified" : {
+      "comment" : "Gender",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3905,6 +3918,7 @@
       }
     },
     "Related" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4000,6 +4014,7 @@
       }
     },
     "Role" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4142,6 +4157,7 @@
       }
     },
     "Search characters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4369,9 +4385,6 @@
         }
       }
     },
-    "Sort" : {
-
-    },
     "Sort anime" : {
 
     },
@@ -4392,9 +4405,6 @@
       }
     },
     "Sort manga" : {
-
-    },
-    "Sorting options" : {
 
     },
     "Source" : {
@@ -5191,6 +5201,7 @@
       }
     },
     "Unknown release year" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5207,6 +5218,7 @@
       }
     },
     "Unknown start date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

@@ -4,9 +4,9 @@ struct ResultView: View {
     
     private let mangaController = MangaController()
     private let animeController = AnimeController()
-    private let profileController = ProfileController()
+    private let userController = UserController()
     
-    @State var mediaResponse = MediaResponse(results: [], page: MediaResponse.Paging(next: ""))
+    @State var mediaResponse = MediaResponse(data: [], paging: nil)
     @State private var searchTerm: String = ""
     
     @State private var isLoading = false
@@ -17,23 +17,25 @@ struct ResultView: View {
     
     var body: some View {
         List {
-            ForEach(mediaResponse.results, id: \.node.id) { media in
+            ForEach(mediaResponse.data, id: \.node.id) { media in
                 ZStack(alignment: .topTrailing) {
                             NavigationLink(destination: DetailsView(media: media.node)) {
                                 MediaView(
-                                    title: media.node.getTitle,
-                                    image: media.node.getCover,
-                                    releaseYear: media.node.getReleaseYear,
-                                    type: media.node.getType,
-                                    mediaCount: (resultManager.mediaType == .anime) ? (media.node.getEpisodes) : (media.node.getChapters),
-                                    status: media.node.getMediaStatus
+                                    title: media.node.preferredTitle,
+                                    image: media.node.mainPicture.largeUrl,
+                                    releaseYear: media.node.isMangaOrAnime == .manga
+                                        ? media.node.yearLabel
+                                        : media.node.getStartSeason.seasonLabel,
+                                    type: media.node.specificMediaType,
+                                    mediaCount: media.node.resultCount,
+                                    status: media.node.specificStatus
                                 )
                             }
 
                     AnyView(media.node.getEntryStatus.libraryIcon)
                         }
             }
-            if !mediaResponse.results.isEmpty, let nextPage = mediaResponse.page?.next, !nextPage.isEmpty {
+            if !mediaResponse.data.isEmpty, let nextPage = mediaResponse.paging?.next, !nextPage.isEmpty {
                 Button{
                     Task {
                         guard !isLoading else { return }
@@ -41,9 +43,9 @@ struct ResultView: View {
                         defer { isLoading = false }
                         
                         do {
-                            let newMediaResponse = try await profileController.fetchNextPage(nextPage)
-                            mediaResponse.results.append(contentsOf: newMediaResponse.results)
-                            mediaResponse.page = newMediaResponse.page
+                            let newMediaResponse = try await userController.fetchNextPage(nextPage)
+                            mediaResponse.append(newMediaResponse.data)
+                            mediaResponse.updatePaging(newMediaResponse.paging)
                         } catch {
                             print("Failed to load next page of results: \(error.localizedDescription)")
                         }
@@ -62,7 +64,9 @@ struct ResultView: View {
                 }
                 .borderedProminentOrGlassProminent()
                 .frame(maxWidth: .infinity, minHeight: 50)
-                .listRowInsets(EdgeInsets())
+                .listRowInsets(.init())
+                .listRowSeparator(.hidden)
+                .contentMargins(.horizontal, 0, for: .scrollContent)
             }
         }
         .softScrollEdgeEffect(for: .top)
@@ -79,7 +83,7 @@ struct ResultView: View {
             }
         }
         .onAppear {
-            guard mediaResponse.results.isEmpty else { return }
+            guard mediaResponse.data.isEmpty else { return }
             alertManager.isLoading = true
             
             Task {
@@ -98,17 +102,16 @@ struct ResultView: View {
     
     private func loadMediaData() async {
         do {
-            switch resultManager.mediaType {
+            switch resultManager.seriesType {
             case .anime:
-                print("hier")
                 mediaResponse = try await animeController.fetchPreviews(searchTerm: searchTerm)
             case .manga:
                 mediaResponse = try await mangaController.fetchPreviews(searchTerm: searchTerm)
             case .unknown:
-                print("test")
+                mediaResponse = MediaResponse(data: [], paging: nil)
             }
         } catch {
-            print("Loading media data failed: \(error.localizedDescription)")
+            print("Failed to load media data: \(error)")
         }
     }
     
@@ -118,3 +121,4 @@ struct ResultView: View {
     ResultView()
         .environmentObject(AlertManager.shared)
 }
+

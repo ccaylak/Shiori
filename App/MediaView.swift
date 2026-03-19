@@ -8,7 +8,7 @@ struct MediaView: View {
     let title: String
     let image: String
     let releaseYear: String
-    let type: FormatType
+    let type: MediaType
     let mediaCount: Int
     let status: Status
     
@@ -54,11 +54,11 @@ struct MediaView: View {
         return formattedResult
     }
     
-    func formattedAnimeDetails(type: FormatType.Anime, year: String) -> String {
+    func formattedAnimeDetails(type: MediaType.Anime, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
     
-    func formattedMangaDetails(type: FormatType.Manga, year: String) -> String {
+    func formattedMangaDetails(type: MediaType.Manga, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
     
@@ -83,7 +83,7 @@ struct MediaView: View {
         }
     }
     
-    func formattedOtherAnimeDetails(episodes: Int, status: Status.Anime, type: FormatType.Anime) -> String {
+    func formattedOtherAnimeDetails(episodes: Int, status: Status.Anime, type: MediaType.Anime) -> String {
         
         if episodes == 0 && (status == .notYetAired || status == .currentlyAiring) {
             return status.displayName
@@ -100,7 +100,7 @@ struct MediaView: View {
         return String(localized: "\(episodes) episodes (\(status.displayName))")
     }
     
-    func formattedOtherMangaDetails(chapters: Int, status: Status.Manga, type: FormatType.Manga) -> String {
+    func formattedOtherMangaDetails(chapters: Int, status: Status.Manga, type: MediaType.Manga) -> String {
         if(status == .currentlyPublishing) {
             return status.displayName
         }
@@ -109,15 +109,4 @@ struct MediaView: View {
         }
         return String(localized: "\(chapters) chapters (\(status.displayName))")
     }
-}
-
-#Preview {
-    MediaView(
-        title: "Tokyo Ghoul",
-        image: "https://cdn.myanimelist.net/images/manga/3/145997l.jpg",
-        releaseYear: "2021",
-        type: .anime(.tv),
-        mediaCount: 12,
-        status: .anime(.currentlyAiring)
-    )
 }

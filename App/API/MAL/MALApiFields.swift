@@ -3,13 +3,11 @@ import Foundation
 enum MALApiFields: String {
     
     // General informations
-    case id = "id"
-    case title = "title"
-    case otherTitles = "alternative_titles"
-    case cover = "main_picture"
+    case alternativeTitles = "alternative_titles"
+    case startSeason = "start_season"
     case startDate = "start_date"
     case endDate = "end_date"
-    case summary = "synopsis"
+    case synopsis = "synopsis"
     case type = "type"
     case mean = "mean"
     case rank = "rank"
@@ -18,24 +16,25 @@ enum MALApiFields: String {
     case mediaType = "media_type"
     case status = "status"
     case recommendations = "recommendations{my_list_status, mean, num_episodes, num_volumes, num_chapters, media_type, alternative_titles}"
-    case scoredUsers = "num_scoring_users"
-    case minutes = "average_episode_duration"
+    case numScoringUsers = "num_scoring_users"
+    case numListUsers = "num_list_users"
+    case averageEpisodeDuration = "average_episode_duration"
     
     // anime related
-    case episodes = "num_episodes"
+    case numEpisodes = "num_episodes"
     case studios = "studios"
     case relatedAnime = "related_anime{my_list_status, media_type, alternative_titles}"
     
     // manga related
-    case volumes = "num_volumes"
-    case chapters = "num_chapters"
+    case numVolumes = "num_volumes"
+    case numChapters = "num_chapters"
     case relatedManga = "related_manga{my_list_status, media_type, alternative_titles}"
     case authors = "authors{first_name,last_name}"
     
     // profile related
-    case username = "name"
-    case profilePicture = "picture"
-    case entryStatus = "my_list_status{status, num_volumes_read, num_chapters_read, score, comments, updated_at, start_date, finish_date}"
+    case name = "name"
+    case picture = "picture"
+    case myListStatus = "my_list_status{status, num_volumes_read, num_chapters_read, score, comments, updated_at, start_date, finish_date}"
     case gender = "gender"
     case birthday = "birthday"
     case location = "location"

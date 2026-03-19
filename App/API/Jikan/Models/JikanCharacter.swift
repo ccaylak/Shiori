@@ -1,80 +1,38 @@
 import Foundation
 
 struct JikanCharacter: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case data
-    }
     
-    let data: [Character]
+    private(set) var data: [CharacterData]
 }
 
-struct Character: Decodable, Identifiable {
-    enum CodingKeys: String, CodingKey {
-        case role, favorites
-        case metaData = "character"
-        case voiceActors = "voice_actors"
-    }
+struct CharacterData: Decodable, Identifiable {
     
-    let id: String = UUID().uuidString
-    let role: String
-    let favorites: Int?
-    let metaData: MetaData
-    let voiceActors: [VoiceActor]?
-    
-    init(role: String = "", favorites: Int? = nil, metaData: MetaData, voiceActors: [VoiceActor]? = nil) {
-        self.role = role
-        self.favorites = favorites
-        self.metaData = metaData
-        self.voiceActors = voiceActors
-    }
+    var id: Int {character.malId}
+    private(set) var role: String
+    private(set) var favorites: Int?
+    private(set) var character: MetaData
+    private(set) var voiceActors: [VoiceActor]?
 }
 
 struct MetaData: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case malId = "mal_id"
-        case images, name
-    }
     
-    let malId: Int
-    let name: String
-    let images: CharacterImage
+    private(set) var malId: Int
+    private(set) var name: String
+    private(set) var images: JikanImages
 }
 
 struct VoiceActor: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case person, language
-    }
     
-    let person: Person
-    let language: String
+    private(set) var person: Person
+    private(set) var language: String
 }
 
 struct Person: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case malId = "mal_id"
-        case url, name, images
-    }
     
-    let malId: Int
-    let url: String
-    let name: String
-    let images: CharacterImage
-}
-
-struct CharacterImage: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case jpg
-    }
-    
-    let jpg: CharacterJPG
-}
-
-struct CharacterJPG: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case imageUrl = "image_url"
-    }
-    
-    let imageUrl: String
+    private(set) var malId: Int
+    private(set) var url: String
+    private(set) var name: String
+    private(set) var images: JikanImages
 }
 
 @MainActor

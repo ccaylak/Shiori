@@ -1,6 +1,6 @@
 import Foundation
 
-enum MediaType: String {
+enum SeriesType: String {
     case manga, anime, unknown
     
     var displayName: String {

@@ -6,14 +6,14 @@ struct SeasonView: View {
     @ObservedObject private var seasonManager: SeasonManager = .shared
     @EnvironmentObject private var alertManager: AlertManager
     
-    @State private var jikanSeason = SeasonResponse(data: [])
+    @State private var jikanSeason = MediaResponse(data: [], paging: nil)
     
-    @State private var groupedMedia: [FormatType.Anime: [MediaNode]] = [:]
+    @State private var groupedMedia: [MediaType.Anime: [Media]] = [:]
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                ForEach(FormatType.Anime.allCases, id: \.self) { animeType in
+                ForEach(MediaType.Anime.allCases, id: \.self) { animeType in
                     if let items = groupedMedia[animeType], !items.isEmpty {
                         VStack(alignment: .leading, spacing: 5) {
                         
@@ -25,12 +25,12 @@ struct SeasonView: View {
                                     ForEach(items, id: \.node.id) { anime in
                                         NavigationLink(destination: DetailsView(media: anime.node)) {
                                             VStack(spacing: 3) {
-                                                AsyncImageView(imageUrl: anime.node.getCover)
+                                                AsyncImageView(imageUrl: anime.node.mainPicture.largeUrl)
                                                     .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                                     .cornerRadius(12)
                                                     .strokedBorder()
                                                 
-                                                Text(anime.node.getTitle)
+                                                Text(anime.node.preferredTitle)
                                                     .font(.caption)
                                                     .lineLimit(2)
                                                     .frame(maxWidth: CoverSize.large.size.width, alignment: .leading)
@@ -113,8 +113,8 @@ struct SeasonView: View {
                 groupedMedia = Dictionary(
                     grouping: season.data,
                     by: { media in
-                        if let type = media.node.type?.lowercased(),
-                           let animeType = FormatType.Anime(rawValue: type) {
+                        if let type = media.node.mediaType?.lowercased(),
+                           let animeType = MediaType.Anime(rawValue: type) {
                             return animeType
                         } else {
                             return .unknown

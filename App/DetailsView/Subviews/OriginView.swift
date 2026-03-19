@@ -7,7 +7,7 @@ struct OriginView: View {
     
     let relations: [RelationEntry]
     
-    @State private var results: [Media] = []
+    @State private var results: [MediaNode] = []
     
     var body: some View {
         if !relations.isEmpty {
@@ -22,12 +22,12 @@ struct OriginView: View {
                         ForEach(results, id: \.id) { media in
                             NavigationLink(destination: DetailsView(media: media)) {
                                 VStack(alignment: .leading) {
-                                    AsyncImageView(imageUrl: media.getCover)
+                                    AsyncImageView(imageUrl: media.mainPicture.largeUrl)
                                         .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                         .cornerRadius(10)
                                         .strokedBorder()
                                     
-                                    Text(media.getTitle)
+                                    Text(media.title)
                                         .font(.caption)
                                         .frame(maxWidth: CoverSize.large.size.width, alignment: .leading)
                                         .lineLimit(1)
@@ -47,7 +47,7 @@ struct OriginView: View {
                 Task {
                     for relation in relations {
                         do {
-                            let fetched: Media
+                            let fetched: MediaNode
                             if relation.type == "manga" {
                                 fetched = try await mangaController.fetchDetails(id: relation.malId)
                             } else {

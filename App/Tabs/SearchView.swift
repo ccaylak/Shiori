@@ -9,7 +9,7 @@ struct SearchView: View {
     var body: some View {
         NavigationStack {
             ResultView()
-                .navigationTitle(resultManager.mediaType.rawValue.capitalized)
+                .navigationTitle(resultManager.seriesType.rawValue.capitalized)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     selectionMenu
@@ -25,14 +25,14 @@ struct SearchView: View {
     private var selectionMenu: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
             Button {
-                resultManager.mediaType = (resultManager.mediaType == .manga) ? .anime : .manga
+                resultManager.seriesType = (resultManager.seriesType == .manga) ? .anime : .manga
             } label: {
-                Image(systemName: resultManager.mediaType == .manga ? "character.book.closed.ja" : "tv")
+                Image(systemName: resultManager.seriesType == .manga ? "character.book.closed.ja" : "tv")
                     .contentTransition(.symbolEffect(.replace))
                     .foregroundStyle(Color.accentColor)
                     .symbolRenderingMode(.monochrome)
             }
-            .sensoryFeedback(.selection, trigger: resultManager.mediaType)
+            .sensoryFeedback(.selection, trigger: resultManager.seriesType)
             .buttonStyle(.borderless)
         }
     }
@@ -40,7 +40,7 @@ struct SearchView: View {
     private var sortMenu: some ToolbarContent {
         ToolbarItem {
             Menu {
-                if resultManager.mediaType == .anime {
+                if resultManager.seriesType == .anime {
                     animeSortPicker
                 } else {
                     mangaSortPicker
@@ -55,14 +55,14 @@ struct SearchView: View {
     
     private var exploreGenres: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            if (resultManager.mediaType == .manga) {
+            if (resultManager.seriesType == .manga) {
                 NavigationLink(destination: GenreListView(mode: "manga")) {
                     Image(systemName: "square.stack")
                         .foregroundColor(.accentColor)
                 }
             }
             
-            if (resultManager.mediaType == .anime) {
+            if (resultManager.seriesType == .anime) {
                 Menu {
                     NavigationLink(destination: GenreListView(mode: "anime")) {
                         Label("Explore anime tags", systemImage: "tag")

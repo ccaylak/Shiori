@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RecommendationsView: View {
     
-    let recommendations: [MediaNode]
+    let recommendations: [Media]
     
     var body: some View {
         if !recommendations.isEmpty {
@@ -17,10 +17,10 @@ struct RecommendationsView: View {
                         ForEach(recommendations, id: \.node.id) { recommendation in
                             NavigationLink(destination: DetailsView(media: recommendation.node)) {
                                 VStack {
-                                    AsyncImageView(imageUrl: recommendation.node.getCover)
+                                    AsyncImageView(imageUrl: recommendation.node.mainPicture.largeUrl)
                                         .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                         .cornerRadius(12)
-                                        .showFullTitleContextMenu(recommendation.node.getTitle)
+                                        .showFullTitleContextMenu(recommendation.node.title)
                                         .strokedBorder()
                                         .overlay(alignment: .topTrailing) {
                                             if recommendation.node.getEntryStatus != .unknown {
@@ -31,7 +31,7 @@ struct RecommendationsView: View {
                                             }
                                         }
                                     
-                                    Text(recommendation.node.getTitle)
+                                    Text(recommendation.node.title)
                                         .font(.caption2)
                                         .frame(maxWidth: CoverSize.large.size.width, alignment: .leading)
                                         .lineLimit(1)
@@ -52,7 +52,7 @@ struct RecommendationsView: View {
 }
 
 private struct RecommendationsListView: View {
-    let recommendations: [MediaNode]
+    let recommendations: [Media]
     
     var body: some View {
         ScrollView (.vertical) {
@@ -61,14 +61,14 @@ private struct RecommendationsListView: View {
                     NavigationLink(destination: DetailsView(media: recommendation.node)) {
                         VStack(spacing: 2) {
                             ZStack(alignment: .topTrailing) {
-                                AsyncImageView(imageUrl: recommendation.node.getCover)
+                                AsyncImageView(imageUrl: "")
                                     .frame(width: 150, height: 238)
                                     .cornerRadius(12)
                             }
                             .overlay(alignment: .topTrailing) {
-                                if (recommendation.node.getScore > 0 && recommendation.node.getScore <= 10){
+                                if (recommendation.node.mean ?? 0.0 > 0 && recommendation.node.mean ?? 0.0 <= 10){
                                     HStack {
-                                        Text("\(recommendation.node.getScore.formatted())")
+                                        Text((recommendation.node.mean ?? 0.0).formatted())
                                             .font(.title3)
                                             .bold()
                                             .foregroundStyle(.white)
@@ -81,7 +81,7 @@ private struct RecommendationsListView: View {
                                     .cornerRadius(12)
                                 }
                             }
-                            Text(recommendation.node.getTitle)
+                            Text(recommendation.node.preferredTitle)
                                 .frame(width: 150, alignment: .leading)
                                 .font(.headline)
                                 .lineLimit(1)

@@ -7,10 +7,12 @@ import Foundation
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         
-        return try JSONDecoder().decode(JikanAnimeStudioResponse.self, from: data)
+        return try JSONDecoder
+            .snakeCaseDecoder
+            .decode(JikanAnimeStudioResponse.self, from: data)
     }
     
-    func fetchAnimeStudios(searchTerm: String, order: String, sort: String, page: Int) async throws -> JikanAnimeStudio {
+    func fetchAnimeStudios(searchTerm: String, order: String, sort: String, page: Int) async throws -> JikanStudio {
         var components = URLComponents(string: JikanEndpoints.Studio.all)!
         
         components.queryItems = [
@@ -27,10 +29,11 @@ import Foundation
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         
-        return try JSONDecoder().decode(JikanAnimeStudio.self, from: data)
+        return try JSONDecoder.snakeCaseDecoder
+            .decode(JikanStudio.self, from: data)
     }
     
-    func fetchAnimesByAnimeStudio(id: Int, page: Int) async throws -> JikanAnime {
+    func fetchAnimesByAnimeStudio(id: Int, page: Int) async throws -> JikanMedia {
         var components = URLComponents(string: JikanEndpoints.Studio.animes)!
         
         components.queryItems = [
@@ -45,6 +48,7 @@ import Foundation
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         
-        return try JSONDecoder().decode(JikanAnime.self, from: data)
+        return try JSONDecoder.snakeCaseDecoder
+            .decode(JikanMedia.self, from: data)
     }
 }

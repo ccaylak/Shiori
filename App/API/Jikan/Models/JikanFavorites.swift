@@ -1,59 +1,28 @@
 import Foundation
 
 struct JikanFavorites: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case data
-    }
     
-    let data: FavoriteData
+    private(set) var data: FavoriteData
 }
 
 struct FavoriteData: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case animes = "anime"
-        case mangas = "manga"
-        case characters
-    }
     
-    let animes: [FavoriteEntries]
-    let mangas: [FavoriteEntries]
-    let characters: [FavoriteEntries]
+    private(set) var anime: [FavoriteEntry]
+    private(set) var manga: [FavoriteEntry]
+    private(set) var characters: [FavoriteEntry]
 }
 
-struct FavoriteEntries: Decodable, Hashable {
-    enum CodingKeys: String, CodingKey {
-        case malId = "mal_id"
-        case title, images, name, type
-    }
+struct FavoriteEntry: Decodable {
     
-    let malId: Int
-    let title: String?
-    let name: String?
-    let type: String?
-    let images: FavoriteImage
-}
-
-struct FavoriteImage: Decodable, Hashable {
-    enum CodingKeys: String, CodingKey {
-        case jpg
-    }
-    let jpg: FavoriteJPG
-}
-
-struct FavoriteJPG: Decodable, Hashable {
-    enum CodingKeys: String, CodingKey {
-        case imageUrl = "image_url"
-        case smallImageUrl = "small_image_url"
-        case largeImageUrl = "large_image_url"
-    }
-    
-    let imageUrl: String
-    let smallImageUrl: String?
-    let largeImageUrl: String?
+    private(set) var malId: Int
+    private(set) var title: String?
+    private(set) var name: String?
+    private(set) var type: String?
+    private(set) var images: JikanImages
 }
 
 @MainActor
-extension FavoriteEntries {
+extension FavoriteEntry {
     var getName: String {
         name ?? "?"
     }

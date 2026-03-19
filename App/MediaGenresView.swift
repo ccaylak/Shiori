@@ -6,7 +6,7 @@ struct MediaGenresView: View {
     let mode: String
     let navigationTitle: String
     
-    @State var jikanMediaResponse = JikanAnime(data: [], pagination: nil)
+    @State var jikanMedia = JikanMedia(data: [], pagination: nil)
     
     private let jikanGenresController = JikanGenresController()
     
@@ -18,15 +18,15 @@ struct MediaGenresView: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2)) {
-                ForEach(jikanMediaResponse.data, id: \.id) { media in
-                    NavigationLink(destination: DetailsView(media: Media(
+                ForEach(jikanMedia.data, id: \.id) { media in
+                    NavigationLink(destination: DetailsView(media: MediaNode(
                         id: media.malId,
                         title: media.titles[0].title,
-                        images: Images(large: media.images.jpg.imageUrl),
-                        type: (mode == "manga") ? "manga" : "tv"
+                        mainPicture: Picture(),
+                        mediaType: (mode == "manga") ? "manga" : "tv"
                     ))) {
                         VStack {
-                            AsyncImageView(imageUrl: media.images.jpg.imageUrl)
+                            AsyncImageView(imageUrl: media.images.jpgImage.baseImage)
                                 .frame(width: CoverSize.extraLarge.size.width, height: CoverSize.extraLarge.size.height)
                                 .strokedBorder()
                                 .cornerRadius(12)
@@ -41,8 +41,8 @@ struct MediaGenresView: View {
                     }
                 }
             }
-            if !jikanMediaResponse.data.isEmpty,
-               let pagination = jikanMediaResponse.pagination,
+            if !jikanMedia.data.isEmpty,
+               let pagination = jikanMedia.pagination,
                pagination.hasNextPage,
                pagination.currentPage < pagination.lastVisiblePage {
                 Button {
@@ -52,21 +52,21 @@ struct MediaGenresView: View {
                         page+=1
                         do {
                             if mode == "anime" {
-                                let newJikanMediaResponse = try await jikanGenresController.fetchAnimeByGenre(
+                                let newJikanMedia = try await jikanGenresController.fetchAnimeByGenre(
                                     id: genreId,
                                     page: page
                                 )
                                 
-                                jikanMediaResponse.data.append(contentsOf: newJikanMediaResponse.data)
+                                jikanMedia.append(newJikanMedia.data)
                                 
                                 
                             } else {
-                                let newJikanMediaResponse = try await jikanGenresController.fetchMangaByGenre(
+                                let newJikanMedia = try await jikanGenresController.fetchMangaByGenre(
                                     id: genreId,
                                     page: page
                                 )
                                 
-                                jikanMediaResponse.data.append(contentsOf: newJikanMediaResponse.data)
+                                jikanMedia.append(newJikanMedia.data)
                             }
                         }
                         
@@ -97,9 +97,9 @@ struct MediaGenresView: View {
                 alertManager.isLoading = true
                 defer { alertManager.isLoading = false }
                 if mode == "manga" {
-                    jikanMediaResponse = try await jikanGenresController.fetchMangaByGenre(id: genreId, page: page)
+                    jikanMedia = try await jikanGenresController.fetchMangaByGenre(id: genreId, page: page)
                 } else {
-                    jikanMediaResponse = try await jikanGenresController.fetchAnimeByGenre(id: genreId, page: page)
+                    jikanMedia = try await jikanGenresController.fetchAnimeByGenre(id: genreId, page: page)
                 }
             }
         }

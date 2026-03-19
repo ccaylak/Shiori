@@ -2,7 +2,7 @@ import SwiftUI
 
 struct GeneralOverviewView: View {
     
-    let type: FormatType
+    let type: MediaType
     let episodes: Int
     let numberOfChapters: Int
     let numberOfVolumes: Int
@@ -10,7 +10,7 @@ struct GeneralOverviewView: View {
     let minutes: Int
     let endDate: String
     let studios: [Studio]
-    let authorInfos: [AuthorInfos]
+    let authors: [Author]
     let status: Status
     
     var body: some View {
@@ -27,7 +27,7 @@ struct GeneralOverviewView: View {
                     .font(.body)
                 
                 StudioInfoView(studios: studios)
-                AuthorsView(authorInfos: authorInfos)
+                AuthorsView(authors: authors)
             }
             .padding(.bottom, 10)
         }
@@ -43,7 +43,7 @@ struct GeneralOverviewView: View {
         }
     }
     
-    private func formattedAnimeDetails(type: FormatType.Anime, episodes: Int, minutes: Int) -> String {
+    private func formattedAnimeDetails(type: MediaType.Anime, episodes: Int, minutes: Int) -> String {
         switch (type, episodes) {
         case (.movie, 1):
             return String(localized: "\(type.displayName), \(episodes) part • \(minutes) minutes")
@@ -79,7 +79,7 @@ struct GeneralOverviewView: View {
         }
     }
     
-    private func formattedMangaDetails(type: FormatType.Manga, chapters: Int, volumes: Int) -> String {
+    private func formattedMangaDetails(type: MediaType.Manga, chapters: Int, volumes: Int) -> String {
         
         switch (chapters, volumes) {
         case (let chapters, let volumes) where chapters > 0 && volumes > 0:
@@ -154,7 +154,7 @@ private struct StudioInfoView: View {
         if (!studios.isEmpty) {
             Spacer()
             HStack(spacing: 5) {
-                Text("Made by")
+                Text("Animated by")
                     
                 ForEach(studios, id: \.id) {studio in
                     NavigationLink(destination: StudioDetailsView(malId: studio.id, initialStudio: nil)) {
@@ -168,39 +168,21 @@ private struct StudioInfoView: View {
 }
 
 private struct AuthorsView: View {
-    let authorInfos: [AuthorInfos]
+    let authors: [Author]
     
     var body: some View {
-        if(!authorInfos.isEmpty) {
+        if(!authors.isEmpty) {
             Spacer()
-            Text("By")
+            Text("Created by")
             
             VStack (alignment: .leading) {
-                ForEach(authorInfos, id: \.self) { authorElement in
-                    Text(authorElement.getAuthor)
-                        .bold()
+                ForEach(authors, id: \.self) { author in
+                    HStack(spacing: 3) {
+                        Text(author.node.fullName)
+                        Text("(\(author.role))")
+                    }
                 }
             }
         }
     }
-}
-
-#Preview {
-    let exampleStudios: [Studio] = [
-        Studio(id: 1, name: "Netflix"),
-        Studio(id: 2, name: "Amazon")
-    ]
-    
-    GeneralOverviewView(
-        type: .anime(.tv),
-        episodes: 10,
-        numberOfChapters: 10,
-        numberOfVolumes: 0,
-        startDate: "2024-10-10",
-        minutes: 21,
-        endDate: "2025-10-10",
-        studios: exampleStudios,
-        authorInfos: [],
-        status: .anime(.currentlyAiring)
-    )
 }

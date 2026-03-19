@@ -51,9 +51,7 @@ import SwiftUI
             URLQueryItem(name: "ranking_type", value: resultManager.animeRankingType.rawValue),
             URLQueryItem(name: "limit", value: "10"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent)),
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [
-                .id, .title, .cover,.otherTitles, .cover, .episodes, .mediaType, .startDate, .status, .entryStatus
-            ])),
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numEpisodes, .mediaType, .startSeason, .status, .myListStatus])),
             URLQueryItem(name: "q", value: searchTerm)
         ]
         
@@ -62,6 +60,7 @@ import SwiftUI
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
@@ -69,15 +68,15 @@ import SwiftUI
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
-        return try JSONDecoder().decode(MediaResponse.self, from: data)
+        return try JSONDecoder.snakeCaseDecoder
+            .decode(MediaResponse.self, from: data)
     }
     
-    func fetchDetails(id: Int) async throws -> Media {
+    func fetchDetails(id: Int) async throws -> MediaNode {
         var components = URLComponents(string: MALEndpoints.Anime(id: id).details)!
         
         components.queryItems = [
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [
-                .otherTitles, .episodes, .mediaType, .startDate, .status, .mean, .summary, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .scoredUsers, .minutes, .entryStatus]))
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numEpisodes, .mediaType, .startDate, .status, .mean, .synopsis, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .numScoringUsers, .numListUsers, .averageEpisodeDuration, .myListStatus]))
         ]
         
         
@@ -93,7 +92,9 @@ import SwiftUI
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
-        return try JSONDecoder().decode(Media.self, from: data)
+        
+        return try JSONDecoder.snakeCaseDecoder
+            .decode(MediaNode.self, from: data)
     }
     
     func addToWatchList(id: Int) async throws {
@@ -171,7 +172,7 @@ import SwiftUI
         }
     }
     
-    func fetchLibrary() async throws -> LibraryResponse {
+    func fetchLibrary() async throws -> MediaResponse {
         var components = URLComponents(string: MALEndpoints.Anime.library)!
         
         components.queryItems = (
@@ -182,10 +183,7 @@ import SwiftUI
             URLQueryItem(name: "sort", value: libraryManager.animeSortOrder.rawValue),
             URLQueryItem(
                 name: "fields",
-                value: MALApiFields.fieldsHeader(for: [
-                    .id, .title, .otherTitles, .cover, .startDate,
-                    .mediaType, .entryStatus, .episodes, .status
-                ])
+                value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .startDate, .mediaType, .myListStatus, .numEpisodes, .status, .numListUsers, .startSeason])
             ),
             URLQueryItem(name: "limit", value: "1000"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
@@ -204,7 +202,8 @@ import SwiftUI
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        return try JSONDecoder().decode(LibraryResponse.self, from: data)
+        return try JSONDecoder.snakeCaseDecoder
+            .decode(MediaResponse.self, from: data)
     }
     
     func deleteEntry(id: Int) async throws {

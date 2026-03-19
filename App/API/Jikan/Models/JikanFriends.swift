@@ -1,25 +1,14 @@
 import Foundation
 
-struct JikanFriends: Decodable, Hashable {
-    let data: [JikanFriendsData]
+struct JikanFriends: Decodable {
+    private(set) var data: [JikanFriendsData]
 }
 
-struct JikanFriendsData: Decodable, Hashable {
-    let user: JikanUser
+struct JikanFriendsData: Decodable {
+    private(set) var user: JikanUser
 }
 
-struct JikanUser: Decodable, Hashable {
-    let username: String
-    let images: UserImages
-}
-
-struct UserImages: Decodable, Hashable {
-    let jpg: UserJPG
-}
-
-struct UserJPG: Decodable, Hashable {
-    enum CodingKeys: String, CodingKey {
-        case imageUrl = "image_url"
-    }
-    let imageUrl: String?
+struct JikanUser: Decodable {
+    private(set) var username: String
+    private(set) var images: JikanImages
 }

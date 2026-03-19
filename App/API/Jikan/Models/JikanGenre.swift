@@ -1,21 +1,13 @@
 import Foundation
 
 struct JikanGenre: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case data
-    }
     
-    let data: [JikanGenreEntry]
+    private(set) var data: [JikanGenreData]
 }
 
-struct JikanGenreEntry: Decodable, Identifiable {
-    enum CodingKeys: String, CodingKey {
-        case malId = "mal_id"
-        case name, count
-    }
+struct JikanGenreData: Decodable {
     
-    let malId: Int
-    let name: String
-    let count: Int
-    let id = UUID()
+    private(set) var malId: Int
+    private(set) var name: String
+    private(set) var count: Int
 }

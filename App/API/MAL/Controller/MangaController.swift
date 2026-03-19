@@ -65,7 +65,7 @@ import SwiftUI
         }
     }
     
-    func completEntry(id: Int) async throws {
+    func completeEntry(id: Int) async throws {
         let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
         guard let url = urlComponents?.url else {
             throw URLError(.badURL)
@@ -136,11 +136,11 @@ import SwiftUI
         }
     }
     
-    func fetchDetails(id: Int) async throws -> Media {
+    func fetchDetails(id: Int) async throws -> MediaNode {
         var components = URLComponents(string: MALEndpoints.Manga(id: id).details)!
         
         components.queryItems = [
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.otherTitles, .authors, .chapters, .volumes, .mediaType, .startDate, .status, .endDate, .summary, .mean, .rank, .popularity, .genres, .mediaType, .recommendations, .relatedManga, .entryStatus, .scoredUsers]))
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .authors, .numChapters, .numVolumes, .mediaType, .startDate, .status, .endDate, .synopsis, .mean, .rank, .popularity, .genres, .mediaType, .recommendations, .relatedManga, .myListStatus, .numScoringUsers, .numListUsers]))
         ]
         
         guard let url = components.url else {
@@ -156,7 +156,8 @@ import SwiftUI
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
-        return try JSONDecoder().decode(Media.self, from: data)
+        return try JSONDecoder.snakeCaseDecoder
+            .decode(MediaNode.self, from: data)
     }
     
     func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
@@ -170,7 +171,7 @@ import SwiftUI
         components.queryItems = [
             URLQueryItem(name: "ranking_type", value: resultManager.mangaRankingType.rawValue),
             URLQueryItem(name: "limit", value: "10"),
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .otherTitles, .cover, .chapters, .volumes, .mediaType, .startDate, .status, .entryStatus])),
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numChapters, .numVolumes, .mediaType, .startDate, .status, .myListStatus])),
             URLQueryItem(name: "q", value: searchTerm),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent)),
         ]
@@ -187,10 +188,10 @@ import SwiftUI
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
-        return try JSONDecoder().decode(MediaResponse.self, from: data)
+        return try JSONDecoder.snakeCaseDecoder.decode(MediaResponse.self, from: data)
     }
     
-    func fetchLibrary() async throws -> LibraryResponse {
+    func fetchLibrary() async throws -> MediaResponse {
         var components = URLComponents(string: MALEndpoints.Manga.library)!
         
         components.queryItems = (
@@ -201,10 +202,7 @@ import SwiftUI
             URLQueryItem(name: "sort", value: libraryManager.mangaSortOrder.rawValue),
             URLQueryItem(
                 name: "fields",
-                value: MALApiFields.fieldsHeader(for: [
-                    .id, .title, .otherTitles, .cover, .startDate,
-                    .mediaType, .entryStatus, .volumes, .chapters, .status
-                ])
+                value: MALApiFields.fieldsHeader(for: [ .alternativeTitles, .startDate, .mediaType, .myListStatus, .numVolumes, .numChapters, .status, .numListUsers])
             ),
             URLQueryItem(name: "limit", value: "1000"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
@@ -215,7 +213,9 @@ import SwiftUI
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        print(request)
         var (data, response) = try await URLSession.shared.data(for: request)
+        
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
@@ -223,7 +223,8 @@ import SwiftUI
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        return try JSONDecoder().decode(LibraryResponse.self, from: data)
+        return try JSONDecoder.snakeCaseDecoder
+            .decode(MediaResponse.self, from: data)
     }
     
     func deleteEntry(id: Int) async throws {

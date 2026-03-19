@@ -3,7 +3,7 @@ import SwiftUI
 @MainActor final class LibraryManager: ObservableObject {
     static let shared = LibraryManager()
     
-    @AppStorage("libraryMediaType") var mediaType = MediaType.manga {
+    @AppStorage("libraryMediaType") var mediaType = SeriesType.manga {
         didSet {
             settingsChanged()
         }

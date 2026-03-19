@@ -3,15 +3,15 @@ import SwiftUI
 struct StudioDetailsView: View {
     
     let malId: Int
-    let initialStudio: JikanAnimeStudioData?
+    let initialStudio: JikanStudioData?
     
-    @State var studio: JikanAnimeStudioData? = nil
+    @State var studio: JikanStudioData? = nil
     
     @ObservedObject private var settingsManager: SettingsManager = .shared
     @EnvironmentObject private var alertManager: AlertManager
     
     private let jikanStudioController = JikanStudioController()
-    @State var jikanAnime = JikanAnime(data: [], pagination: nil)
+    @State var jikanAnime = JikanMedia(data: [], pagination: nil)
     @State var page = 1
     
     @State var isLoading = false
@@ -19,46 +19,47 @@ struct StudioDetailsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                HStack(alignment: .top, spacing: 8) {
-                    AsyncImageView(imageUrl: studio?.images.jpg.imageUrl ?? "")
-                        .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.width)
-                        .cornerRadius(12)
-                        .strokedBorder()
-                    
-                    VStack(alignment: .leading, spacing: 10) {
-                        HStack(alignment: .top) {
-                            HStack(alignment: .center) {
-                                Image(systemName: "film.stack")
-                                    .foregroundStyle(.secondary)
-                                    .font(.caption)
-                                
-                                Text("\(studio?.count ?? 0) productions")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            
-                            Spacer()
-                            
-                            HStack(alignment: .center) {
-                                Image(systemName: "heart.fill")
-                                    .foregroundStyle(Color.red)
-                                    .font(.caption)
-                                
-                                Text("\(studio?.favorites ?? 0) favorites")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
+                if let studio {
+                    HStack(alignment: .top, spacing: 8) {
+                        AsyncImageView(imageUrl: studio.images.jpgImage.baseImage)
+                            .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.width)
+                            .cornerRadius(12)
+                            .strokedBorder()
                         
-                        Text(studio?.about ?? "No description available")
-                            .font(.subheadline)
-                            .lineLimit(5)
-                            .truncationMode(.tail)
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack(alignment: .top) {
+                                HStack(alignment: .center) {
+                                    Image(systemName: "film.stack")
+                                        .foregroundStyle(.secondary)
+                                        .font(.caption)
+                                    
+                                    Text("\(studio.count) productions")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                
+                                Spacer()
+                                
+                                HStack(alignment: .center) {
+                                    Image(systemName: "heart.fill")
+                                        .foregroundStyle(Color.red)
+                                        .font(.caption)
+                                    
+                                    Text("\(studio.favorites) favorites")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            
+                            Text(studio.aboutText)
+                                .font(.subheadline)
+                                .lineLimit(5)
+                                .truncationMode(.tail)
+                        }
                     }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
-                
                 VStack(spacing: 5){
                     LabelWithChevron(text: "Productions")
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -68,15 +69,15 @@ struct StudioDetailsView: View {
                         columns: Array(repeating: GridItem(.flexible()), count: 3),
                         spacing: 25
                     ) {
-                        ForEach(jikanAnime.data, id: \.id) { anime in
-                            NavigationLink(destination: DetailsView(media: Media(
+                        ForEach(jikanAnime.data) { anime in
+                            NavigationLink(destination: DetailsView(media: MediaNode(
                                 id: anime.malId,
                                 title: anime.titles[0].title,
-                                images: Images(large: anime.images.jpg.imageUrl),
-                                type: "tv"
+                                mainPicture: Picture(),
+                                mediaType: "tv"
                             ))) {
                                 VStack {
-                                    AsyncImageView(imageUrl: anime.images.jpg.imageUrl)
+                                    AsyncImageView(imageUrl: anime.images.jpgImage.largeImage)
                                         .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                         .cornerRadius(12)
                                         .strokedBorder()
@@ -107,7 +108,7 @@ struct StudioDetailsView: View {
                                         page: page
                                     )
                                     
-                                    jikanAnime.data.append(contentsOf: newJikanAnimeResponse.data)
+                                    jikanAnime.append(newJikanAnimeResponse.data)
                                 }
                                 
                                 isLoading = false

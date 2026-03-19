@@ -3,7 +3,7 @@ import SwiftUI
 @MainActor final class ResultManager: ObservableObject {
     static let shared = ResultManager()
     
-    @AppStorage("mediaType") var mediaType = MediaType.manga {
+    @AppStorage("mediaType") var seriesType = SeriesType.manga {
         didSet {
             settingsChanged()
         }

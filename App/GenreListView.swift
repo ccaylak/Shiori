@@ -11,7 +11,7 @@ struct GenreListView: View {
     
     var body: some View {
         List {
-            ForEach(jikanGenresResponse.data, id: \.id) { genre in
+            ForEach(jikanGenresResponse.data, id: \.malId) { genre in
                 NavigationLink(destination: MediaGenresView(genreId: genre.malId, mode: mode, navigationTitle: genre.name)) {
                     LabeledContent {
                         Text(String(genre.count))

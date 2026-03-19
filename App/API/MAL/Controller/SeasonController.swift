@@ -6,13 +6,13 @@ import Foundation
     
     private var malService: MALService = .shared
     
-    func fetchSeason(year: Int, season: String) async throws -> SeasonResponse {
+    func fetchSeason(year: Int, season: String) async throws -> MediaResponse {
         var components: URLComponents = URLComponents(string: MALEndpoints.Anime.season(year: year, seasonName: season))!
         
         components.queryItems = [
             URLQueryItem(name: "sort", value: "anime_num_list_users"),
             URLQueryItem(name: "limit", value: "500"),
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .title, .otherTitles, .cover, .episodes, .mediaType, .status, .entryStatus])),
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numEpisodes, .mediaType, .status, .myListStatus, .numListUsers, .numScoringUsers, .genres])),
         ]
         
         guard let url = components.url else {
@@ -28,6 +28,7 @@ import Foundation
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        return try JSONDecoder().decode(SeasonResponse.self, from: data)
+        return try JSONDecoder.snakeCaseDecoder
+            .decode(MediaResponse.self, from: data)
     }
 }

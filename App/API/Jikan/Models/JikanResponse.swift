@@ -1,38 +1,30 @@
 import Foundation
 
 struct JikanResponse: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case data
-    }
     
-    let data: AnimeManga
+    private(set) var data: AnimeManga
     
     struct AnimeManga: Decodable {
-        enum CodingKeys: String, CodingKey {
-            case anime, manga
-        }
         
-        let anime: AnimeStatistics
-        let manga: MangaStatistics
+        private(set) var anime: AnimeStatistics
+        private(set) var manga: MangaStatistics
         
         struct AnimeStatistics: Decodable {
-            enum CodingKeys: String, CodingKey {
-                case watching, completed, dropped
-                case onHold = "on_hold"
-                case planToWatch = "plan_to_watch"
-            }
             
-            let watching, completed, dropped, onHold, planToWatch: Int
+            private(set) var watching: Int
+            private(set) var completed: Int
+            private(set) var dropped: Int
+            private(set) var onHold: Int
+            private(set) var planToWatch: Int
         }
         
         struct MangaStatistics: Decodable {
-            enum CodingKeys: String, CodingKey {
-                case reading, completed, dropped
-                case onHold = "on_hold"
-                case planToRead = "plan_to_read"
-            }
             
-            let reading, completed, dropped, onHold, planToRead: Int
+            private(set) var reading: Int
+            private(set) var completed: Int
+            private(set) var dropped: Int
+            private(set) var onHold: Int
+            private(set) var planToRead: Int
         }
     }
 }

@@ -51,7 +51,7 @@ struct StudiosView: View {
     @StateObject private var resultManager: ResultManager = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
     
-    @State var jikanAnimeStudio = JikanAnimeStudio(data: [], pagination: nil)
+    @State var jikanStudio = JikanStudio(data: [], pagination: nil)
     @State var searchText: String = ""
     
     @State var studioPage = 1
@@ -60,10 +60,10 @@ struct StudiosView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(jikanAnimeStudio.data, id: \.malId) { studio in
+                ForEach(jikanStudio.data, id: \.malId) { studio in
                     NavigationLink(destination: StudioDetailsView(malId: studio.malId, initialStudio: studio)) {
                         HStack {
-                            AsyncImageView(imageUrl: studio.images.jpg.imageUrl)
+                            AsyncImageView(imageUrl: studio.images.jpgImage.baseImage)
                                 .frame(width: CoverSize.small.size.width, height: CoverSize.small.size.width)
                                 .cornerRadius(12)
                                 .strokedBorder()
@@ -84,8 +84,8 @@ struct StudiosView: View {
                     }
                 }
                 
-                if !jikanAnimeStudio.data.isEmpty,
-                   let pagination = jikanAnimeStudio.pagination,
+                if !jikanStudio.data.isEmpty,
+                   let pagination = jikanStudio.pagination,
                    pagination.hasNextPage,
                    pagination.currentPage < pagination.lastVisiblePage
                 {
@@ -95,14 +95,14 @@ struct StudiosView: View {
                             isLoading = true
                             studioPage+=1
                             do {
-                                let newJikanAnimeStudioResponse = try await jikanStudioController.fetchAnimeStudios(
+                                let newJikanStudioResponse = try await jikanStudioController.fetchAnimeStudios(
                                     searchTerm: searchText,
                                     order: resultManager.animeStudioOption.rawValue,
                                     sort: resultManager.animeStudioSort.rawValue,
                                     page: studioPage
                                 )
                                 
-                                jikanAnimeStudio.data.append(contentsOf: newJikanAnimeStudioResponse.data)
+                                jikanStudio.append(newJikanStudioResponse.data)
                             }
                             
                             isLoading = false
@@ -166,10 +166,10 @@ struct StudiosView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             
-            guard jikanAnimeStudio.data.isEmpty else { return }
+            guard jikanStudio.data.isEmpty else { return }
             
             Task {
-                jikanAnimeStudio = try await jikanStudioController.fetchAnimeStudios(
+                jikanStudio = try await jikanStudioController.fetchAnimeStudios(
                     searchTerm: searchText,
                     order: resultManager.animeStudioOption.rawValue,
                     sort: resultManager.animeStudioSort.rawValue,
@@ -179,7 +179,7 @@ struct StudiosView: View {
         }
         .onSubmit(of: .search) {
             Task {
-                jikanAnimeStudio = try await jikanStudioController.fetchAnimeStudios(
+                jikanStudio = try await jikanStudioController.fetchAnimeStudios(
                     searchTerm: searchText,
                     order: resultManager.animeStudioOption.rawValue,
                     sort: resultManager.animeStudioSort.rawValue,
@@ -189,7 +189,7 @@ struct StudiosView: View {
         }
         .onChange(of: resultManager.animeStudioOption) {
             Task {
-                jikanAnimeStudio = try await jikanStudioController.fetchAnimeStudios(
+                jikanStudio = try await jikanStudioController.fetchAnimeStudios(
                     searchTerm: searchText,
                     order: resultManager.animeStudioOption.rawValue,
                     sort: resultManager.animeStudioSort.rawValue,
@@ -199,7 +199,7 @@ struct StudiosView: View {
         }
         .onChange(of: resultManager.animeStudioSort) {
             Task {
-                jikanAnimeStudio = try await jikanStudioController.fetchAnimeStudios(
+                jikanStudio = try await jikanStudioController.fetchAnimeStudios(
                     searchTerm: searchText,
                     order: resultManager.animeStudioOption.rawValue,
                     sort: resultManager.animeStudioSort.rawValue,

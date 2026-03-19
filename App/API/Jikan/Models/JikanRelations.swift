@@ -1,31 +1,20 @@
 import Foundation
 
 struct JikanRelations: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case data
-    }
     
-    let data: [Relation]
+    private(set) var data: [Relation]
 }
 
-struct Relation: Decodable, Identifiable {
-    enum CodingKeys: String, CodingKey {
-        case relation, entry
-    }
+struct Relation: Decodable {
     
-    let id: String = UUID().uuidString
-    let relation: String
-    let entry: [RelationEntry]
+    private(set) var relation: String
+    private(set) var entry: [RelationEntry]
 }
 
 struct RelationEntry: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case malId = "mal_id"
-        case type, name, url
-    }
     
-    let malId: Int
-    let type: String
-    let name: String
-    let url: String
+    private(set) var malId: Int
+    private(set) var type: String
+    private(set) var name: String
+    private(set) var url: String
 }

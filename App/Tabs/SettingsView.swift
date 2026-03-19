@@ -68,7 +68,7 @@ struct SettingsView: View {
                 }
                 
                 Section("Library") {
-                    Picker(selection: $settingsManager.mangaMode, label: Label("Manga progress", systemImage: MediaType.manga.icon)) {
+                    Picker(selection: $settingsManager.mangaMode, label: Label("Manga progress", systemImage: SeriesType.manga.icon)) {
                         ForEach(MangaMode.allCases, id: \.self) { mode in
                             Text(mode.displayName)
                         }

@@ -8,8 +8,8 @@ struct LibraryMediaView: View {
     let title: String
     let image: String
     let releaseYear: String
-    let type: FormatType
-    let rating: Int
+    let type: MediaType
+    let score: Int
     
     let completedEpisodes: Int?
     let totalEpisodes: Int?
@@ -41,12 +41,12 @@ struct LibraryMediaView: View {
                 
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     HStack(spacing: 4) {
-                        if rating > 1 {
+                        if score > 1 {
                             Image(systemName: "star.fill")
                                 .foregroundColor(.yellow)
                                 .font(.system(size: 14, weight: .bold))
                             
-                            Text("\(rating)")
+                            Text("\(score)")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.primary)
                         }
@@ -182,27 +182,11 @@ struct LibraryMediaView: View {
         return formattedResult
     }
     
-    func formattedAnimeDetails(type: FormatType.Anime, year: String) -> String {
+    func formattedAnimeDetails(type: MediaType.Anime, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
     
-    func formattedMangaDetails(type: FormatType.Manga, year: String) -> String {
+    func formattedMangaDetails(type: MediaType.Manga, year: String) -> String {
         return "\(type.displayName), \(releaseYear)"
     }
-}
-
-#Preview {
-    LibraryMediaView(
-        title: "Tokyo Ghoul",
-        image: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg",
-        releaseYear: "2020-01-01",
-        type: .manga(.manga),
-        rating: 4,
-        completedEpisodes: 5,
-        totalEpisodes: 12,
-        completedChapters: nil,
-        totalChapters: nil,
-        completedVolumes: nil,
-        totalVolumes: nil
-    )
 }

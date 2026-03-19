@@ -2,11 +2,13 @@ import SwiftUI
 
 struct DetailsView: View {
     
-    @State var media: Media
+    @State var media: MediaNode
     @State var isDescriptionExpanded = false
     @State private var isSheetPresented = false
     
-    @State private var jikanCharacters: JikanCharacter = JikanCharacter(data: [])
+    @State private var jikanCharacters: JikanCharacter = JikanCharacter(
+        data: []
+    )
     @State private var jikanRelations: [RelationEntry] = []
     
     struct UserProgress {
@@ -58,18 +60,17 @@ struct DetailsView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
                     CoverSummaryView(
-                        title: media.getTitle,
-                        imageUrl: media.getCover,
-                        score: media.getScore,
-                        chapters: media.getChapters,
-                        volumes: media.getVolumes,
-                        episodes: media.getEpisodes,
-                        summary: media.getSummary,
-                        type: media.getType
+                        title: media.preferredTitle,
+                        imageUrl: media.mainPicture.largeUrl,
+                        score: media.meanValue,
+                        chapters: media.chapters,
+                        volumes: media.volumes,
+                        episodes: media.episodes,
+                        summary: media.synopsisText,
+                        type: media.specificMediaType
                     )
-                    
                     if tokenHandler.isAuthenticated {
-                        if media.getListStatus.getProgressStatus != .unknown {
+                        if media.getEntryStatus != .unknown {
                             HStack(alignment: .center) {
                                 VStack(spacing: 3) {
                                     Image(systemName: "star.fill")
@@ -78,26 +79,28 @@ struct DetailsView: View {
                                     Text("Rating")
                                         .font(.caption)
                                     
-                                    Text("\(media.getListStatus.getRating)")
+                                    Text("\(media.getMyListStatus.score)")
                                         .font(.body)
                                         .accentColor(.primary)
                                 }
                                 .frame(maxWidth: .infinity)
                                 Divider()
                                 VStack(spacing: 3) {
-                                    media.getListStatus.getProgressStatus.libraryIcon
+                                    media.getEntryStatus.libraryIcon
                                     
                                     Text("Status")
                                         .font(.caption)
                                     
-                                    Text(media.getListStatus.getProgressStatus.displayName)
+                                    Text(media.getEntryStatus.displayName)
                                         .lineLimit(1)
                                         .truncationMode(.tail)
                                         .font(.callout)
                                         .accentColor(.primary)
                                 }
                                 .frame(maxWidth: .infinity)
-                                if (media.getMediaType == .anime && media.getListStatus.getWatchedEpisodes != 0) {
+                                if (
+                                    media.isMangaOrAnime == .anime && media.getMyListStatus.watchedEpisodes != 0
+                                ) {
                                     Divider()
                                     VStack(spacing: 3) {
                                         Image(systemName: "tv.fill")
@@ -106,28 +109,38 @@ struct DetailsView: View {
                                         Text("Episode")
                                             .font(.caption)
                                         
-                                        Text("\(media.getListStatus.getWatchedEpisodes)\(media.getEpisodes != 0 ? "/\(media.getEpisodes)" : "")")
-                                            .font(.body)
-                                            .accentColor(.primary)
+                                        Text(
+                                            "\(media.getMyListStatus.watchedEpisodes)\(media.episodes != 0 ? "/\(media.episodes)" : "")"
+                                        )
+                                        .font(.body)
+                                        .accentColor(.primary)
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
-                                if (media.getMediaType == .manga && media.getListStatus.getReadVolumes != 0) {
+                                if (
+                                    media.isMangaOrAnime == .manga && media.getMyListStatus.readVolumes != 0
+                                ) {
                                     Divider()
                                     VStack(spacing: 3) {
-                                        Image(systemName: "character.book.closed.fill.ja")
-                                            .font(.subheadline)
+                                        Image(
+                                            systemName: "character.book.closed.fill.ja"
+                                        )
+                                        .font(.subheadline)
                                         
                                         Text("Volume")
                                             .font(.caption)
                                         
-                                        Text("\(media.getListStatus.getReadVolumes)\(media.getVolumes != 0 ? "/\(media.getVolumes)" : "")")
-                                            .font(.body)
-                                            .accentColor(.primary)
+                                        Text(
+                                            "\(media.getMyListStatus.readVolumes)\(media.volumes != 0 ? "/\(media.volumes)" : "")"
+                                        )
+                                        .font(.body)
+                                        .accentColor(.primary)
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
-                                if (media.getMediaType == .manga && media.getListStatus.getReadChapters != 0) {
+                                if (
+                                    media.isMangaOrAnime == .manga && media.getMyListStatus.readChapters != 0
+                                ) {
                                     Divider()
                                     VStack(spacing: 3) {
                                         Image(systemName: "book.pages.fill")
@@ -136,23 +149,22 @@ struct DetailsView: View {
                                         Text("Chapter")
                                             .font(.caption)
                                         
-                                        Text("\(media.getListStatus.getReadChapters)\(media.getChapters != 0 ? "/\(media.getChapters)" : "")")
-                                            .font(.body)
-                                            .accentColor(.primary)
+                                        Text(
+                                            "\(media.getMyListStatus.readChapters)\(media.chapters != 0 ? "/\(media.chapters)" : "")"
+                                        )
+                                        .font(.body)
+                                        .accentColor(.primary)
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
                             }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .padding([.top, .bottom], 8)
-                            .background(Color(.secondarySystemGroupedBackground))
+                            .background(
+                                Color(.secondarySystemGroupedBackground)
+                            )
                             .cornerRadius(12)
                             .padding(.horizontal)
-                            .onTapGesture(perform: {
-                                if media.getListStatus.getProgressStatus != .unknown {
-                                    isSheetPresented = true
-                                }
-                            })
                         } else {
                             Button {
                                 didTap.toggle()
@@ -162,21 +174,28 @@ struct DetailsView: View {
                                     defer {
                                         alertManager.isLoading = false
                                     }
-                                    if (media.getMediaType == .anime) {
-                                        try await animeController.addToWatchList(id: media.id)
-                                        media = try await animeController.fetchDetails(id: media.id)
+                                    if (media.isMangaOrAnime == .anime) {
+                                        try await animeController
+                                            .addToWatchList(id: media.id)
+                                        media = try await animeController
+                                            .fetchDetails(id: media.id)
                                     }
-                                    if (media.getMediaType == .manga) {
-                                        try await mangaController.addToReadingList(id: media.id)
-                                        media = try await mangaController.fetchDetails(id: media.id)
+                                    if (media.isMangaOrAnime == .manga) {
+                                        try await mangaController
+                                            .addToReadingList(id: media.id)
+                                        media = try await mangaController
+                                            .fetchDetails(id: media.id)
                                     }
                                 }
                             } label : {
-                                Label("Add to library", systemImage: "plus.circle.fill")
-                                    .foregroundStyle(.primary)
-                                    .frame(maxWidth: .infinity)
-                                    .font(.title3)
-                                    .padding(.vertical, 4)
+                                Label(
+                                    "Add to library",
+                                    systemImage: "plus.circle.fill"
+                                )
+                                .foregroundStyle(.primary)
+                                .frame(maxWidth: .infinity)
+                                .font(.title3)
+                                .padding(.vertical, 4)
                                 
                             }
                             .frame(maxWidth: .infinity)
@@ -186,25 +205,33 @@ struct DetailsView: View {
                         }
                     } else {
                         GroupBox {
-                            Text("Log in with your MyAnimeList account to see your \(media.getMediaType.displayName) progress, rating, and status.")
-                                .font(.body)
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.leading)
+                            Text(
+                                "Log in with your MyAnimeList account to see your \(media.specificMediaType.displayName) progress, rating, and status."
+                            )
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.leading)
                         } label: {
                             Label("Info", systemImage: "info.circle")
                                 .font(.headline)
                         }
                         .padding(.horizontal)
-                        .backgroundStyle(Color(.secondarySystemGroupedBackground))
+                        .backgroundStyle(
+                            Color(.secondarySystemGroupedBackground)
+                        )
                     }
-                    Sections(media: media, jikanCharacters: jikanCharacters, jikanRelations: jikanRelations)
+                    Sections(
+                        media: media,
+                        jikanCharacters: jikanCharacters,
+                        jikanRelations: jikanRelations
+                    )
                 }
             }
             .noScrollEdgeEffect()
             .scrollIndicators(.hidden)
             .scrollClipDisabled()
             .toolbar {
-                if media.getListStatus.getProgressStatus != .unknown {
+                if media.getEntryStatus != .unknown {
                     ToolbarItem {
                         if #available(iOS 26.0, *) {
                             Button(role: .close, action: {
@@ -227,9 +254,14 @@ struct DetailsView: View {
                     }
                 }
                 ToolbarItem {
-                    let escapedTitle = media.getTitle.replacingOccurrences(of: " ", with: "_")
+                    let escapedTitle = media.title.replacingOccurrences(
+                        of: " ",
+                        with: "_"
+                    )
                     
-                    if let url = URL(string: "https://myanimelist.net/\(media.getMediaType.rawValue)/\(media.id)/\(escapedTitle)") {
+                    if let url = URL(
+                        string: "https://myanimelist.net/\(media.isMangaOrAnime.rawValue)/\(media.id)/\(escapedTitle)"
+                    ) {
                         
                         ShareLink(item: url) {
                             Image(systemName: "square.and.arrow.up")
@@ -243,18 +275,37 @@ struct DetailsView: View {
                 if (tokenHandler.isAuthenticated) {
                     NavigationStack {
                         List {
-                            if (media.getMediaType == .manga) {
+                            if (media.isMangaOrAnime == .manga) {
                                 Section {
-                                    Picker("Progress", selection: $userProgress.mangaProgress) {
-                                        ForEach([ProgressStatus.Manga.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
-                                            Text(mangaSelection.displayName).tag(mangaSelection)
+                                    Picker(
+                                        "Progress",
+                                        selection: $userProgress.mangaProgress
+                                    ) {
+                                        ForEach(
+                                            [
+                                                ProgressStatus.Manga.completed,
+                                                .reading,
+                                                .dropped,
+                                                .onHold,
+                                                .planToRead
+                                            ],
+                                            id: \.self
+                                        ) { mangaSelection in
+                                            Text(mangaSelection.displayName)
+                                                .tag(mangaSelection)
                                         }
                                     }
                                     
-                                    Picker("Rating", selection: $userProgress.rating) {
+                                    Picker(
+                                        "Rating",
+                                        selection: $userProgress.rating
+                                    ) {
                                         ForEach(0...10, id: \.self) { rating in
-                                            if let ratingValue = RatingValues(rawValue: rating) {
-                                                Text(ratingValue.displayName).tag(rating)
+                                            if let ratingValue = RatingValues(
+                                                rawValue: rating
+                                            ) {
+                                                Text(ratingValue.displayName)
+                                                    .tag(rating)
                                             } else {
                                                 Text("Unknown")
                                             }
@@ -264,124 +315,204 @@ struct DetailsView: View {
                                     VStack(alignment: .leading, spacing: 6) {
                                         Text("Mode")
                                         
-                                        Picker("Mode", selection: $settingsManager.mangaMode) {
-                                            ForEach(MangaMode.allCases, id: \.self) { mode in
+                                        Picker(
+                                            "Mode",
+                                            selection: $settingsManager.mangaMode
+                                        ) {
+                                            ForEach(
+                                                MangaMode.allCases,
+                                                id: \.self
+                                            ) { mode in
                                                 Text(mode.displayName).tag(mode)
                                             }
                                         }
                                         .pickerStyle(.segmented)
                                     }
                                     
-                                    if (settingsManager.mangaMode == MangaMode.all) {
+                                    if (
+                                        settingsManager.mangaMode == MangaMode.all
+                                    ) {
                                         if userProgress.end != 0 {
-                                            Picker(selection: $userProgress.progress, label:
-                                                    VStack(alignment: .leading, spacing: 4) {
-                                                Text("Chapter")
-                                                Text("\(userProgress.progress)/\(userProgress.end)")
-                                                    .foregroundStyle(.secondary)
-                                                    .font(.caption)
-                                                    .fontWeight(.bold)
-                                            }
+                                            Picker(
+selection: $userProgress.progress,
+label:
+    VStack(
+        alignment: .leading,
+        spacing: 4
+    ) {
+        Text("Chapter")
+        Text("\(userProgress.progress)/\(userProgress.end)")
+            .foregroundStyle(.secondary)
+            .font(.caption)
+            .fontWeight(.bold)
+    }
                                             ) {
-                                                ForEach(0...userProgress.end, id: \.self) { chapter in
-                                                    Text("\(chapter)").tag(chapter)
+                                                ForEach(
+                                                    0...userProgress.end,
+                                                    id: \.self
+                                                ) { chapter in
+                                                    Text("\(chapter)")
+                                                        .tag(chapter)
                                                 }
                                             }
                                         } else {
-                                            Stepper(value: $userProgress.progress, in: 0...Int.max) {
-                                                VStack(alignment: .leading, spacing: 4) {
+                                            Stepper(
+                                                value: $userProgress.progress,
+                                                in: 0...Int.max
+                                            ) {
+                                                VStack(
+                                                    alignment: .leading,
+                                                    spacing: 4
+                                                ) {
                                                     Text("Chapter")
                                                     
-                                                    Text("\(userProgress.progress)")
-                                                        .foregroundStyle(.secondary)
-                                                        .font(.caption)
-                                                        .fontWeight(.bold)
+                                                    Text(
+                                                        "\(userProgress.progress)"
+                                                    )
+                                                    .foregroundStyle(.secondary)
+                                                    .font(.caption)
+                                                    .fontWeight(.bold)
                                                     
                                                 }
                                             }
                                         }
                                         
                                         if userProgress.volumes != 0 {
-                                            Picker(selection: $userProgress.currentVolume, label:
-                                                    VStack(alignment: .leading, spacing: 4) {
-                                                Text("Volume")
-                                                Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
-                                                    .foregroundStyle(.secondary)
-                                                    .font(.caption)
-                                                    .fontWeight(.bold)
-                                            }
+                                            Picker(
+selection: $userProgress.currentVolume,
+label:
+    VStack(
+        alignment: .leading,
+        spacing: 4
+    ) {
+        Text("Volume")
+        Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
+            .foregroundStyle(.secondary)
+            .font(.caption)
+            .fontWeight(.bold)
+    }
                                             ) {
-                                                ForEach(0...userProgress.volumes, id: \.self) { volume in
-                                                    Text("\(volume)").tag(volume)
+                                                ForEach(
+                                                    0...userProgress.volumes,
+                                                    id: \.self
+                                                ) { volume in
+                                                    Text("\(volume)")
+                                                        .tag(volume)
                                                 }
                                             }
                                         } else {
-                                            Stepper(value: $userProgress.currentVolume, in: 0...Int.max) {
-                                                VStack(alignment: .leading, spacing: 4) {
+                                            Stepper(
+                                                value: $userProgress.currentVolume,
+                                                in: 0...Int.max
+                                            ) {
+                                                VStack(
+                                                    alignment: .leading,
+                                                    spacing: 4
+                                                ) {
                                                     Text("Volume")
                                                     
-                                                    Text("\(userProgress.currentVolume)")
-                                                        .foregroundStyle(.secondary)
-                                                        .font(.caption)
-                                                        .fontWeight(.bold)
+                                                    Text(
+                                                        "\(userProgress.currentVolume)"
+                                                    )
+                                                    .foregroundStyle(.secondary)
+                                                    .font(.caption)
+                                                    .fontWeight(.bold)
                                                 }
                                             }
                                         }
                                     }
                                     
-                                    if (settingsManager.mangaMode == MangaMode.chapter) {
+                                    if (
+                                        settingsManager.mangaMode == MangaMode.chapter
+                                    ) {
                                         if userProgress.end != 0 {
-                                            Picker(selection: $userProgress.progress, label:
-                                                    VStack(alignment: .leading, spacing: 4) {
-                                                Text("Chapter")
-                                                Text("\(userProgress.progress)/\(userProgress.end)")
-                                                    .foregroundStyle(.secondary)
-                                                    .font(.caption)
-                                                    .fontWeight(.bold)
-                                            }
+                                            Picker(
+selection: $userProgress.progress,
+label:
+    VStack(
+        alignment: .leading,
+        spacing: 4
+    ) {
+        Text("Chapter")
+        Text("\(userProgress.progress)/\(userProgress.end)")
+            .foregroundStyle(.secondary)
+            .font(.caption)
+            .fontWeight(.bold)
+    }
                                             ) {
-                                                ForEach(0...userProgress.end, id: \.self) { chapter in
-                                                    Text("\(chapter)").tag(chapter)
+                                                ForEach(
+                                                    0...userProgress.end,
+                                                    id: \.self
+                                                ) { chapter in
+                                                    Text("\(chapter)")
+                                                        .tag(chapter)
                                                 }
                                             }
                                         } else {
-                                            Stepper(value: $userProgress.progress, in: 0...Int.max) {
-                                                VStack(alignment: .leading, spacing: 4) {
+                                            Stepper(
+                                                value: $userProgress.progress,
+                                                in: 0...Int.max
+                                            ) {
+                                                VStack(
+                                                    alignment: .leading,
+                                                    spacing: 4
+                                                ) {
                                                     Text("Chapter")
                                                     
-                                                    Text("\(userProgress.progress)")
-                                                        .foregroundStyle(.secondary)
-                                                        .font(.caption)
-                                                        .fontWeight(.bold)
+                                                    Text(
+                                                        "\(userProgress.progress)"
+                                                    )
+                                                    .foregroundStyle(.secondary)
+                                                    .font(.caption)
+                                                    .fontWeight(.bold)
                                                     
                                                 }
                                             }
                                         }
                                     }
-                                    if (settingsManager.mangaMode == MangaMode.volume) {
+                                    if (
+                                        settingsManager.mangaMode == MangaMode.volume
+                                    ) {
                                         if userProgress.volumes != 0 {
-                                            Picker(selection: $userProgress.currentVolume, label:
-                                                    VStack(alignment: .leading, spacing: 4) {
-                                                Text("Volume")
-                                                Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
-                                                    .foregroundStyle(.secondary)
-                                                    .font(.caption)
-                                                    .fontWeight(.bold)
-                                            }
+                                            Picker(
+selection: $userProgress.currentVolume,
+label:
+    VStack(
+        alignment: .leading,
+        spacing: 4
+    ) {
+        Text("Volume")
+        Text("\(userProgress.currentVolume)/\(userProgress.volumes)")
+            .foregroundStyle(.secondary)
+            .font(.caption)
+            .fontWeight(.bold)
+    }
                                             ) {
-                                                ForEach(0...userProgress.volumes, id: \.self) { volume in
-                                                    Text("\(volume)").tag(volume)
+                                                ForEach(
+                                                    0...userProgress.volumes,
+                                                    id: \.self
+                                                ) { volume in
+                                                    Text("\(volume)")
+                                                        .tag(volume)
                                                 }
                                             }
                                         } else {
-                                            Stepper(value: $userProgress.currentVolume, in: 0...Int.max) {
-                                                VStack(alignment: .leading, spacing: 4) {
+                                            Stepper(
+                                                value: $userProgress.currentVolume,
+                                                in: 0...Int.max
+                                            ) {
+                                                VStack(
+                                                    alignment: .leading,
+                                                    spacing: 4
+                                                ) {
                                                     Text("Volume")
                                                     
-                                                    Text("\(userProgress.currentVolume)")
-                                                        .foregroundStyle(.secondary)
-                                                        .font(.caption)
-                                                        .fontWeight(.bold)
+                                                    Text(
+                                                        "\(userProgress.currentVolume)"
+                                                    )
+                                                    .foregroundStyle(.secondary)
+                                                    .font(.caption)
+                                                    .fontWeight(.bold)
                                                 }
                                             }
                                         }
@@ -389,17 +520,36 @@ struct DetailsView: View {
                                 }
                             }
                             
-                            if (media.getMediaType == .anime){
-                                Picker("Status", selection: $userProgress.animeProgress) {
-                                    ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
-                                        Text(animeSelection.displayName).tag(animeSelection)
+                            if (media.isMangaOrAnime == .anime){
+                                Picker(
+                                    "Status",
+                                    selection: $userProgress.animeProgress
+                                ) {
+                                    ForEach(
+                                        [
+                                            ProgressStatus.Anime.completed,
+                                            .watching,
+                                            .dropped,
+                                            .onHold,
+                                            .planToWatch
+                                        ],
+                                        id: \.self
+                                    ) { animeSelection in
+                                        Text(animeSelection.displayName)
+                                            .tag(animeSelection)
                                     }
                                 }
                                 
-                                Picker("Rating", selection: $userProgress.rating) {
+                                Picker(
+                                    "Rating",
+                                    selection: $userProgress.rating
+                                ) {
                                     ForEach(0...10, id: \.self) { rating in
-                                        if let ratingValue = RatingValues(rawValue: rating) {
-                                            Text(ratingValue.displayName).tag(rating)
+                                        if let ratingValue = RatingValues(
+                                            rawValue: rating
+                                        ) {
+                                            Text(ratingValue.displayName)
+                                                .tag(rating)
                                         } else {
                                             Text("Unknown")
                                         }
@@ -407,20 +557,29 @@ struct DetailsView: View {
                                 }
                                 
                                 if userProgress.end != 0 {
-                                    Picker(selection: $userProgress.progress, label:
-                                            VStack(alignment: .leading, spacing: 4) {
-                                        Text("Episode")
-                                        Text("\(userProgress.progress)/\(userProgress.end)")
-                                            .foregroundStyle(.secondary)
-                                            .font(.caption)
-                                            .fontWeight(.bold)
-                                    }) {
-                                        ForEach(0...userProgress.end, id: \.self) { episode in
-                                            Text("\(episode)").tag(episode)
-                                        }
-                                    }
+                                    Picker(
+selection: $userProgress.progress,
+label:
+    VStack(
+        alignment: .leading,
+        spacing: 4
+    ) {
+        Text("Episode")
+        Text("\(userProgress.progress)/\(userProgress.end)")
+            .foregroundStyle(.secondary)
+            .font(.caption)
+            .fontWeight(.bold)
+    }) {
+        ForEach(0...userProgress.end, id: \.self) { episode in
+            Text("\(episode)").tag(episode)
+        }
+    }
                                 } else {
-                                    Stepper("Episode \(userProgress.progress)", value: $userProgress.progress, in: 0...Int.max)
+                                    Stepper(
+                                        "Episode \(userProgress.progress)",
+                                        value: $userProgress.progress,
+                                        in: 0...Int.max
+                                    )
                                 }
                             }
                             
@@ -435,18 +594,33 @@ struct DetailsView: View {
                                 }
                                 ){
                                     Label {
-                                        Text(showComments ? "Remove comments" : "Add comments")
+                                        Text(
+                                            showComments ? "Remove comments" : "Add comments"
+                                        )
                                     } icon: {
-                                        Image(systemName: showComments ? "minus.circle.fill" : "plus.circle.fill")
-                                            .symbolRenderingMode(.monochrome)
-                                            .foregroundStyle(showComments ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        Image(
+                                            systemName: showComments ? "minus.circle.fill" : "plus.circle.fill"
+                                        )
+                                        .symbolRenderingMode(.monochrome)
+                                        .foregroundStyle(
+                                            showComments ? .red : Color
+                                                .getByColorString(
+                                                    settingsManager.accentColor.rawValue
+                                                )
+                                        )
                                     }
                                 }
                                 .buttonStyle(.plain)
                                 
                                 if showComments {
-                                    TextField("Comments", text: $userProgress.comments)
-                                        .transition(.opacity.combined(with: .move(edge: .top)))
+                                    TextField(
+                                        "Comments",
+                                        text: $userProgress.comments
+                                    )
+                                    .transition(
+                                        .opacity
+                                            .combined(with: .move(edge: .top))
+                                    )
                                 }
                             }
                             
@@ -460,10 +634,19 @@ struct DetailsView: View {
                                     }
                                 }) {
                                     Label {
-                                        Text(showStartDate ? "Remove start date" : "Add start date")
+                                        Text(
+                                            showStartDate ? "Remove start date" : "Add start date"
+                                        )
                                     } icon: {
-                                        Image(systemName: showStartDate ? "calendar.badge.minus" : "calendar.badge.plus")
-                                            .foregroundStyle(showStartDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        Image(
+                                            systemName: showStartDate ? "calendar.badge.minus" : "calendar.badge.plus"
+                                        )
+                                        .foregroundStyle(
+                                            showStartDate ? .red : Color
+                                                .getByColorString(
+                                                    settingsManager.accentColor.rawValue
+                                                )
+                                        )
                                     }
                                 }
                                 .buttonStyle(.plain)
@@ -472,12 +655,17 @@ struct DetailsView: View {
                                     DatePicker(
                                         "Start date",
                                         selection: Binding(
-                                            get: { userProgress.startDate ?? Date() },
+                                            get: {
+                                                userProgress.startDate ?? Date()
+                                            },
                                             set: { userProgress.startDate = $0 }
                                         ),
                                         displayedComponents: .date
                                     )
-                                    .transition(.opacity.combined(with: .move(edge: .top)))
+                                    .transition(
+                                        .opacity
+                                            .combined(with: .move(edge: .top))
+                                    )
                                 }
                                 
                                 Button(action: {
@@ -489,10 +677,19 @@ struct DetailsView: View {
                                     }
                                 }) {
                                     Label {
-                                        Text(showFinishDate ? "Remove finish date" : "Add finish date")
+                                        Text(
+                                            showFinishDate ? "Remove finish date" : "Add finish date"
+                                        )
                                     } icon: {
-                                        Image(systemName: showFinishDate ? "calendar.badge.minus" : "calendar.badge.plus")
-                                            .foregroundStyle(showFinishDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        Image(
+                                            systemName: showFinishDate ? "calendar.badge.minus" : "calendar.badge.plus"
+                                        )
+                                        .foregroundStyle(
+                                            showFinishDate ? .red : Color
+                                                .getByColorString(
+                                                    settingsManager.accentColor.rawValue
+                                                )
+                                        )
                                     }
                                 }
                                 .buttonStyle(.plain)
@@ -501,12 +698,17 @@ struct DetailsView: View {
                                     DatePicker(
                                         "Finish date",
                                         selection: Binding(
-                                            get: { userProgress.endDate ?? Date() },
+                                            get: {
+                                                userProgress.endDate ?? Date()
+                                            },
                                             set: { userProgress.endDate = $0 }
                                         ),
                                         displayedComponents: .date
                                     )
-                                    .transition(.opacity.combined(with: .move(edge: .top)))
+                                    .transition(
+                                        .opacity
+                                            .combined(with: .move(edge: .top))
+                                    )
                                 }
                             }
                         }
@@ -519,73 +721,99 @@ struct DetailsView: View {
                                 if #available(iOS 26.0, *) {
                                     Button(role: .confirm) {
                                         Task {
-                                            if (media.getMediaType == .manga) {
-                                                try await mangaController.saveProgress(
-                                                    id: media.id,
-                                                    status: userProgress.mangaProgress.rawValue,
-                                                    score: userProgress.rating,
-                                                    chapters: userProgress.progress,
-                                                    volumes: userProgress.currentVolume,
-                                                    comments: userProgress.comments,
-                                                    startDate: userProgress.startDate,
-                                                    finishDate: userProgress.endDate
-                                                )
+                                            if (
+                                                media.isMangaOrAnime == .manga
+                                            ) {
+                                                try await mangaController
+                                                    .saveProgress(
+                                                        id: media.id,
+                                                        status: userProgress.mangaProgress.rawValue,
+                                                        score: userProgress.rating,
+                                                        chapters: userProgress.progress,
+                                                        volumes: userProgress.currentVolume,
+                                                        comments: userProgress.comments,
+                                                        startDate: userProgress.startDate,
+                                                        finishDate: userProgress.endDate
+                                                    )
                                                 alertManager.showUpdatedAlert = true
-                                                media = try await mangaController.fetchDetails(id: media.id)
+                                                media = try await mangaController
+                                                    .fetchDetails(id: media.id)
                                                 isSheetPresented = false
                                             }
-                                            if (media.getMediaType == .anime) {
-                                                try await animeController.saveProgress(
-                                                    id: media.id,
-                                                    status: userProgress.animeProgress.rawValue,
-                                                    score: userProgress.rating,
-                                                    episodes: userProgress.progress,
-                                                    comments: userProgress.comments,
-                                                    startDate: userProgress.startDate,
-                                                    finishDate: userProgress.endDate
-                                                )
+                                            if (
+                                                media.isMangaOrAnime == .anime
+                                            ) {
+                                                try await animeController
+                                                    .saveProgress(
+                                                        id: media.id,
+                                                        status: userProgress.animeProgress.rawValue,
+                                                        score: userProgress.rating,
+                                                        episodes: userProgress.progress,
+                                                        comments: userProgress.comments,
+                                                        startDate: userProgress.startDate,
+                                                        finishDate: userProgress.endDate
+                                                    )
                                                 alertManager.showUpdatedAlert = true
-                                                media = try await animeController.fetchDetails(id: media.id)
+                                                media = try await animeController
+                                                    .fetchDetails(id: media.id)
                                                 isSheetPresented = false
                                             }
                                         }
                                     }
-                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                    .tint(
+                                        Color
+                                            .getByColorString(
+                                                settingsManager.accentColor.rawValue
+                                            )
+                                    )
                                 } else {
                                     Button("Save") {
                                         Task {
-                                            if (media.getMediaType == .manga) {
-                                                try await mangaController.saveProgress(
-                                                    id: media.id,
-                                                    status: userProgress.mangaProgress.rawValue,
-                                                    score: userProgress.rating,
-                                                    chapters: userProgress.progress,
-                                                    volumes: userProgress.currentVolume,
-                                                    comments: userProgress.comments,
-                                                    startDate: userProgress.startDate,
-                                                    finishDate: userProgress.endDate
-                                                )
+                                            if (
+                                                media.isMangaOrAnime == .manga
+                                            ) {
+                                                try await mangaController
+                                                    .saveProgress(
+                                                        id: media.id,
+                                                        status: userProgress.mangaProgress.rawValue,
+                                                        score: userProgress.rating,
+                                                        chapters: userProgress.progress,
+                                                        volumes: userProgress.currentVolume,
+                                                        comments: userProgress.comments,
+                                                        startDate: userProgress.startDate,
+                                                        finishDate: userProgress.endDate
+                                                    )
                                                 alertManager.showUpdatedAlert = true
-                                                media = try await mangaController.fetchDetails(id: media.id)
+                                                media = try await mangaController
+                                                    .fetchDetails(id: media.id)
                                                 isSheetPresented = false
                                             }
-                                            if (media.getMediaType == .anime) {
-                                                try await animeController.saveProgress(
-                                                    id: media.id,
-                                                    status: userProgress.animeProgress.rawValue,
-                                                    score: userProgress.rating,
-                                                    episodes: userProgress.progress,
-                                                    comments: userProgress.comments,
-                                                    startDate: userProgress.startDate,
-                                                    finishDate: userProgress.endDate
-                                                )
+                                            if (
+                                                media.isMangaOrAnime == .anime
+                                            ) {
+                                                try await animeController
+                                                    .saveProgress(
+                                                        id: media.id,
+                                                        status: userProgress.animeProgress.rawValue,
+                                                        score: userProgress.rating,
+                                                        episodes: userProgress.progress,
+                                                        comments: userProgress.comments,
+                                                        startDate: userProgress.startDate,
+                                                        finishDate: userProgress.endDate
+                                                    )
                                                 alertManager.showUpdatedAlert = true
-                                                media = try await animeController.fetchDetails(id: media.id)
+                                                media = try await animeController
+                                                    .fetchDetails(id: media.id)
                                                 isSheetPresented = false
                                             }
                                         }
                                     }
-                                    .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                    .foregroundStyle(
+                                        Color
+                                            .getByColorString(
+                                                settingsManager.accentColor.rawValue
+                                            )
+                                    )
                                 }
                             }
                             ToolbarItem(placement: .cancellationAction) {
@@ -604,19 +832,26 @@ struct DetailsView: View {
                                         }
                                     }
                                 }
-                                .alert("Delete progress", isPresented: $showAlert) {
+                                .alert(
+                                    "Delete progress",
+                                    isPresented: $showAlert
+                                ) {
                                     Button("Delete", role: .destructive) {
                                         didTap.toggle()
                                         Task {
-                                            if(media.getMediaType == .manga) {
-                                                try await mangaController.deleteEntry(id: media.id)
+                                            if(media.isMangaOrAnime == .manga) {
+                                                try await mangaController
+                                                    .deleteEntry(id: media.id)
                                                 alertManager.showRemovedAlert = true
-                                                media = try await mangaController.fetchDetails(id: media.id)
+                                                media = try await mangaController
+                                                    .fetchDetails(id: media.id)
                                             }
-                                            if(media.getMediaType == .anime) {
-                                                try await animeController.deleteEntry(id: media.id)
+                                            if(media.isMangaOrAnime == .anime) {
+                                                try await animeController
+                                                    .deleteEntry(id: media.id)
                                                 alertManager.showRemovedAlert = true
-                                                media = try await animeController.fetchDetails(id: media.id)
+                                                media = try await animeController
+                                                    .fetchDetails(id: media.id)
                                             }
                                             showAlert = false
                                             isSheetPresented = false
@@ -624,11 +859,15 @@ struct DetailsView: View {
                                     }
                                     Button("Cancel", role: .cancel) {}
                                 } message: {
-                                    Text("Do you really want to delete your progress for \(media.getTitle)?")
+                                    Text(
+                                        "Do you really want to delete your progress for \(media.preferredTitle)?"
+                                    )
                                 }.sensoryFeedback(.warning, trigger: didTap)
                             }
                         }
-                        .navigationTitle(media.getMediaType == .manga ? "Edit Reading Progress" : "Edit Watch Progress")
+                        .navigationTitle(
+                            media.isMangaOrAnime == .manga ? "Edit Reading Progress" : "Edit Watch Progress"
+                        )
                         .navigationBarTitleDisplayMode(.inline)
                         .presentationDetents([.fraction(0.8)])
                         .presentationBackgroundInteraction(.disabled)
@@ -637,10 +876,12 @@ struct DetailsView: View {
                 }
                 else {
                     GroupBox {
-                        Text("Log in with your MyAnimeList account to be able to edit \(media.getTitle)'s progress, rating and progress status.")
-                            .font(.body)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.leading)
+                        Text(
+                            "Log in with your MyAnimeList account to be able to edit \(media.preferredTitle)'s progress, rating and progress status."
+                        )
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
                     } label: {
                         Label("Info", systemImage: "info.circle")
                             .font(.headline)
@@ -649,55 +890,69 @@ struct DetailsView: View {
             }
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle(media.getTitle)
+        .navigationTitle(media.preferredTitle)
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             Task {
                 alertManager.isLoading = true
                 defer { alertManager.isLoading = false }
                 do {
-                    if media.getMediaType == .anime {
-                        media = try await animeController.fetchDetails(id: media.id)
+                    if media.isMangaOrAnime == .anime {
+                        media = try await animeController
+                            .fetchDetails(id: media.id)
                         
-                        jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
-                        jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id)
+                        jikanCharacters = try await jikanCharacterController
+                            .fetchAnimeCharacter(id: media.id)
+                        jikanRelations = try await jikanRelationsController
+                            .fetchAnimeRelations(id: media.id)
                         
-                        userProgress.progress = media.getListStatus.getWatchedEpisodes
-                        userProgress.rating = media.getListStatus.getRating
-                        userProgress.end = media.getEpisodes
-                        userProgress.comments = media.getListStatus.getComments
+                        userProgress.progress = media.getMyListStatus.watchedEpisodes
+                        userProgress.rating = media.getMyListStatus.score
+                        userProgress.end = media.episodes
+                        userProgress.comments = media.getMyListStatus.userComments
                         
-                        if (media.getListStatus.getStartDate != nil) {
-                            userProgress.startDate = stringToDate(media.getListStatus.getStartDate!)
+                        if (media.getMyListStatus.startDate != nil) {
+                            userProgress.startDate = stringToDate(
+                                media.getMyListStatus.startDate!
+                            )
                         }
-                        if (media.getListStatus.getEndDate != nil) {
-                            userProgress.startDate = stringToDate(media.getListStatus.getEndDate!)
-                        }
-                    }
-                    
-                    if media.getMediaType == .manga {
-                        media = try await mangaController.fetchDetails(id: media.id)
-                        jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id)
-                        jikanRelations = try await jikanRelationsController.fetchMangaRelations(id: media.id)
-                        
-                        userProgress.progress = media.getListStatus.getReadChapters
-                        userProgress.rating = media.getListStatus.getRating
-                        
-                        userProgress.end = media.getChapters
-                        userProgress.comments = media.getListStatus.getComments
-                        
-                        userProgress.currentVolume = media.getListStatus.getReadVolumes
-                        userProgress.volumes = media.getVolumes
-                        
-                        if (media.getListStatus.getStartDate != nil) {
-                            userProgress.startDate = stringToDate(media.getListStatus.getStartDate!)
-                        }
-                        if (media.getListStatus.getEndDate != nil) {
-                            userProgress.startDate = stringToDate(media.getListStatus.getEndDate!)
+                        if (media.getMyListStatus.finishDate != nil) {
+                            userProgress.endDate = stringToDate(
+                                media.getMyListStatus.finishDate!
+                            )
                         }
                     }
                     
-                    let wrapper = media.getListStatus.getProgressStatus
+                    if media.isMangaOrAnime == .manga {
+                        media = try await mangaController
+                            .fetchDetails(id: media.id)
+                        jikanCharacters = try await jikanCharacterController
+                            .fetchMangaCharacter(id: media.id)
+                        jikanRelations = try await jikanRelationsController
+                            .fetchMangaRelations(id: media.id)
+                        
+                        userProgress.progress = media.getMyListStatus.readChapters
+                        userProgress.rating = media.getMyListStatus.score
+                        
+                        userProgress.end = media.chapters
+                        userProgress.comments = media.getMyListStatus.userComments
+                        
+                        userProgress.currentVolume = media.getMyListStatus.readVolumes
+                        userProgress.volumes = media.volumes
+                        
+                        if (media.getMyListStatus.startDate != nil) {
+                            userProgress.startDate = stringToDate(
+                                media.getMyListStatus.startDate!
+                            )
+                        }
+                        if (media.getMyListStatus.finishDate != nil) {
+                            userProgress.endDate = stringToDate(
+                                media.getMyListStatus.finishDate!
+                            )
+                        }
+                    }
+                    
+                    let wrapper = media.getEntryStatus
                     
                     switch wrapper {
                     case .manga(let mProgress):
@@ -722,101 +977,39 @@ struct DetailsView: View {
 }
 
 private struct Sections: View {
-    let media: Media
+    let media: MediaNode
     let jikanCharacters: JikanCharacter
     let jikanRelations: [RelationEntry]
-    @ObservedObject private var sectionsManager: SectionsManager = .shared
-    
-    private var activeSections: [EditSections] {
-        EditSections.allCases.filter { type in
-            switch type {
-            case .general:
-                return sectionsManager.showGeneral
-            case .genres:
-                return sectionsManager.showGenres && !media.getGenres.isEmpty
-            case .score:
-                return sectionsManager.showScore
-            case .origin:
-                return sectionsManager.showOrigin && !jikanRelations.isEmpty
-            case .related:
-                return sectionsManager.showRelated && (!media.getRelatedAnimes.isEmpty || !media.getRelatedMangas.isEmpty)
-            case .recommendations:
-                return sectionsManager.showRecommendations && !media.getRecommendations.isEmpty
-            case .characters:
-                return sectionsManager.showCharacters && !jikanCharacters.data.isEmpty
-            }
-        }
-    }
     
     var body: some View {
-        ForEach(Array(activeSections.enumerated()), id: \.element) { index, type in
-            sectionView(for: type)
-        }
-    }
-    
-    @ViewBuilder
-    private func sectionView(for type: EditSections) -> some View {
-        switch type {
-        case .general:
-            GeneralOverviewView(
-                type: media.getType,
-                episodes: media.getEpisodes,
-                numberOfChapters: media.getChapters,
-                numberOfVolumes: media.getVolumes,
-                startDate: media.getStartDate,
-                minutes: media.getMinutes,
-                endDate: media.getEndDate,
-                studios: media.getStudios,
-                authorInfos: media.getAuthors,
-                status: media.getMediaStatus
-            )
-        case .genres:
-            GenresView(genres: media.getMediaGenres, mode: media.getMediaType.displayName.lowercased())
-        case .score:
-            StatisticsView(
-                score: media.getScore,
-                rank: media.getRank,
-                popularity: media.getPopularity,
-                users: media.getUsers
-            )
-        case .origin:
-            OriginView(relations: jikanRelations)
-        case .related:
-            RelatedMediaView(media: media, mediaType: media.getMediaType)
-        case .recommendations:
-            RecommendationsView(recommendations: media.getRecommendations)
-        case .characters:
-            CharactersView(characters: jikanCharacters.data, mediaType: media.getMediaType)
-        }
-    }
-}
-
-#Preview {
-    DetailsView(
-        media: Media(
-            id: 1,
-            title: "Tokyo Ghoul",
-            images: Images(
-                large: "https://cdn.myanimelist.net/images/anime/9/74398l.jpg"
-            ),
-            startDate: "2020-01-01",
-            type: "manga",
-            status: "on_hiatus",
-            episodes: 10,
-            numberOfVolumes: 10,
-            numberOfChapters: 20,
-            authors: [
-                AuthorInfos(
-                    author: AuthorInfos.Author(
-                        id: 1,
-                        firstName: "Sui",
-                        lastName: "Ishida"
-                    ),
-                    role: "Writer"
-                )
-            ],
-            users: 10
+        GeneralOverviewView(
+            type: media.specificMediaType,
+            episodes: media.episodes,
+            numberOfChapters: media.chapters,
+            numberOfVolumes: media.volumes,
+            startDate: media.releaseStartDate,
+            minutes: media.averageEpisodeDurationInMinutes,
+            endDate: media.releaseEndDate,
+            studios: media.studiosList,
+            authors: media.authorsList,
+            status: media.specificStatus
         )
-    )
-    .environmentObject(AlertManager.shared)
+        GenresView(
+            genres: media.genresList,
+            mode: media.specificMediaType.displayName.lowercased()
+        )
+        StatisticsView(
+            score: media.mean ?? 0.0,
+            rank: media.rank ?? 0,
+            popularity: media.popularity ?? 0,
+            users: media.listUserCount
+        )
+        OriginView(relations: jikanRelations)
+        RelatedMediaView(media: media, seriesType: media.isMangaOrAnime)
+        RecommendationsView(recommendations: media.recommendationsList)
+        CharactersView(
+            characters: jikanCharacters.data,
+            seriesType: media.isMangaOrAnime
+        )
+    }
 }

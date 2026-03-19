@@ -1,7 +1,7 @@
 import Foundation
 
 enum Gender: String {
-    case male, female
+    case male, female, unknown
     case nonBinary = "non-binary"
     
     var displayName: String {
@@ -9,6 +9,7 @@ enum Gender: String {
         case .male: return String(localized: "Male ♂", comment: "Gender")
         case .female: return String(localized: "Female ♀", comment: "Gender")
         case .nonBinary: return String(localized: "Non-binary ⚧", comment: "Gender")
+        case .unknown: return String(localized: "Not specified", comment: "Gender")
         }
     }
 }

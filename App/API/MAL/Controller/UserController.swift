@@ -1,14 +1,14 @@
 import Foundation
 import SwiftUI
 
-@MainActor class ProfileController {
+@MainActor class UserController {
     
     private var malService: MALService = .shared
     
-    func fetchUserProfile() async throws -> ProfileDetails {
+    func fetchUserProfile() async throws -> User {
         var components = URLComponents(string: MALEndpoints.Profile.information)!
         components.queryItems = [
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.id, .username, .profilePicture, .gender, .birthday, .location, .joinedAt, .timeZone]))
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.name, .picture, .gender, .birthday, .location, .joinedAt, .timeZone]))
         ]
         
         guard let url = components.url else {
@@ -24,7 +24,9 @@ import SwiftUI
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        return try JSONDecoder().decode(ProfileDetails.self, from: data)
+        return try JSONDecoder
+            .snakeCaseDecoder
+            .decode(User.self, from: data)
     }
     
     func fetchNextPage(_ nextPage: String) async throws -> MediaResponse {
@@ -40,6 +42,8 @@ import SwiftUI
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
-        return try JSONDecoder().decode(MediaResponse.self, from: data)
+        return try JSONDecoder
+            .snakeCaseDecoder
+            .decode(MediaResponse.self, from: data)
     }
 }

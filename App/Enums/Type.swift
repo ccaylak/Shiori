@@ -1,6 +1,6 @@
 import Foundation
 
-enum FormatType {
+enum MediaType {
     case anime(Anime)
     case manga(Manga)
     

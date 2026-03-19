@@ -1,50 +1,28 @@
 import Foundation
 
 struct JikanCharacterFull: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case data
-    }
     
-    let data: CharacterDetails
+    private(set) var data: CharacterDetails
 }
 
 struct CharacterDetails: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case malId = "mal_id"
-        case url, images, name
-        case nameKanji = "name_kanji"
-        case nicknames, favorites, about, voices
-        case animeAppearances = "anime"
-        case mangaAppearances = "manga"
-    }
     
-    let malId: Int
-    let url: String
-    let images: CharacterImage
-    let name: String
-    let nameKanji: String
-    let nicknames: [String]
-    let favorites: Int
-    let about: String
-    let animeAppearances: [CharacterDetailsAnime]
-    let mangaAppearances: [CharacterDetailsManga]
-    let voices: [VoiceActor]
+    private(set) var malId: Int
+    private(set) var url: String
+    private(set) var images: JikanImages
+    private(set) var name: String
+    private(set) var nameKanji: String?
+    private(set) var nicknames: [String]
+    private(set) var favorites: Int
+    private(set) var about: String?
+    private(set) var anime: [CharacterDetailsMedia]
+    private(set) var manga: [CharacterDetailsMedia]
+    private(set) var voices: [VoiceActor]
 }
 
-struct CharacterDetailsAnime: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case role, anime
-    }
+struct CharacterDetailsMedia: Decodable {
     
-    let role: String
-    let anime: FavoriteEntries
-}
-
-struct CharacterDetailsManga: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case role, manga
-    }
-    
-    let role: String
-    let manga: FavoriteEntries
+    private(set) var role: String
+    private(set) var anime: FavoriteEntry?
+    private(set) var manga: FavoriteEntry?
 }

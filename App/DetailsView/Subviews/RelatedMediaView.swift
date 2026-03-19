@@ -2,23 +2,23 @@ import SwiftUI
 
 struct RelatedMediaView: View {
     
-    let media: Media
-    let mediaType: MediaType
+    let media: MediaNode
+    let seriesType: SeriesType
     
     private let priorityTypes: [Related] = [.prequel, .sequel, .sideStory]
     
-    private var relevantItems: [MediaNode] {
-        switch mediaType {
+    private var relevantItems: [Media] {
+        switch seriesType {
         case .anime:
-            return media.relatedAnimes ?? []
+            return media.relatedAnime ?? []
         case .manga:
-            return media.relatedMangas ?? []
+            return media.relatedManga ?? []
         case .unknown:
             return []
         }
     }
     
-    private var sortedMediaItems: [MediaNode] {
+    private var sortedMediaItems: [Media] {
         guard relevantItems.contains(where: { priorityTypes.contains($0.getRelationType) }) else {
             return relevantItems
         }
@@ -43,17 +43,17 @@ struct RelatedMediaView: View {
                         ForEach(sortedMediaItems, id: \.node.id) { relatedMedia in
                             NavigationLink(destination: DetailsView(media: relatedMedia.node)) {
                                 VStack(alignment: .center) {
-                                    Text(relatedMedia.getRelationType.displayName)
+                                    Text(relatedMedia.relationTypeFormatted ?? "")
                                         .frame(maxWidth: CoverSize.large.size.width, alignment: .center)
                                         .lineLimit(1)
                                         .truncationMode(.tail)
                                         .foregroundColor(.accentColor)
                                     
-                                    AsyncImageView(imageUrl: relatedMedia.node.getCover)
+                                    AsyncImageView(imageUrl: relatedMedia.node.mainPicture.largeUrl)
                                         .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                         .cornerRadius(12)
                                         .strokedBorder()
-                                        .showFullTitleContextMenu(relatedMedia.node.getTitle)
+                                        .showFullTitleContextMenu(relatedMedia.node.preferredTitle)
                                         .padding(.bottom, 2)
                                         .overlay(alignment: .topTrailing) {
                                             if relatedMedia.node.getEntryStatus != .unknown {
@@ -64,7 +64,7 @@ struct RelatedMediaView: View {
                                             }
                                         }
                                     
-                                    Text(relatedMedia.node.getTitle)
+                                    Text(relatedMedia.node.preferredTitle)
                                         .font(.caption)
                                         .frame(maxWidth: CoverSize.large.size.width, alignment: .leading)
                                         .lineLimit(1)
