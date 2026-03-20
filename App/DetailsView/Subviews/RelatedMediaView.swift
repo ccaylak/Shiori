@@ -13,8 +13,6 @@ struct RelatedMediaView: View {
             return media.relatedAnime ?? []
         case .manga:
             return media.relatedManga ?? []
-        case .unknown:
-            return []
         }
     }
     

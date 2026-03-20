@@ -912,12 +912,12 @@ label:
                         userProgress.comments = media.getMyListStatus.userComments
                         
                         if (media.getMyListStatus.startDate != nil) {
-                            userProgress.startDate = stringToDate(
+                            userProgress.startDate = Date.from(
                                 media.getMyListStatus.startDate!
                             )
                         }
                         if (media.getMyListStatus.finishDate != nil) {
-                            userProgress.endDate = stringToDate(
+                            userProgress.endDate = Date.from(
                                 media.getMyListStatus.finishDate!
                             )
                         }
@@ -941,12 +941,12 @@ label:
                         userProgress.volumes = media.volumes
                         
                         if (media.getMyListStatus.startDate != nil) {
-                            userProgress.startDate = stringToDate(
+                            userProgress.startDate = Date.from(
                                 media.getMyListStatus.startDate!
                             )
                         }
                         if (media.getMyListStatus.finishDate != nil) {
-                            userProgress.endDate = stringToDate(
+                            userProgress.endDate = Date.from(
                                 media.getMyListStatus.finishDate!
                             )
                         }
@@ -967,12 +967,6 @@ label:
                 }
             }
         }
-    }
-    
-    private func stringToDate(_ dateString: String) -> Date {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.date(from: dateString) ?? Date()
     }
 }
 

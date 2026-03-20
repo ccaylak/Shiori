@@ -1,54 +1,12 @@
 import SwiftUI
-import Pow
 
 struct LibraryView: View {
-    
-    struct MangaEntry {
-        var progressStatus: ProgressStatus.Manga
-        var score: Int
-        var currentVolume: Int
-        var totalVolumes: Int
-        var currentChapter: Int
-        var totalChapters: Int
-        var comments: String
-        var startDate: String
-        var finishDate: String
-    }
-    
-    struct AnimeEntry {
-        var progressStatus: ProgressStatus.Anime
-        var score: Int
-        var currentEpisode: Int
-        var totalEpisodes: Int
-        var comments: String
-        var startDate: String
-        var finishDate: String
-    }
     
     @State private var library = MediaResponse(data: [], paging: nil)
     
     @State private var selectedMedia: Media?
     
-    @State private var mangaEntry = MangaEntry(
-        progressStatus: .reading,
-        score: 0,
-        currentVolume: 0,
-        totalVolumes: 0,
-        currentChapter: 0,
-        totalChapters: 0,
-        comments: "",
-        startDate: "",
-        finishDate: ""
-    )
-    @State private var animeEntry = AnimeEntry(
-        progressStatus: .watching,
-        score: 0,
-        currentEpisode: 0,
-        totalEpisodes: 0,
-        comments: "",
-        startDate: "",
-        finishDate: ""
-    )
+    @State private var libraryEntry = MyListStatus()
     
     @State private var showAlert = false
     @State private var searchTerm = ""
@@ -59,7 +17,7 @@ struct LibraryView: View {
     @State private var showFinishDate = false
     
     @State private var startDate: Date?
-    @State private var endDate: Date?
+    @State private var finishDate: Date?
     
     @State private var loadingMediaID: Int?
     
@@ -86,193 +44,166 @@ struct LibraryView: View {
         NavigationStack {
             List {
                 if tokenHandler.isAuthenticated {
-                    if libraryManager.mediaType == .manga {
-                        
-                        ForEach(filteredLibraryData) { manga in
-                            Button(action: {
-                                selectedMedia = manga
-                                loadingMediaID = manga.node.id
-                            }) {
-                                LibraryMediaView(
-                                    title: manga.node.preferredTitle,
-                                    image: manga.node.mainPicture.largeUrl,
-                                    releaseYear: manga.node.yearLabel,
-                                    type: manga.node.specificMediaType,
-                                    score: manga.node.getMyListStatus.score,
-                                    completedEpisodes: nil,
-                                    totalEpisodes: nil,
-                                    completedChapters: manga.node.getMyListStatus.readChapters,
-                                    totalChapters: manga.node.chapters,
-                                    completedVolumes: manga.node.getMyListStatus.readVolumes,
-                                    totalVolumes: manga.node.volumes
-                                ).overlay(
-                                    Group {
-                                        if loadingMediaID == manga.node.id {
-                                            ProgressView()
-                                                .progressViewStyle(CircularProgressViewStyle())
-                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        }
-                                    }
+                    ForEach(filteredLibraryData) { media in
+                        Button(action: {
+                            selectedMedia = media
+                            loadingMediaID = media.node.id
+                        }) {
+                            LibraryMediaView(
+                                title: media.node.preferredTitle,
+                                image: media.node.mainPicture.largeUrl,
+                                release: media.node.isMangaOrAnime == .anime ? media.node.getStartSeason.seasonLabel : media.node.yearLabel,
+                                type: media.node.specificMediaType,
+                                score: media.node.getMyListStatus.score,
+                                progress: LibraryMediaProgress(
+                                    current: media.node.isMangaOrAnime == .anime ? media.node.getMyListStatus.watchedEpisodes : media.node.getMyListStatus.readChapters,
+                                    total: media.node.isMangaOrAnime == .anime ? media.node.episodes : media.node.chapters,
+                                    secondaryCurrent: media.node.getMyListStatus.readVolumes,
+                                    secondaryTotal: media.node.volumes
                                 )
-                                
-                                
+                            ).overlay(
+                                Group {
+                                    if loadingMediaID == media.node.id {
+                                        ProgressView()
+                                            .progressViewStyle(CircularProgressViewStyle())
+                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    }
+                                }
+                            )
+                        }
+                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                            Button {
+                                Task {
+                                    try await mangaController.completeEntry(id: media.node.id)
+                                    
+                                    alertManager.showUpdatedAlert = true
+                                    library = try await mangaController.fetchLibrary()
+                                }
+                            } label : {
+                                Label("Completed", systemImage: "checkmark")
                             }
-                            .swipeActions(edge: .leading) {
-                                if manga.node.getEntryStatus != ProgressStatus.manga(.completed) {
-                                Button {
-                                    Task {
-                                        try await mangaController.completeEntry(id: manga.node.id)
+                            .tint(.green)
+                            .isVisible(media.node.isMangaOrAnime == .manga && media.node.getEntryStatus != ProgressStatus.manga(.completed))
+                            
+                            Button {
+                                Task {
+                                    try await animeController.completeEntry(id: media.node.id)
+                                    
+                                    alertManager.showUpdatedAlert = true
+                                    library = try await animeController.fetchLibrary()
+                                }
+                            } label: {
+                                Label("Completed", systemImage: "checkmark")
+                                    .bold()
+                            }
+                            .tint(.green)
+                            .isVisible(media.node.isMangaOrAnime == .anime && media.node.getEntryStatus != ProgressStatus.anime(.completed))
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            let currentChapter = media.node.getMyListStatus.readChapters
+                            let totalChapters = media.node.chapters
+                            
+                            let currentVolume = media.node.getMyListStatus.readVolumes
+                            let totalVolumes = media.node.volumes
+                            
+                            Button {
+                                Task {
+                                    let updatedChapterValue = {
+                                        if totalChapters > 0 {
+                                            return min(currentChapter + 1, totalChapters)
+                                        } else {
+                                            return currentChapter + 1
+                                        }
+                                    }()
+                                    
+                                    if updatedChapterValue > currentChapter {
+                                        try await mangaController.increaseChapters(id: media.node.id, chapter: updatedChapterValue)
                                         
                                         alertManager.showUpdatedAlert = true
                                         library = try await mangaController.fetchLibrary()
                                     }
-                                } label : {
-                                    Label("Completed", systemImage: "checkmark")
                                 }
-                                .tint(.green)
-                                }
+                            } label: {
+                                Label("Chapter +1", systemImage: "book.pages")
                             }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: settingsManager.mangaMode != .all) {
-                                let currentChapter = manga.node.getMyListStatus.readChapters
-                                let totalChapters = manga.node.chapters
+                            .tint(.orange)
+                            .isVisible(
+                                media.node.isMangaOrAnime == .manga &&
+                                (
+                                    totalChapters == 0 ||
+                                    (currentChapter != totalChapters && settingsManager.mangaMode == .chapter) ||
+                                    settingsManager.mangaMode == .all
+                                )
+                            )
                                 
-                                let currentVolume = manga.node.getMyListStatus.readVolumes
-                                let totalVolumes = manga.node.volumes
-                                
-                                if totalChapters == 0 || currentChapter != totalChapters {
-                                    if settingsManager.mangaMode == .chapter || settingsManager.mangaMode == .all {
-                                        Button {
-                                            Task {
-                                                let updatedChapterValue = {
-                                                    if totalChapters > 0 {
-                                                        return min(currentChapter + 1, totalChapters)
-                                                    } else {
-                                                        return currentChapter + 1
-                                                    }
-                                                }()
-                                                
-                                                if updatedChapterValue > currentChapter {
-                                                    try await mangaController.increaseChapters(id: manga.node.id, chapter: updatedChapterValue)
-                                                    
-                                                    alertManager.showUpdatedAlert = true
-                                                    library = try await mangaController.fetchLibrary()
-                                                }
-                                            }
-                                        } label: {
-                                            Label("Chapter +1", systemImage: "book.pages")
+                            Button {
+                                Task {
+                                    let current = media.node.getMyListStatus.readVolumes
+                                    let total = media.node.volumes
+                                    
+                                    let updatedVolumeValue = {
+                                        if total > 0 {
+                                            return min(current + 1, total)
+                                        } else {
+                                            return current + 1
                                         }
-                                        .tint(.orange)
+                                    }()
+                                    
+                                    if updatedVolumeValue > current {
+                                        try await mangaController.increaseVolumes(id: media.node.id, volume: updatedVolumeValue)
+                                        
+                                        alertManager.showUpdatedAlert = true
+                                        library = try await mangaController.fetchLibrary()
                                     }
                                 }
-                                if totalVolumes == 0 || currentVolume != totalVolumes {
-                                    if settingsManager.mangaMode == .volume || settingsManager.mangaMode == .all {
-                                        Button {
-                                            Task {
-                                                let current = manga.node.getMyListStatus.readVolumes
-                                                let total = manga.node.volumes
-                                                
-                                                let updatedVolumeValue = {
-                                                    if total > 0 {
-                                                        return min(current + 1, total)
-                                                    } else {
-                                                        return current + 1
-                                                    }
-                                                }()
-                                                
-                                                if updatedVolumeValue > current {
-                                                    try await mangaController.increaseVolumes(id: manga.node.id, volume: updatedVolumeValue)
-                                                    
-                                                    alertManager.showUpdatedAlert = true
-                                                    library = try await mangaController.fetchLibrary()
-                                                }
-                                            }
-                                            
-                                        } label: {
-                                            Label("Volume +1", systemImage: "character.book.closed.ja")
-                                        }
-                                        .tint(.yellow)
-                                    }
-                                }
+                                
+                            } label: {
+                                Label("Volume +1", systemImage: "character.book.closed.ja")
                             }
-                            
+                            .tint(.yellow)
+                            .isVisible(
+                                media.node.isMangaOrAnime == .manga &&
+                                (
+                                    totalVolumes == 0 ||
+                                    (currentVolume != totalVolumes && settingsManager.mangaMode == .volume) ||
+                                    settingsManager.mangaMode == .all
+                                )
+                            )
                         }
-                    }
-                    if libraryManager.mediaType == SeriesType.anime {
-                        ForEach(filteredLibraryData, id: \.self) { anime in
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            let currentEpisode = media.node.getMyListStatus.watchedEpisodes
+                            let totalEpisodes = media.node.episodes
                             
-                            Button(action: {
-                                selectedMedia = anime
-                                loadingMediaID = anime.node.id
-                            }) {
-                                LibraryMediaView(
-                                    title: anime.node.preferredTitle,
-                                    image: anime.node.mainPicture.largeUrl,
-                                    releaseYear: anime.node.getStartSeason.seasonLabel,
-                                    type: anime.node.specificMediaType,
-                                    score: anime.node.getMyListStatus.score,
-                                    completedEpisodes: anime.node.getMyListStatus.watchedEpisodes,
-                                    totalEpisodes: anime.node.episodes,
-                                    completedChapters: nil,
-                                    totalChapters: nil,
-                                    completedVolumes: nil,
-                                    totalVolumes: nil
-                                )
-                                .overlay(
-                                    Group {
-                                        if loadingMediaID == anime.node.id {
-                                            ProgressView()
-                                                .progressViewStyle(CircularProgressViewStyle())
-                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            Button {
+                                Task {
+                                    let updatedEpisodeValue = {
+                                        if totalEpisodes > 0 {
+                                            return min(currentEpisode + 1, totalEpisodes)
+                                        } else {
+                                            return currentEpisode + 1
                                         }
-                                    }
-                                )
-                            }
-                            .swipeActions(edge: .leading) {
-                                if anime.node.getEntryStatus != ProgressStatus.anime(.completed) {
-                                Button {
-                                    Task {
-                                        try await animeController.completeEntry(id: anime.node.id)
+                                    }()
+                                    
+                                    if updatedEpisodeValue > currentEpisode {
+                                        try await animeController.increaseEpisodes(id: media.node.id, episode: updatedEpisodeValue)
                                         
                                         alertManager.showUpdatedAlert = true
                                         library = try await animeController.fetchLibrary()
                                     }
-                                } label: {
-                                    Label("Completed", systemImage: "checkmark")
-                                        .bold()
                                 }
-                                .tint(.green)
-                                }
+                            } label: {
+                                Label("Episode +1", systemImage: "tv")
                             }
-                            .swipeActions(edge: .trailing) {
-                                if anime.node.episodes == 0 || anime.node.getMyListStatus.watchedEpisodes != anime.node.episodes {
-                                Button {
-                                    Task {
-                                        let current = anime.node.getMyListStatus.watchedEpisodes
-                                        let total = anime.node.episodes
-                                        
-                                        let updatedEpisodeValue = {
-                                            if total > 0 {
-                                                return min(current + 1, total)
-                                            } else {
-                                                return current + 1
-                                            }
-                                        }()
-                                        
-                                        if updatedEpisodeValue > current {
-                                            try await animeController.increaseEpisodes(id: anime.node.id, episode: updatedEpisodeValue)
-                                            
-                                            alertManager.showUpdatedAlert = true
-                                            library = try await animeController.fetchLibrary()
-                                        }
-                                    }
-                                    
-                                } label: {
-                                    Label("Episode +1", systemImage: "tv")
-                                }
-                                .tint(.yellow)
-                                }
-                            }
+                            .tint(.yellow)
+                            .isVisible(
+                                media.node.isMangaOrAnime == .anime &&
+                                (
+                                    totalEpisodes == 0 ||
+                                    currentEpisode != totalEpisodes
+                                )
+                            )
                         }
+                        
                     }
                     if filteredLibraryData.isEmpty && !alertManager.isLoading {
                         if searchTerm != "" {
@@ -301,54 +232,42 @@ struct LibraryView: View {
             }
             .safeAreaInset(edge: .top) {
                 if tokenHandler.isAuthenticated {
-                    if libraryManager.mediaType == .manga {
+                    
+                    PillPicker(
+                        options: ProgressStatus.Manga.allCases,
+                        selectedOption: $libraryManager.mangaProgressStatus,
+                        displayName: { $0.displayName },
+                        icon: { AnyView($0.libraryIcon) }
+                    )
+                    .padding(.horizontal)
+                    .padding(.bottom, 6)
+                    .padding(.top, -4)
+                    .background {
                         if #available(iOS 26, *) {
-                            PillPicker(
-                                options: ProgressStatus.Manga.allCases,
-                                selectedOption: $libraryManager.mangaProgressStatus,
-                                displayName: { $0.displayName },
-                                icon: { AnyView($0.libraryIcon) }
-                            )
-                            .padding(.horizontal)
-                            .padding(.bottom, 6)
-                            .padding(.top, -4)
+                            EmptyView()
                         } else {
-                            PillPicker(
-                                options: ProgressStatus.Manga.allCases,
-                                selectedOption: $libraryManager.mangaProgressStatus,
-                                displayName: { $0.displayName },
-                                icon: { AnyView($0.libraryIcon) }
-                            )
-                            .padding(.horizontal)
-                            .padding(.bottom, 6)
-                            .padding(.top, -4)
-                        }
-                        
-                    }
-                    if libraryManager.mediaType == .anime {
-                        if #available(iOS 26, *) {
-                            PillPicker(
-                                options: ProgressStatus.Anime.allCases,
-                                selectedOption: $libraryManager.animeProgressStatus,
-                                displayName: { $0.displayName },
-                                icon: { AnyView($0.libraryIcon) }
-                            )
-                            .padding(.horizontal)
-                            .padding(.bottom, 6)
-                            .padding(.top, -4)
-                        } else {
-                            PillPicker(
-                                options: ProgressStatus.Anime.allCases,
-                                selectedOption: $libraryManager.animeProgressStatus,
-                                displayName: { $0.displayName },
-                                icon: { AnyView($0.libraryIcon) }
-                            )
-                            .padding(.horizontal)
-                            .padding(.bottom, 6)
-                            .padding(.top, -4)
-                            .background(.ultraThinMaterial)
+                            Color.clear.background(.ultraThinMaterial)
                         }
                     }
+                    .isVisible(libraryManager.mediaType == .manga)
+                    
+                    PillPicker(
+                        options: ProgressStatus.Anime.allCases,
+                        selectedOption: $libraryManager.animeProgressStatus,
+                        displayName: { $0.displayName },
+                        icon: { AnyView($0.libraryIcon) }
+                    )
+                    .padding(.horizontal)
+                    .padding(.bottom, 6)
+                    .padding(.top, -4)
+                    .background {
+                        if #available(iOS 26, *) {
+                            EmptyView()
+                        } else {
+                            Color.clear.background(.ultraThinMaterial)
+                        }
+                    }
+                    .isVisible(libraryManager.mediaType == .anime)
                 }
             }
             .listStyle(.automatic)
@@ -391,21 +310,22 @@ struct LibraryView: View {
                 }
                 ToolbarItem {
                     Menu {
-                        if libraryManager.mediaType == .anime {
-                            Picker("Sort by", selection: $libraryManager.animeSortOrder) {
-                                ForEach(LibraryAnimeSort.allCases, id: \.self) { sortSelection in
-                                    Label(sortSelection.displayName, systemImage: sortSelection.icon)
-                                        .tag(sortSelection.rawValue)
-                                }
-                            }
-                        } else {
-                            Picker("Sort by", selection: $libraryManager.mangaSortOrder) {
-                                ForEach(LibraryMangaSort.allCases, id: \.self) { sortSelection in
-                                    Label(sortSelection.displayName, systemImage: sortSelection.icon)
-                                        .tag(sortSelection.rawValue)
-                                }
+                        
+                        Picker("Sort by", selection: $libraryManager.animeSortOrder) {
+                            ForEach(LibraryAnimeSort.allCases, id: \.self) { sortSelection in
+                                Label(sortSelection.displayName, systemImage: sortSelection.icon)
+                                    .tag(sortSelection.rawValue)
                             }
                         }
+                        .isVisible(libraryManager.mediaType == .anime)
+                        
+                        Picker("Sort by", selection: $libraryManager.mangaSortOrder) {
+                            ForEach(LibraryMangaSort.allCases, id: \.self) { sortSelection in
+                                Label(sortSelection.displayName, systemImage: sortSelection.icon)
+                                    .tag(sortSelection.rawValue)
+                            }
+                        }
+                        .isVisible(libraryManager.mediaType == .manga)
                         
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease")
@@ -423,153 +343,49 @@ struct LibraryView: View {
                 showFinishDate = false
                 
                 startDate = nil
-                endDate = nil
+                finishDate = nil
             }) { media in
                 NavigationStack {
                     List {
                         Section {
                             HStack(spacing: 16) {
-                                if (libraryManager.mediaType == .anime || settingsManager.mangaMode != MangaMode.all) {
-                                    Button(action: {
-                                        let generator = UIImpactFeedbackGenerator(style: .soft)
-                                        generator.impactOccurred(intensity: 1.0)
-                                        if (libraryManager.mediaType == .anime) {
-                                            animeEntry.currentEpisode -= 1
-                                        }
-                                        if (libraryManager.mediaType == .manga) {
-                                            if (settingsManager.mangaMode == MangaMode.chapter) {
-                                                mangaEntry.currentChapter -= 1
-                                            }
-                                            if (settingsManager.mangaMode == MangaMode.volume) {
-                                                mangaEntry.currentVolume -= 1
-                                            }
-                                        }
-                                        
-                                    }) {
-                                        Image(systemName: "minus")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 16, height: 16)
-                                    }
-                                    .buttonStyle(.bordered)
-                                    .controlSize(.large)
-                                    .disabled(
-                                        (libraryManager.mediaType == .anime && animeEntry.currentEpisode <= 0) ||
-                                        (libraryManager.mediaType == .manga &&
-                                         ((settingsManager.mangaMode == MangaMode.chapter && mangaEntry.currentChapter <= 0) ||
-                                          (settingsManager.mangaMode == MangaMode.volume && mangaEntry.currentVolume <= 0)))
-                                    )
-                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
-                                }
-                                
-                                if (libraryManager.mediaType == .manga && settingsManager.mangaMode == MangaMode.all) {
-                                    Menu {
-                                        Button("Decrease volume") {
-                                            mangaEntry.currentVolume -= 1
-                                        }
-                                        .disabled(settingsManager.mangaMode == MangaMode.volume && mangaEntry.currentVolume <= 0)
-                                        Button("Decrease chapter") {
-                                            mangaEntry.currentChapter -= 1
-                                        }
-                                        .disabled(settingsManager.mangaMode == MangaMode.chapter && mangaEntry.currentChapter <= 0)
-                                    } label: {
-                                        Image(systemName: "minus")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 16, height: 16)
-                                    }
-                                    .buttonStyle(.bordered)
-                                    .controlSize(.large)
-                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
-                                }
-                                
                                 AsyncImageView(imageUrl: media.node.mainPicture.largeUrl)
                                     .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                     .cornerRadius(12)
-                                
-                                if (libraryManager.mediaType == .anime || settingsManager.mangaMode != MangaMode.all) {
-                                    Button(action: {
-                                        let generator = UIImpactFeedbackGenerator(style: .soft)
-                                        generator.impactOccurred(intensity: 1.0)
-                                        if (libraryManager.mediaType == .anime) {
-                                            animeEntry.currentEpisode += 1
-                                        }
-                                        if (libraryManager.mediaType == .manga) {
-                                            if (settingsManager.mangaMode == MangaMode.chapter) {
-                                                mangaEntry.currentChapter += 1
-                                            }
-                                            if (settingsManager.mangaMode == MangaMode.volume) {
-                                                mangaEntry.currentVolume += 1
-                                            }
-                                        }
-                                    }) {
-                                        Image(systemName: "plus")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 16, height: 16)
-                                    }
-                                    .buttonStyle(.bordered)
-                                    .controlSize(.large)
-                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
-                                    .disabled(
-                                        (libraryManager.mediaType == .anime && animeEntry.totalEpisodes != 0 && animeEntry.currentEpisode == animeEntry.totalEpisodes ) ||
-                                        (libraryManager.mediaType == .manga &&
-                                         ((settingsManager.mangaMode == MangaMode.chapter && mangaEntry.totalChapters != 0 && mangaEntry.currentChapter == mangaEntry.totalChapters) ||
-                                          (settingsManager.mangaMode == MangaMode.volume && mangaEntry.totalVolumes != 0 && mangaEntry.currentVolume == mangaEntry.totalVolumes)))
-                                    )
-                                }
-                                if (libraryManager.mediaType == .manga && settingsManager.mangaMode == MangaMode.all) {
-                                    Menu {
-                                        Button("Increase volume") {
-                                            mangaEntry.currentVolume += 1
-                                        }
-                                        .disabled(settingsManager.mangaMode == MangaMode.volume && mangaEntry.totalVolumes != 0 && mangaEntry.currentVolume == mangaEntry.totalVolumes)
-                                        
-                                        Button("Increase chapter") {
-                                            mangaEntry.currentChapter += 1
-                                        }
-                                        .disabled(settingsManager.mangaMode == MangaMode.chapter && mangaEntry.totalChapters != 0 && mangaEntry.currentChapter == mangaEntry.totalChapters)
-                                    } label: {
-                                        Image(systemName: "plus")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 16, height: 16)
-                                    }
-                                    .buttonStyle(.bordered)
-                                    .controlSize(.large)
-                                    .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
-                                }
                             }
                             .frame(maxWidth: .infinity, alignment: .center)
                             .listRowBackground(Color.clear)
                         }
-                        .listRowInsets(EdgeInsets(
-                            top: 0,
-                            leading: 16,
-                            bottom: 0,
-                            trailing: 16
-                        ))
-                        
+                        .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         
                         Section {
-                            if (libraryManager.mediaType == .manga) {
-                                Picker("Progress", selection: $mangaEntry.progressStatus) {
-                                    ForEach([ProgressStatus.Manga.completed, .reading, .onHold, .dropped, .planToRead], id: \.self) { mangaSelection in
-                                        Text(mangaSelection.displayName)
-                                            .tag(mangaSelection)
+                        
+                            Picker("Progress", selection: $libraryEntry.progressStatus) {
+                                ForEach([ProgressStatus.Manga.completed, .reading, .onHold, .dropped, .planToRead], id: \.self) { mangaSelection in
+                                    Text(mangaSelection.displayName)
+                                        .tag(mangaSelection)
+                                }
+                            }
+                            .isVisible(libraryManager.mediaType == .manga)
+                            
+                            Picker("Status", selection: $libraryEntry.progressStatus) {
+                                ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
+                                    Text(animeSelection.displayName).tag(animeSelection)
+                                }
+                            }
+                            .isVisible(libraryManager.mediaType == .anime)
+                            
+                            Picker("Rating", selection: $libraryEntry.score) {
+                                ForEach(0...10, id: \.self) { rating in
+                                    if let ratingValue = RatingValues(rawValue: rating) {
+                                        Text(ratingValue.displayName).tag(rating)
+                                    } else {
+                                        Text("Unknown")
                                     }
                                 }
-                                
-                                Picker("Rating", selection: $mangaEntry.score) {
-                                    ForEach(0...10, id: \.self) { rating in
-                                        if let ratingValue = RatingValues(rawValue: rating) {
-                                            Text(ratingValue.displayName).tag(rating)
-                                        } else {
-                                            Text("Unknown")
-                                        }
-                                    }
-                                }
-                                
+                            }
+                            
+                            Group {
                                 VStack(alignment: .leading, spacing: 6) {
                                     Text("Mode")
                                     
@@ -581,129 +397,68 @@ struct LibraryView: View {
                                     .pickerStyle(.segmented)
                                 }
                                 
-                                if (settingsManager.mangaMode == MangaMode.all) {
-                                    if mangaEntry.totalChapters != 0 {
-                                        Picker(selection: $mangaEntry.currentChapter, label:
-                                                VStack(alignment: .leading, spacing: 4) {
-                                            Text("Chapter")
-                                            Text("\(mangaEntry.currentChapter)/\(mangaEntry.totalChapters)")
-                                                .foregroundStyle(.secondary)
-                                                .font(.caption)
-                                                .fontWeight(.bold)
-                                        }
-                                        ) {
-                                            ForEach(0...mangaEntry.totalChapters, id: \.self) { chapter in
-                                                Text("\(chapter)").tag(chapter)
-                                            }
-                                        }
-                                    } else {
-                                        LabeledContent("Chapter") {
-                                            Text("\(mangaEntry.currentChapter)")
-                                        }
-                                    }
-                                    if mangaEntry.totalVolumes != 0 {
-                                        Picker(selection: $mangaEntry.currentVolume, label:
-                                                VStack(alignment: .leading, spacing: 4) {
-                                            Text("Volume")
-                                            Text("\(mangaEntry.currentVolume)/\(mangaEntry.totalVolumes)")
-                                                .foregroundStyle(.secondary)
-                                                .font(.caption)
-                                                .fontWeight(.bold)
-                                        }
-                                        ) {
-                                            ForEach(0...mangaEntry.totalVolumes, id: \.self) { volume in
-                                                Text("\(volume)").tag(volume)
-                                            }
-                                        }
-                                    } else {
-                                        LabeledContent("Volume") {
-                                            Text("\(mangaEntry.currentVolume)")
-                                        }
-                                    }
-                                }
                                 
-                                if (settingsManager.mangaMode == MangaMode.chapter) {
-                                    if mangaEntry.totalChapters != 0 {
-                                        Picker(selection: $mangaEntry.currentChapter, label:
-                                                VStack(alignment: .leading, spacing: 4) {
-                                            Text("Chapter")
-                                            Text("\(mangaEntry.currentChapter)/\(mangaEntry.totalChapters)")
-                                                .foregroundStyle(.secondary)
-                                                .font(.caption)
-                                                .fontWeight(.bold)
-                                        }
-                                        ) {
-                                            ForEach(0...mangaEntry.totalChapters, id: \.self) { chapter in
-                                                Text("\(chapter)").tag(chapter)
-                                            }
-                                        }
-                                    } else {
-                                        LabeledContent("Chapter") {
-                                            Text("\(mangaEntry.currentChapter)")
-                                        }
-                                    }
-                                }
-                                if (settingsManager.mangaMode == MangaMode.volume) {
-                                    if mangaEntry.totalVolumes != 0 {
-                                        Picker(selection: $mangaEntry.currentVolume, label:
-                                                VStack(alignment: .leading, spacing: 4) {
-                                            Text("Volume")
-                                            Text("\(mangaEntry.currentVolume)/\(mangaEntry.totalVolumes)")
-                                                .foregroundStyle(.secondary)
-                                                .font(.caption)
-                                                .fontWeight(.bold)
-                                        }
-                                        ) {
-                                            ForEach(0...mangaEntry.totalVolumes, id: \.self) { volume in
-                                                Text("\(volume)").tag(volume)
-                                            }
-                                        }
-                                    } else {
-                                        LabeledContent("Volume") {
-                                            Text("\(mangaEntry.currentVolume)")
-                                        }
-                                    }
-                                }
-                                
-                            }
-                            
-                            if (libraryManager.mediaType == .anime){
-                                Picker("Status", selection: $animeEntry.progressStatus) {
-                                    ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
-                                        Text(animeSelection.displayName).tag(animeSelection)
-                                    }
-                                }
-                                
-                                Picker("Rating", selection: $animeEntry.score) {
-                                    ForEach(0...10, id: \.self) { rating in
-                                        if let ratingValue = RatingValues(rawValue: rating) {
-                                            Text(ratingValue.displayName).tag(rating)
-                                        } else {
-                                            Text("Unknown")
-                                        }
-                                    }
-                                }
-                                
-                                if animeEntry.totalEpisodes != 0 {
-                                    Picker(selection: $animeEntry.currentEpisode, label:
+                                Picker(selection: $libraryEntry.readChapters, label:
                                             VStack(alignment: .leading, spacing: 4) {
-                                        Text("Episode")
-                                        Text("\(animeEntry.currentEpisode)/\(animeEntry.totalEpisodes)")
+                                        Text("Chapter")
+                                        Text("\(libraryEntry.readChapters)/\(media.node.chapters)")
                                             .foregroundStyle(.secondary)
                                             .font(.caption)
                                             .fontWeight(.bold)
                                     }
                                     ) {
-                                        ForEach(0...animeEntry.totalEpisodes, id: \.self) { episode in
-                                            Text("\(episode)").tag(episode)
+                                        ForEach(0...media.node.chapters, id: \.self) { chapter in
+                                            Text("\(chapter)").tag(chapter)
                                         }
                                     }
-                                } else {
-                                    LabeledContent("Episode") {
-                                        Text("\(animeEntry.currentEpisode)")
+                                    .isVisible(media.node.chapters != 0 && (settingsManager.mangaMode == .chapter || settingsManager.mangaMode == .all))
+                                
+                                    LabeledContent("Chapter") {
+                                        Text("\(libraryEntry.readChapters)")
                                     }
+                                    .isVisible(media.node.chapters == 0)
+                                
+                                    Picker(selection: $libraryEntry.readVolumes, label:
+                                            VStack(alignment: .leading, spacing: 4) {
+                                        Text("Volume")
+                                        Text("\(libraryEntry.readVolumes)/\(media.node.volumes)")
+                                            .foregroundStyle(.secondary)
+                                            .font(.caption)
+                                            .fontWeight(.bold)
+                                    }
+                                    ) {
+                                        ForEach(0...media.node.volumes, id: \.self) { volume in
+                                            Text("\(volume)").tag(volume)
+                                        }
+                                    }
+                                
+                                    LabeledContent("Volume") {
+                                        Text("\(libraryEntry.readVolumes)")
+                                    }
+                                    .isVisible(media.node.volumes == 0)
+                            }
+                            .isVisible(media.node.isMangaOrAnime == .manga)
+                                
+                            Picker(selection: $libraryEntry.watchedEpisodes, label:
+                                    VStack(alignment: .leading, spacing: 4) {
+                                Text("Episode")
+                                Text("\(libraryEntry.watchedEpisodes)/\(media.node.episodes)")
+                                    .foregroundStyle(.secondary)
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                            }
+                            ) {
+                                ForEach(0...media.node.episodes, id: \.self) { episode in
+                                    Text("\(episode)").tag(episode)
                                 }
                             }
+                            .isVisible(media.node.isMangaOrAnime == .anime && media.node.episodes != 0)
+                        
+                            LabeledContent("Episode") {
+                                Text("\(libraryEntry.watchedEpisodes)")
+                            }
+                            .isVisible(media.node.isMangaOrAnime == .anime && media.node.episodes == 0)
+                        
                         }
                         
                         Section {
@@ -712,9 +467,9 @@ struct LibraryView: View {
                                     showComments.toggle()
                                     if !showComments {
                                         if libraryManager.mediaType == .anime {
-                                            animeEntry.comments = ""
+                                            libraryEntry.userComments = ""
                                         } else {
-                                            mangaEntry.comments = ""
+                                            libraryEntry.userComments = ""
                                         }
                                     }
                                 }
@@ -732,10 +487,10 @@ struct LibraryView: View {
                             
                             if showComments {
                                 if (libraryManager.mediaType == .anime) {
-                                    TextField("Comments", text: $animeEntry.comments)
+                                    TextField("Comments", text: $libraryEntry.userComments)
                                         .transition(.opacity.combined(with: .move(edge: .top)))
                                 } else {
-                                    TextField("Comments", text: $mangaEntry.comments)
+                                    TextField("Comments", text: $libraryEntry.userComments)
                                         .transition(.opacity.combined(with: .move(edge: .top)))
                                 }
                             }
@@ -774,7 +529,7 @@ struct LibraryView: View {
                                 withAnimation {
                                     showFinishDate.toggle()
                                     if !showFinishDate {
-                                        endDate = nil
+                                        finishDate = nil
                                     }
                                 }
                             }) {
@@ -791,8 +546,8 @@ struct LibraryView: View {
                                 DatePicker(
                                     "Finish date",
                                     selection: Binding(
-                                        get: { endDate ?? Date() },
-                                        set: { endDate = $0 }
+                                        get: { finishDate ?? Date() },
+                                        set: { finishDate = $0 }
                                     ),
                                     displayedComponents: .date
                                 )
@@ -868,68 +623,35 @@ struct LibraryView: View {
         }
         .onChange(of: selectedMedia) {
             if (selectedMedia != nil) {
-                if (libraryManager.mediaType == .manga) {
                     
-                    guard let media = selectedMedia else { return }
-                    
-                    mangaEntry = MangaEntry(
-                        progressStatus: media.node.mangaStatus,
-                        score: media.node.getMyListStatus.score,
-                        currentVolume: media.node.getMyListStatus.readVolumes,
-                        totalVolumes: media.node.volumes,
-                        currentChapter: media.node.getMyListStatus.readChapters,
-                        totalChapters: media.node.chapters,
-                        comments: media.node.getMyListStatus.userComments,
-                        startDate: media.node.getMyListStatus.startDateValue,
-                        finishDate: media.node.getMyListStatus.finishDateValue
-                    )
-                     
-                    if mangaEntry.comments != "" {
-                        showComments = true
-                    }
-                    
-                    if mangaEntry.startDate != "" {
-                        showStartDate = true
-                        startDate = stringToDate(mangaEntry.startDate)
-                    }
-                    if  mangaEntry.finishDate != "" {
-                        showFinishDate = true
-                        endDate = stringToDate(mangaEntry.finishDate)
-                    }
+                guard let media = selectedMedia else { return }
+                
+                libraryEntry = MyListStatus(
+                    status: media.node.getMyListStatus.progressStatus,
+                    score: media.node.getMyListStatus.score,
+                    numVolumesRead: media.node.getMyListStatus.readVolumes,
+                    numChaptersRead: media.node.getMyListStatus.readChapters,
+                    numEpisodesWatched: media.node.getMyListStatus.watchedEpisodes,
+                    startDate: media.node.getMyListStatus.startDateValue,
+                    finishDate: media.node.getMyListStatus.finishDateValue,
+                    comments: media.node.getMyListStatus.userComments,
+                    updatedAt: media.node.getMyListStatus.lastUpdate
+                )
+                 
+                if libraryEntry.userComments != "" {
+                    showComments = true
                 }
-                if (libraryManager.mediaType == .anime) {
-                    guard let media = selectedMedia else { return }
-                    
-                    animeEntry = AnimeEntry(
-                        progressStatus: media.node.animeStatus,
-                        score: media.node.getMyListStatus.score,
-                        currentEpisode: media.node.getMyListStatus.watchedEpisodes,
-                        totalEpisodes: media.node.episodes,
-                        comments: media.node.getMyListStatus.userComments,
-                        startDate: media.node.getMyListStatus.startDateValue,
-                        finishDate: media.node.getMyListStatus.finishDateValue
-                    )
-                     
-                    if animeEntry.comments != "" {
-                        showComments = true
-                    }
-                    if animeEntry.startDate != ""{
-                        showStartDate = true
-                        startDate = stringToDate(animeEntry.startDate)
-                    }
-                    if animeEntry.finishDate != "" {
-                        showFinishDate = true
-                        endDate = stringToDate(animeEntry.finishDate)
-                    }
+                
+                if libraryEntry.startDateValue != "" {
+                    showStartDate = true
+                    startDate = Date.from(libraryEntry.startDateValue)
+                }
+                if  libraryEntry.startDateValue != "" {
+                    showFinishDate = true
+                    finishDate = Date.from(libraryEntry.finishDateValue)
                 }
             }
         }
-    }
-    
-    private func stringToDate(_ dateString: String) -> Date {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.date(from: dateString) ?? Date()
     }
     
     private func fetchLibrary() {
@@ -953,30 +675,12 @@ struct LibraryView: View {
     var saveEntry: (Int) -> Void {
         return { id in
             Task {
-                
                 if libraryManager.mediaType == .manga {
-                    try await mangaController.saveProgress(
-                        id: id,
-                        status: mangaEntry.progressStatus.rawValue,
-                        score: mangaEntry.score,
-                        chapters: mangaEntry.currentChapter,
-                        volumes: mangaEntry.currentVolume,
-                        comments: mangaEntry.comments,
-                        startDate: startDate,
-                        finishDate: endDate
-                    )
+                    //try await mangaController.saveProgress()
                     alertManager.showUpdatedAlert = true
                     library = try await mangaController.fetchLibrary()
                 } else if libraryManager.mediaType == .anime {
-                    try await animeController.saveProgress(
-                        id: id,
-                        status: animeEntry.progressStatus.rawValue,
-                        score: animeEntry.score,
-                        episodes: animeEntry.currentEpisode,
-                        comments: animeEntry.comments,
-                        startDate: startDate,
-                        finishDate: endDate
-                    )
+                    //try await animeController.saveProgress()
                     alertManager.showUpdatedAlert = true
                     library = try await animeController.fetchLibrary()
                 }
@@ -990,7 +694,6 @@ struct LibraryView: View {
     var deleteEntry: (Int) -> Void {
         return { id in
             Task {
-                
                 if(libraryManager.mediaType == .manga) {
                     try await mangaController.deleteEntry(id: id)
                     alertManager.showRemovedAlert = true

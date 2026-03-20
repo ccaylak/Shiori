@@ -156,31 +156,7 @@ private struct AboutView: View {
                 LabeledContent("Build number", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
             }
             
-            Section (
-                header: Text("Languages"),
-                footer:
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Translations are added through community contributions.")
-                            .font(.footnote)
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("If you want to contribute, please send a mail to:")
-                                .font(.footnote)
-                            Link("shiori.app@icloud.com", destination: URL(string: "mailto:shiori.app@icloud.com")!)
-                                .font(.footnote)
-                                .foregroundColor(.blue)
-                        }
-                    }
-            ) {
-                ForEach(SupportedLanguages.allCases, id: \.self) { language in
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text(language.displayName)
-                        language.additionalInfoView
-                    }
-                }
-            }
-            
-            Section ("Third-Party Services") {
+            Section ("Third-Party services") {
                 Link("MyAnimeList", destination: URL(string: "https://MyAnimeList.net")!)
                 Link("Jikan", destination: URL(string: "https://jikan.moe")!)
             }

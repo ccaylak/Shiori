@@ -107,14 +107,11 @@ struct ResultView: View {
                 mediaResponse = try await animeController.fetchPreviews(searchTerm: searchTerm)
             case .manga:
                 mediaResponse = try await mangaController.fetchPreviews(searchTerm: searchTerm)
-            case .unknown:
-                mediaResponse = MediaResponse(data: [], paging: nil)
             }
         } catch {
             print("Failed to load media data: \(error)")
         }
     }
-    
 }
 
 #Preview {

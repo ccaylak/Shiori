@@ -186,32 +186,31 @@ struct LoginView: View {
                             }
                         }
                         
-                        if !friends.isEmpty {
-                            Section(header: Label("Friends", systemImage: "person.3")) {
-                                ScrollView(.horizontal) {
-                                    HStack(spacing: 10) {
-                                        ForEach(friends, id: \.user.username) { friend in
-                                            VStack {
-                                                AsyncImageView(imageUrl: friend.user.images.jpgImage.baseImage)
-                                                    .frame(width: 60, height: 60)
-                                                    .cornerRadius(12)
-                                                    .strokedBorder()
-                                                
-                                                Text(friend.user.username)
-                                                    .font(.caption2)
-                                                    .frame(maxWidth: 60, alignment: .center)
-                                                    .lineLimit(1)
-                                                    .truncationMode(.tail)
-                                            }
+                        Section(header: Label("Friends", systemImage: "person.3")) {
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 10) {
+                                    ForEach(friends, id: \.user.username) { friend in
+                                        VStack {
+                                            AsyncImageView(imageUrl: friend.user.images.jpgImage.baseImage)
+                                                .frame(width: 60, height: 60)
+                                                .cornerRadius(12)
+                                                .strokedBorder()
+                                            
+                                            Text(friend.user.username)
+                                                .font(.caption2)
+                                                .frame(maxWidth: 60, alignment: .center)
+                                                .lineLimit(1)
+                                                .truncationMode(.tail)
                                         }
                                     }
-                                    .scrollTargetLayout()
                                 }
-                                .scrollTargetBehavior(.viewAligned)
-                                .scrollIndicators(.hidden)
-                                .scrollClipDisabled()
+                                .scrollTargetLayout()
                             }
+                            .scrollTargetBehavior(.viewAligned)
+                            .scrollIndicators(.hidden)
+                            .scrollClipDisabled()
                         }
+                        .isVisible(!friends.isEmpty)
                         
                         UserStatistics(
                             title: String(localized: "Anime statistics"),
@@ -225,113 +224,111 @@ struct LoginView: View {
                             statisticsValues: mangaStatisticsValues
                         )
                         
-                        if !favoriteMangas.isEmpty {
-                            Section(header: Label("Favorite manga", systemImage: "heart")) {
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 10) {
-                                        ForEach(
-                                            favoriteMangas,
-                                            id: \.malId
-                                        ) { manga in
-                                            /*NavigationLink(destination: DetailsView(
-                                                media: MediaNode(
-                                                    id: manga.malId,
-                                                    title: manga.title ?? "",
-                                                    mainPicture: Picture(),
-                                                    mediatype: "tv"
-                                                )))*/
-                                            //{
-                                                VStack {
-                                                    AsyncImageView(imageUrl: manga.images.jpgImage.baseImage)
-                                                        .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
-                                                        .cornerRadius(12)
-                                                        .strokedBorder()
-                                                    
-                                                    Text(manga.title ?? "–")
-                                                        .font(.caption)
-                                                        .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
-                                                        .lineLimit(1)
-                                                        .truncationMode(.tail)
-                                                }
-                                            //}.buttonStyle(.plain)
-                                        }
+                        Section(header: Label("Favorite manga", systemImage: "heart")) {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 10) {
+                                    ForEach(
+                                        favoriteMangas,
+                                        id: \.malId
+                                    ) { manga in
+                                        /*NavigationLink(destination: DetailsView(
+                                            media: MediaNode(
+                                                id: manga.malId,
+                                                title: manga.title ?? "",
+                                                mainPicture: Picture(),
+                                                mediatype: "tv"
+                                            )))*/
+                                        //{
+                                            VStack {
+                                                AsyncImageView(imageUrl: manga.images.jpgImage.baseImage)
+                                                    .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                                    .cornerRadius(12)
+                                                    .strokedBorder()
+                                                
+                                                Text(manga.title ?? "–")
+                                                    .font(.caption)
+                                                    .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                            }
+                                        //}.buttonStyle(.plain)
                                     }
-                                    .scrollTargetLayout()
                                 }
-                                .scrollTargetBehavior(.viewAligned)
-                                .scrollClipDisabled()
+                                .scrollTargetLayout()
                             }
+                            .scrollTargetBehavior(.viewAligned)
+                            .scrollClipDisabled()
                         }
+                        .isVisible(!favoriteMangas.isEmpty)
                         
-                        if !favoriteAnimes.isEmpty {
-                            Section(header: Label("Favorite anime", systemImage: "heart")) {
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 10) {
-                                        ForEach(favoriteAnimes, id: \.malId) { anime in
-                                            //NavigationLink(destination: DetailsView(media: MediaNode(
-                                             //   id: anime.malId,
-                                              //  title: anime.title ?? "-",
-                                               // mainPicture: Picture(),
-                                               // type: anime.type?.lowercased() ?? "Unknown"
-                                            //))) {
-                                                VStack {
-                                                    AsyncImageView(imageUrl: anime.images.jpgImage.baseImage)
-                                                        .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
-                                                        .cornerRadius(12)
-                                                        .strokedBorder()
-                                                    
-                                                    Text(anime.title ?? "–")
-                                                        .font(.caption)
-                                                        .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
-                                                        .lineLimit(1)
-                                                        .truncationMode(.tail)
-                                                }
-                                            //}.buttonStyle(.plain)
-                                        }
+                        Section(header: Label("Favorite anime", systemImage: "heart")) {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 10) {
+                                    ForEach(favoriteAnimes, id: \.malId) { anime in
+                                        //NavigationLink(destination: DetailsView(media: MediaNode(
+                                         //   id: anime.malId,
+                                          //  title: anime.title ?? "-",
+                                           // mainPicture: Picture(),
+                                           // type: anime.type?.lowercased() ?? "Unknown"
+                                        //))) {
+                                            VStack {
+                                                AsyncImageView(imageUrl: anime.images.jpgImage.baseImage)
+                                                    .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                                    .cornerRadius(12)
+                                                    .strokedBorder()
+                                                
+                                                Text(anime.title ?? "–")
+                                                    .font(.caption)
+                                                    .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                            }
+                                        //}.buttonStyle(.plain)
                                     }
-                                    .scrollTargetLayout()
                                 }
-                                .scrollTargetBehavior(.viewAligned)
-                                .scrollClipDisabled()
+                                .scrollTargetLayout()
                             }
+                            .scrollTargetBehavior(.viewAligned)
+                            .scrollClipDisabled()
                         }
+                        .isVisible(!favoriteAnimes.isEmpty)
+                    
+                        Section(header: Label("Favorite characters", systemImage: "person.3.sequence")) {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 10) {
+                                    ForEach(jikanFavorites.data.characters, id: \.malId) { character in
+                                        /*
+                                        NavigationLink(
+                                            destination: CharacterDetailsView(
+                                                metaData: MetaData(
+                                                    malId: character.malId,
+                                                    name: character.formattedName,
+                                                    images: JikanImages(large: character.images.jpgImage.baseImage)
+                                                ),
+                                                role: ""
+                                            )
+                                        ) {*/
+                                            VStack {
+                                                AsyncImageView(imageUrl: character.images.jpgImage.baseImage)
+                                                    .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                                    .cornerRadius(12)
+                                                    .strokedBorder()
+                                                
+                                                Text(character.formattedName)
+                                                    .font(.caption)
+                                                    .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                            }
+                                        }.buttonStyle(.plain)
+                                    }
+                            //}.scrollTargetLayout()
+                            }
+                            .scrollTargetBehavior(.viewAligned)
+                            .scrollClipDisabled()
+                        }
+                        .isVisible(!favoriteCharacters.isEmpty)
                         
-                        if !favoriteCharacters.isEmpty {
-                            Section(header: Label("Favorite characters", systemImage: "person.3.sequence")) {
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 10) {
-                                        ForEach(jikanFavorites.data.characters, id: \.malId) { character in
-                                            /*
-                                            NavigationLink(
-                                                destination: CharacterDetailsView(
-                                                    metaData: MetaData(
-                                                        malId: character.malId,
-                                                        name: character.formattedName,
-                                                        images: JikanImages(large: character.images.jpgImage.baseImage)
-                                                    ),
-                                                    role: ""
-                                                )
-                                            ) {*/
-                                                VStack {
-                                                    AsyncImageView(imageUrl: character.images.jpgImage.baseImage)
-                                                        .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
-                                                        .cornerRadius(12)
-                                                        .strokedBorder()
-                                                    
-                                                    Text(character.formattedName)
-                                                        .font(.caption)
-                                                        .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
-                                                        .lineLimit(1)
-                                                        .truncationMode(.tail)
-                                                }
-                                            }.buttonStyle(.plain)
-                                        }
-                                //}.scrollTargetLayout()
-                                }
-                                .scrollTargetBehavior(.viewAligned)
-                                .scrollClipDisabled()
-                            }
-                        }
                     }
                     .onAppear {
                         Task {

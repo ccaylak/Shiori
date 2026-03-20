@@ -7,17 +7,10 @@ struct LibraryMediaView: View {
     
     let title: String
     let image: String
-    let releaseYear: String
+    let release: String
     let type: MediaType
     let score: Int
-    
-    let completedEpisodes: Int?
-    let totalEpisodes: Int?
-    
-    let completedChapters: Int?
-    let totalChapters: Int?
-    let completedVolumes: Int?
-    let totalVolumes: Int?
+    let progress: LibraryMediaProgress
     
     var body: some View {
         HStack(spacing: 20) {
@@ -34,7 +27,7 @@ struct LibraryMediaView: View {
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.primary)
                 
-                Text(formattedDetails(year: releaseYear))
+                Text(formattedDetails(year: release))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
@@ -69,15 +62,15 @@ struct LibraryMediaView: View {
                 switch type {
                 case .anime(_):
                     HStack {
-                        Label(totalEpisodes ?? 0 > 0
-                              ? "\(completedEpisodes ?? 0)/\(totalEpisodes ?? 0)"
-                              : "\(completedEpisodes ?? 0)", systemImage: "tv")
+                        Label(progress.total ?? 0 > 0
+                              ? "\(progress.current ?? 0)/\(progress.total ?? 0)"
+                              : "\(progress.current ?? 0)", systemImage: "tv")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .fontWeight(.semibold)
                         
-                        if totalEpisodes ?? 0 > 0 {
-                            Gauge(value: Double(completedEpisodes ?? 0), in: 0...Double(totalEpisodes!)) { }
+                        if progress.total ?? 0 > 0 {
+                            Gauge(value: Double(progress.current ?? 0), in: 0...Double(progress.total!)) { }
                                 .gaugeStyle(.accessoryLinearCapacity)
                         } else {
                             Gauge(value: 1, in: 0...1) { }
@@ -87,74 +80,54 @@ struct LibraryMediaView: View {
                     }
                     
                 case .manga(_):
-                    if (settingsManager.mangaMode == .all) {
+                    if (settingsManager.mangaMode == .all || settingsManager.mangaMode == .chapter) {
                         VStack(alignment: .leading, spacing: 3) {
                             HStack {
-                                Label(totalVolumes ?? 0 > 0
-                                      ? "\(completedVolumes ?? 0)/\(totalVolumes ?? 0)"
-                                      : "\(completedVolumes ?? 0)", systemImage: "character.book.closed.fill.ja")
+                                Label(progress.total ?? 0 > 0
+                                      ? "\(progress.current ?? 0)/\(progress.total ?? 0)"
+                                      : "\(progress.current ?? 0)", systemImage: "book.pages.fill")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .fontWeight(.semibold)
-                                Spacer()
                                 
-                                let total = max(totalVolumes ?? 0, 1)
-                                let completed = min(completedVolumes ?? 0, total)
+                                Spacer()
+                                let total = max(progress.total ?? 0, 1)
+                                let completed = min(progress.current ?? 0, total)
                                 Gauge(value: Double(completed), in: 0...Double(total)) {}
                                     .gaugeStyle(.accessoryLinearCapacity)
-                                    .tint(totalVolumes ?? 0 > 0 ? .accentColor : .secondary)
+                                    .tint(progress.total ?? 0 > 0 ? .accentColor : .secondary)
                                     .frame(maxWidth: 160)
                             }
-                            
                             HStack {
-                                Label(totalChapters ?? 0 > 0
-                                      ? "\(completedChapters ?? 0)/\(totalChapters ?? 0)"
-                                      : "\(completedChapters ?? 0)", systemImage: "book.pages.fill")
+                                Label(progress.secondaryTotal ?? 0 > 0
+                                      ? "\(progress.secondaryCurrent ?? 0)/\(progress.secondaryTotal ?? 0)"
+                                      : "\(progress.secondaryCurrent ?? 0)", systemImage: "character.book.closed.fill.ja")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .fontWeight(.semibold)
-                                
                                 Spacer()
-                                let total = max(totalChapters ?? 0, 1)
-                                let completed = min(completedChapters ?? 0, total)
+                                
+                                let total = max(progress.secondaryTotal ?? 0, 1)
+                                let completed = min(progress.secondaryCurrent ?? 0, total)
                                 Gauge(value: Double(completed), in: 0...Double(total)) {}
                                     .gaugeStyle(.accessoryLinearCapacity)
-                                    .tint(totalChapters ?? 0 > 0 ? .accentColor : .secondary)
+                                    .tint(progress.secondaryTotal ?? 0 > 0 ? .accentColor : .secondary)
                                     .frame(maxWidth: 160)
                             }
                         }
                     }
                     
-                    if (settingsManager.mangaMode == .volume) {
+                    if (settingsManager.mangaMode == .all || settingsManager.mangaMode == .volume) {
                         HStack {
-                            Label(totalVolumes ?? 0 > 0
-                                  ? "\(completedVolumes ?? 0)/\(totalVolumes ?? 0)"
-                                  : "\(completedVolumes ?? 0)", systemImage: "character.book.closed.fill.ja")
+                            Label(progress.secondaryTotal ?? 0 > 0
+                                  ? "\(progress.secondaryCurrent ?? 0)/\(progress.secondaryTotal ?? 0)"
+                                  : "\(progress.secondaryCurrent ?? 0)", systemImage: "character.book.closed.fill.ja")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .fontWeight(.semibold)
                             
-                            if totalVolumes ?? 0 > 0 {
-                                Gauge(value: Double(completedVolumes ?? 0), in: 0...Double(totalVolumes ?? 0)) { }
-                                    .gaugeStyle(.accessoryLinearCapacity)
-                            } else {
-                                Gauge(value: 1, in: 0...1) { }
-                                    .gaugeStyle(.accessoryLinearCapacity)
-                                    .tint(Color.secondary)
-                            }
-                        }
-                    }
-                    if (settingsManager.mangaMode == .chapter) {
-                        HStack {
-                            Label(totalChapters ?? 0 > 0
-                                  ? "\(completedChapters ?? 0)/\(totalChapters ?? 0)"
-                                  : "\(completedChapters ?? 0)", systemImage: "book.pages.fill")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .fontWeight(.semibold)
-                            
-                            if totalChapters ?? 0 > 0 {
-                                Gauge(value: Double(completedChapters ?? 0), in: 0...Double(totalChapters ?? 0)) { }
+                            if progress.secondaryTotal ?? 0 > 0 {
+                                Gauge(value: Double(progress.secondaryCurrent ?? 0), in: 0...Double(progress.secondaryTotal ?? 0)) { }
                                     .gaugeStyle(.accessoryLinearCapacity)
                             } else {
                                 Gauge(value: 1, in: 0...1) { }
@@ -183,10 +156,10 @@ struct LibraryMediaView: View {
     }
     
     func formattedAnimeDetails(type: MediaType.Anime, year: String) -> String {
-        return "\(type.displayName), \(releaseYear)"
+        return "\(type.displayName), \(release)"
     }
     
     func formattedMangaDetails(type: MediaType.Manga, year: String) -> String {
-        return "\(type.displayName), \(releaseYear)"
+        return "\(type.displayName), \(release)"
     }
 }

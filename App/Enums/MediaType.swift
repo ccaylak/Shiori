@@ -1,13 +1,12 @@
 import Foundation
 
 enum SeriesType: String {
-    case manga, anime, unknown
+    case manga, anime
     
     var displayName: String {
         switch self {
         case .anime: return String(localized: "Anime")
         case .manga: return String(localized: "Manga")
-        case .unknown: return String(localized: "Unknown")
         }
     }
     
@@ -15,7 +14,6 @@ enum SeriesType: String {
         switch self {
         case .anime: return "tv"
         case .manga: return "character.book.closed.ja"
-        default: return "questionmark.circle"
         }
     }
 }

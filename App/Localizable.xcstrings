@@ -359,17 +359,6 @@
         }
       }
     },
-    "🇵🇹 Portuguese" : {
-      "comment" : "Supported language",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "🇵🇹 Portugiesisch"
-          }
-        }
-      }
-    },
     "1 (Appalling)" : {
       "comment" : "Rating",
       "localizations" : {
@@ -880,34 +869,12 @@
         }
       }
     },
-    "Anime appearances" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anime-Auftritte"
-          }
-        }
-      }
-    },
     "Anime genres" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anime-Genres"
-          }
-        }
-      }
-    },
-    "Anime progress" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anime-Fortschritt"
           }
         }
       }
@@ -1136,33 +1103,6 @@
         }
       }
     },
-    "By" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Von"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Por"
-          }
-        }
-      }
-    },
-    "By Alex Madeira" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Von Alex Madeira"
-          }
-        }
-      }
-    },
     "Cancel" : {
       "localizations" : {
         "de" : {
@@ -1252,17 +1192,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personagens"
-          }
-        }
-      }
-    },
-    "Characters and voice actors" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Charaktere und Synchronsprecher"
           }
         }
       }
@@ -1438,26 +1367,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escuro"
-          }
-        }
-      }
-    },
-    "Decrease chapter" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorheriges Kapitel"
-          }
-        }
-      }
-    },
-    "Decrease volume" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorheriger Band"
           }
         }
       }
@@ -2292,16 +2201,6 @@
         }
       }
     },
-    "If you want to contribute, please send a mail to:" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wenn du dich beteiligen möchtest, kontaktiere mich unter:"
-          }
-        }
-      }
-    },
     "In chapters" : {
       "comment" : "Manga mode",
       "localizations" : {
@@ -2342,26 +2241,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "In Bänden"
-          }
-        }
-      }
-    },
-    "Increase chapter" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nächstes Kapitel"
-          }
-        }
-      }
-    },
-    "Increase volume" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nächster Band"
           }
         }
       }
@@ -2524,27 +2403,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Koreanisch"
-          }
-        }
-      }
-    },
-    "Language" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprache"
-          }
-        }
-      }
-    },
-    "Languages" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprachen"
           }
         }
       }
@@ -2797,23 +2655,6 @@
         }
       }
     },
-    "Made by" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Produziert von"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feito por"
-          }
-        }
-      }
-    },
     "Magical Sex Shift" : {
       "comment" : "Genre",
       "localizations" : {
@@ -2892,17 +2733,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mangá"
-          }
-        }
-      }
-    },
-    "Manga appearances" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Manga-Auftritte"
           }
         }
       }
@@ -3177,17 +3007,6 @@
         }
       }
     },
-    "Name" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Name"
-          }
-        }
-      }
-    },
     "Name order" : {
       "localizations" : {
         "de" : {
@@ -3214,23 +3033,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Einträge gefunden"
-          }
-        }
-      }
-    },
-    "No summary available" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine Zusammenfassung verfügbar"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nenhum resumo disponível."
           }
         }
       }
@@ -3917,23 +3719,6 @@
         }
       }
     },
-    "Related" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ähnliches"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Relacionado"
-          }
-        }
-      }
-    },
     "Remove comments" : {
       "localizations" : {
         "de" : {
@@ -4009,17 +3794,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Harém Reverso"
-          }
-        }
-      }
-    },
-    "Role" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rolle"
           }
         }
       }
@@ -4156,17 +3930,6 @@
         }
       }
     },
-    "Search characters" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Charaktere suchen"
-          }
-        }
-      }
-    },
     "Season" : {
       "localizations" : {
         "de" : {
@@ -4248,9 +4011,6 @@
           }
         }
       }
-    },
-    "shiori.app@icloud.com" : {
-      "shouldTranslate" : false
     },
     "Shoujo" : {
       "comment" : "Genre",
@@ -4716,15 +4476,8 @@
         }
       }
     },
-    "Third-Party Services" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Drittanbieter-Services"
-          }
-        }
-      }
+    "Third-Party services" : {
+
     },
     "Time Travel" : {
       "comment" : "Genre",
@@ -5030,16 +4783,6 @@
         }
       }
     },
-    "Translations are added through community contributions." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Übersetzungen entstehen durch Hilfe der Community."
-          }
-        }
-      }
-    },
     "Try a different category." : {
       "localizations" : {
         "de" : {
@@ -5196,34 +4939,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tipo de relacionamento desconhecido"
-          }
-        }
-      }
-    },
-    "Unknown release year" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unbekanntes Veröffentlichungsjahr"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ano de lançamento desconhecido"
-          }
-        }
-      }
-    },
-    "Unknown start date" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unbekanntes Anfangsdatum"
           }
         }
       }

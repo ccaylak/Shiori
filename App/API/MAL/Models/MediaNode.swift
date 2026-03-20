@@ -152,8 +152,6 @@ extension MediaNode {
             } else {
                 return .unknown
             }
-        case .unknown:
-            return .unknown
         }
     }
     
@@ -182,7 +180,8 @@ extension MediaNode {
         if MediaType.Anime(rawValue: seriesType) != nil {
             return .anime
         }
-        return .unknown
+        
+        preconditionFailure("Unexpected mediaType: \(seriesType)")
     }
     
     var resultCount: Int {

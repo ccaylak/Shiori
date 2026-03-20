@@ -1,57 +1,56 @@
 import Foundation
 
 struct MyListStatus: Decodable, Hashable {
-    private(set) var status: String?
-    private(set) var score: Int
-    
-    private(set) var numVolumesRead: Int?
-    private(set) var numChaptersRead: Int?
-    
-    private(set) var numWatchedEpisodes: Int?
-    
-    private(set) var startDate: String?
-    private(set) var finishDate: String?
-    private(set) var comments: String?
-    private(set) var updatedAt: String?
-    
-    init() {
-        self.status = ""
-        self.score = 0
+    var status: String? = ""
+    var score: Int = 0
         
-        self.numVolumesRead = 0
-        self.numChaptersRead = 0
+    var numVolumesRead: Int? = 0
+    var numChaptersRead: Int? = 0
+    var numEpisodesWatched: Int? = 0
         
-        self.numWatchedEpisodes = 0
-        
-        self.startDate = ""
-        self.finishDate = ""
-        self.comments = ""
-        self.updatedAt = ""
-    }
+    var startDate: String? = ""
+    var finishDate: String? = ""
+    var comments: String? = ""
+    var updatedAt: String? = ""
 }
 
 extension MyListStatus {
+    var progressStatus: String {
+        get { status ?? "Unknown" }
+        set { status = newValue }
+    }
+    
     var readVolumes: Int {
-        numVolumesRead ?? 0
+        get { numVolumesRead ?? 0 }
+        set { numVolumesRead = newValue }
     }
     
     var readChapters: Int {
-        numChaptersRead ?? 0
+        get { numChaptersRead ?? 0 }
+        set { numChaptersRead = newValue }
     }
     
     var watchedEpisodes: Int {
-        numWatchedEpisodes ?? 0
+        get { numEpisodesWatched ?? 0 }
+        set { numEpisodesWatched = newValue }
     }
     
     var userComments: String {
-        comments ?? ""
+        get { comments ?? "" }
+        set { comments = newValue }
     }
     
     var startDateValue: String {
-        startDate ?? ""
+        get {startDate ?? ""}
+        set {startDate = newValue}
     }
     
     var finishDateValue: String {
-        finishDate ?? ""
+        get {finishDate ?? ""}
+        set {finishDate = newValue}
+    }
+    
+    var lastUpdate: String {
+        updatedAt ?? ""
     }
 }

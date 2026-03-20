@@ -6,28 +6,28 @@ struct GenresView: View {
     let mode: String
     
     var body: some View {
-        if !genres.isEmpty {
-            VStack(alignment: .leading, spacing: 5) {
-                NavigationLink(destination: GenresListView(genres: genres, mode: mode)) {
-                    LabelWithChevron(text: "Genres")
-                }
-                .buttonStyle(.plain)
-                ScrollView(.horizontal) {
-                    LazyHStack(spacing: 10) {
-                        ForEach(genres, id: \.self) { genre in
-                            Text((Genre(rawValue: genre.name) ?? .unknown).displayName)
-                                .font(.body)
-                                .padding(9)
-                                .background(Color(.secondarySystemGroupedBackground))
-                                .cornerRadius(12)
-                                .foregroundStyle(.primary)
-                        }
+    
+        VStack(alignment: .leading, spacing: 5) {
+            NavigationLink(destination: GenresListView(genres: genres, mode: mode)) {
+                LabelWithChevron(text: "Genres")
+            }
+            .buttonStyle(.plain)
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 10) {
+                    ForEach(genres, id: \.self) { genre in
+                        Text((Genre(rawValue: genre.name) ?? .unknown).displayName)
+                            .font(.body)
+                            .padding(9)
+                            .background(Color(.secondarySystemGroupedBackground))
+                            .cornerRadius(12)
+                            .foregroundStyle(.primary)
                     }
                 }
-                .scrollClipDisabled()
             }
-            .padding(.horizontal)
+            .scrollClipDisabled()
         }
+        .padding(.horizontal)
+        .isVisible(!genres.isEmpty)    
     }
 }
 
