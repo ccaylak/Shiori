@@ -36,12 +36,11 @@ struct SeasonView: View {
                                                     .frame(maxWidth: CoverSize.large.size.width, alignment: .leading)
                                             }
                                             .overlay(alignment: .topTrailing) {
-                                                if anime.node.getEntryStatus != .unknown {
-                                                    anime.node.getEntryStatus.libraryIcon
-                                                        .padding(6)
-                                                        .background(Material.ultraThin)
-                                                        .cornerRadius(12)
-                                                }
+                                                anime.node.getEntryStatus.libraryIcon
+                                                    .padding(6)
+                                                    .background(Material.ultraThin)
+                                                    .cornerRadius(12)
+                                                    .isVisible(anime.node.getEntryStatus != .notSet)
                                             }
                                         }.buttonStyle(.plain)
                                     }

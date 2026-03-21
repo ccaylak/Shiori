@@ -23,12 +23,13 @@ struct RecommendationsView: View {
                                         .showFullTitleContextMenu(recommendation.node.title)
                                         .strokedBorder()
                                         .overlay(alignment: .topTrailing) {
-                                            if recommendation.node.getEntryStatus != .unknown {
-                                                recommendation.node.getEntryStatus.libraryIcon
-                                                    .padding(7)
-                                                    .glassEffectOrMaterial()
-                                                    .cornerRadius(12)
-                                            }
+                                        
+                                            recommendation.node.getEntryStatus.libraryIcon
+                                                .padding(7)
+                                                .glassEffectOrMaterial()
+                                                .cornerRadius(12)
+                                                .isVisible(recommendation.node.getEntryStatus != .notSet)
+                                        
                                         }
                                     
                                     Text(recommendation.node.title)

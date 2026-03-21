@@ -370,7 +370,8 @@ struct LibraryView: View {
                             
                             Picker("Status", selection: $libraryEntry.progressStatus) {
                                 ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
-                                    Text(animeSelection.displayName).tag(animeSelection)
+                                    Text(animeSelection.displayName)
+                                        .tag(animeSelection)
                                 }
                             }
                             .isVisible(libraryManager.mediaType == .anime)

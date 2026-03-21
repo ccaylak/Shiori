@@ -54,12 +54,13 @@ struct RelatedMediaView: View {
                                         .showFullTitleContextMenu(relatedMedia.node.preferredTitle)
                                         .padding(.bottom, 2)
                                         .overlay(alignment: .topTrailing) {
-                                            if relatedMedia.node.getEntryStatus != .unknown {
-                                                relatedMedia.node.getEntryStatus.libraryIcon
-                                                    .padding(7)
-                                                    .glassEffectOrMaterial()
-                                                    .cornerRadius(12)
-                                            }
+
+                                            relatedMedia.node.getEntryStatus.libraryIcon
+                                                .padding(7)
+                                                .glassEffectOrMaterial()
+                                                .cornerRadius(12)
+                                                .isVisible(relatedMedia.node.getEntryStatus != .notSet)
+                                            
                                         }
                                     
                                     Text(relatedMedia.node.preferredTitle)

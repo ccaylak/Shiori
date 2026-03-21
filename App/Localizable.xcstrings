@@ -1493,22 +1493,6 @@
     "Discord" : {
       "shouldTranslate" : false
     },
-    "Do you really want to delete your progress for %@?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Möchtest du deinen Fortschritt für %@ wirklich löschen?"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Você realmente deseja excluir seu progresso para %@?"
-          }
-        }
-      }
-    },
     "Do you really want to logout of your MAL-Account?" : {
       "localizations" : {
         "de" : {
@@ -1524,6 +1508,9 @@
           }
         }
       }
+    },
+    "Do you really want to remove %@ from your library?" : {
+
     },
     "Doujinshi" : {
       "comment" : "Manga type",

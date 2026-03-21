@@ -4,7 +4,7 @@ import SwiftUI
 enum ProgressStatus: Equatable {
     case anime(Anime)
     case manga(Manga)
-    case unknown
+    case notSet
     
     enum Anime: String, CaseIterable {
         case all, completed, watching, dropped
@@ -106,7 +106,7 @@ enum ProgressStatus: Equatable {
         switch self {
         case .anime(let status): return status.displayName
         case .manga(let status): return status.displayName
-        case .unknown: return String("Unknown progress status")
+        case .notSet: return ""
         }
     }
     
@@ -117,7 +117,7 @@ enum ProgressStatus: Equatable {
             animeStatus.libraryIcon
         case .manga(let mangaStatus):
             mangaStatus.libraryIcon
-        case .unknown:
+        case .notSet:
             EmptyView()
         }
     }

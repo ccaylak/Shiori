@@ -142,7 +142,7 @@ extension MediaNode {
                let animeStatus = ProgressStatus.Anime(rawValue: raw) {
                 return .anime(animeStatus)
             } else {
-                return .unknown
+                return .notSet
             }
             
         case .manga:
@@ -150,7 +150,7 @@ extension MediaNode {
                let mangaStatus = ProgressStatus.Manga(rawValue: raw) {
                 return .manga(mangaStatus)
             } else {
-                return .unknown
+                return .notSet
             }
         }
     }
