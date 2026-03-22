@@ -20,7 +20,7 @@ struct RecommendationsView: View {
                                     AsyncImageView(imageUrl: recommendation.node.mainPicture.largeUrl)
                                         .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                         .cornerRadius(12)
-                                        .showFullTitleContextMenu(recommendation.node.title)
+                                        .showFullTitleContextMenu(recommendation.node.preferredTitle)
                                         .strokedBorder()
                                         .overlay(alignment: .topTrailing) {
                                         
@@ -32,7 +32,7 @@ struct RecommendationsView: View {
                                         
                                         }
                                     
-                                    Text(recommendation.node.title)
+                                    Text(recommendation.node.preferredTitle)
                                         .font(.caption2)
                                         .frame(maxWidth: CoverSize.large.size.width, alignment: .leading)
                                         .lineLimit(1)
@@ -62,14 +62,14 @@ private struct RecommendationsListView: View {
                     NavigationLink(destination: DetailsView(media: recommendation.node)) {
                         VStack(spacing: 2) {
                             ZStack(alignment: .topTrailing) {
-                                AsyncImageView(imageUrl: "")
+                                AsyncImageView(imageUrl: recommendation.node.mainPicture.largeUrl)
                                     .frame(width: 150, height: 238)
                                     .cornerRadius(12)
                             }
                             .overlay(alignment: .topTrailing) {
-                                if (recommendation.node.mean ?? 0.0 > 0 && recommendation.node.mean ?? 0.0 <= 10){
+                                if let mean = recommendation.node.mean, mean > 0 {
                                     HStack {
-                                        Text((recommendation.node.mean ?? 0.0).formatted())
+                                        Text(mean.formatted())
                                             .font(.title3)
                                             .bold()
                                             .foregroundStyle(.white)

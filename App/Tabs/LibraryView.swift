@@ -60,7 +60,8 @@ struct LibraryView: View {
                                     total: media.node.isMangaOrAnime == .anime ? media.node.episodes : media.node.chapters,
                                     secondaryCurrent: media.node.getMyListStatus.readVolumes,
                                     secondaryTotal: media.node.volumes
-                                )
+                                ),
+                                episodeDurationInMinutes: media.node.averageEpisodeDurationInMinutes
                             ).overlay(
                                 Group {
                                     if loadingMediaID == media.node.id {
@@ -131,8 +132,8 @@ struct LibraryView: View {
                                 media.node.isMangaOrAnime == .manga &&
                                 (
                                     totalChapters == 0 ||
-                                    (currentChapter != totalChapters && settingsManager.mangaMode == .chapter) ||
-                                    settingsManager.mangaMode == .all
+                                    (currentChapter != totalChapters && settingsManager.mangaFormat == .chapter) ||
+                                    settingsManager.mangaFormat == .both
                                 )
                             )
                                 
@@ -165,8 +166,8 @@ struct LibraryView: View {
                                 media.node.isMangaOrAnime == .manga &&
                                 (
                                     totalVolumes == 0 ||
-                                    (currentVolume != totalVolumes && settingsManager.mangaMode == .volume) ||
-                                    settingsManager.mangaMode == .all
+                                    (currentVolume != totalVolumes && settingsManager.mangaFormat == .volume) ||
+                                    settingsManager.mangaFormat == .both
                                 )
                             )
                         }
@@ -363,7 +364,7 @@ struct LibraryView: View {
                             Picker("Progress", selection: $libraryEntry.progressStatus) {
                                 ForEach([ProgressStatus.Manga.completed, .reading, .onHold, .dropped, .planToRead], id: \.self) { mangaSelection in
                                     Text(mangaSelection.displayName)
-                                        .tag(mangaSelection)
+                                        .tag(mangaSelection.rawValue)
                                 }
                             }
                             .isVisible(libraryManager.mediaType == .manga)
@@ -371,7 +372,7 @@ struct LibraryView: View {
                             Picker("Status", selection: $libraryEntry.progressStatus) {
                                 ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
                                     Text(animeSelection.displayName)
-                                        .tag(animeSelection)
+                                        .tag(animeSelection.rawValue)
                                 }
                             }
                             .isVisible(libraryManager.mediaType == .anime)
@@ -390,8 +391,8 @@ struct LibraryView: View {
                                 VStack(alignment: .leading, spacing: 6) {
                                     Text("Mode")
                                     
-                                    Picker("Mode", selection: $settingsManager.mangaMode) {
-                                        ForEach(MangaMode.allCases, id: \.self) { mode in
+                                    Picker("Mode", selection: $settingsManager.mangaFormat) {
+                                        ForEach(MangaFormat.allCases, id: \.self) { mode in
                                             Text(mode.displayName).tag(mode)
                                         }
                                     }
@@ -412,7 +413,7 @@ struct LibraryView: View {
                                             Text("\(chapter)").tag(chapter)
                                         }
                                     }
-                                    .isVisible(media.node.chapters != 0 && (settingsManager.mangaMode == .chapter || settingsManager.mangaMode == .all))
+                                    .isVisible(media.node.chapters != 0 && (settingsManager.mangaFormat == .chapter || settingsManager.mangaFormat == .both))
                                 
                                     LabeledContent("Chapter") {
                                         Text("\(libraryEntry.readChapters)")
@@ -626,18 +627,7 @@ struct LibraryView: View {
             if (selectedMedia != nil) {
                     
                 guard let media = selectedMedia else { return }
-                
-                libraryEntry = MyListStatus(
-                    status: media.node.getMyListStatus.progressStatus,
-                    score: media.node.getMyListStatus.score,
-                    numVolumesRead: media.node.getMyListStatus.readVolumes,
-                    numChaptersRead: media.node.getMyListStatus.readChapters,
-                    numEpisodesWatched: media.node.getMyListStatus.watchedEpisodes,
-                    startDate: media.node.getMyListStatus.startDateValue,
-                    finishDate: media.node.getMyListStatus.finishDateValue,
-                    comments: media.node.getMyListStatus.userComments,
-                    updatedAt: media.node.getMyListStatus.lastUpdate
-                )
+                libraryEntry = media.node.getMyListStatus
                  
                 if libraryEntry.userComments != "" {
                     showComments = true
@@ -677,12 +667,16 @@ struct LibraryView: View {
         return { id in
             Task {
                 if libraryManager.mediaType == .manga {
-                    //try await mangaController.saveProgress()
+                    
+                    try await mangaController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, chapters: libraryEntry.readChapters, volumes: libraryEntry.readVolumes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
+                    
                     alertManager.showUpdatedAlert = true
                     library = try await mangaController.fetchLibrary()
                 } else if libraryManager.mediaType == .anime {
-                    //try await animeController.saveProgress()
+                    
+                    try await animeController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, episodes: libraryEntry.watchedEpisodes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
                     alertManager.showUpdatedAlert = true
+                    
                     library = try await animeController.fetchLibrary()
                 }
                 loadingMediaID = nil

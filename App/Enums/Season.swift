@@ -28,7 +28,7 @@ enum Season: String, CaseIterable {
         case 3, 4, 5: return .spring
         case 6, 7, 8: return .summer
         case 9, 10, 11: return .fall
-        default: return .winter // Fallback
+        default: return .winter
         }
     }
     

@@ -3,7 +3,7 @@ import SwiftUI
 struct MediaGenresView: View {
     
     let genreId: Int
-    let mode: String
+    let mode: SeriesType
     let navigationTitle: String
     
     @State var jikanMedia = JikanMedia(data: [], pagination: nil)
@@ -23,7 +23,7 @@ struct MediaGenresView: View {
                         id: media.malId,
                         title: media.titles[0].title,
                         mainPicture: Picture(),
-                        mediaType: (mode == "manga") ? "manga" : "tv"
+                        mediaType: mode.rawValue
                     ))) {
                         VStack {
                             AsyncImageView(imageUrl: media.images.jpgImage.baseImage)
@@ -39,6 +39,7 @@ struct MediaGenresView: View {
                         }
                         .padding(.bottom)
                     }
+                    .buttonStyle(.plain)
                 }
             }
             if !jikanMedia.data.isEmpty,
@@ -51,7 +52,7 @@ struct MediaGenresView: View {
                         isLoading = true
                         page+=1
                         do {
-                            if mode == "anime" {
+                            if mode == .anime {
                                 let newJikanMedia = try await jikanGenresController.fetchAnimeByGenre(
                                     id: genreId,
                                     page: page
@@ -96,7 +97,7 @@ struct MediaGenresView: View {
             Task {
                 alertManager.isLoading = true
                 defer { alertManager.isLoading = false }
-                if mode == "manga" {
+                if mode == .manga {
                     jikanMedia = try await jikanGenresController.fetchMangaByGenre(id: genreId, page: page)
                 } else {
                     jikanMedia = try await jikanGenresController.fetchAnimeByGenre(id: genreId, page: page)

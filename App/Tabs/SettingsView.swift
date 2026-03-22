@@ -25,7 +25,7 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.navigationLink)
                     
-                    Picker("Accent color", systemImage: "paintpalette", selection: $settingsManager.accentColor) {
+                    Picker("Accent Color", systemImage: "paintpalette", selection: $settingsManager.accentColor) {
                         ForEach(AccentColor.allCases, id: \.self) { accentColor in
                             HStack {
                                 Image(systemName: "circle.fill")
@@ -39,7 +39,7 @@ struct SettingsView: View {
                     .pickerStyle(.navigationLink)
                     
                     HStack {
-                        Label("Show mature content", systemImage: "eye.trianglebadge.exclamationmark")
+                        Label("Show NSFW Content", systemImage: "eye.trianglebadge.exclamationmark")
                         Spacer()
                         Button {
                             settingsManager.showNsfwContent.toggle()
@@ -59,8 +59,8 @@ struct SettingsView: View {
                         .buttonStyle(.borderless)
                     }
                     
-                    Picker("Name order", systemImage: "textformat.characters.arrow.left.and.right", selection: $settingsManager.namePresentation) {
-                        ForEach(NamePresentation.allCases, id: \.self) { mode in
+                    Picker("Name Format", systemImage: "textformat.characters.arrow.left.and.right", selection: $settingsManager.nameFormat) {
+                        ForEach(NameFormat.allCases, id: \.self) { mode in
                             Text(mode.displayName)
                                 .tag(mode)
                         }
@@ -68,17 +68,17 @@ struct SettingsView: View {
                 }
                 
                 Section("Library") {
-                    Picker(selection: $settingsManager.mangaMode, label: Label("Manga progress", systemImage: SeriesType.manga.icon)) {
-                        ForEach(MangaMode.allCases, id: \.self) { mode in
+                    Picker(selection: $settingsManager.mangaFormat, label: Label("Manga Progress Format", systemImage: SeriesType.manga.icon)) {
+                        ForEach(MangaFormat.allCases, id: \.self) { mode in
                             Text(mode.displayName)
                         }
                     }
                     
-//                    Picker(selection: $settingsManager.animeMode, label: Label("Anime progress", systemImage: MediaType.anime.icon)) {
-//                        ForEach(AnimeMode.allCases, id: \.self) { mode in
-//                            Text(mode.displayName)
-//                        }
-//                    }
+                    Picker(selection: $settingsManager.animeFormat, label: Label("Anime Progress Format", systemImage: SeriesType.anime.icon)) {
+                        ForEach(AnimeFormat.allCases, id: \.self) { mode in
+                            Text(mode.displayName)
+                        }
+                    }
                 }
                 
                 Section ("Contact"){
@@ -152,21 +152,20 @@ private struct AboutView: View {
                 .padding(.bottom, -30)
             
             Section("Info") {
-                LabeledContent("App version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
-                LabeledContent("Build number", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
+                LabeledContent("App Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
+                LabeledContent("Build Number", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
             }
             
-            Section ("Third-Party services") {
+            Section ("Third-Party Services") {
                 Link("MyAnimeList", destination: URL(string: "https://MyAnimeList.net")!)
                 Link("Jikan", destination: URL(string: "https://jikan.moe")!)
             }
             
-            Section ("Third-Party libraries") {
+            Section ("Third-Party Libraries") {
                 Link("AlertToast", destination: URL(string: "https://github.com/elai950/AlertToast")!)
                 Link("KeychainSwift", destination: URL(string: "https://github.com/evgenyneu/keychain-swift")!)
                 Link("Nuke", destination: URL(string: "https://github.com/kean/Nuke")!)
                 Link("TelemetryDeck", destination: URL(string: "https://telemetrydeck.com")!)
-                Link("Pow", destination: URL(string: "https://movingparts.io/pow")!)
             }
         }
         .noScrollEdgeEffect()

@@ -19,21 +19,18 @@ struct ResultView: View {
         List {
             ForEach(mediaResponse.data, id: \.node.id) { media in
                 ZStack(alignment: .topTrailing) {
-                            NavigationLink(destination: DetailsView(media: media.node)) {
-                                MediaView(
-                                    title: media.node.preferredTitle,
-                                    image: media.node.mainPicture.largeUrl,
-                                    releaseYear: media.node.isMangaOrAnime == .manga
-                                        ? media.node.yearLabel
-                                        : media.node.getStartSeason.seasonLabel,
-                                    type: media.node.specificMediaType,
-                                    mediaCount: media.node.resultCount,
-                                    status: media.node.specificStatus
-                                )
-                            }
-
+                    NavigationLink(destination: DetailsView(media: media.node)) {
+                        MediaView(
+                            title: media.node.preferredTitle,
+                            image: media.node.mainPicture.largeUrl,
+                            releaseYear: media.node.isMangaOrAnime == .manga ? media.node.yearLabel : media.node.getStartSeason.seasonLabel,
+                            type: media.node.specificMediaType,
+                            mediaCount: media.node.resultCount,
+                            status: media.node.specificStatus
+                        )
+                    }
                     AnyView(media.node.getEntryStatus.libraryIcon)
-                        }
+                }
             }
             if !mediaResponse.data.isEmpty, let nextPage = mediaResponse.paging?.next, !nextPage.isEmpty {
                 Button{

@@ -37,8 +37,8 @@ struct Person: Decodable {
 
 @MainActor
 extension Person {
-    var formattedName: String {
-        let nameFormat = SettingsManager.shared.namePresentation
+    var preferredNameFormat: String {
+        let nameFormat = SettingsManager.shared.nameFormat
         
         switch nameFormat {
         case .lastFirst:
@@ -56,8 +56,8 @@ extension Person {
 
 @MainActor
 extension MetaData {
-    var formattedName: String {
-        let nameFormat = SettingsManager.shared.namePresentation
+    var preferredNameFormat: String {
+        let nameFormat = SettingsManager.shared.nameFormat
         
         switch nameFormat {
         case .lastFirst:

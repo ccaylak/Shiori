@@ -1,14 +1,14 @@
 import Foundation
 
-enum NamePresentation: String, CaseIterable {
+enum NameFormat: String, CaseIterable {
     case firstLast, lastFirst
 
     var displayName: String {
         switch self {
         case .firstLast:
-            return String(localized: "First Name Last Name")
+            return String(localized: "John Doe")
         case .lastFirst:
-            return String(localized: "Last Name, First Name")
+            return String(localized: "Doe, John")
         }
     }
 }

@@ -8,9 +8,9 @@ import SwiftUI
     @AppStorage("nsfw") var showNsfwContent = false
     @AppStorage("titleLanguage") var titleLanguage = TitleLanguage.english
     @AppStorage("airingSoon") var showAiringSoonBanner = true
-    @AppStorage("mangaMode") var mangaMode = MangaMode.all
-    @AppStorage("animeMode") var animeMode = AnimeMode.episodes
-    @AppStorage("namePresentation") var namePresentation = NamePresentation.firstLast
+    @AppStorage("mangaFormat") var mangaFormat = MangaFormat.both
+    @AppStorage("animeFormat") var animeFormat = AnimeFormat.episode
+    @AppStorage("nameFormat") var nameFormat = NameFormat.firstLast
     
     private init() {}
 }

@@ -21,3 +21,29 @@ struct JikanMediaData: Decodable, Identifiable {
     
     var id: Int {malId}
 }
+
+extension JikanMediaData {
+    var preferredTitle: String {
+        let value = UserDefaults.standard.string(forKey: "titleLanguage") ?? TitleLanguage.romanji.rawValue
+
+        switch value {
+        case "romanji":
+            return titles.first { $0.type == "Default" }?.title
+                ?? titles.first?.title
+                ?? ""
+
+        case "english":
+            return titles.first { $0.type == "English" }?.title
+                ?? titles.first?.title
+                ?? ""
+
+        case "japanese":
+            return titles.first { $0.type == "Japanese" }?.title
+                ?? titles.first?.title
+                ?? ""
+
+        default:
+            return titles.first?.title ?? ""
+        }
+    }
+}

@@ -211,7 +211,7 @@ struct DetailsView: View {
                                 Picker("Status",selection: $userProgress.progressStatus) {
                                     ForEach([ProgressStatus.Manga.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
                                         Text(mangaSelection.displayName)
-                                            //.tag(mangaSelection)
+                                            .tag(mangaSelection.rawValue)
                                     }
                                 }
                                 .isVisible(media.isMangaOrAnime == .manga)
@@ -219,7 +219,7 @@ struct DetailsView: View {
                                 Picker("Status",selection: $userProgress.progressStatus) {
                                     ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch],id: \.self) { animeSelection in
                                         Text(animeSelection.displayName)
-                                            //.tag(animeSelection)
+                                            .tag(animeSelection.rawValue)
                                     }
                                 }
                                 .isVisible(media.isMangaOrAnime == .anime)
@@ -239,8 +239,8 @@ struct DetailsView: View {
                                     VStack(alignment: .leading, spacing: 6) {
                                         Text("Mode")
                                         
-                                        Picker("Mode",selection: $settingsManager.mangaMode) {
-                                            ForEach(MangaMode.allCases,id: \.self) { mode in
+                                        Picker("Mode",selection: $settingsManager.mangaFormat) {
+                                            ForEach(MangaFormat.allCases,id: \.self) { mode in
                                                 Text(mode.displayName)
                                                     .tag(mode)
                                             }
@@ -260,7 +260,7 @@ struct DetailsView: View {
                                                 .tag(chapter)
                                         }
                                     }
-                                    .isVisible(media.chapters != 0 && settingsManager.mangaMode == MangaMode.all || settingsManager.mangaMode == MangaMode.chapter)
+                                    .isVisible(media.chapters != 0 && settingsManager.mangaFormat == .both || settingsManager.mangaFormat == .chapter)
                                     Stepper(value: $userProgress.readChapters, in: 0...Int.max) {
                                         VStack(alignment: .leading, spacing: 4) {
                                             Text("Chapter")
@@ -271,7 +271,7 @@ struct DetailsView: View {
                                                 .fontWeight(.bold)
                                         }
                                     }
-                                    .isVisible(media.chapters != 0 && settingsManager.mangaMode == MangaMode.all || settingsManager.mangaMode == MangaMode.chapter)
+                                    .isVisible(media.chapters != 0 && settingsManager.mangaFormat == .both || settingsManager.mangaFormat == .chapter)
                                     
                                     Picker(selection: $userProgress.readVolumes,label:
                                         VStack(alignment: .leading,spacing: 4) {
@@ -286,7 +286,7 @@ struct DetailsView: View {
                                                 .tag(volume)
                                         }
                                     }
-                                    .isVisible(media.volumes != 0 && settingsManager.mangaMode == MangaMode.all || settingsManager.mangaMode == MangaMode.volume)
+                                    .isVisible(media.volumes != 0 && settingsManager.mangaFormat == .both || settingsManager.mangaFormat == .volume)
                                     Stepper(value: $userProgress.readVolumes, in: 0...Int.max) {
                                         VStack(alignment: .leading, spacing: 4) {
                                             Text("Volume")
@@ -297,7 +297,7 @@ struct DetailsView: View {
                                                 .fontWeight(.bold)
                                         }
                                     }
-                                    .isVisible(media.volumes != 0 && settingsManager.mangaMode == MangaMode.all || settingsManager.mangaMode == MangaMode.volume)
+                                    .isVisible(media.volumes != 0 && settingsManager.mangaFormat == .both || settingsManager.mangaFormat == .volume)
                                 }
                                 .isVisible(media.isMangaOrAnime == .manga)
                                 
@@ -585,7 +585,7 @@ private struct Sections: View {
         )
         GenresView(
             genres: media.genresList,
-            mode: media.specificMediaType.displayName.lowercased()
+            mode: media.isMangaOrAnime
         )
         StatisticsView(
             score: media.mean ?? 0.0,

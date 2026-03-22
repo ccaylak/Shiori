@@ -31,4 +31,8 @@ extension JikanStudioData {
     var aboutText: String {
         about ?? "No studio description available"
     }
+    
+    var englishTitle: String {
+        titles.first?.title ?? "Unknown"
+    }
 }

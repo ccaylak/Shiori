@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct GenreListView: View {
-    let mode: String
+    let mode: SeriesType
     
     private let jikanGenresController = JikanGenresController()
     
@@ -22,13 +22,13 @@ struct GenreListView: View {
             }
         }
         .contentMargins(.top, 0)
-        .navigationTitle(mode == "manga" ? "Manga genres" : "Anime genres")
+        .navigationTitle(mode == .manga ? "Manga Genres" : "Anime Genres")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             Task {
                 alertManager.isLoading = true
                 defer { alertManager.isLoading = false }
-                if mode == "manga" {
+                if mode == .manga {
                     jikanGenresResponse = try await jikanGenresController.fetchMangaGenres()
                 } else {
                     jikanGenresResponse = try await jikanGenresController.fetchAnimeGenres()

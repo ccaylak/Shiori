@@ -45,7 +45,6 @@ private struct CoverView: View {
 }
 
 private struct SummaryView: View {
-    
     let summary: String
     let title: String
     
@@ -88,19 +87,18 @@ private struct ScoreBadgeView: View {
     let score: Double
     
     var body: some View {
-        if (score > 0 && score <= 10){
-            HStack {
-                Text("\(score.formatted())")
-                    .font(.title3)
-                    .bold()
-                
-                Image(systemName: "star.fill")
-            }
-            .foregroundStyle(Color.primary)
-            .padding(4)
-            .glassEffectOrMaterial()
-            .cornerRadius(12)
+        HStack {
+            Text("\(score.formatted())")
+                .font(.title3)
+                .bold()
+            
+            Image(systemName: "star.fill")
         }
+        .foregroundStyle(Color.primary)
+        .padding(4)
+        .glassEffectOrMaterial()
+        .cornerRadius(12)
+        .isVisible(score > 0)
     }
 }
 

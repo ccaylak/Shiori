@@ -213,18 +213,18 @@ struct LoginView: View {
                         .isVisible(!friends.isEmpty)
                         
                         UserStatistics(
-                            title: String(localized: "Anime statistics"),
+                            title: String(localized: "Anime Statistics"),
                             icon: "tv",
                             statisticsValues: animeStatisticsValues
                         )
                         
                         UserStatistics(
-                            title: String(localized: "Manga statistics"),
+                            title: String(localized: "Manga Statistics"),
                             icon: "character.book.closed.ja",
                             statisticsValues: mangaStatisticsValues
                         )
                         
-                        Section(header: Label("Favorite manga", systemImage: "heart")) {
+                        Section(header: Label("Favorite Manga", systemImage: "heart")) {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 10) {
                                     ForEach(
@@ -261,7 +261,7 @@ struct LoginView: View {
                         }
                         .isVisible(!favoriteMangas.isEmpty)
                         
-                        Section(header: Label("Favorite anime", systemImage: "heart")) {
+                        Section(header: Label("Favorite Anime", systemImage: "heart")) {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 10) {
                                     ForEach(favoriteAnimes, id: \.malId) { anime in
@@ -293,7 +293,7 @@ struct LoginView: View {
                         }
                         .isVisible(!favoriteAnimes.isEmpty)
                     
-                        Section(header: Label("Favorite characters", systemImage: "person.3.sequence")) {
+                        Section(header: Label("Favorite Characters", systemImage: "person.3.sequence")) {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 10) {
                                     ForEach(jikanFavorites.data.characters, id: \.malId) { character in
@@ -314,7 +314,7 @@ struct LoginView: View {
                                                     .cornerRadius(12)
                                                     .strokedBorder()
                                                 
-                                                Text(character.formattedName)
+                                                Text(character.preferredNameFormat)
                                                     .font(.caption)
                                                     .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
                                                     .lineLimit(1)

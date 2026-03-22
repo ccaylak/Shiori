@@ -3,7 +3,7 @@ import SwiftUI
 struct GenresView: View {
     
     let genres: [MediaGenre]
-    let mode: String
+    let mode: SeriesType
     
     var body: some View {
     
@@ -33,7 +33,7 @@ struct GenresView: View {
 
 private struct GenresListView: View {
     let genres: [MediaGenre]
-    let mode: String
+    let mode: SeriesType
     
     var body: some View {
         List(genres, id: \.self) { genre in

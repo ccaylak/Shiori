@@ -56,7 +56,7 @@ struct SearchView: View {
     private var exploreGenres: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             if (resultManager.seriesType == .manga) {
-                NavigationLink(destination: GenreListView(mode: "manga")) {
+                NavigationLink(destination: GenreListView(mode: .manga)) {
                     Image(systemName: "square.stack")
                         .foregroundColor(.accentColor)
                 }
@@ -64,11 +64,11 @@ struct SearchView: View {
             
             if (resultManager.seriesType == .anime) {
                 Menu {
-                    NavigationLink(destination: GenreListView(mode: "anime")) {
-                        Label("Explore anime tags", systemImage: "tag")
+                    NavigationLink(destination: GenreListView(mode: .anime)) {
+                        Label("Explore Anime Genres", systemImage: "tag")
                     }
                     NavigationLink(destination: StudiosView()) {
-                        Label("Explore anime studios", systemImage: "film")
+                        Label("Explore Anime Studios", systemImage: "film")
                     }
                 } label : {
                     Image(systemName: "square.stack")

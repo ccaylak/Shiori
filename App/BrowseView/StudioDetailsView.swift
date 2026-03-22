@@ -33,13 +33,12 @@ struct StudioDetailsView: View {
                                         .foregroundStyle(.secondary)
                                         .font(.caption)
                                     
-                                    Text("\(studio.count) productions")
+                                    Text("\(studio.count) anime")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
-                                
+                                    
                                 Spacer()
-                                
                                 HStack(alignment: .center) {
                                     Image(systemName: "heart.fill")
                                         .foregroundStyle(Color.red)
@@ -50,7 +49,6 @@ struct StudioDetailsView: View {
                                         .foregroundStyle(.secondary)
                                 }
                             }
-                            
                             Text(studio.aboutText)
                                 .font(.subheadline)
                                 .lineLimit(5)
@@ -60,8 +58,8 @@ struct StudioDetailsView: View {
                     .padding(.horizontal)
                     .padding(.bottom)
                 }
-                VStack(spacing: 5){
-                    LabelWithChevron(text: "Productions")
+                VStack(spacing: 5) {
+                    LabelWithChevron(text: "Anime")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
 
@@ -72,7 +70,7 @@ struct StudioDetailsView: View {
                         ForEach(jikanAnime.data) { anime in
                             NavigationLink(destination: DetailsView(media: MediaNode(
                                 id: anime.malId,
-                                title: anime.titles[0].title,
+                                title: anime.preferredTitle,
                                 mainPicture: Picture(),
                                 mediaType: "tv"
                             ))) {
@@ -81,7 +79,7 @@ struct StudioDetailsView: View {
                                         .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
                                         .cornerRadius(12)
                                         .strokedBorder()
-                                    Text(anime.titles[0].title)
+                                    Text(anime.preferredTitle)
                                         .font(.caption)
                                         .lineLimit(1)
                                         .truncationMode(.tail)
@@ -103,10 +101,7 @@ struct StudioDetailsView: View {
                                 isLoading = true
                                 page+=1
                                 do {
-                                    let newJikanAnimeResponse = try await jikanStudioController.fetchAnimesByAnimeStudio(
-                                        id: malId,
-                                        page: page
-                                    )
+                                    let newJikanAnimeResponse = try await jikanStudioController.fetchAnimesByAnimeStudio(id: malId,page: page)
                                     
                                     jikanAnime.append(newJikanAnimeResponse.data)
                                 }
@@ -133,7 +128,6 @@ struct StudioDetailsView: View {
                 }
             }
             .onAppear{
-                
                 guard jikanAnime.data.isEmpty else { return }
                 
                 Task {
@@ -146,13 +140,10 @@ struct StudioDetailsView: View {
                         studio = try? await jikanStudioController.fetchAnimeStudioById(id: malId).data
                     }
                     
-                    jikanAnime = try! await jikanStudioController.fetchAnimesByAnimeStudio(
-                        id: malId,
-                        page: page
-                    )
+                    jikanAnime = try! await jikanStudioController.fetchAnimesByAnimeStudio(id: malId, page: page)
                 }
             }
-            .navigationTitle(studio?.titles[0].title ?? "")
+            .navigationTitle(studio?.englishTitle ?? "") // hier
             .navigationBarTitleDisplayMode(.inline)
         }
         .noScrollEdgeEffect()

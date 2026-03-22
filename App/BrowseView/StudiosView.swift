@@ -2,50 +2,6 @@ import SwiftUI
 
 struct StudiosView: View {
     
-    enum SortOrder: String, CaseIterable {
-        case def = ""
-        case asc, desc
-        
-        var displayName: String {
-            switch self {
-            case .def: String(localized: "Default")
-            case .asc: String(localized: "Ascending")
-            case .desc: String(localized: "Descending")
-            }
-        }
-        
-        var icon: String {
-            switch self {
-            case .def: return "arrow.up.arrow.down"
-            case .asc: return "arrow.up"
-            case .desc: return "arrow.down"
-            }
-        }
-    }
-    
-    enum SortOption: String, CaseIterable {
-        case malId = "mal_id"
-        case count, favorites, established
-        
-        var displayName: String {
-            switch self {
-            case .malId: String(localized: "Id")
-            case .count: String(localized: "Productions")
-            case .favorites: String(localized: "Favorites")
-            case .established: String(localized: "Established")
-            }
-        }
-        
-        var icon: String {
-            switch self {
-            case .malId: return "barcode"
-            case .count: return "chart.bar"
-            case .favorites: return "heart"
-            case .established: return "calendar"
-            }
-        }
-    }
-    
     private let jikanStudioController = JikanStudioController()
     
     @StateObject private var resultManager: ResultManager = .shared
@@ -69,12 +25,12 @@ struct StudiosView: View {
                                 .strokedBorder()
                             
                             VStack(alignment: .leading, spacing: 3) {
-                                Text(studio.titles[0].title)
+                                Text(studio.englishTitle)
                                     .bold()
                                 
                                 Spacer()
                                 
-                                Label("\(studio.favorites) favorites ", systemImage: "heart")
+                                Label("\(studio.favorites) favorites", systemImage: "heart")
                                     .font(.caption)
                                 
                                 Label("\(studio.count) anime", systemImage: "film.stack")
@@ -128,12 +84,12 @@ struct StudiosView: View {
                 ToolbarItem {
                     Menu {
                         Picker("Choose a sort option", selection: $resultManager.animeStudioOption){
-                            ForEach(StudiosView.SortOption.allCases, id: \.self) { option in
+                            ForEach(StudioSortOption.allCases, id: \.self) { option in
                                 Label(option.displayName, systemImage: option.icon)
                                     .tag(option)
                             }
                         }
-                    } label : {
+                    } label: {
                         Image(systemName: resultManager.animeStudioOption.icon)
                             .foregroundColor(.accentColor)
                     }
@@ -146,7 +102,7 @@ struct StudiosView: View {
                 ToolbarItem {
                     Menu {
                         Picker("Choose a sort order", selection: $resultManager.animeStudioSort){
-                            ForEach(StudiosView.SortOrder.allCases, id: \.self) { order in
+                            ForEach(SortOrder.allCases, id: \.self) { order in
                                 Label(order.displayName, systemImage: order.icon)
                                     .tag(order)
                             }
@@ -161,8 +117,8 @@ struct StudiosView: View {
             
         }
         .listRowSpacing(10)
-        .contentMargins(.top, 0 )
-        .navigationTitle("Anime studios")
+        .contentMargins(.top, 0)
+        .navigationTitle("Anime Studios")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             

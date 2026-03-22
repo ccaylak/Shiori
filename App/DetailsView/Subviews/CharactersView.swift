@@ -23,10 +23,10 @@ struct CharactersView: View {
                                 AsyncImageView(imageUrl: character.character.images.jpgImage.baseImage)
                                     .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
                                     .cornerRadius(12)
-                                    .showFullTitleContextMenu(character.character.name)
+                                    .showFullTitleContextMenu(character.character.preferredNameFormat)
                                     .strokedBorder()
                                 
-                                Text(character.character.name)
+                                Text(character.character.preferredNameFormat)
                                     .font(.caption)
                                     .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
                                     .lineLimit(1)

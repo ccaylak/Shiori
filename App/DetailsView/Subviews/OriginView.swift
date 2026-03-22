@@ -63,7 +63,6 @@ struct OriginView: View {
                     }
                 }
             }
-
         }
     }
 }

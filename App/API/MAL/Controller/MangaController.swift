@@ -202,7 +202,7 @@ import SwiftUI
             URLQueryItem(name: "sort", value: libraryManager.mangaSortOrder.rawValue),
             URLQueryItem(
                 name: "fields",
-                value: MALApiFields.fieldsHeader(for: [ .alternativeTitles, .startDate, .mediaType, .myListStatus, .numVolumes, .numChapters, .status, .numListUsers])
+                value: MALApiFields.fieldsHeader(for: [ .alternativeTitles, .startDate, .mediaType, .myListStatus, .numVolumes, .numChapters, .status])
             ),
             URLQueryItem(name: "limit", value: "1000"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
@@ -213,7 +213,6 @@ import SwiftUI
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
-        print(request)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         

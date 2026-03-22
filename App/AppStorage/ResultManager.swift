@@ -19,13 +19,13 @@ import SwiftUI
         }
     }
     
-    @AppStorage("animeStudioSort") var animeStudioSort = StudiosView.SortOrder.desc {
+    @AppStorage("animeStudioSort") var animeStudioSort = SortOrder.desc {
         didSet {
             settingsChanged()
         }
     }
     
-    @AppStorage("animeStudioOption") var animeStudioOption = StudiosView.SortOption.favorites {
+    @AppStorage("animeStudioOption") var animeStudioOption = StudioSortOption.favorites {
         didSet {
             settingsChanged()
         }

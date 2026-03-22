@@ -183,7 +183,7 @@ import SwiftUI
             URLQueryItem(name: "sort", value: libraryManager.animeSortOrder.rawValue),
             URLQueryItem(
                 name: "fields",
-                value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .startDate, .mediaType, .myListStatus, .numEpisodes, .status, .numListUsers, .startSeason])
+                value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .startDate, .mediaType, .myListStatus, .numEpisodes, .status, .startSeason, .averageEpisodeDuration])
             ),
             URLQueryItem(name: "limit", value: "1000"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))

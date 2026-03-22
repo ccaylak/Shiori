@@ -27,8 +27,8 @@ extension FavoriteEntry {
         name ?? "?"
     }
     
-    var formattedName: String {
-        let nameFormat = SettingsManager.shared.namePresentation
+    var preferredNameFormat: String {
+        let nameFormat = SettingsManager.shared.nameFormat
         
         switch nameFormat {
         case .lastFirst:

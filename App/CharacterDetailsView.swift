@@ -93,7 +93,7 @@ struct CharacterDetailsView: View {
                                         id: voiceactor.person.malId,
                                         language: voiceactor.language,
                                         image: voiceactor.person.images.jpgImage.baseImage,
-                                        name: voiceactor.person.name
+                                        name: voiceactor.person.preferredNameFormat
                                     )) {
                                         VStack {
                                             AsyncImageView(
@@ -106,7 +106,7 @@ struct CharacterDetailsView: View {
                                             .cornerRadius(12)
                                             .strokedBorder()
                                             
-                                            Text(voiceactor.person.name)
+                                            Text(voiceactor.person.preferredNameFormat)
                                                 .font(.caption)
                                                 .frame(
                                                     maxWidth: CoverSize.medium.size.width
@@ -234,7 +234,6 @@ struct CharacterDetailsView: View {
                         .fetchCharacterDetails(
                             id: details?.data.malId ?? 0
                         )
-                    print("Details loaded:", details?.data.name ?? "nil")
                 } catch {
                     print("Failed to load character details:", error)
                 }
