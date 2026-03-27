@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Xcode user data
+xcuserdata/
+*.xcuserstate
+
+# Build artifacts
+DerivedData/
+.build/
+
+# App builds
+*.ipa
+*.dSYM
+
+# Secrets
+secrets*.json
