@@ -1,0 +1,214 @@
+import SwiftUI
+
+struct CharacterDetailsView: View {
+    
+    let characterData: MetaData
+    let role: String
+    @State private var details: JikanCharacterFull? = nil
+    @State private var isDescriptionExpanded = false
+    
+    @EnvironmentObject private var alertManager: AlertManager
+    
+    let jikanCharacterController = JikanCharacterController()
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 12) {
+                HStack(alignment: .top, spacing: 8) {
+                    AsyncImageView(imageUrl: characterData.images.jpgImage.baseImage)
+                    .frame(width: CoverSize.extraLarge.size.width, height: CoverSize.extraLarge.size.height)
+                    .cornerRadius(12)
+                    .strokedBorder()
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack(alignment: .top) {
+                            Text(details?.data.nameKanji ?? "")
+                                .fontWeight(.bold)
+                                .foregroundStyle(.secondary)
+                                .font(.caption)
+                            Spacer()
+                            
+                            if let favorites = details?.data.favorites, favorites > 0 {
+                                HStack(alignment: .center) {
+                                    Image(systemName: "heart.fill")
+                                        .foregroundStyle(Color.red)
+                                        .font(.caption)
+                                    
+                                    Text("\(favorites) favorites")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(details?.data.about ?? "")
+                                .font(.subheadline)
+                                .lineLimit(12)
+                                .truncationMode(.tail)
+                            Button(isDescriptionExpanded ? "Show less" : "Show more") {
+                                isDescriptionExpanded.toggle()
+                            }
+                            .font(.caption)
+                            .sheet(isPresented: $isDescriptionExpanded) {
+                                ScrollView {
+                                    VStack(alignment: .leading) {
+                                        Text(details?.data.about ?? "")
+                                            .font(.subheadline)
+                                    }
+                                    .padding()
+                                    .presentationDetents([.large, .medium])
+                                    .presentationBackgroundInteraction(.automatic)
+                                }
+                                .scrollIndicators(.automatic)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .frame(maxHeight: CoverSize.extraLarge.size.height)
+                .padding(.horizontal)
+                
+                if let voices = details?.data.voices, !voices.isEmpty {
+                    VStack(alignment: .leading, spacing: 5) {
+                        LabelWithChevron(
+                            text: String(localized: "Voice Actors")
+                        )
+                        .padding(.horizontal)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 10) {
+                                ForEach(voices, id: \.person.malId) { voiceactor in
+                                    NavigationLink(destination: VoiceActorDetailsView(
+                                        id: voiceactor.person.malId,
+                                        language: voiceactor.language,
+                                        image: voiceactor.person.images.jpgImage.baseImage,
+                                        name: voiceactor.person.preferredNameFormat
+                                    )) {
+                                        VStack {
+                                            AsyncImageView(imageUrl: voiceactor.person.images.jpgImage.baseImage)
+                                            .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                            .cornerRadius(12)
+                                            .strokedBorder()
+                                            
+                                            Text(voiceactor.person.preferredNameFormat)
+                                                .font(.caption)
+                                                .frame(maxWidth: CoverSize.medium.size.width)
+                                                .lineLimit(1)
+                                                .truncationMode(.tail)
+                                            
+                                            Text(VoiceActorLanguage(rawValue: voiceactor.language)?.displayName ?? VoiceActorLanguage.unknown.displayName)
+                                            .font(.caption2)
+                                            .fontWeight(.bold)
+                                            .foregroundStyle(.secondary)
+                                            .frame(maxWidth: CoverSize.medium.size.width)
+                                            .lineLimit(1)
+                                            .truncationMode(.tail)
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                }
+                
+                if let animeAppearances = details?.data.anime, !animeAppearances.isEmpty {
+                    VStack(alignment: .leading, spacing: 5) {
+                        LabelWithChevron(text: String(localized: "Anime Appearances"))
+                        .padding(.horizontal)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 10) {
+                                ForEach(animeAppearances, id: \.anime?.malId) { result in
+                                    NavigationLink(destination: DetailsView(media:
+                                        MediaNode(
+                                            id: result.anime?.malId ?? 0,
+                                            title: result.anime?.title ?? "",
+                                            mainPicture: Picture(),
+                                            mediaType: "tv")
+                                       )) {
+                                        VStack {
+                                            AsyncImageView(imageUrl: result.anime?.images.jpgImage.baseImage ?? "")
+                                            .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                            .cornerRadius(12)
+                                            .strokedBorder()
+                                            
+                                            Text(result.anime?.title ?? "")
+                                                .font(.caption)
+                                                .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
+                                                .lineLimit(1)
+                                                .truncationMode(.tail)
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                }
+                
+                if let mangaAppearances = details?.data.manga, !mangaAppearances.isEmpty {
+                    VStack(alignment: .leading, spacing: 5) {
+                        LabelWithChevron(text: String(localized: "Manga Appearances"))
+                        .padding(.horizontal)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 10) {
+                                ForEach(mangaAppearances, id: \.manga?.malId) { result in
+                                    NavigationLink(destination: DetailsView( media: MediaNode(
+                                        id: result.manga?.malId ?? 0,
+                                        title: result.manga?.title ?? "",
+                                        mainPicture: Picture(),
+                                        mediaType: "manga")
+                                    )) {
+                                        VStack {
+                                            AsyncImageView(imageUrl: result.manga?.images.jpgImage.baseImage ?? "")
+                                            .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                            .cornerRadius(12)
+                                            .strokedBorder()
+
+                                            Text(result.manga?.title ?? "")
+                                                .font(.caption)
+                                                .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
+                                                .lineLimit(1)
+                                                .truncationMode(.tail)
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.horizontal)
+                            .padding(.bottom)
+                        }
+                    }
+                }
+            }
+        }
+        .noScrollEdgeEffect()
+        .toolbar {
+            ToolbarItem {
+                ShareLink(item: URL(string: "https://myanimelist.net/character/\(characterData.malId)")!) {
+                    Image(systemName: "square.and.arrow.up")
+                        .foregroundColor(.accentColor)
+                }
+            }
+        }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle(characterData.preferredNameFormat)
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            print(characterData.images)
+            Task {
+                alertManager.isLoading = true
+                defer { alertManager.isLoading = false }
+                
+                do {
+                    details = try await jikanCharacterController.fetchCharacterDetails(id: characterData.malId)
+                } catch {
+                    print("Failed to load character details:", error)
+                }
+            }
+        }
+    }
+}
