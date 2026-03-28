@@ -10,6 +10,7 @@
 		F36329482D94AD1300329F11 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = F36329472D94AD1300329F11 /* NukeUI */; };
 		F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37EA6182CFFC19700CD994E /* KeychainSwift */; };
 		F381D31E2F74E13900B45D79 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = F381D30B2F74E13900B45D79 /* .gitignore */; };
+		F381D4E52F7769F100B45D79 /* secrets.json in Resources */ = {isa = PBXBuildFile; fileRef = F381D3192F74E13900B45D79 /* secrets.json */; };
 		F38579932DCB5AAF00CB4D14 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = F38579922DCB5AAF00CB4D14 /* TelemetryDeck */; };
 		F3DE62ED2CF140BC00CD77EF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F3DE62EC2CF140BC00CD77EF /* README.md */; };
 		F3E27BBB2DBF743C00BB1AE4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = F3E27BBA2DBF743C00BB1AE4 /* AlertToast */; };
@@ -192,6 +193,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F381D31E2F74E13900B45D79 /* .gitignore in Resources */,
+				F381D4E52F7769F100B45D79 /* secrets.json in Resources */,
 				F3DE62ED2CF140BC00CD77EF /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
