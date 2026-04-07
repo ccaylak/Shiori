@@ -13,15 +13,8 @@
     "%@" : {
       "shouldTranslate" : false
     },
-    "%@ library" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@-Bibliothek"
-          }
-        }
-      }
+    "%@ Library" : {
+
     },
     "%@, %lld chapters" : {
       "localizations" : {
@@ -132,15 +125,8 @@
         }
       }
     },
-    "%lld chapters" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Kapitel"
-          }
-        }
-      }
+    "%lld Chapters" : {
+
     },
     "%lld chapters (%@)" : {
       "localizations" : {
@@ -158,15 +144,8 @@
         }
       }
     },
-    "%lld episode" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Folge"
-          }
-        }
-      }
+    "%lld Episode" : {
+
     },
     "%lld episodes" : {
       "localizations" : {
@@ -177,6 +156,9 @@
           }
         }
       }
+    },
+    "%lld Episodes" : {
+
     },
     "%lld episodes (%@)" : {
       "localizations" : {
@@ -204,26 +186,8 @@
         }
       }
     },
-    "%lld favorites " : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Favoriten"
-          }
-        }
-      }
-    },
-    "%lld part" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Teil"
-          }
-        }
-      }
+    "%lld Part" : {
+
     },
     "%lld parts" : {
       "localizations" : {
@@ -235,26 +199,11 @@
         }
       }
     },
-    "%lld productions" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Produktionen"
-          }
-        }
-      }
+    "%lld Parts" : {
+
     },
-    "%lld volumes" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Bände"
-          }
-        }
-      }
+    "%lld Volumes" : {
+
     },
     "%lld/%lld" : {
       "localizations" : {
@@ -419,26 +368,12 @@
         }
       }
     },
-    "Accent color" : {
-      "extractionState" : "stale",
+    "Accent Color" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Akzentfarbe"
-          }
-        }
-      }
-    },
-    "Accent Color" : {
-
-    },
-    "Account" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Account"
           }
         }
       }
@@ -455,7 +390,15 @@
       }
     },
     "Adaptation" : {
-      "comment" : "Relation type of detailview"
+      "comment" : "Relation type of detailview",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adaption"
+          }
+        }
+      }
     },
     "Adaption" : {
       "comment" : "Relation type of detailview",
@@ -478,7 +421,7 @@
         }
       }
     },
-    "Add finish date" : {
+    "Add Finish Date" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -488,12 +431,22 @@
         }
       }
     },
-    "Add start date" : {
+    "Add Notes" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anfangsdatum hinzufügen"
+            "value" : "Notizen hinzufügen"
+          }
+        }
+      }
+    },
+    "Add Start Date" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startdatum hinzufügen"
           }
         }
       }
@@ -519,12 +472,22 @@
       }
     },
     "Adult Cast" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erwachsene Charaktere"
+          }
+        }
+      }
+    },
+    "Advanced Mode" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expertenmodus"
           }
         }
       }
@@ -577,15 +540,8 @@
         }
       }
     },
-    "Airing date" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Veröffentlichungsdatum"
-          }
-        }
-      }
+    "Airing Date" : {
+
     },
     "Airing since %@" : {
       "localizations" : {
@@ -622,7 +578,7 @@
         }
       }
     },
-    "Alternative setting" : {
+    "Alternative Setting" : {
       "comment" : "Relation type of detailview",
       "localizations" : {
         "de" : {
@@ -633,7 +589,7 @@
         }
       }
     },
-    "Alternative version" : {
+    "Alternative Version" : {
       "comment" : "Relation type of detailview",
       "localizations" : {
         "de" : {
@@ -645,7 +601,14 @@
       }
     },
     "Animated by" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animiert von"
+          }
+        }
+      }
     },
     "Anime" : {
       "localizations" : {
@@ -658,10 +621,16 @@
       }
     },
     "Anime Appearances" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime-Auftritte"
+          }
+        }
+      }
     },
-    "Anime genres" : {
-      "extractionState" : "stale",
+    "Anime Genres" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -671,24 +640,20 @@
         }
       }
     },
-    "Anime Genres" : {
-
-    },
     "Anime Progress Format" : {
 
     },
-    "Anime season" : {
+    "Anime Season" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anime-Saison"
+            "value" : "Anime-Season"
           }
         }
       }
     },
-    "Anime statistics" : {
-      "extractionState" : "stale",
+    "Anime Statistics" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -698,11 +663,7 @@
         }
       }
     },
-    "Anime Statistics" : {
-
-    },
-    "Anime studios" : {
-      "extractionState" : "stale",
+    "Anime Studios" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -712,11 +673,11 @@
         }
       }
     },
-    "Anime Studios" : {
+    "Anime Tracking" : {
 
     },
     "Anthropomorphic" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -736,8 +697,7 @@
         }
       }
     },
-    "App version" : {
-      "extractionState" : "stale",
+    "App Version" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -746,9 +706,6 @@
           }
         }
       }
-    },
-    "App Version" : {
-
     },
     "Appearance" : {
       "localizations" : {
@@ -835,7 +792,6 @@
     },
     "Both" : {
       "comment" : "Manga mode",
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -856,8 +812,7 @@
         }
       }
     },
-    "Build number" : {
-      "extractionState" : "stale",
+    "Build Number" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -866,9 +821,6 @@
           }
         }
       }
-    },
-    "Build Number" : {
-
     },
     "Cancel" : {
       "localizations" : {
@@ -881,7 +833,7 @@
       }
     },
     "CGDCT" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -912,8 +864,26 @@
         }
       }
     },
+    "Chapters" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kapitel"
+          }
+        }
+      }
+    },
     "Chapters & Volumes" : {
-      "comment" : "Manga mode"
+      "comment" : "Manga mode",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kapitel und Bände"
+          }
+        }
+      }
     },
     "Character" : {
       "comment" : "Relation type of detailview",
@@ -937,7 +907,7 @@
       }
     },
     "Childcare" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -963,6 +933,25 @@
     "Choose a sort order" : {
 
     },
+    "Choose how Anime and Manga titles are displayed: Original, Romaji, or English." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legt fest, wie Anime- und Manga-Titel angezeigt werden (Original, Romaji oder Englisch)."
+          }
+        }
+      }
+    },
+    "Clear Finish Date" : {
+
+    },
+    "Clear Notes" : {
+
+    },
+    "Clear Start Date" : {
+
+    },
     "CM" : {
       "comment" : "Anime type",
       "localizations" : {
@@ -975,7 +964,7 @@
       }
     },
     "Combat Sports" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1031,7 +1020,7 @@
 
     },
     "Crossdressing" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1063,16 +1052,6 @@
         }
       }
     },
-    "Default" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standard"
-          }
-        }
-      }
-    },
     "Delete" : {
       "localizations" : {
         "de" : {
@@ -1083,7 +1062,7 @@
         }
       }
     },
-    "Delete MyAnimeList account" : {
+    "Delete MyAnimeList Account" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1104,12 +1083,22 @@
       }
     },
     "Delinquents" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Straffällige Jugendliche"
+          }
+        }
+      }
+    },
+    "Demographics" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demografie"
           }
         }
       }
@@ -1125,7 +1114,7 @@
       }
     },
     "Detective" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1163,7 +1152,7 @@
 
     },
     "Doe, John" : {
-
+      "shouldTranslate" : false
     },
     "Doujinshi" : {
       "comment" : "Manga type",
@@ -1199,7 +1188,7 @@
       }
     },
     "Ecchi" : {
-      "comment" : "Genre",
+      "comment" : "Explicit Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1240,7 +1229,7 @@
       }
     },
     "Educational" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1292,13 +1281,29 @@
       }
     },
     "Episodes" : {
-      "comment" : "Anime mode"
+      "comment" : "Anime mode",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folgen"
+          }
+        }
+      }
     },
     "Episodes with duration" : {
-      "comment" : "Anime mode"
+      "comment" : "Anime mode",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Episoden & Gesamtlaufzeit"
+          }
+        }
+      }
     },
     "Erotica" : {
-      "comment" : "Genre",
+      "comment" : "Explicit Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1318,30 +1323,32 @@
         }
       }
     },
-    "Explore Anime Genres" : {
-
-    },
-    "Explore anime studios" : {
-      "extractionState" : "stale",
+    "Explicit Genres" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anime-Studios durchsuchen"
+            "value" : "Explizite Genres"
+          }
+        }
+      }
+    },
+    "Explore Anime Genres" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anime-Genres entdecken"
           }
         }
       }
     },
     "Explore Anime Studios" : {
-
-    },
-    "Explore anime tags" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anime-Genres durchsuchen"
+            "value" : "Anime-Studios entdecken"
           }
         }
       }
@@ -1367,8 +1374,7 @@
         }
       }
     },
-    "Favorite anime" : {
-      "extractionState" : "stale",
+    "Favorite Anime" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1378,11 +1384,7 @@
         }
       }
     },
-    "Favorite Anime" : {
-
-    },
-    "Favorite characters" : {
-      "extractionState" : "stale",
+    "Favorite Characters" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1392,11 +1394,7 @@
         }
       }
     },
-    "Favorite Characters" : {
-
-    },
-    "Favorite manga" : {
-      "extractionState" : "stale",
+    "Favorite Manga" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1405,9 +1403,6 @@
           }
         }
       }
-    },
-    "Favorite Manga" : {
-
     },
     "Favorites" : {
       "localizations" : {
@@ -1451,16 +1446,14 @@
         }
       }
     },
-    "First Name Last Name" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorname Nachname"
-          }
-        }
-      }
+    "First episode counts toward duration" : {
+
+    },
+    "First name followed by last name." : {
+
+    },
+    "Format" : {
+
     },
     "French" : {
       "localizations" : {
@@ -1482,19 +1475,11 @@
         }
       }
     },
-    "Full story" : {
-      "comment" : "Relation type of detailview",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ganze Story"
-          }
-        }
-      }
+    "Full Story" : {
+      "comment" : "Relation type of detailview"
     },
     "Gag Humor" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1577,7 +1562,7 @@
       }
     },
     "Gore" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1599,7 +1584,7 @@
       }
     },
     "Harem" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1610,7 +1595,7 @@
       }
     },
     "Hentai" : {
-      "comment" : "Genre",
+      "comment" : "Explicit Genre",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1620,8 +1605,19 @@
         }
       }
     },
+    "High" : {
+      "comment" : "Priority",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoch"
+          }
+        }
+      }
+    },
     "High Stakes Game" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1632,7 +1628,7 @@
       }
     },
     "Historical" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1667,7 +1663,7 @@
       "shouldTranslate" : false
     },
     "Idols (Female)" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1678,60 +1674,12 @@
       }
     },
     "Idols (Male)" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Idols (männlich)"
-          }
-        }
-      }
-    },
-    "In chapters" : {
-      "comment" : "Manga mode",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In Kapiteln"
-          }
-        }
-      }
-    },
-    "In episodes" : {
-      "comment" : "Anime mode",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In Folgen"
-          }
-        }
-      }
-    },
-    "In time" : {
-      "comment" : "Anime mode",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In Zeit"
-          }
-        }
-      }
-    },
-    "In volumes" : {
-      "comment" : "Manga mode",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In Bänden"
           }
         }
       }
@@ -1757,7 +1705,7 @@
       }
     },
     "Isekai" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1778,7 +1726,7 @@
       }
     },
     "Iyashikei" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1802,7 +1750,7 @@
       "shouldTranslate" : false
     },
     "John Doe" : {
-
+      "shouldTranslate" : false
     },
     "Join date" : {
       "localizations" : {
@@ -1825,7 +1773,7 @@
       }
     },
     "Josei" : {
-      "comment" : "Genre",
+      "comment" : "Demographic",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1839,7 +1787,7 @@
       "shouldTranslate" : false
     },
     "Kids" : {
-      "comment" : "Genre",
+      "comment" : "Demographic",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1859,18 +1807,10 @@
         }
       }
     },
-    "Last Name, First Name" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nachname, Vorname"
-          }
-        }
-      }
+    "Last name first, separated by a comma." : {
+
     },
-    "Last updated" : {
+    "Last Updated" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2003,7 +1943,7 @@
       }
     },
     "Love Polygon" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2014,7 +1954,7 @@
       }
     },
     "Love Status Quo" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2024,8 +1964,19 @@
         }
       }
     },
+    "Low" : {
+      "comment" : "Priority",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gering"
+          }
+        }
+      }
+    },
     "Magical Sex Shift" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2036,7 +1987,7 @@
       }
     },
     "Mahou Shoujo" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2089,10 +2040,16 @@
       }
     },
     "Manga Appearances" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manga-Auftritte"
+          }
+        }
+      }
     },
-    "Manga genres" : {
-      "extractionState" : "stale",
+    "Manga Genres" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2102,25 +2059,10 @@
         }
       }
     },
-    "Manga Genres" : {
-
-    },
-    "Manga progress" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Manga-Fortschritt"
-          }
-        }
-      }
-    },
     "Manga Progress Format" : {
 
     },
-    "Manga statistics" : {
-      "extractionState" : "stale",
+    "Manga Statistics" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2130,7 +2072,7 @@
         }
       }
     },
-    "Manga Statistics" : {
+    "Manga Tracking" : {
 
     },
     "Manhua" : {
@@ -2156,7 +2098,7 @@
       }
     },
     "Martial Arts" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2167,7 +2109,7 @@
       }
     },
     "Mecha" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2178,7 +2120,7 @@
       }
     },
     "Medical" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2188,8 +2130,19 @@
         }
       }
     },
+    "Medium" : {
+      "comment" : "Priority",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mittel"
+          }
+        }
+      }
+    },
     "Memoir" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2200,7 +2153,7 @@
       }
     },
     "Military" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2254,7 +2207,7 @@
       }
     },
     "Music" : {
-      "comment" : "Anime type\nGenre",
+      "comment" : "Anime type\nTheme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2279,7 +2232,7 @@
       }
     },
     "Mythology" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2292,16 +2245,8 @@
     "Name Format" : {
 
     },
-    "Name order" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Namensdarstellung"
-          }
-        }
-      }
+    "Names" : {
+
     },
     "No" : {
       "localizations" : {
@@ -2366,6 +2311,16 @@
         }
       }
     },
+    "Notes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notizen"
+          }
+        }
+      }
+    },
     "Novel" : {
       "comment" : "Manga type\nRelation type of detailview",
       "localizations" : {
@@ -2387,16 +2342,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OEL"
-          }
-        }
-      }
-    },
-    "Okay" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Okay"
           }
         }
       }
@@ -2456,8 +2401,11 @@
         }
       }
     },
+    "Order" : {
+
+    },
     "Organized Crime" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2471,7 +2419,7 @@
 
     },
     "Otaku Culture" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2503,19 +2451,11 @@
         }
       }
     },
-    "Parent story" : {
-      "comment" : "Relation type of detailview",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hauptgeschichte"
-          }
-        }
-      }
+    "Parent Story" : {
+      "comment" : "Relation type of detailview"
     },
     "Parody" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2526,7 +2466,7 @@
       }
     },
     "Performing Arts" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2537,7 +2477,7 @@
       }
     },
     "Pets" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2600,13 +2540,15 @@
         }
       }
     },
-    "Productions" : {
-      "extractionState" : "stale",
+    "Preview" : {
+
+    },
+    "Priority" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Produktionen"
+            "value" : "Priorität"
           }
         }
       }
@@ -2642,7 +2584,7 @@
       }
     },
     "Psychological" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2722,7 +2664,7 @@
       }
     },
     "Racing" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2774,7 +2716,7 @@
       }
     },
     "Reincarnation" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2804,26 +2746,6 @@
         }
       }
     },
-    "Remove finish date" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abschlussdatum entfernen"
-          }
-        }
-      }
-    },
-    "Remove start date" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anfangsdatum entfernen"
-          }
-        }
-      }
-    },
     "Removed from library" : {
       "localizations" : {
         "de" : {
@@ -2835,7 +2757,7 @@
       }
     },
     "Reverse Harem" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2867,7 +2789,7 @@
       }
     },
     "Samurai" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2888,7 +2810,7 @@
       }
     },
     "School" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2940,7 +2862,7 @@
       }
     },
     "Seinen" : {
-      "comment" : "Genre",
+      "comment" : "Demographic",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2967,15 +2889,8 @@
         }
       }
     },
-    "Serialization date" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serialisierungsdatum"
-          }
-        }
-      }
+    "Serialization Date" : {
+
     },
     "Settings" : {
       "localizations" : {
@@ -2988,7 +2903,7 @@
       }
     },
     "Shoujo" : {
-      "comment" : "Genre",
+      "comment" : "Demographic",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2999,7 +2914,7 @@
       }
     },
     "Shounen" : {
-      "comment" : "Genre",
+      "comment" : "Demographic",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3019,17 +2934,6 @@
         }
       }
     },
-    "Show mature content" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mature-Inhalte anzeigen"
-          }
-        }
-      }
-    },
     "Show more" : {
       "localizations" : {
         "de" : {
@@ -3041,10 +2945,17 @@
       }
     },
     "Show NSFW Content" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NSFW-Inhalte anzeigen"
+          }
+        }
+      }
     },
     "Showbiz" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3054,16 +2965,8 @@
         }
       }
     },
-    "Side story" : {
-      "comment" : "Relation type of detailview",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zusatzgeschichte"
-          }
-        }
-      }
+    "Side Story" : {
+      "comment" : "Relation type of detailview"
     },
     "Slice of Life" : {
       "comment" : "Genre",
@@ -3103,7 +3006,7 @@
       }
     },
     "Space" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3134,7 +3037,7 @@
         }
       }
     },
-    "Spin-off" : {
+    "Spin-Off" : {
       "comment" : "Relation type of detailview",
       "localizations" : {
         "de" : {
@@ -3166,15 +3069,8 @@
         }
       }
     },
-    "Start date" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anfangsdatum"
-          }
-        }
-      }
+    "Start Date" : {
+
     },
     "Status" : {
       "localizations" : {
@@ -3187,7 +3083,7 @@
       }
     },
     "Strategy Game" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3219,7 +3115,7 @@
       }
     },
     "Super Power" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3251,7 +3147,7 @@
       }
     },
     "Survival" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3284,7 +3180,7 @@
       }
     },
     "Team Sports" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3297,6 +3193,16 @@
     "TelemetryDeck" : {
       "shouldTranslate" : false
     },
+    "Themes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Themen"
+          }
+        }
+      }
+    },
     "There was an error loading the image." : {
       "localizations" : {
         "de" : {
@@ -3307,8 +3213,7 @@
         }
       }
     },
-    "Third-Party libraries" : {
-      "extractionState" : "stale",
+    "Third-Party Libraries" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3318,14 +3223,21 @@
         }
       }
     },
-    "Third-Party Libraries" : {
-
-    },
     "Third-Party Services" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drittanbieter-Services"
+          }
+        }
+      }
+    },
+    "This preview is only meant to illustrate the selected format." : {
 
     },
     "Time Travel" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3344,6 +3256,9 @@
           }
         }
       }
+    },
+    "Title Language" : {
+
     },
     "To use these features, you can create an account at MyAnimeList.net." : {
       "localizations" : {
@@ -3520,6 +3435,15 @@
         }
       }
     },
+    "Total Duration" : {
+
+    },
+    "Tracks episodes and shows the total remaining watch time." : {
+
+    },
+    "Tracks your progress by episodes." : {
+
+    },
     "Try a different category." : {
       "localizations" : {
         "de" : {
@@ -3583,17 +3507,6 @@
         }
       }
     },
-    "Unknown genre" : {
-      "comment" : "Genre",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unbekanntes Genre"
-          }
-        }
-      }
-    },
     "Unknown manga type" : {
       "comment" : "Manga type",
       "localizations" : {
@@ -3638,7 +3551,7 @@
       }
     },
     "Urban Fantasy" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3649,7 +3562,7 @@
       }
     },
     "Vampire" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3660,7 +3573,7 @@
       }
     },
     "Video Game" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3671,7 +3584,7 @@
       }
     },
     "Villainess" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3682,7 +3595,7 @@
       }
     },
     "Visual Arts" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3692,8 +3605,7 @@
         }
       }
     },
-    "Voice actors" : {
-      "extractionState" : "stale",
+    "Voice Actors" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3702,9 +3614,6 @@
           }
         }
       }
-    },
-    "Voice Actors" : {
-
     },
     "Volume" : {
       "comment" : "Manga mode",
@@ -3769,7 +3678,7 @@
       }
     },
     "Workplace" : {
-      "comment" : "Genre",
+      "comment" : "Theme",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3789,15 +3698,8 @@
         }
       }
     },
-    "You will be redirected to the MyAnimeList account deletion page." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du wirst auf die Kontolöschungsseite von MyAnimeList weitergeleitet"
-          }
-        }
-      }
+    "You’ll be redirected to MyAnimeList.net to complete the deletion." : {
+
     }
   },
   "version" : "1.0"

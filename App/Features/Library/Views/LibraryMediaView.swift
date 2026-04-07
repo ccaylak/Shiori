@@ -62,7 +62,7 @@ struct LibraryMediaView: View {
                         
                         if progress.totalValue > 0 {
                             Gauge(value: Double(progress.currentValue), in: 0...Double(progress.totalValue)) {
-                                Text(leftTime(episodeDurationInMinutes: episodeDurationInMinutes, totalEpisodes: progress.totalValue, watchedEpisodes: progress.currentValue))
+                                Text(leftTime(episodeDurationInMinutes: episodeDurationInMinutes, totalEpisodes: progress.totalValue, watchedEpisodes: progress.currentValue, includeFirstEpisodeInDuration: settingsManager.includeFirstEpisodeInDuration))
                                     .font(.caption2)
                                     .foregroundStyle(Color.secondary)
                                     .bold()
@@ -143,10 +143,21 @@ struct LibraryMediaView: View {
         return "\(type.displayName), \(release)"
     }
     
-    func leftTime(episodeDurationInMinutes: Int, totalEpisodes: Int, watchedEpisodes: Int) -> String {
+    func leftTime(
+        episodeDurationInMinutes: Int,
+        totalEpisodes: Int,
+        watchedEpisodes: Int,
+        includeFirstEpisodeInDuration: Bool
+    ) -> String {
         
         let clampedWatchedEpisodes = min(max(watchedEpisodes, 0), totalEpisodes)
-        let remainingEpisodes = totalEpisodes - clampedWatchedEpisodes
+        
+        var remainingEpisodes = totalEpisodes - clampedWatchedEpisodes
+        
+        if includeFirstEpisodeInDuration {
+            remainingEpisodes += 1
+        }
+        
         let totalMinutesLeft = remainingEpisodes * episodeDurationInMinutes
         
         if totalMinutesLeft == 0 {

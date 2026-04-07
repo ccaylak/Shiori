@@ -3,6 +3,7 @@ import Foundation
 struct MyListStatus: Decodable, Hashable {
     var status: String? = ""
     var score: Int = 0
+    var priority: Int? = 0
         
     var numVolumesRead: Int? = 0
     var numChaptersRead: Int? = 0

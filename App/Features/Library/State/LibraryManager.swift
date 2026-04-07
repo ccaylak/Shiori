@@ -9,7 +9,7 @@ import SwiftUI
         }
     }
     
-    @AppStorage("animeSortOrder") var animeSortOrder: LibraryAnimeSort = .lastUpdated {
+    @AppStorage("animeSortOrder") var animeSortOrder: MediaSort.AnimeSort = .listUpdatedAt {
         didSet {
             settingsChanged()
         }
@@ -20,12 +20,18 @@ import SwiftUI
         }
     }
     
-    @AppStorage("mangaSortOrder") var mangaSortOrder: LibraryMangaSort = .lastUpdated {
+    @AppStorage("mangaSortOrder") var mangaSortOrder: MediaSort.MangaSort = .listUpdatedAt {
         didSet {
             settingsChanged()
         }
     }
     @AppStorage("mangaProgressStatus") var mangaProgressStatus: ProgressStatus.Manga = .completed {
+        didSet {
+            settingsChanged()
+        }
+    }
+    
+    @AppStorage("sortDirection") var sortDirection: SortDirection = .descending {
         didSet {
             settingsChanged()
         }

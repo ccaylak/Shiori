@@ -22,7 +22,7 @@ struct MediaGenresView: View {
                     NavigationLink(destination: DetailsView(media: MediaNode(
                         id: media.malId,
                         title: media.titles[0].title,
-                        mainPicture: Picture(),
+                        mainPicture: Picture(large: media.images.jpgImage.largeImage, medium: media.images.jpgImage.baseImage),
                         mediaType: mode.rawValue
                     ))) {
                         VStack {

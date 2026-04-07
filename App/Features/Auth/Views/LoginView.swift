@@ -227,31 +227,40 @@ struct LoginView: View {
                         Section(header: Label("Favorite Manga", systemImage: "heart")) {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 10) {
-                                    ForEach(
-                                        favoriteMangas,
-                                        id: \.malId
-                                    ) { manga in
-                                        /*NavigationLink(destination: DetailsView(
-                                            media: MediaNode(
-                                                id: manga.malId,
-                                                title: manga.title ?? "",
-                                                mainPicture: Picture(),
-                                                mediatype: "tv"
-                                            )))*/
-                                        //{
+                                    ForEach(favoriteMangas, id: \.malId) { manga in
+                                        NavigationLink {
+                                            DetailsView(
+                                                media: MediaNode(
+                                                    id: manga.malId,
+                                                    title: manga.title ?? "",
+                                                    mainPicture: Picture(
+                                                        large: manga.images.jpgImage.largeImage,
+                                                        medium: manga.images.jpgImage.baseImage
+                                                    ),
+                                                    mediaType: "manga"
+                                                )
+                                            )
+                                        } label: {
                                             VStack {
                                                 AsyncImageView(imageUrl: manga.images.jpgImage.baseImage)
-                                                    .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
+                                                    .frame(
+                                                        width: CoverSize.medium.size.width,
+                                                        height: CoverSize.medium.size.height
+                                                    )
                                                     .cornerRadius(12)
                                                     .strokedBorder()
-                                                
+
                                                 Text(manga.title ?? "–")
                                                     .font(.caption)
-                                                    .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
+                                                    .frame(
+                                                        maxWidth: CoverSize.medium.size.width,
+                                                        alignment: .leading
+                                                    )
                                                     .lineLimit(1)
                                                     .truncationMode(.tail)
                                             }
-                                        //}.buttonStyle(.plain)
+                                        }
+                                        .buttonStyle(.plain)
                                     }
                                 }
                                 .scrollTargetLayout()
@@ -265,12 +274,12 @@ struct LoginView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 10) {
                                     ForEach(favoriteAnimes, id: \.malId) { anime in
-                                        //NavigationLink(destination: DetailsView(media: MediaNode(
-                                         //   id: anime.malId,
-                                          //  title: anime.title ?? "-",
-                                           // mainPicture: Picture(),
-                                           // type: anime.type?.lowercased() ?? "Unknown"
-                                        //))) {
+                                        NavigationLink(destination: DetailsView(media: MediaNode(
+                                            id: anime.malId,
+                                            title: anime.title ?? "-",
+                                            mainPicture: Picture(large: anime.images.jpgImage.largeImage, medium: anime.images.jpgImage.baseImage),
+                                            mediaType: "tv"
+                                        ))) {
                                             VStack {
                                                 AsyncImageView(imageUrl: anime.images.jpgImage.baseImage)
                                                     .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
@@ -283,7 +292,7 @@ struct LoginView: View {
                                                     .lineLimit(1)
                                                     .truncationMode(.tail)
                                             }
-                                        //}.buttonStyle(.plain)
+                                        }.buttonStyle(.plain)
                                     }
                                 }
                                 .scrollTargetLayout()

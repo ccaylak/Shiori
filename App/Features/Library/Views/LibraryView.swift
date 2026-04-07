@@ -240,7 +240,6 @@ struct LibraryView: View {
                         displayName: { $0.displayName },
                         icon: { AnyView($0.libraryIcon) }
                     )
-                    .padding(.horizontal)
                     .padding(.bottom, 6)
                     .padding(.top, -4)
                     .background {
@@ -258,7 +257,6 @@ struct LibraryView: View {
                         displayName: { $0.displayName },
                         icon: { AnyView($0.libraryIcon) }
                     )
-                    .padding(.horizontal)
                     .padding(.bottom, 6)
                     .padding(.top, -4)
                     .background {
@@ -293,49 +291,43 @@ struct LibraryView: View {
                 
                 ToolbarItem {
                     Menu {
-                        Picker("Sort by", selection: $settingsManager.titleLanguage) {
-                            ForEach(TitleLanguage.allCases, id: \.self) { language in
-                                Text(language.displayName)
-                                    .tag(language.rawValue)
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "globe")
-                            .fontWeight(.regular)
-                            .foregroundColor(.accentColor)
-                    }
-                }
-                
-                if #available(iOS 26.0, *) {
-                    ToolbarSpacer(.fixed)
-                }
-                ToolbarItem {
-                    Menu {
-                        
                         Picker("Sort by", selection: $libraryManager.animeSortOrder) {
-                            ForEach(LibraryAnimeSort.allCases, id: \.self) { sortSelection in
-                                Label(sortSelection.displayName, systemImage: sortSelection.icon)
-                                    .tag(sortSelection.rawValue)
+                            ForEach(MediaSort.AnimeSort.allCases, id: \.self) { sortOrder in
+                                Label(sortOrder.displayName, systemImage: sortOrder.icon)
+                                    .tag(sortOrder.rawValue)
                             }
                         }
                         .isVisible(libraryManager.mediaType == .anime)
                         
                         Picker("Sort by", selection: $libraryManager.mangaSortOrder) {
-                            ForEach(LibraryMangaSort.allCases, id: \.self) { sortSelection in
-                                Label(sortSelection.displayName, systemImage: sortSelection.icon)
-                                    .tag(sortSelection.rawValue)
+                            ForEach(MediaSort.MangaSort.allCases, id: \.self) { sortOrder in
+                                Label(sortOrder.displayName, systemImage: sortOrder.icon)
+                                    .tag(sortOrder.rawValue)
                             }
                         }
                         .isVisible(libraryManager.mediaType == .manga)
-                        
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease")
                             .fontWeight(.regular)
                             .foregroundColor(.accentColor)
                     }
                 }
+                ToolbarItem {
+                    Menu {
+                        Picker("Order", selection: $libraryManager.sortDirection) {
+                            
+                            ForEach(SortDirection.allCases, id: \.self) { sortDirection in
+                                Label(sortDirection.displayName, systemImage: sortDirection.icon).tag(sortDirection)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: libraryManager.sortDirection.icon)
+                            .fontWeight(.regular)
+                            .foregroundColor(.accentColor)
+                    }
+                }
             }
-            .navigationTitle("\(libraryManager.mediaType.rawValue.capitalized) library")
+            .navigationTitle("\(libraryManager.mediaType.rawValue.capitalized) Library")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(item: $selectedMedia, onDismiss: {
                 showComments = false
@@ -360,7 +352,6 @@ struct LibraryView: View {
                         .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         
                         Section {
-                        
                             Picker("Progress", selection: $libraryEntry.progressStatus) {
                                 ForEach([ProgressStatus.Manga.completed, .reading, .onHold, .dropped, .planToRead], id: \.self) { mangaSelection in
                                     Text(mangaSelection.displayName)
@@ -388,18 +379,6 @@ struct LibraryView: View {
                             }
                             
                             Group {
-                                VStack(alignment: .leading, spacing: 6) {
-                                    Text("Mode")
-                                    
-                                    Picker("Mode", selection: $settingsManager.mangaFormat) {
-                                        ForEach(MangaFormat.allCases, id: \.self) { mode in
-                                            Text(mode.displayName).tag(mode)
-                                        }
-                                    }
-                                    .pickerStyle(.segmented)
-                                }
-                                
-                                
                                 Picker(selection: $libraryEntry.readChapters, label:
                                             VStack(alignment: .leading, spacing: 4) {
                                         Text("Chapter")
@@ -415,29 +394,105 @@ struct LibraryView: View {
                                     }
                                     .isVisible(media.node.chapters != 0 && (settingsManager.mangaFormat == .chapter || settingsManager.mangaFormat == .both))
                                 
-                                    LabeledContent("Chapter") {
-                                        Text("\(libraryEntry.readChapters)")
-                                    }
-                                    .isVisible(media.node.chapters == 0)
-                                
-                                    Picker(selection: $libraryEntry.readVolumes, label:
-                                            VStack(alignment: .leading, spacing: 4) {
-                                        Text("Volume")
-                                        Text("\(libraryEntry.readVolumes)/\(media.node.volumes)")
-                                            .foregroundStyle(.secondary)
-                                            .font(.caption)
-                                            .fontWeight(.bold)
-                                    }
-                                    ) {
-                                        ForEach(0...media.node.volumes, id: \.self) { volume in
-                                            Text("\(volume)").tag(volume)
+                                LabeledContent("Chapters") {
+                                    HStack(spacing: 0) {
+                                        Button {
+                                            libraryEntry.readChapters -= 1
+                                        } label: {
+                                            Image(systemName: "minus")
+                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                                         }
+                                        .buttonStyle(.plain)
+                                        .disabled(libraryEntry.readChapters == 0)
+
+                                        Divider()
+
+                                        TextField("", value: $libraryEntry.readChapters, format: .number)
+                                            .keyboardType(.numberPad)
+                                            .multilineTextAlignment(.center)
+                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                                        Divider()
+
+                                        Button {
+                                            libraryEntry.readChapters += 1
+                                        } label: {
+                                            Image(systemName: "plus")
+                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        }
+                                        .buttonStyle(.plain)
                                     }
+                                    .frame(width: 170, height: 35)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                            .fill(Color(uiColor: .secondarySystemFill))
+                                    )
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                    )
+                                }
+                                .isVisible(
+                                    media.node.chapters == 0 &&
+                                    (settingsManager.mangaFormat == .chapter || settingsManager.mangaFormat == .both)
+                                )
                                 
-                                    LabeledContent("Volume") {
-                                        Text("\(libraryEntry.readVolumes)")
+                                Picker(selection: $libraryEntry.readVolumes, label:
+                                        VStack(alignment: .leading, spacing: 4) {
+                                    Text("Volume")
+                                    Text("\(libraryEntry.readVolumes)/\(media.node.volumes)")
+                                        .foregroundStyle(.secondary)
+                                        .font(.caption)
+                                        .fontWeight(.bold)
+                                }
+                                ) {
+                                    ForEach(0...media.node.volumes, id: \.self) { volume in
+                                        Text("\(volume)").tag(volume)
                                     }
-                                    .isVisible(media.node.volumes == 0)
+                                }
+                                .isVisible(media.node.volumes != 0 && (settingsManager.mangaFormat == .volume || settingsManager.mangaFormat == .both))
+                              
+                                
+                                LabeledContent("Volume") {
+                                    HStack(spacing: 0) {
+                                        Button {
+                                            libraryEntry.readVolumes -= 1
+                                        } label: {
+                                            Image(systemName: "minus")
+                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        }
+                                        .buttonStyle(.plain)
+                                        .disabled(libraryEntry.readVolumes == 0)
+
+                                        Divider()
+
+                                        TextField("", value: $libraryEntry.readVolumes, format: .number)
+                                            .keyboardType(.numberPad)
+                                            .multilineTextAlignment(.center)
+                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                                        Divider()
+
+                                        Button {
+                                            libraryEntry.readVolumes += 1
+                                        } label: {
+                                            Image(systemName: "plus")
+                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                    .frame(width: 170, height: 35)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                            .fill(Color(uiColor: .secondarySystemFill))
+                                    )
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                    )
+                                }
+                                .isVisible(
+                                    media.node.volumes == 0 &&
+                                    (settingsManager.mangaFormat == .volume || settingsManager.mangaFormat == .both)
+                                )
                             }
                             .isVisible(media.node.isMangaOrAnime == .manga)
                                 
@@ -457,11 +512,60 @@ struct LibraryView: View {
                             .isVisible(media.node.isMangaOrAnime == .anime && media.node.episodes != 0)
                         
                             LabeledContent("Episode") {
-                                Text("\(libraryEntry.watchedEpisodes)")
+                                HStack(spacing: 0) {
+                                    Button {
+                                        libraryEntry.watchedEpisodes -= 1
+                                    } label: {
+                                        Image(systemName: "minus")
+                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .disabled(libraryEntry.watchedEpisodes == 0)
+
+                                    Divider()
+
+                                    TextField("", value: $libraryEntry.watchedEpisodes, format: .number)
+                                        .keyboardType(.numberPad)
+                                        .multilineTextAlignment(.center)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                                    Divider()
+
+                                    Button {
+                                        libraryEntry.watchedEpisodes += 1
+                                    } label: {
+                                        Image(systemName: "plus")
+                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                                .frame(width: 170, height: 35)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                        .fill(Color(uiColor: .secondarySystemFill))
+                                )
+                                .clipShape(
+                                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                )
                             }
-                            .isVisible(media.node.isMangaOrAnime == .anime && media.node.episodes == 0)
-                        
+                            .isVisible(media.node.episodes == 0 && media.node.isMangaOrAnime == .anime)
                         }
+                        
+                        Section {
+                            VStack(alignment: .leading, spacing: 8) {
+                                    Text("Priority")
+
+                                    Picker("", selection: $libraryEntry.priority) {
+                                        ForEach(PriorityValues.allCases, id: \.self) { priority in
+                                            Text(priority.displayName)
+                                                .tag(priority.rawValue)
+                                        }
+                                    }
+                                    .pickerStyle(.segmented)
+                                    .labelsHidden()
+                                }
+                        }
+                        .isVisible(settingsManager.advancedMode)
                         
                         Section {
                             Button(action: {
@@ -497,6 +601,7 @@ struct LibraryView: View {
                                 }
                             }
                         }
+                        .isVisible(settingsManager.advancedMode)
                         
                         Section {
                             Button(action: {
@@ -508,7 +613,7 @@ struct LibraryView: View {
                                 }
                             }) {
                                 Label {
-                                    Text(showStartDate ? "Remove start date" : "Add start date")
+                                    Text(showStartDate ? "Clear Start Date" : "Add Start Date")
                                 } icon: {
                                     Image(systemName: showStartDate ? "calendar.badge.minus" : "calendar.badge.plus")
                                         .foregroundStyle(showStartDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
@@ -518,7 +623,7 @@ struct LibraryView: View {
                             
                             if showStartDate {
                                 DatePicker(
-                                    "Start date",
+                                    "Start Date",
                                     selection: Binding(
                                         get: { startDate ?? Date() },
                                         set: { startDate = $0 }
@@ -536,7 +641,7 @@ struct LibraryView: View {
                                 }
                             }) {
                                 Label {
-                                    Text(showFinishDate ? "Remove finish date" : "Add finish date")
+                                    Text(showFinishDate ? "Clear Finish Date" : "Add Finish Date")
                                 } icon: {
                                     Image(systemName: showFinishDate ? "calendar.badge.minus" : "calendar.badge.plus")
                                         .foregroundStyle(showFinishDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
@@ -556,9 +661,9 @@ struct LibraryView: View {
                                 .transition(.opacity.combined(with: .move(edge: .top)))
                             }
                         }
+                        .isVisible(settingsManager.advancedMode)
                     }
                     .scrollContentBackground(.hidden)
-                    .scrollBounceBehavior(.basedOnSize)
                     .contentMargins(.top, 0)
                     .padding(.horizontal)
                     .scrollIndicators(.hidden)
@@ -607,7 +712,8 @@ struct LibraryView: View {
                     }
                     .navigationTitle(media.node.preferredTitle)
                     .navigationBarTitleDisplayMode(.inline)
-                    .presentationDetents([.fraction(0.8)])
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([settingsManager.advancedMode ? .fraction(0.8) : .medium])
                     .presentationBackgroundInteraction(.disabled)
                     .presentationBackground(.regularMaterial)
                     .onAppear {
@@ -621,7 +727,47 @@ struct LibraryView: View {
             fetchLibrary()
         }
         .onChange(of: libraryManager.needToLoadData) {
-            fetchLibrary()
+            if (libraryManager.mediaType == .manga &&
+                (
+                    libraryManager.mangaSortOrder == .mangaTitle ||
+                    libraryManager.mangaSortOrder == .listScore ||
+                    libraryManager.mangaSortOrder == .listUpdatedAt ||
+                    libraryManager.mangaSortOrder == .mangaStartDate)
+            ) {
+                if (libraryManager.mangaSortOrder == .mangaTitle) {
+                    if (libraryManager.sortDirection == .ascending) {
+                        fetchLibrary()
+                    }
+                    if libraryManager.sortDirection == .descending {
+                        //filteredLibraryData = filteredLibraryData.sorted {
+                          //  $0.node.title > $1.node.title
+                        //}
+                    }
+                }
+                
+                if (libraryManager.mangaSortOrder == .mangaStartDate && libraryManager.sortDirection == .descending) {
+                    fetchLibrary()
+                }
+                
+                if (libraryManager.mangaSortOrder == .listUpdatedAt && libraryManager.sortDirection == .descending) {
+                    fetchLibrary()
+                }
+                
+                if (libraryManager.mangaSortOrder == .listScore && libraryManager.sortDirection == .descending) {
+                    fetchLibrary()
+                }
+            }
+            
+            if (libraryManager.mediaType == .anime &&
+            (
+                libraryManager.animeSortOrder == .animeTitle ||
+                libraryManager.animeSortOrder == .listScore ||
+                libraryManager.animeSortOrder == .listUpdatedAt ||
+                libraryManager.animeSortOrder == .animeStartDate)
+            ) {
+                fetchLibrary()
+            }
+                
         }
         .onChange(of: selectedMedia) {
             if (selectedMedia != nil) {

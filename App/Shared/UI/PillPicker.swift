@@ -13,52 +13,66 @@ struct PillPicker<T: Hashable>: View {
             HStack(spacing: 10) {
                 ForEach(options, id: \.self) { option in
                     let isSelected = (option == selectedOption)
+                    
                     if #available(iOS 26.0, *) {
-                        Label {
-                            Text(displayName(option))
-                                .fontWeight(.medium)
-                                .font(.body)
-                        } icon: {
-                            icon(option)
-                        }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 10)
-                        .glassEffect()
-                        .shadow(color: isSelected ? Color.accentColor.opacity(0.8) : .clear, radius: 4, x: 0, y: 0)
-                        .onTapGesture {
-                            withAnimation {
+                        Button {
+                            withAnimation(.snappy) {
                                 selectedOption = option
                             }
+                        } label: {
+                            Label {
+                                Text(displayName(option))
+                                    .fontWeight(.medium)
+                                    .font(.body)
+                            } icon: {
+                                icon(option)
+                            }
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 10)
+                            .contentShape(.capsule)
                         }
-                    } else {
-                        Label {
-                            Text(displayName(option))
-                                .fontWeight(.medium)
-                                .font(.body)
-                        } icon: {
-                            icon(option)
-                        }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 10)
-                        .background(Color(.systemBackground))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(
-                                    isSelected
-                                    ? Color.accentColor
-                                    : Color.clear,
-                                    lineWidth: 5
-                                )
+                        .buttonStyle(.plain)
+                        .glassEffect(.regular.interactive(), in: .capsule)
+                        .shadow(
+                            color: isSelected ? Color.accentColor.opacity(0.8) : .clear,
+                            radius: 4,
+                            x: 0,
+                            y: 0
                         )
-                        .cornerRadius(8)
-                        .onTapGesture {
+                        
+                    } else {
+                        Button {
                             withAnimation {
                                 selectedOption = option
                             }
+                        } label: {
+                            Label {
+                                Text(displayName(option))
+                                    .fontWeight(.medium)
+                                    .font(.body)
+                            } icon: {
+                                icon(option)
+                            }
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 10)
+                            .background(Color(.systemBackground))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(
+                                        isSelected
+                                        ? Color.accentColor
+                                        : Color.clear,
+                                        lineWidth: 5
+                                    )
+                            )
+                            .cornerRadius(8)
+                            .contentShape(RoundedRectangle(cornerRadius: 8))
                         }
+                        .buttonStyle(.plain)
                     }
                 }
             }
+            .padding(.horizontal)
         }
     }
 }
@@ -72,4 +86,3 @@ struct PillPicker<T: Hashable>: View {
         icon: { AnyView($0.libraryIcon) }
     )
 }
-

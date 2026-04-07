@@ -37,9 +37,15 @@ import Foundation
         let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
         let (data, _) = try await URLSession.shared.data(for: request)
         
-        return try JSONDecoder
+        let decoded = try JSONDecoder
             .snakeCaseDecoder
             .decode(JikanGenre.self, from: data)
+        
+        // 👉 Doppelte Genres anhand von malId entfernen (letzter gewinnt) Bug melden
+        let uniqueGenres = Dictionary(grouping: decoded.data, by: \.malId)
+            .compactMap { $0.value.last }
+        
+        return JikanGenre(data: uniqueGenres)
     }
     
     func fetchMangaByGenre(id: Int, page: Int) async throws -> JikanMedia {

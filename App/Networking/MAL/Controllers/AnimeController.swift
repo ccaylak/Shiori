@@ -76,7 +76,7 @@ import SwiftUI
         var components = URLComponents(string: MALEndpoints.Anime(id: id).details)!
         
         components.queryItems = [
-            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numEpisodes, .mediaType, .startDate, .status, .mean, .synopsis, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .numScoringUsers, .numListUsers, .averageEpisodeDuration, .myListStatus]))
+            URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numEpisodes, .mediaType, .startDate, .status, .mean, .synopsis, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .numScoringUsers, .numListUsers, .averageEpisodeDuration, .myListStatus, .startSeason]))
         ]
         
         

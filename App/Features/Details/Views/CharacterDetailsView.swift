@@ -124,7 +124,10 @@ struct CharacterDetailsView: View {
                                         MediaNode(
                                             id: result.anime?.malId ?? 0,
                                             title: result.anime?.title ?? "",
-                                            mainPicture: Picture(),
+                                            mainPicture: Picture(
+                                                large: result.anime?.images.jpgImage.largeImage ?? "", 
+                                                medium: result.anime?.images.jpgImage.baseImage ?? ""
+                                            ),
                                             mediaType: "tv")
                                        )) {
                                         VStack {
@@ -159,7 +162,10 @@ struct CharacterDetailsView: View {
                                     NavigationLink(destination: DetailsView( media: MediaNode(
                                         id: result.manga?.malId ?? 0,
                                         title: result.manga?.title ?? "",
-                                        mainPicture: Picture(),
+                                        mainPicture: Picture(
+                                            large: result.manga?.images.jpgImage.largeImage ?? "",
+                                            medium: result.manga?.images.jpgImage.baseImage ?? ""
+                                        ),
                                         mediaType: "manga")
                                     )) {
                                         VStack {
@@ -185,12 +191,14 @@ struct CharacterDetailsView: View {
                 }
             }
         }
+        .scrollIndicators(.hidden)
         .noScrollEdgeEffect()
         .toolbar {
-            ToolbarItem {
-                ShareLink(item: URL(string: "https://myanimelist.net/character/\(characterData.malId)")!) {
-                    Image(systemName: "square.and.arrow.up")
-                        .foregroundColor(.accentColor)
+            if let url = URL(string: "https://myanimelist.net/character/\(characterData.malId)") {
+                ToolbarItem {
+                    ShareLink(item: url) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
                 }
             }
         }
@@ -198,7 +206,6 @@ struct CharacterDetailsView: View {
         .navigationTitle(characterData.preferredNameFormat)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            print(characterData.images)
             Task {
                 alertManager.isLoading = true
                 defer { alertManager.isLoading = false }

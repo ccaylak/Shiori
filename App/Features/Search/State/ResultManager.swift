@@ -19,7 +19,7 @@ import SwiftUI
         }
     }
     
-    @AppStorage("animeStudioSort") var animeStudioSort = SortOrder.desc {
+    @AppStorage("animeStudioSort") var animeStudioSort = SortDirection.descending {
         didSet {
             settingsChanged()
         }

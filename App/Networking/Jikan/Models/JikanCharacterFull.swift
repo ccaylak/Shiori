@@ -8,7 +8,6 @@ struct JikanCharacterFull: Decodable {
 struct CharacterDetails: Decodable {
     
     private(set) var malId: Int
-    private(set) var url: String
     private(set) var images: JikanImages
     private(set) var name: String
     private(set) var nameKanji: String?

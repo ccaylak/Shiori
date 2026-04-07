@@ -6,8 +6,6 @@ struct SettingsView: View {
     
     private var tokenHandler: TokenHandler = .shared
     
-    @State private var showConfirmationDialog: Bool = false
-    
     var body: some View {
         NavigationStack {
             Form {
@@ -59,26 +57,36 @@ struct SettingsView: View {
                         .buttonStyle(.borderless)
                     }
                     
-                    Picker("Name Format", systemImage: "textformat.characters.arrow.left.and.right", selection: $settingsManager.nameFormat) {
-                        ForEach(NameFormat.allCases, id: \.self) { mode in
-                            Text(mode.displayName)
-                                .tag(mode)
-                        }
-                    }.pickerStyle(.navigationLink)
+                    NavigationLink {
+                        NameSelectionView()
+                    } label: {
+                        Label("Names", systemImage: "textformat.characters.arrow.left.and.right")
+                    }
+                    
+                    NavigationLink {
+                        TitleLanguageSelectionView()
+                    } label: {
+                        Label("Title Language", systemImage: "globe")
+                    }
                 }
                 
                 Section("Library") {
-                    Picker(selection: $settingsManager.mangaFormat, label: Label("Manga Progress Format", systemImage: SeriesType.manga.icon)) {
-                        ForEach(MangaFormat.allCases, id: \.self) { mode in
-                            Text(mode.displayName)
-                        }
+                    NavigationLink {
+                        MangaProgressFormatSelectionView()
+                    } label: {
+                        Label("Manga Tracking", systemImage: SeriesType.manga.icon)
                     }
                     
-                    Picker(selection: $settingsManager.animeFormat, label: Label("Anime Progress Format", systemImage: SeriesType.anime.icon)) {
-                        ForEach(AnimeFormat.allCases, id: \.self) { mode in
-                            Text(mode.displayName)
-                        }
+                    NavigationLink {
+                        AnimeFormatSelectionView()
+                    } label: {
+                        Label("Anime Tracking", systemImage: SeriesType.anime.icon)
                     }
+                    
+                    Toggle(isOn: $settingsManager.advancedMode) {
+                        Label("Advanced Mode", systemImage: "gearshape.2")
+                    }
+                    .toggleStyle(.switch)
                 }
                 
                 Section ("Contact"){
@@ -99,24 +107,16 @@ struct SettingsView: View {
                 }
                 
                 if tokenHandler.isAuthenticated {
-                    Section("Account") {
+                    Section {
                         Button(role: .destructive) {
-                            showConfirmationDialog = true
-                        } label: {
-                            Text("Delete MyAnimeList account")
-                        }
-                        .confirmationDialog(
-                            Text("You will be redirected to the MyAnimeList account deletion page."),
-                            isPresented: $showConfirmationDialog,
-                            titleVisibility: .visible
-                        ) {
-                            Button("Okay", role: .destructive) {
-                                if let url = URL(string: "https://myanimelist.net/account_deletion") {
-                                    UIApplication.shared.open(url)
-                                }
+                            if let url = URL(string: "https://myanimelist.net/account_deletion") {
+                                UIApplication.shared.open(url)
                             }
-                            Button("Cancel", role: .cancel) { }
+                        } label: {
+                            Label("Delete MyAnimeList Account", systemImage: "trash")
                         }
+                    } footer: {
+                        Text("You’ll be redirected to MyAnimeList.net to complete the deletion.")
                     }
                 }
             }
@@ -142,16 +142,12 @@ private struct AboutView: View {
                             .bold()
                     }
                     .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 40)
-                            .fill(Color(.secondarySystemBackground))
-                    )
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .listRowBackground(Color.clear)
                 .padding(.bottom, -30)
             
-            Section("Info") {
+            Section {
                 LabeledContent("App Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
                 LabeledContent("Build Number", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
             }

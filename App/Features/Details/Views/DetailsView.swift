@@ -191,9 +191,7 @@ struct DetailsView: View {
                     }
                 }
                 ToolbarItem {
-                    let escapedTitle = media.title.replacingOccurrences(of: " ",with: "_")
-                    
-                    if let url = URL(string: "https://myanimelist.net/\(media.isMangaOrAnime.rawValue)/\(media.id)/\(escapedTitle)") {
+                    if let url = URL(string: "https://myanimelist.net/\(media.isMangaOrAnime.rawValue)/\(media.id)") {
                         
                         ShareLink(item: url) {
                             Image(systemName: "square.and.arrow.up")
@@ -331,7 +329,7 @@ struct DetailsView: View {
                                 }
                                 ){
                                     Label {
-                                        Text(showComments ? "Remove comments" : "Add comments")
+                                        Text(showComments ? "Clear Notes" : "Add Notes")
                                     } icon: {
                                         Image(systemName: showComments ? "minus.circle.fill" : "plus.circle.fill")
                                             .symbolRenderingMode(.monochrome)
@@ -341,7 +339,7 @@ struct DetailsView: View {
                                 .buttonStyle(.plain)
                                 
                                 if showComments {
-                                    TextField("Comments",text: $userProgress.userComments)
+                                    TextField("Notes",text: $userProgress.userComments)
                                         .transition(.opacity.combined(with: .move(edge: .top)))
                                 }
                             }

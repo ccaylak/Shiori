@@ -127,10 +127,11 @@ struct VoiceActorDetailsView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                ShareLink(item: URL(string: details?.data.url ?? "myanimelist.net")!) {
-                    Image(systemName: "square.and.arrow.up")
-                        .foregroundColor(.accentColor)
+            if let url = URL(string: "https://myanimelist.net/people/\(id)") {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    ShareLink(item: url) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
                 }
             }
         }
@@ -144,10 +145,8 @@ struct VoiceActorDetailsView: View {
                 alertManager.isLoading = true
                 defer { alertManager.isLoading = false }
                 
-                
                 do {
                     details = try await jikanPersonFullController.fetchPersonFull(id: id)
-                    print("Details loaded:", details?.data.name ?? "nil")
                 } catch {
                     print("Failed to load voice actor details:", error)
                 }

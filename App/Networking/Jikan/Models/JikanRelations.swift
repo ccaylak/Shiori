@@ -16,5 +16,4 @@ struct RelationEntry: Decodable {
     private(set) var malId: Int
     private(set) var type: String
     private(set) var name: String
-    private(set) var url: String
 }

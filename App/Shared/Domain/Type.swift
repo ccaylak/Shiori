@@ -22,6 +22,20 @@ enum MediaType {
             case .pv: return String(localized: "PV", comment: "Anime type")
             }
         }
+        
+        var icon: String {
+            switch self {
+            case .unknown: return "questionmark.circle"
+            case .tv: return "tv"
+            case .tvSpecial: return "sparkles.tv"
+            case .music: return "music.note.tv"
+            case .movie: return "film"
+            case .special: return "sparkles"
+            case .ona: return "globe"
+            case .cm: return "megaphone"
+            default: return "tv"
+            }
+        }
     }
     
     enum Manga: String, CaseIterable {

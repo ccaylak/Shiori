@@ -34,7 +34,7 @@ enum MALApiFields: String {
     // profile related
     case name = "name"
     case picture = "picture"
-    case myListStatus = "my_list_status{status, num_volumes_read, num_chapters_read, score, comments, updated_at, start_date, finish_date}"
+    case myListStatus = "my_list_status{status, num_episodes_watched, num_volumes_read, num_chapters_read, score, priority, comments, updated_at, start_date, finish_date}"
     case gender = "gender"
     case birthday = "birthday"
     case location = "location"

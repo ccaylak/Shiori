@@ -11,6 +11,8 @@ import SwiftUI
     @AppStorage("mangaFormat") var mangaFormat = MangaFormat.both
     @AppStorage("animeFormat") var animeFormat = AnimeFormat.episode
     @AppStorage("nameFormat") var nameFormat = NameFormat.firstLast
+    @AppStorage("includeFirstEpisodeInDuration") var includeFirstEpisodeInDuration = true
+    @AppStorage("advancedMode") var advancedMode: Bool = false
     
     private init() {}
 }

@@ -71,7 +71,7 @@ struct StudioDetailsView: View {
                             NavigationLink(destination: DetailsView(media: MediaNode(
                                 id: anime.malId,
                                 title: anime.preferredTitle,
-                                mainPicture: Picture(),
+                                mainPicture: Picture(large: anime.images.jpgImage.largeImage, medium: anime.images.jpgImage.baseImage),
                                 mediaType: "tv"
                             ))) {
                                 VStack {

@@ -102,9 +102,9 @@ struct StudiosView: View {
                 ToolbarItem {
                     Menu {
                         Picker("Choose a sort order", selection: $resultManager.animeStudioSort){
-                            ForEach(SortOrder.allCases, id: \.self) { order in
-                                Label(order.displayName, systemImage: order.icon)
-                                    .tag(order)
+                            ForEach(SortDirection.allCases, id: \.self) { direction in
+                                Label(direction.displayName, systemImage: direction.icon)
+                                    .tag(direction)
                             }
                         }
                     }  label: {

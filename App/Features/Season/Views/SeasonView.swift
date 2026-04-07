@@ -12,14 +12,10 @@ struct SeasonView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
+            Form {
                 ForEach(MediaType.Anime.allCases, id: \.self) { animeType in
                     if let items = groupedMedia[animeType], !items.isEmpty {
-                        VStack(alignment: .leading, spacing: 5) {
-                        
-                            LabelWithChevron(text: animeType.displayName)
-                            .padding(.horizontal)
-                            
+                        Section(header: Label(animeType.displayName,systemImage: animeType.icon)) {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 10) {
                                     ForEach(items, id: \.node.id) { anime in
@@ -45,10 +41,9 @@ struct SeasonView: View {
                                         }.buttonStyle(.plain)
                                     }
                                 }
-                                .padding(.horizontal)
                             }
+                            .scrollClipDisabled()
                         }
-                        .padding(.bottom, 4)
                     }
                 }
             }
@@ -81,18 +76,21 @@ struct SeasonView: View {
                 }
                 ToolbarItem {
                     Menu {
-                        Picker("Select year", selection: $seasonManager.selectedYear) {
-                            ForEach((1980...Calendar.current.component(.year, from: Date()) + 1).reversed(), id: \.self) { year in
+                        Picker("Select year",selection: $seasonManager.selectedYear) {
+                            ForEach(
+                                (1980...Calendar.current.component(.year, from: Date()) + 1).reversed(),
+                                id: \.self
+                            ) { year in
                                 Text(String(year)).tag(year)
                             }
                         }
                     } label : {
                         Text(String(seasonManager.selectedYear))
-                                .foregroundColor(.accentColor)
+                            .foregroundColor(.accentColor)
                     }
                 }
             }
-            .navigationTitle("Anime season")
+            .navigationTitle("Anime Season")
             .toolbarTitleDisplayMode(.inlineLarge)
         }
     }

@@ -18,7 +18,6 @@ struct JikanAnimeStudioResponse: Decodable {
 struct JikanStudioData: Decodable {
     
     private(set) var malId: Int
-    private(set) var url: String
     private(set) var favorites: Int
     private(set) var titles: [JikanTitle]
     private(set) var images: JikanImages

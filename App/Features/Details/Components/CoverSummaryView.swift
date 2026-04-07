@@ -115,7 +115,13 @@ private struct CountBadgeView: View {
                     .bold()
                     .font(.title3)
                 
-                Image(systemName: "tv.fill")
+                Image(systemName: {
+                    if case .anime = type {
+                        return SeriesType.anime.icon
+                    } else {
+                        return SeriesType.manga.icon
+                    }
+                }())
             }
             .padding(4)
             .foregroundStyle(.primary)
@@ -131,19 +137,19 @@ private struct CountBadgeView: View {
         case .anime(let animeType):
             switch animeType {
             case .movie where episodes == 1:
-                return String(localized: "\(episodes) part")
+                return String(localized: "\(episodes) Part")
             case .movie where episodes > 1:
-                return String(localized: "\(episodes) parts")
+                return String(localized: "\(episodes) Parts")
             case .tv where episodes > 1,
                     .ova where episodes > 1,
                     .tvSpecial where episodes > 1,
                     .special where episodes > 1:
-                return String(localized: "\(episodes) episodes")
+                return String(localized: "\(episodes) Episodes")
             case .tv where episodes == 1,
                     .ova where episodes == 1,
                     .tvSpecial where episodes == 1,
                     .special where episodes == 1:
-                return String(localized: "\(episodes) episode")
+                return String(localized: "\(episodes) Episode")
             default:
                 return nil
             }
@@ -151,9 +157,9 @@ private struct CountBadgeView: View {
         case .manga(let mangaType):
             switch mangaType {
             case .manga where chapters > 1, .lightNovel where chapters > 1, .manhwa where chapters > 1, .manhua where chapters > 1, .doujinshi where chapters > 1:
-                return String(localized: "\(chapters) chapters")
+                return String(localized: "\(chapters) Chapters")
             case .manga where chapters == 0 && volumes > 1, .doujinshi where chapters == 0 && volumes > 1:
-                return String(localized: "\(volumes) volumes")
+                return String(localized: "\(volumes) Volumes")
             default:
                 return nil
             }
