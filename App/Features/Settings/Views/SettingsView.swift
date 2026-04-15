@@ -63,7 +63,6 @@ struct SettingsView: View {
                         Label {
                             VStack (alignment: .leading, spacing: 2) {
                                 Text("Names")
-                                    .font(.headline)
                                 
                                 Text("Choose how names are displayed")
                                     .font(.caption)
@@ -80,7 +79,6 @@ struct SettingsView: View {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Title Language")
-                                    .font(.headline)
                                 
                                 Text("Preferred title language for Anime and Manga")
                                     .font(.caption)
@@ -109,7 +107,6 @@ struct SettingsView: View {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Advanced Mode")
-                                    .font(.headline)
                                 
                                 Text("Adds additional fields for tracking")
                                     .font(.caption)
@@ -127,7 +124,6 @@ struct SettingsView: View {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Mail")
-                                    .font(.headline)
                                     .foregroundStyle(Color.primary)
                                 
                                 Text("Feedback and Support")
@@ -142,7 +138,6 @@ struct SettingsView: View {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Discord")
-                                    .font(.headline)
                                     .foregroundStyle(Color.primary)
                                 
                                 Text("Updates and More")
