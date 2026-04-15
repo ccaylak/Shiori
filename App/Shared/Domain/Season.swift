@@ -24,10 +24,10 @@ enum Season: String, CaseIterable {
     static var current: Season {
         let month = Calendar.current.component(.month, from: Date())
         switch month {
-        case 12, 1, 2: return .winter
-        case 3, 4, 5: return .spring
-        case 6, 7, 8: return .summer
-        case 9, 10, 11: return .fall
+        case 1, 2, 3: return .winter
+        case 4, 5, 6: return .spring
+        case 7, 8, 9: return .summer
+        case 10, 11, 12: return .fall
         default: return .winter
         }
     }

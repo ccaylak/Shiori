@@ -5,9 +5,9 @@ import Foundation
     private static let tokenHandler: TokenHandler = .shared
     private static let apiKey = Config.apiKey
     
-    static func buildRequest(url: URL, httpMethod: String) -> URLRequest {
+    static func buildRequest(url: URL, httpMethod: HTTPMethod) -> URLRequest {
         var request = URLRequest(url: url)
-        request.httpMethod = httpMethod
+        request.httpMethod = httpMethod.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if let accessToken = tokenHandler.accessToken, !accessToken.isEmpty {

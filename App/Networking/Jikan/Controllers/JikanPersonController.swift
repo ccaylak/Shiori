@@ -5,7 +5,7 @@ import Foundation
     func fetchPersonFull(id: Int) async throws -> JikanPerson {
         let url = URL(string: JikanEndpoints.Person(id: id).full)!
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder.snakeCaseDecoder

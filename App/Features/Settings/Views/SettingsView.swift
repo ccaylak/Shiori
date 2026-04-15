@@ -60,13 +60,35 @@ struct SettingsView: View {
                     NavigationLink {
                         NameSelectionView()
                     } label: {
-                        Label("Names", systemImage: "textformat.characters.arrow.left.and.right")
+                        Label {
+                            VStack (alignment: .leading, spacing: 2) {
+                                Text("Names")
+                                    .font(.headline)
+                                
+                                Text("Choose how names are displayed")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "textformat.characters.arrow.left.and.right")
+                        }
                     }
                     
                     NavigationLink {
                         TitleLanguageSelectionView()
                     } label: {
-                        Label("Title Language", systemImage: "globe")
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Title Language")
+                                    .font(.headline)
+                                
+                                Text("Preferred title language for Anime and Manga")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "globe")
+                        }
                     }
                 }
                 
@@ -84,18 +106,49 @@ struct SettingsView: View {
                     }
                     
                     Toggle(isOn: $settingsManager.advancedMode) {
-                        Label("Advanced Mode", systemImage: "gearshape.2")
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Advanced Mode")
+                                    .font(.headline)
+                                
+                                Text("Adds additional fields for tracking")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "gearshape.2")
+                        }
                     }
                     .toggleStyle(.switch)
                 }
                 
                 Section ("Contact"){
                     Link(destination: URL(string: "mailto:shiori.app@icloud.com")!) {
-                        Label("Mail", systemImage: "envelope")
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Mail")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.primary)
+                                
+                                Text("Feedback and Support")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "envelope")
+                        }
                     }
                     Link(destination: URL(string: "https://discord.gg/4ajqv3aMdd")!) {
                         Label {
-                            Text("Discord")
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Discord")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.primary)
+                                
+                                Text("Updates and More")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.secondary)
+                            }
                         } icon: {
                             Image("discord_icon")
                                 .resizable()

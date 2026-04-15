@@ -12,6 +12,7 @@ struct LibraryMediaView: View {
     let score: Int
     let progress: LibraryMediaProgress
     let episodeDurationInMinutes: Int
+    let completed: Bool
     
     var body: some View {
         HStack(spacing: 20) {
@@ -62,12 +63,14 @@ struct LibraryMediaView: View {
                         
                         if progress.totalValue > 0 {
                             Gauge(value: Double(progress.currentValue), in: 0...Double(progress.totalValue)) {
-                                Text(leftTime(episodeDurationInMinutes: episodeDurationInMinutes, totalEpisodes: progress.totalValue, watchedEpisodes: progress.currentValue, includeFirstEpisodeInDuration: settingsManager.includeFirstEpisodeInDuration))
-                                    .font(.caption2)
-                                    .foregroundStyle(Color.secondary)
-                                    .bold()
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .isVisible(settingsManager.animeFormat == .episodesWithDuration)
+                                if (!completed) {
+                                    Text(leftTime(episodeDurationInMinutes: episodeDurationInMinutes, totalEpisodes: progress.totalValue, watchedEpisodes: progress.currentValue, includeFirstEpisodeInDuration: settingsManager.includeFirstEpisodeInDuration))
+                                        .font(.caption2)
+                                        .foregroundStyle(Color.secondary)
+                                        .bold()
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .isVisible(settingsManager.animeFormat == .episodesWithDuration)
+                                }
                             }
                                 .gaugeStyle(.accessoryLinearCapacity)
                         } else {

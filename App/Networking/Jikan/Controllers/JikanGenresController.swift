@@ -5,7 +5,7 @@ import Foundation
     func fetchAnimeGenres() async throws -> JikanGenre {
         let url = URL(string: JikanEndpoints.Genres().anime)!
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder.snakeCaseDecoder
@@ -24,7 +24,7 @@ import Foundation
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder.snakeCaseDecoder
@@ -34,7 +34,7 @@ import Foundation
     func fetchMangaGenres() async throws -> JikanGenre {
         let url = URL(string: JikanEndpoints.Genres().manga)!
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         let decoded = try JSONDecoder
@@ -60,7 +60,7 @@ import Foundation
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
 
         return try JSONDecoder.snakeCaseDecoder

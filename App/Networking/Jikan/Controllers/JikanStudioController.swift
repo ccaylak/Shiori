@@ -4,7 +4,7 @@ import Foundation
     func fetchAnimeStudioById(id: Int) async throws -> JikanAnimeStudioResponse {
         let url = URL(string: JikanEndpoints.Studio(id: id).studio)!
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder
@@ -26,7 +26,7 @@ import Foundation
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder.snakeCaseDecoder
@@ -45,7 +45,7 @@ import Foundation
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder.snakeCaseDecoder

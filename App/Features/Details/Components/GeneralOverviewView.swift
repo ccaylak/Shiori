@@ -54,13 +54,13 @@ struct GeneralOverviewView: View {
             (.tvSpecial, let episodes) where episodes > 1,
             (.ona, let episodes) where episodes > 1,
             (.ova, let episodes) where episodes > 1:
-            return String(localized: "\(type.displayName), \(episodes) episodes • \(minutes) minutes (≈\(formattedDuration(from: episodes*minutes)))")
+            return String(localized: "\(type.displayName), \(episodes) Episodes • \(minutes) Minutes (≈\(formattedDuration(from: episodes*minutes)))")
         case (.tv, let episodes) where episodes == 1,
             (.special, let episodes) where episodes == 1,
             (.tvSpecial, let episodes) where episodes == 1,
             (.ona, let episodes) where episodes == 1,
             (.ova, let episodes) where episodes == 1:
-            return String(localized: "\(type.displayName), \(episodes) episode • \(minutes) minutes")
+            return String(localized: "\(type.displayName), \(episodes) Episode • \(minutes) Minutes")
         default:
             return type.displayName
         }
@@ -83,9 +83,9 @@ struct GeneralOverviewView: View {
         
         switch (chapters, volumes) {
         case (let chapters, let volumes) where chapters > 0 && volumes > 0:
-            return String(localized: "\(type.displayName), \(chapters) chapters in \(volumes) volumes")
+            return String(localized: "\(type.displayName), \(chapters) Chapters in \(volumes) Volumes")
         case (let chapters, 0) where chapters > 0:
-            return String(localized: "\(type.displayName), \(chapters) chapters")
+            return String(localized: "\(type.displayName), \(chapters) Chapters")
         default:
             return type.displayName
         }

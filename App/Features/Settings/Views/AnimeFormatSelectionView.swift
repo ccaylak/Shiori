@@ -9,7 +9,7 @@ struct AnimeFormatSelectionView: View {
                 header: Text("Preview"),
                 footer: Text("This preview is only meant to illustrate the selected format.")
             ) {
-                LibraryMediaView(title: "Nana", image: "https://myanimelist.net/images/anime/2/11232l.jpg", release: "Spring 2006", type: .anime(.tv), score: 10, progress: LibraryMediaProgress(current: 5, total: 47, secondaryCurrent: 0, secondaryTotal: 0), episodeDurationInMinutes: 22)
+                LibraryMediaView(title: "Nana", image: "https://myanimelist.net/images/anime/2/11232l.jpg", release: "Spring 2006", type: .anime(.tv), score: 10, progress: LibraryMediaProgress(current: 5, total: 47, secondaryCurrent: 0, secondaryTotal: 0), episodeDurationInMinutes: 22, completed: false)
             }
             
             Section {

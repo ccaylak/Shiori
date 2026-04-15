@@ -29,6 +29,9 @@ struct LibraryView: View {
     @ObservedObject private var tokenHandler: TokenHandler = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
     
+    @State private var detailMedia: MediaNode?
+    @State private var pendingDetailMedia: MediaNode?
+    
     
     private var filteredLibraryData: [Media] {
         if searchTerm.isEmpty {
@@ -40,11 +43,29 @@ struct LibraryView: View {
         }
     }
     
+    private var shouldReverseResultLocally: Bool {
+        switch libraryManager.mediaType {
+        case .manga:
+            return libraryManager.mangaSortOrder.apiDirection != libraryManager.sortDirection
+            
+        case .anime:
+            return libraryManager.animeSortOrder.apiDirection != libraryManager.sortDirection
+        }
+    }
+
+    private var displayedLibraryData: [Media] {
+        if shouldReverseResultLocally {
+            return Array(filteredLibraryData.reversed())
+        } else {
+            return filteredLibraryData
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             List {
                 if tokenHandler.isAuthenticated {
-                    ForEach(filteredLibraryData) { media in
+                    ForEach(displayedLibraryData) { media in
                         Button(action: {
                             selectedMedia = media
                             loadingMediaID = media.node.id
@@ -61,7 +82,8 @@ struct LibraryView: View {
                                     secondaryCurrent: media.node.getMyListStatus.readVolumes,
                                     secondaryTotal: media.node.volumes
                                 ),
-                                episodeDurationInMinutes: media.node.averageEpisodeDurationInMinutes
+                                episodeDurationInMinutes: media.node.averageEpisodeDurationInMinutes,
+                                completed: media.node.getMyListStatus.progressStatus == "completed" ? true : false
                             ).overlay(
                                 Group {
                                     if loadingMediaID == media.node.id {
@@ -206,7 +228,7 @@ struct LibraryView: View {
                         }
                         
                     }
-                    if filteredLibraryData.isEmpty && !alertManager.isLoading {
+                    if displayedLibraryData.isEmpty && !alertManager.isLoading {
                         if searchTerm != "" {
                             ContentUnavailableView.search
                         } else {
@@ -231,9 +253,11 @@ struct LibraryView: View {
                     .backgroundStyle(Color(.secondarySystemGroupedBackground))
                 }
             }
+            .navigationDestination(item: $detailMedia) { media in
+                    DetailsView(media: media)
+                }
             .safeAreaInset(edge: .top) {
                 if tokenHandler.isAuthenticated {
-                    
                     PillPicker(
                         options: ProgressStatus.Manga.allCases,
                         selectedOption: $libraryManager.mangaProgressStatus,
@@ -307,7 +331,7 @@ struct LibraryView: View {
                         }
                         .isVisible(libraryManager.mediaType == .manga)
                     } label: {
-                        Image(systemName: "line.3.horizontal.decrease")
+                        Image(systemName: libraryManager.mediaType == .anime ? libraryManager.animeSortOrder.icon : libraryManager.mangaSortOrder.icon)
                             .fontWeight(.regular)
                             .foregroundColor(.accentColor)
                     }
@@ -337,16 +361,38 @@ struct LibraryView: View {
                 
                 startDate = nil
                 finishDate = nil
+                
+                if let pendingDetailMedia {
+                    let mediaToOpen = pendingDetailMedia
+                    self.pendingDetailMedia = nil
+                    
+                    DispatchQueue.main.async {
+                        detailMedia = mediaToOpen
+                    }
+                }
             }) { media in
                 NavigationStack {
                     List {
                         Section {
-                            HStack(spacing: 16) {
-                                AsyncImageView(imageUrl: media.node.mainPicture.largeUrl)
-                                    .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
-                                    .cornerRadius(12)
+                            Button {
+                                pendingDetailMedia = media.node
+                                
+                                selectedMedia = nil
+                            } label: {
+                                HStack(spacing: 16) {
+                                    AsyncImageView(imageUrl: media.node.mainPicture.largeUrl)
+                                        .frame(width: CoverSize.large.size.width, height: CoverSize.large.size.height)
+                                        .cornerRadius(12)
+                                        .overlay(alignment: .topTrailing) {
+                                            Image(systemName: "arrow.up.forward.square.fill")
+                                                .foregroundStyle(Color.primary)
+                                                .padding(6)
+                                                .glassEffectOrMaterial()
+                                        }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .center)
                             }
-                            .frame(maxWidth: .infinity, alignment: .center)
+                            .buttonStyle(.plain)
                             .listRowBackground(Color.clear)
                         }
                         .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
@@ -360,7 +406,7 @@ struct LibraryView: View {
                             }
                             .isVisible(libraryManager.mediaType == .manga)
                             
-                            Picker("Status", selection: $libraryEntry.progressStatus) {
+                            Picker("Progress", selection: $libraryEntry.progressStatus) {
                                 ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
                                     Text(animeSelection.displayName)
                                         .tag(animeSelection.rawValue)
@@ -372,8 +418,6 @@ struct LibraryView: View {
                                 ForEach(0...10, id: \.self) { rating in
                                     if let ratingValue = RatingValues(rawValue: rating) {
                                         Text(ratingValue.displayName).tag(rating)
-                                    } else {
-                                        Text("Unknown")
                                     }
                                 }
                             }
@@ -582,7 +626,7 @@ struct LibraryView: View {
                             }
                             ){
                                 Label {
-                                    Text(showComments ? "Remove comments" : "Add comments")
+                                    Text(showComments ? "Clear Notes" : "Add Notes")
                                 } icon: {
                                     Image(systemName: showComments ? "minus.circle.fill" : "plus.circle.fill")
                                         .symbolRenderingMode(.monochrome)
@@ -727,47 +771,7 @@ struct LibraryView: View {
             fetchLibrary()
         }
         .onChange(of: libraryManager.needToLoadData) {
-            if (libraryManager.mediaType == .manga &&
-                (
-                    libraryManager.mangaSortOrder == .mangaTitle ||
-                    libraryManager.mangaSortOrder == .listScore ||
-                    libraryManager.mangaSortOrder == .listUpdatedAt ||
-                    libraryManager.mangaSortOrder == .mangaStartDate)
-            ) {
-                if (libraryManager.mangaSortOrder == .mangaTitle) {
-                    if (libraryManager.sortDirection == .ascending) {
-                        fetchLibrary()
-                    }
-                    if libraryManager.sortDirection == .descending {
-                        //filteredLibraryData = filteredLibraryData.sorted {
-                          //  $0.node.title > $1.node.title
-                        //}
-                    }
-                }
-                
-                if (libraryManager.mangaSortOrder == .mangaStartDate && libraryManager.sortDirection == .descending) {
-                    fetchLibrary()
-                }
-                
-                if (libraryManager.mangaSortOrder == .listUpdatedAt && libraryManager.sortDirection == .descending) {
-                    fetchLibrary()
-                }
-                
-                if (libraryManager.mangaSortOrder == .listScore && libraryManager.sortDirection == .descending) {
-                    fetchLibrary()
-                }
-            }
-            
-            if (libraryManager.mediaType == .anime &&
-            (
-                libraryManager.animeSortOrder == .animeTitle ||
-                libraryManager.animeSortOrder == .listScore ||
-                libraryManager.animeSortOrder == .listUpdatedAt ||
-                libraryManager.animeSortOrder == .animeStartDate)
-            ) {
-                fetchLibrary()
-            }
-                
+            fetchLibrary()
         }
         .onChange(of: selectedMedia) {
             if (selectedMedia != nil) {

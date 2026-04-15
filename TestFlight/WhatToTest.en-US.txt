@@ -1,0 +1,19 @@
+What’s New:
+
+New Features
+- You can now open details from your library by tapping a cover while editing an entry
+- Choose how anime progress is displayed in the library (episode only or with additional estimated remaining time)
+- Choose how manga progress is tracked (chapters, volumes, or both)
+- Added an Advanced Mode toggle for simpler tracking (progress, episodes, rating)
+
+Reworks
+- Title language setting moved to Settings (instead of the Library)
+- Removed Portuguese as a language (the app is changing too frequently right now)
+- Library and search filters now use matching icons, so you can easily see what’s active
+- Updated the Library PillPicker with a “liquid glass” style
+- Updated the appearance of the Season view
+- Genres are now grouped more clearly in the Genre view
+
+Bug Fixes
+- Fixed “Load More” button in the results view
+- Fixed glitching share button

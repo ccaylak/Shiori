@@ -17,7 +17,8 @@ struct TitleLanguageSelectionView: View {
                     type: exampleAnime.specificMediaType,
                     score: exampleAnime.getMyListStatus.score,
                     progress: LibraryMediaProgress(current: exampleAnime.getMyListStatus.watchedEpisodes, total: exampleAnime.episodes, secondaryCurrent: 0, secondaryTotal: 0),
-                    episodeDurationInMinutes: exampleAnime.averageEpisodeDurationInMinutes
+                    episodeDurationInMinutes: exampleAnime.averageEpisodeDurationInMinutes,
+                    completed: false
                 )
             }
             Section {

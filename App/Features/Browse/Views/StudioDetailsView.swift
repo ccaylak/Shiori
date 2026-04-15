@@ -137,10 +137,10 @@ struct StudioDetailsView: View {
                     if let initialStudio {
                         studio = initialStudio
                     } else {
-                        studio = try? await jikanStudioController.fetchAnimeStudioById(id: malId).data
+                        studio = try await jikanStudioController.fetchAnimeStudioById(id: malId).data
                     }
                     
-                    jikanAnime = try! await jikanStudioController.fetchAnimesByAnimeStudio(id: malId, page: page)
+                    jikanAnime = try await jikanStudioController.fetchAnimesByAnimeStudio(id: malId, page: page)
                 }
             }
             .navigationTitle(studio?.englishTitle ?? "") // hier

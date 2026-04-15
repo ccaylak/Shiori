@@ -15,7 +15,7 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
@@ -34,7 +34,7 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {

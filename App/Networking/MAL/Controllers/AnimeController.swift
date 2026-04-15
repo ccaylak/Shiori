@@ -26,7 +26,7 @@ import SwiftUI
         let formBody = parameters.map { "\($0.key)=\($0.value)" }
             .joined(separator: "&")
         
-        var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
+        var request = APIRequest.buildRequest(url: url, httpMethod: .put)
         request.httpBody = formBody.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
@@ -59,7 +59,7 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
         var (data, response) = try await URLSession.shared.data(for: request)
         
@@ -84,7 +84,7 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
@@ -109,7 +109,7 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
+        var request = APIRequest.buildRequest(url: url, httpMethod: .put)
         request.httpBody = bodyData.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
@@ -134,7 +134,7 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
+        var request = APIRequest.buildRequest(url: url, httpMethod: .put)
         request.httpBody = bodyData.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
@@ -159,7 +159,7 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        var request = APIRequest.buildRequest(url: url, httpMethod: "PUT")
+        var request = APIRequest.buildRequest(url: url, httpMethod: .put)
         request.httpBody = bodyData.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
@@ -175,25 +175,38 @@ import SwiftUI
     func fetchLibrary() async throws -> MediaResponse {
         var components = URLComponents(string: MALEndpoints.Anime.library)!
         
-        components.queryItems = (
-            libraryManager.animeProgressStatus != .all
-            ? [URLQueryItem(name: "status", value: libraryManager.animeProgressStatus.rawValue)]
-            : []
-        ) + [
-            URLQueryItem(name: "sort", value: libraryManager.animeSortOrder.rawValue),
+        var queryItems: [URLQueryItem] = []
+            
+        if libraryManager.animeProgressStatus != .all {
+            queryItems.append(
+                URLQueryItem(name: "status", value: libraryManager.animeProgressStatus.rawValue)
+            )
+        }
+        
+        if let sort = libraryManager.animeSortOrder.apiValue {
+            queryItems.append(
+                URLQueryItem(name: "sort", value: sort)
+            )
+        }
+        
+        queryItems += [
             URLQueryItem(
                 name: "fields",
-                value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .startDate, .mediaType, .myListStatus, .numEpisodes, .status, .startSeason, .averageEpisodeDuration])
+                value: MALApiFields.fieldsHeader(
+                    for: [.alternativeTitles, .startDate, .mediaType, .myListStatus, .numEpisodes, .status, .startSeason, .averageEpisodeDuration]
+                )
             ),
             URLQueryItem(name: "limit", value: "1000"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
         ]
+            
+        components.queryItems = queryItems
         
         guard let url = components.url else {
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
@@ -213,7 +226,7 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "DELETE")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .delete)
         var (_, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {

@@ -90,14 +90,14 @@ struct MediaView: View {
         }
         
         if type == .movie {
-            return episodes > 1 ? String(localized: "\(episodes) parts") : ""
+            return episodes > 1 ? String(localized: "\(episodes) Parts") : ""
         }
         
         if type == .tvSpecial || type == .special {
-            return episodes > 1 ? String(localized: "\(episodes) episodes") : ""
+            return episodes > 1 ? String(localized: "\(episodes) Episodes") : ""
         }
         
-        return String(localized: "\(episodes) episodes (\(status.displayName))")
+        return String(localized: "\(episodes) Episodes (\(status.displayName))")
     }
     
     func formattedOtherMangaDetails(chapters: Int, status: Status.Manga, type: MediaType.Manga) -> String {
@@ -107,6 +107,6 @@ struct MediaView: View {
         if (chapters == 0 && status == .finished) {
             return status.displayName
         }
-        return String(localized: "\(chapters) chapters (\(status.displayName))")
+        return String(localized: "\(chapters) Chapters (\(status.displayName))")
     }
 }

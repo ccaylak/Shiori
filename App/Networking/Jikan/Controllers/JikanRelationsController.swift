@@ -4,7 +4,7 @@ import Foundation
     func fetchAnimeRelations(id: Int) async throws -> [RelationEntry] {
         let url = URL(string: JikanEndpoints.Relations(id: id).animeRelations)!
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         let animeRelations = try JSONDecoder
@@ -19,7 +19,7 @@ import Foundation
     func fetchMangaRelations(id: Int) async throws -> [RelationEntry] {
         let url = URL(string: JikanEndpoints.Relations(id: id).mangaRelations)!
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         let mangaRelations = try JSONDecoder

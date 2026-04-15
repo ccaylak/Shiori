@@ -5,7 +5,7 @@ import Foundation
     func fetchProfileStatistics(username: String) async throws -> JikanResponse {
         let url = URL(string: JikanEndpoints.Profile(username: username).statistics)!
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder
@@ -16,7 +16,7 @@ import Foundation
     func fetchProfileFavorites(username: String) async throws -> JikanFavorites {
         let url = URL(string: JikanEndpoints.Profile(username: username).favorites)!
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder
@@ -27,7 +27,7 @@ import Foundation
     func fetchFriends(username: String) async throws -> JikanFriends {
         let url = URL(string: JikanEndpoints.Profile(username: username).friends)!
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: "GET")
+        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder

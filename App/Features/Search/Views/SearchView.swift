@@ -46,7 +46,7 @@ struct SearchView: View {
                     mangaSortPicker
                 }
             } label: {
-                Image(systemName: "line.3.horizontal.decrease")
+                Image(systemName: resultManager.seriesType == .anime ? resultManager.animeRankingType.icon : resultManager.mangaRankingType.icon)
                     .fontWeight(.regular)
                     .foregroundColor(.accentColor)
             }

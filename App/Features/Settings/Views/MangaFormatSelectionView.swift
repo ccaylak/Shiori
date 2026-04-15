@@ -10,7 +10,7 @@ struct MangaProgressFormatSelectionView: View {
                 header: Text("Preview"),
                 footer: Text("This preview is only meant to illustrate the selected format.")
             ) {
-                LibraryMediaView(title: "Nana", image: "https://myanimelist.net/images/manga/1/262324l.webp", release: "2000", type: .manga(.manga), score: 9, progress: LibraryMediaProgress(current: 10, total: 200, secondaryCurrent: 0, secondaryTotal: 0), episodeDurationInMinutes: 0)
+                LibraryMediaView(title: "Nana", image: "https://myanimelist.net/images/manga/1/262324l.webp", release: "2000", type: .manga(.manga), score: 9, progress: LibraryMediaProgress(current: 10, total: 200, secondaryCurrent: 0, secondaryTotal: 0), episodeDurationInMinutes: 0, completed: false)
             }
             
             Section(
