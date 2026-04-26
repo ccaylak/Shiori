@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "myanimelist.svg",
+      "filename" : "MyAnimeList-2.png",
       "idiom" : "universal"
     }
   ],
@@ -10,6 +10,6 @@
     "version" : 1
   },
   "properties" : {
-    "preserves-vector-representation" : true
+    "template-rendering-intent" : "template"
   }
 }

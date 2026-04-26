@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MainView: View {
     
-    @State private var selectedTab = "search"
+    @AppStorage("selectedTab") private var selectedTab = "search"
     @ObservedObject private var settingsManager: SettingsManager = .shared
     
     var body: some View {

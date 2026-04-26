@@ -8,6 +8,7 @@ struct LoginView: View {
     private var jikanProfileController = JikanProfileController()
     private var userController = UserController()
     private var malService: MALService = .shared
+    private let authService = MALAuthService.shared
     
     @StateObject private var tokenHandler: TokenHandler = .shared
     
@@ -368,18 +369,34 @@ struct LoginView: View {
                         Button {
                             Task {
                                 isAuthenticating = true
+                                defer { isAuthenticating = false }
+                                
                                 do {
-                                    let urlWithToken = try await webAuthenticationSession.authenticate(using: generateLoginUrl()!, callbackURLScheme: "yourapp", preferredBrowserSession: .shared)
-                                    await signIn(using: urlWithToken)
+                                    guard let loginURL = authService.generateLoginURL() else { return }
+                                    
+                                    let callbackURL = try await webAuthenticationSession.authenticate(
+                                        using: loginURL,
+                                        callbackURLScheme: "yourapp",
+                                        preferredBrowserSession: .shared
+                                    )
+                                    
+                                    let tokenResponse = try await authService.exchangeCode(from: callbackURL)
+                                    tokenHandler.setTokens(from: tokenResponse)
                                 } catch {
                                     print("Authentication failed: \(error)")
                                 }
-                                isAuthenticating = false
                             }
                         } label: {
-                            Text("Log in with MyAnimeList")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
+                            HStack(alignment: .center) {
+                                Text("Log in with")
+                                    .fontWeight(.semibold)
+                                
+                                Image("mal_logo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundStyle(Color.white)
+                                    .frame(height: 16)
+                            }
                         }
                         .borderedProminentOrGlassProminent()
                         .disabled(isAuthenticating)
@@ -486,82 +503,6 @@ struct LoginView: View {
             }
         }
         
-    }
-    
-    func signIn(using url: URL) async {
-        do {
-            getCodeValueFromUrl(url)
-            if code.isEmpty { return }
-            
-            let baseURLString = "https://myanimelist.net/v1/oauth2/token"
-            var requestBody = "client_id=\(Config.apiKey)&"
-            requestBody += "code=\(code)&"
-            requestBody += "code_verifier=\(codeChallenge)&"
-            requestBody += "grant_type=authorization_code"
-            
-            guard let url = URL(string: baseURLString) else { return }
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            request.httpBody = requestBody.data(using: .utf8)
-            
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-                print("Error: HTTP request failed with status code \(httpResponse.statusCode)")
-                return
-            }
-            
-            let content = try JSONDecoder
-                .snakeCaseDecoder
-                .decode(TokenResponse.self, from: data)
-            tokenHandler.setTokens(from: content)
-        } catch {
-            print("Error during sign-in: \(error)")
-        }
-    }
-    
-    func getCodeValueFromUrl(_ url: URL) {
-        guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
-        guard let queryItems = urlComponents.queryItems else { return }
-        
-        for queryItem in queryItems {
-            if queryItem.name == "code" {
-                code = queryItem.value ?? ""
-            }
-        }
-    }
-    
-    func getNewCodeVerifier() -> String {
-        let allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~"
-        var result = ""
-        
-        for _ in 0..<128 {
-            let randomIndex = Int(arc4random_uniform(UInt32(allowedCharacters.count)))
-            let randomCharacter = allowedCharacters[allowedCharacters.index(allowedCharacters.startIndex, offsetBy: randomIndex)]
-            result.append(randomCharacter)
-        }
-        
-        return result
-    }
-    
-    func generateLoginUrl() -> URL?{
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "myanimelist.net"
-        components.path = "/v1/oauth2/authorize"
-        
-        codeChallenge = getNewCodeVerifier()
-        
-        components.queryItems = [
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "client_id", value: Config.apiKey),
-            URLQueryItem(name: "state", value: UUID().uuidString),
-            URLQueryItem(name: "code_challenge", value: codeChallenge),
-            URLQueryItem(name: "code_challenge_method", value: "plain"),
-        ]
-        guard let url = components.url else { return nil}
-        return url
     }
 }
 

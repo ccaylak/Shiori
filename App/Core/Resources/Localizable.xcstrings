@@ -1054,12 +1054,32 @@
         }
       }
     },
+    "Connect your MyAnimeList account to sync your library and track your progress." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinde dein MyAnimeList-Konto, um deine Bibliothek zu synchronisieren und deinen Fortschritt zu verfolgen."
+          }
+        }
+      }
+    },
     "Contact" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kontaktmöglichkeiten"
+          }
+        }
+      }
+    },
+    "Continue with" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinde dich mit"
           }
         }
       }
@@ -1621,12 +1641,22 @@
         }
       }
     },
-    "Get the latest app news, explore the roadmap, share feature ideas, report bugs, or just hang out – all on Discord!" : {
+    "Get Started" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erhalte die neuesten App News, wirf einen Blick auf die Roadmap, teile Feature-Ideen, melde Bugs – oder chatte einfach auf Discord!"
+            "value" : "Starten"
+          }
+        }
+      }
+    },
+    "Get updates, share feedback, report bugs and talk with other Shiori users." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier bekommst du Updates, kannst Feedback geben, Bugs melden und dich mit anderen Shiori-Usern austauschen."
           }
         }
       }
@@ -1843,12 +1873,22 @@
         }
       }
     },
-    "Join Server" : {
+    "Join Shiori on" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Server beitreten"
+            "value" : "Zum Shiori"
+          }
+        }
+      }
+    },
+    "Join the Shiori Discord" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tritt dem Shiori Discord bei"
           }
         }
       }
@@ -1904,6 +1944,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zuletzt aktualisiert"
+          }
+        }
+      }
+    },
+    "Let's get you set up" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lass uns alles einrichten"
           }
         }
       }
@@ -1970,12 +2020,12 @@
         }
       }
     },
-    "Log in with MyAnimeList" : {
+    "Log in with" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mit MyAnimeList einloggen"
+            "value" : "Einloggen mit"
           }
         }
       }
@@ -2364,16 +2414,6 @@
         }
       }
     },
-    "No Thanks" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nein, danke"
-          }
-        }
-      }
-    },
     "Non-binary ⚧" : {
       "comment" : "Gender",
       "localizations" : {
@@ -2472,6 +2512,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "One-Shot"
+          }
+        }
+      }
+    },
+    "or" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "oder"
           }
         }
       }
@@ -3112,6 +3162,16 @@
         }
       }
     },
+    "Skip for now" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überspringen"
+          }
+        }
+      }
+    },
     "Slice of Life" : {
       "comment" : "Genre",
       "localizations" : {
@@ -3600,6 +3660,16 @@
         }
       }
     },
+    "Track your anime and manga, manage your library, and discover new favorites." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Behalte deine Anime und Manga im Blick, verwalte deine Bibliothek und entdecke neue Favoriten"
+          }
+        }
+      }
+    },
     "Tracks episodes and shows the total remaining watch time." : {
       "localizations" : {
         "de" : {
@@ -3833,6 +3903,16 @@
         }
       }
     },
+    "Welcome to Shiori!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Willkommen bei Shiori!"
+          }
+        }
+      }
+    },
     "Will air in %@" : {
       "localizations" : {
         "de" : {
@@ -3880,6 +3960,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ja"
+          }
+        }
+      }
+    },
+    "You can join anytime later from Settings." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst auch nachträglich über die Einstellungen beitreten."
+          }
+        }
+      }
+    },
+    "You can still connect your account later." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst deinen Account auch später noch verbinden."
           }
         }
       }

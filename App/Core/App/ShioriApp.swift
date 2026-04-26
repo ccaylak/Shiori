@@ -6,7 +6,7 @@ import TelemetryDeck
 struct ShioriApp: App {
     
     @AppStorage("isFirstLaunch") private var isFirstLaunch: Bool = true
-    @AppStorage("showDiscordSheet") private var showDiscordSheet: Bool = true
+    @AppStorage("shouldShowOnboarding") private var shouldShowOnboarding: Bool = false
     @ObservedObject private var settingsManager: SettingsManager = .shared
     @StateObject private var alertManager: AlertManager = .shared
     private var tokenHandler: TokenHandler = .shared
@@ -18,53 +18,11 @@ struct ShioriApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
-                .sheet(isPresented: $showDiscordSheet) {
-                    VStack(spacing: 20) {
-                        HStack {
-                            Image("discord_icon")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(Color(red: 88/255, green: 101/255, blue: 242/255))
-                            
-                            Text("Discord")
-                                .font(.title)
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color(red: 88/255, green: 101/255, blue: 242/255))
-                        }
-                        
-                        
-                        Text("Get the latest app news, explore the roadmap, share feature ideas, report bugs, or just hang out – all on Discord!")
-                            .font(.caption)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 30)
-                            .frame(maxWidth: 400)
-                        
-                        Button("Join Server") {
-                            if let url = URL(string: "https://discord.gg/4ajqv3aMdd") {
-                                UIApplication.shared.open(url)
-                            }
-                            showDiscordSheet = false
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color(red: 88/255, green: 101/255, blue: 242/255))
-                        .controlSize(.regular)
-                        .frame(maxWidth: 150)
-
-                        Button("No Thanks", role: .destructive) {
-                            showDiscordSheet = false
-                        }
-                        .buttonStyle(.bordered)
-                        .controlSize(.mini)
-                        .frame(maxWidth: 150)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .presentationDetents([.fraction(0.4)])
-                    .interactiveDismissDisabled()
+                .sheet(isPresented: $shouldShowOnboarding) {
+                    OnboardingFlowView(isPresented: $shouldShowOnboarding)
+                    .presentationDetents([.medium])
                     .presentationBackgroundInteraction(.disabled)
-                    .presentationDragIndicator(.visible)
-                    .ignoresSafeArea(edges: .top)
+                    .interactiveDismissDisabled()
                 }
                 .environmentObject(alertManager)
                 .toast(isPresenting: $alertManager.isLoading, tapToDismiss: false) {
@@ -82,6 +40,7 @@ struct ShioriApp: App {
                 .onAppear {
                     if isFirstLaunch {
                         tokenHandler.revokeTokens()
+                        shouldShowOnboarding = true
                         isFirstLaunch = false
                     }
                 }

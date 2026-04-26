@@ -13,6 +13,19 @@ extension View {
     }
     
     @ViewBuilder
+    func buttonSizingFullWidth() -> some View {
+        if #available(iOS 26.0, *) {
+            self
+                .buttonSizing(.flexible)
+                .padding(.horizontal)
+        } else {
+            self
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal)
+        }
+    }
+    
+    @ViewBuilder
     func softScrollEdgeEffect(for edges: Edge.Set = .all) -> some View {
         if #available(iOS 26.0, *) {
             self.scrollEdgeEffectStyle(.soft, for: edges)
@@ -54,6 +67,18 @@ extension View {
             self.buttonStyle(.glassProminent)
         } else {
             self.buttonStyle(.borderedProminent)
+        }
+    }
+    
+    //iOS 18
+    @ViewBuilder
+    func zoomTransitionIfAvailable<ID: Hashable>(id: ID, namespace: Namespace.ID) -> some View {
+        if #available(iOS 18.0, *) {
+            self.navigationTransition(
+                .zoom(sourceID: id, in: namespace)
+            )
+        } else {
+            self
         }
     }
 }
