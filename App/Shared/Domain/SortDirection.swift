@@ -1,7 +1,8 @@
 import Foundation
 
 enum SortDirection: String, CaseIterable {
-    case ascending, descending
+    case ascending = "asc"
+    case descending = "desc"
     
     var displayName: String {
         switch self {

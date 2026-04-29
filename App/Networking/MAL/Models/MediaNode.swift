@@ -159,7 +159,7 @@ extension MediaNode {
         if case let .anime(status) = getEntryStatus {
             return status
         } else {
-            return .planToWatch // default
+            return .planToWatch
         }
     }
     
@@ -167,12 +167,16 @@ extension MediaNode {
         if case let .manga(status) = getEntryStatus {
             return status
         } else {
-            return .planToRead // default
+            return .planToRead
         }
     }
     
     var isMangaOrAnime: SeriesType {
         let seriesType = mediaType?.lowercased() ?? ""
+        
+        if seriesType == "anime" {
+            return .anime
+        }
         
         if MediaType.Manga(rawValue: seriesType) != nil {
             return .manga

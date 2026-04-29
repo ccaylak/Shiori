@@ -449,6 +449,7 @@
       }
     },
     "Add to library" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -457,6 +458,9 @@
           }
         }
       }
+    },
+    "Add To Library" : {
+
     },
     "Added to library" : {
       "localizations" : {
@@ -577,9 +581,6 @@
           }
         }
       }
-    },
-    "AlertToast" : {
-      "shouldTranslate" : false
     },
     "All" : {
       "comment" : "Progress status\nSort by",
@@ -1200,9 +1201,6 @@
         }
       }
     },
-    "Discord" : {
-      "shouldTranslate" : false
-    },
     "Do you really want to logout of your MAL-Account?" : {
       "localizations" : {
         "de" : {
@@ -1271,6 +1269,7 @@
       }
     },
     "Edit" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1281,6 +1280,7 @@
       }
     },
     "Edit Reading Progress" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1291,6 +1291,7 @@
       }
     },
     "Edit Watch Progress" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1857,9 +1858,6 @@
         }
       }
     },
-    "Jikan" : {
-      "shouldTranslate" : false
-    },
     "John Doe" : {
       "shouldTranslate" : false
     },
@@ -1903,9 +1901,6 @@
           }
         }
       }
-    },
-    "KeychainSwift" : {
-      "shouldTranslate" : false
     },
     "Kids" : {
       "comment" : "Demographic",
@@ -2041,6 +2036,7 @@
       }
     },
     "Log in with your MyAnimeList account to see your %@ progress, rating, and status." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2349,9 +2345,6 @@
         }
       }
     },
-    "MyAnimeList" : {
-      "shouldTranslate" : false
-    },
     "Mystery" : {
       "comment" : "Genre",
       "localizations" : {
@@ -2457,9 +2450,6 @@
           }
         }
       }
-    },
-    "Nuke" : {
-      "shouldTranslate" : false
     },
     "OEL" : {
       "comment" : "Manga type",
@@ -3400,9 +3390,6 @@
           }
         }
       }
-    },
-    "TelemetryDeck" : {
-      "shouldTranslate" : false
     },
     "Themes" : {
       "localizations" : {

@@ -137,7 +137,7 @@ struct SettingsView: View {
                     Link(destination: URL(string: "https://discord.gg/4ajqv3aMdd")!) {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Discord")
+                                Text(verbatim: "Discord")
                                     .foregroundStyle(Color.primary)
                                 
                                 Text("Updates and More")
@@ -201,15 +201,27 @@ private struct AboutView: View {
             }
             
             Section ("Third-Party Services") {
-                Link("MyAnimeList", destination: URL(string: "https://MyAnimeList.net")!)
-                Link("Jikan", destination: URL(string: "https://jikan.moe")!)
+                Link(destination: URL(string: "https://myanimelist.net")!) {
+                    Text(verbatim: "MyAnimeList")
+                }
+                Link(destination: URL(string: "https://jikan.moe")!) {
+                    Text(verbatim: "Jikan")
+                }
             }
             
             Section ("Third-Party Libraries") {
-                Link("AlertToast", destination: URL(string: "https://github.com/elai950/AlertToast")!)
-                Link("KeychainSwift", destination: URL(string: "https://github.com/evgenyneu/keychain-swift")!)
-                Link("Nuke", destination: URL(string: "https://github.com/kean/Nuke")!)
-                Link("TelemetryDeck", destination: URL(string: "https://telemetrydeck.com")!)
+                Link(destination: URL(string: "https://github.com/elai950/AlertToast")!) {
+                    Text(verbatim: "AlertToast")
+                }
+                Link(destination: URL(string: "https://github.com/evgenyneu/keychain-swift")!) {
+                    Text(verbatim: "KeychainSwift")
+                }
+                Link(destination: URL(string: "https://github.com/kean/Nuke")!) {
+                    Text(verbatim: "Nuke")
+                }
+                Link(destination: URL(string: "https://telemetrydeck.com")!) {
+                    Text(verbatim: "TelemetryDeck")
+                }
             }
         }
         .noScrollEdgeEffect()
