@@ -1,0 +1,82 @@
+{
+  "color-space-for-untagged-svg-colors" : "display-p3",
+  "fill" : {
+    "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+  },
+  "groups" : [
+    {
+      "blend-mode" : "normal",
+      "blur-material" : 0.5,
+      "hidden" : false,
+      "layers" : [
+        {
+          "image-name" : "Band.png",
+          "name" : "Band",
+          "position" : {
+            "scale" : 1.67,
+            "translation-in-points" : [
+              -92.71640624999998,
+              -97
+            ]
+          }
+        },
+        {
+          "image-name" : "Loch.png",
+          "name" : "Loch",
+          "position" : {
+            "scale" : 1.62,
+            "translation-in-points" : [
+              0,
+              -236.80078125
+            ]
+          }
+        },
+        {
+          "image-name" : "Schrift.png",
+          "name" : "Schrift",
+          "position" : {
+            "scale" : 1.61,
+            "translation-in-points" : [
+              0,
+              72
+            ]
+          }
+        },
+        {
+          "image-name" : "Lesezeichen.png",
+          "name" : "Lesezeichen",
+          "position" : {
+            "scale" : 1.6,
+            "translation-in-points" : [
+              0,
+              61
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "position" : {
+        "scale" : 1,
+        "translation-in-points" : [
+          18,
+          -27
+        ]
+      },
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
