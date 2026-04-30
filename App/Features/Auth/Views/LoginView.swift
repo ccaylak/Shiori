@@ -1,5 +1,6 @@
 import SwiftUI
 import AuthenticationServices
+import TelemetryDeck
 
 struct LoginView: View {
     
@@ -437,7 +438,10 @@ struct LoginView: View {
                 }
                 
                 ToolbarItem {
-                    NavigationLink(destination: SettingsView()) {
+                    NavigationLink {
+                        SettingsView()
+                            .trackNavigation(path: "settings")
+                    } label: {
                         Image(systemName: "gearshape.fill")
                             .foregroundColor(.accentColor)
                     }

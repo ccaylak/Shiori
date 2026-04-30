@@ -136,6 +136,7 @@ struct DetailsView: View {
                                         try await mangaController.addToReadingList(id: media.id)
                                         media = try await mangaController.fetchDetails(id: media.id)
                                     }
+                                    Metrics.entryAction(.added, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                 }
                             } label : {
                                 Label("Add to library",systemImage: "plus.circle.fill")
@@ -536,9 +537,7 @@ struct DetailsView: View {
                                                     startDate: startDate,
                                                     finishDate: finishDate
                                                 )
-                                            alertManager.showUpdatedAlert = true
                                             media = try await mangaController.fetchDetails(id: media.id)
-                                            isSheetPresented = false
                                         }
                                         if (media.isMangaOrAnime == .anime) {
                                             try await animeController
@@ -551,10 +550,11 @@ struct DetailsView: View {
                                                     startDate: startDate,
                                                     finishDate: finishDate
                                                 )
-                                            alertManager.showUpdatedAlert = true
                                             media = try await animeController.fetchDetails(id: media.id)
-                                            isSheetPresented = false
                                         }
+                                        alertManager.showUpdatedAlert = true
+                                        isSheetPresented = false
+                                        Metrics.entryAction(.updated, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                     }
                                 }
                                 .tint(Color.getByColorString(settingsManager.accentColor.rawValue)
@@ -574,9 +574,7 @@ struct DetailsView: View {
                                                     startDate: startDate,
                                                     finishDate: finishDate
                                                 )
-                                            alertManager.showUpdatedAlert = true
                                             media = try await mangaController.fetchDetails(id: media.id)
-                                            isSheetPresented = false
                                         }
                                         if (media.isMangaOrAnime == .anime) {
                                             try await animeController
@@ -589,10 +587,11 @@ struct DetailsView: View {
                                                     startDate: startDate,
                                                     finishDate: finishDate
                                                 )
-                                            alertManager.showUpdatedAlert = true
                                             media = try await animeController.fetchDetails(id: media.id)
-                                            isSheetPresented = false
                                         }
+                                        alertManager.showUpdatedAlert = true
+                                        isSheetPresented = false
+                                        Metrics.entryAction(.updated, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                     }
                                 }
                                 .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
@@ -630,6 +629,7 @@ struct DetailsView: View {
                                         }
                                         showAlert = false
                                         isSheetPresented = false
+                                        Metrics.entryAction(.deleted, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                     }
                                 }
                                 Button("Cancel", role: .cancel) {}
@@ -660,8 +660,6 @@ struct DetailsView: View {
                         
                         jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
                         jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id)
-                        
-                        userProgress = media.getMyListStatus
                     }
                     
                     if media.isMangaOrAnime == .manga {
@@ -669,9 +667,8 @@ struct DetailsView: View {
                         
                         jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id)
                         jikanRelations = try await jikanRelationsController.fetchMangaRelations(id: media.id)
-                        
-                        userProgress = media.getMyListStatus
                     }
+                    userProgress = media.getMyListStatus
                 } catch {
                     print("Fehler beim Abrufen der Daten: \(error)")
                 }

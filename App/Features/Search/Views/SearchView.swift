@@ -1,4 +1,5 @@
 import SwiftUI
+import TelemetryDeck
 
 struct SearchView: View {
     
@@ -56,7 +57,10 @@ struct SearchView: View {
     private var exploreGenres: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             if (resultManager.seriesType == .manga) {
-                NavigationLink(destination: GenreListView(mode: .manga)) {
+                NavigationLink {
+                    GenreListView(mode: .manga)
+                        .trackNavigation(path: "genres")
+                } label: {
                     Image(systemName: "square.stack")
                         .foregroundColor(.accentColor)
                 }
@@ -64,10 +68,17 @@ struct SearchView: View {
             
             if (resultManager.seriesType == .anime) {
                 Menu {
-                    NavigationLink(destination: GenreListView(mode: .anime)) {
+                    NavigationLink {
+                        GenreListView(mode: .anime)
+                            .trackNavigation(path: "genres")
+                    } label : {
                         Label("Explore Anime Genres", systemImage: "tag")
                     }
-                    NavigationLink(destination: StudiosView()) {
+                    
+                    NavigationLink {
+                        StudiosView()
+                            .trackNavigation(path: "studios")
+                    } label : {
                         Label("Explore Anime Studios", systemImage: "film")
                     }
                 } label : {
