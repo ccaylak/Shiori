@@ -1,7 +1,6 @@
 import Foundation
 
-@MainActor
-final class MangaController {
+@MainActor class MangaController {
     
     private var malService: MALService = .shared
     
@@ -10,7 +9,7 @@ final class MangaController {
     private var resultManager: ResultManager = .shared
     
     func saveProgress(id: Int, status: String, score: Int, chapters: Int, volumes: Int, comments: String, startDate: Date?, finishDate: Date?) async throws {
-        let url = MALEndpoints.Manga(id: id).update
+        let url = URL(string: MALEndpoints.Manga(id: id).update)!
         
         let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -38,17 +37,15 @@ final class MangaController {
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            
+
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
     
     func addToReadingList(id: Int) async throws {
-        guard let url = URLComponents(
-            url: MALEndpoints.Manga(id: id).update,
-            resolvingAgainstBaseURL: false
-        )?.url else {
+        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
+        guard let url = urlComponents?.url else {
             throw URLError(.badURL)
         }
 
@@ -69,17 +66,15 @@ final class MangaController {
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            
+
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
     
     func completeEntry(id: Int) async throws {
-        guard let url = URLComponents(
-            url: MALEndpoints.Manga(id: id).update,
-            resolvingAgainstBaseURL: false
-        )?.url else {
+        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
+        guard let url = urlComponents?.url else {
             throw URLError(.badURL)
         }
 
@@ -100,17 +95,15 @@ final class MangaController {
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            
+
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
     
     func increaseVolumes(id: Int, volume: Int) async throws {
-        guard let url = URLComponents(
-            url: MALEndpoints.Manga(id: id).update,
-            resolvingAgainstBaseURL: false
-        )?.url else {
+        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
+        guard let url = urlComponents?.url else {
             throw URLError(.badURL)
         }
 
@@ -129,17 +122,15 @@ final class MangaController {
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            
+
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
     
     func increaseChapters(id: Int, chapter: Int) async throws {
-        guard let url = URLComponents(
-            url: MALEndpoints.Manga(id: id).update,
-            resolvingAgainstBaseURL: false
-        )?.url else {
+        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
+        guard let url = urlComponents?.url else {
             throw URLError(.badURL)
         }
 
@@ -158,19 +149,14 @@ final class MangaController {
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            
+
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
     
     func fetchDetails(id: Int) async throws -> MediaNode {
-        guard var components = URLComponents(
-            url: MALEndpoints.Manga(id: id).details,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw URLError(.badURL)
-        }
+        var components = URLComponents(string: MALEndpoints.Manga(id: id).details)!
         
         components.queryItems = [
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .authors, .numChapters, .numVolumes, .mediaType, .startDate, .status, .endDate, .synopsis, .mean, .rank, .popularity, .genres, .mediaType, .recommendations, .relatedManga, .myListStatus, .numScoringUsers, .numListUsers]))
@@ -186,27 +172,27 @@ final class MangaController {
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
             request = APIRequest.buildRequest(url: url, httpMethod: .get)
-            
+
             (data, response) = try await URLSession.shared.data(for: request)
         }
-        
-        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
-        
+
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+
         do {
             return try JSONDecoder.snakeCaseDecoder
                 .decode(MediaNode.self, from: data)
         } catch {
-            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaNode.self)
+            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaNode.self)
             throw error
         }
     }
     
     func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
-        guard var components = URLComponents(
-            url: searchTerm.isEmpty ? MALEndpoints.Manga.ranking : MALEndpoints.Manga.list,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw URLError(.badURL)
+        var components: URLComponents
+        if searchTerm == "" {
+            components = URLComponents(string: MALEndpoints.Manga.ranking)!
+        } else {
+            components = URLComponents(string: MALEndpoints.Manga.list)!
         }
         
         components.queryItems = [
@@ -227,28 +213,23 @@ final class MangaController {
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
             request = APIRequest.buildRequest(url: url, httpMethod: .get)
-            
+
             (data, response) = try await URLSession.shared.data(for: request)
         }
-        
-        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
-        
+
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+
         do {
             return try JSONDecoder.snakeCaseDecoder
                 .decode(MediaResponse.self, from: data)
         } catch {
-            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaResponse.self)
+            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaResponse.self)
             throw error
         }
     }
     
     func fetchLibrary() async throws -> MediaResponse {
-        guard var components = URLComponents(
-            url: MALEndpoints.Manga.library,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw URLError(.badURL)
-        }
+        var components = URLComponents(string: MALEndpoints.Manga.library)!
         
         var queryItems: [URLQueryItem] = []
 
@@ -283,29 +264,28 @@ final class MangaController {
         
         var request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
-        
+
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
             request = APIRequest.buildRequest(url: url, httpMethod: .get)
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
-        
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+
         do {
             return try JSONDecoder.snakeCaseDecoder
                 .decode(MediaResponse.self, from: data)
         } catch {
-            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaResponse.self)
+            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaResponse.self)
             throw error
         }
     }
     
     func deleteEntry(id: Int) async throws {
-        guard let url = URLComponents(
-            url: MALEndpoints.Manga(id: id).update,
-            resolvingAgainstBaseURL: false
-        )?.url else {
+        let components = URLComponents(string: MALEndpoints.Manga(id:id).update)!
+        
+        guard let url = components.url else {
             throw URLError(.badURL)
         }
         
@@ -317,6 +297,6 @@ final class MangaController {
             request = APIRequest.buildRequest(url: url, httpMethod: .delete)
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
 }

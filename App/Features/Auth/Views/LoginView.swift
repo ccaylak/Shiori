@@ -1,14 +1,9 @@
 import SwiftUI
 import AuthenticationServices
 import TelemetryDeck
-import SwiftData
 
 struct LoginView: View {
-    @AppStorage("animeScheduleLastRefresh")
-    private var animeScheduleLastRefresh: Double = 0
     
-    @AppStorage("isExtendedDataEnabled") var isExtendedDataEnabled: Bool = true
-    @AppStorage("extendedDataSource") var apiService: APIService = .tenrai
     @Environment(\.webAuthenticationSession) private var webAuthenticationSession
     
     private var jikanProfileController = JikanProfileController()
@@ -22,7 +17,6 @@ struct LoginView: View {
     @State private var codeChallenge: String = ""
     
     @State private var user: User?
-    
     @State private var animeStats: JikanResponse.AnimeManga.AnimeStatistics?
     @State private var mangaStats: JikanResponse.AnimeManga.MangaStatistics?
     @State private var jikanFavorites: JikanFavorites = JikanFavorites(data: FavoriteData(anime: [], manga: [], characters: []))
@@ -32,76 +26,11 @@ struct LoginView: View {
     
     @State private var showLogoutConfirmationDialog: Bool = false
     
-    @EnvironmentObject private var toastManager: ToastManager
+    @EnvironmentObject private var alertManager: AlertManager
     
-    @Environment(\.modelContext)
-    private var modelContext
     
     private var friends: [JikanFriendsData] {
         jikanFriends.data
-    }
-
-    private func clearJikanProfileData() {
-        jikanFavorites = JikanFavorites(
-            data: FavoriteData(anime: [], manga: [], characters: [])
-        )
-        jikanFriends = JikanFriends(data: [])
-        animeStats = nil
-        mangaStats = nil
-    }
-    
-    private func clearAnimeSchedule() throws {
-        let schedules = try modelContext.fetch(
-            FetchDescriptor<AnimeSchedule>()
-        )
-
-        for schedule in schedules {
-            modelContext.delete(schedule)
-        }
-
-        try modelContext.save()
-
-        animeScheduleLastRefresh = 0
-    }
-    
-    private func loadProfile() async {
-        guard tokenHandler.isAuthenticated else { return }
-
-        toastManager.isLoading = true
-        defer { toastManager.isLoading = false }
-
-        do {
-            let fetchedUser = try await userController.fetchUserProfile()
-            user = fetchedUser
-
-            guard isExtendedDataEnabled,
-                  apiService == .jikan else {
-                clearJikanProfileData()
-                return
-            }
-
-            let username = fetchedUser.name
-
-            async let favorites = jikanProfileController.fetchProfileFavorites(
-                username: username
-            )
-            async let friends = jikanProfileController.fetchFriends(
-                username: username
-            )
-            async let statistics = jikanProfileController.fetchProfileStatistics(
-                username: username
-            )
-
-            jikanFavorites = try await favorites
-            jikanFriends = try await friends
-
-            let response = try await statistics
-            animeStats = response.data.anime
-            mangaStats = response.data.manga
-        } catch {
-            print("Failed to load profile data:", error)
-            clearJikanProfileData()
-        }
     }
 
     private var favoriteMangas: [FavoriteEntry] { jikanFavorites.data.manga }
@@ -285,19 +214,17 @@ struct LoginView: View {
                         }
                         .isVisible(!friends.isEmpty)
                         
-                        if isExtendedDataEnabled && apiService == .jikan  {
-                            UserStatistics(
-                                title: String(localized: "Anime Statistics"),
-                                icon: "tv",
-                                statisticsValues: animeStatisticsValues
-                            )
-                            
-                            UserStatistics(
-                                title: String(localized: "Manga Statistics"),
-                                icon: "character.book.closed.ja",
-                                statisticsValues: mangaStatisticsValues
-                            )
-                        }
+                        UserStatistics(
+                            title: String(localized: "Anime Statistics"),
+                            icon: "tv",
+                            statisticsValues: animeStatisticsValues
+                        )
+                        
+                        UserStatistics(
+                            title: String(localized: "Manga Statistics"),
+                            icon: "character.book.closed.ja",
+                            statisticsValues: mangaStatisticsValues
+                        )
                         
                         Section(header: Label("Favorite Manga", systemImage: "heart")) {
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -416,7 +343,14 @@ struct LoginView: View {
                     }
                     .onAppear {
                         Task {
-                            await loadProfile()
+                            alertManager.isLoading = true
+                            defer { alertManager.isLoading = false }
+                            user = try await userController.fetchUserProfile()
+                            jikanFavorites = try await jikanProfileController.fetchProfileFavorites(username: user?.name ?? "test")
+                            jikanFriends = try await jikanProfileController.fetchFriends(username: user?.name ?? "test")
+                            let response = try await jikanProfileController.fetchProfileStatistics(username: user?.name ?? "test")
+                            animeStats = response.data.anime
+                            mangaStats = response.data.manga
                         }
                     }
                 }
@@ -526,17 +460,7 @@ struct LoginView: View {
                             isPresented: $showLogoutConfirmationDialog,
                             titleVisibility: .visible,
                             actions: {
-                                Button("Yes", role: .destructive) {
-                                    Task {
-                                        do {
-                                            await AnimeNotificationManager.cancelNotifications()
-                                            try clearAnimeSchedule()
-                                            tokenHandler.revokeTokens()
-                                        } catch {
-                                            print("Failed to clear logout data:", error)
-                                        }
-                                    }
-                                }
+                                Button("Yes", role: .destructive) { tokenHandler.revokeTokens() }
                                 Button("Cancel", role: .cancel) {}
                             }
                         )
