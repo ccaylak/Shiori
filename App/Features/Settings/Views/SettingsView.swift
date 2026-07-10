@@ -90,6 +90,41 @@ struct SettingsView: View {
                     }
                 }
                 
+                Section {
+                    Toggle(isOn: $settingsManager.isExtendedDataEnabled) {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Extended Data")
+                                
+                                Text("Shows additional data for anime, manga, characters, people, producers, and seasons.")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "curlybraces")
+                        }
+                    }
+                    .toggleStyle(.switch)
+                    
+                    if settingsManager.isExtendedDataEnabled {
+                        Picker(
+                            "API",
+                            systemImage: "chevron.left.forwardslash.chevron.right",
+                            selection: $settingsManager.extendedDataSource
+                        ) {
+                            ForEach(ExtendedDataSource.allCases, id: \.self) { entry in
+                                Text(entry.displayName)
+                                    .tag(entry)
+                            }
+                        }
+                        .pickerStyle(.automatic)
+                    } else {
+                        Label("API", systemImage: "chevron.left.forwardslash.chevron.right")
+                            .foregroundStyle(Color.secondary)
+                            .opacity(0.45)
+                    }
+                }
+                
                 Section("Library") {
                     NavigationLink {
                         MangaProgressFormatSelectionView()
@@ -206,6 +241,9 @@ private struct AboutView: View {
                 }
                 Link(destination: URL(string: "https://jikan.moe")!) {
                     Text(verbatim: "Jikan")
+                }
+                Link(destination: URL(string: "https://tenrai.org")!) {
+                    Text(verbatim: "Tenrai")
                 }
             }
             

@@ -1,7 +1,12 @@
 import Foundation
+import SwiftUI
 
 struct JikanEndpoints {
-    private static let baseURL = "https://api.jikan.moe/v4"
+    @AppStorage("extendedDataSource") private static var extendedDataSource: ExtendedDataSource = ExtendedDataSource.jikan
+    
+    private static var baseURL: String {
+        extendedDataSource.baseURL
+    }
     
     struct Profile {
         let username: String

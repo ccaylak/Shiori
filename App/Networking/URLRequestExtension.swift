@@ -1,4 +1,5 @@
 import Foundation
+import TelemetryDeck
 
 @MainActor class APIRequest {
     
@@ -17,5 +18,24 @@ import Foundation
         }
         
         return request
+    }
+    
+    static func validateResponse(_ response: URLResponse, api: String, endpoint: String) throws {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            TelemetryDeck.errorOccurred(
+                id: "API.badStatusCode",
+                parameters: [
+                    "api": api,
+                    "statusCode": "\(httpResponse.statusCode)",
+                    "endpoint": endpoint
+                ]
+            )
+
+            throw URLError(.badServerResponse)
+        }
     }
 }

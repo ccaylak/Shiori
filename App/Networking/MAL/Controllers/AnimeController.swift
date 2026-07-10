@@ -1,5 +1,4 @@
 import Foundation
-import SwiftUI
 
 @MainActor class AnimeController {
     
@@ -34,9 +33,13 @@ import SwiftUI
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request.httpBody = formBody.data(using: .utf8)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
     
     func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
@@ -59,17 +62,25 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        var request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .get)
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
-        return try JSONDecoder.snakeCaseDecoder
-            .decode(MediaResponse.self, from: data)
+        
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        do {
+            return try JSONDecoder.snakeCaseDecoder
+                .decode(MediaResponse.self, from: data)
+        } catch {
+            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaResponse.self)
+            throw error
+        }
     }
     
     func fetchDetails(id: Int) async throws -> MediaNode {
@@ -84,17 +95,25 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        var request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .get)
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        return try JSONDecoder.snakeCaseDecoder
-            .decode(MediaNode.self, from: data)
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        
+        do {
+            return try JSONDecoder.snakeCaseDecoder
+                .decode(MediaNode.self, from: data)
+        } catch {
+            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaNode.self)
+            throw error
+        }
     }
     
     func addToWatchList(id: Int) async throws {
@@ -117,9 +136,13 @@ import SwiftUI
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request.httpBody = bodyData.data(using: .utf8)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
     
     func completeEntry(id: Int) async throws {
@@ -142,9 +165,13 @@ import SwiftUI
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request.httpBody = bodyData.data(using: .utf8)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
     
     func increaseEpisodes(id: Int, episode: Int) async throws {
@@ -167,16 +194,21 @@ import SwiftUI
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request.httpBody = bodyData.data(using: .utf8)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
     
     func fetchLibrary() async throws -> MediaResponse {
         var components = URLComponents(string: MALEndpoints.Anime.library)!
         
         var queryItems: [URLQueryItem] = []
-            
+        
         if libraryManager.animeProgressStatus != .all {
             queryItems.append(
                 URLQueryItem(name: "status", value: libraryManager.animeProgressStatus.rawValue)
@@ -199,24 +231,32 @@ import SwiftUI
             URLQueryItem(name: "limit", value: "1000"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
         ]
-            
+        
         components.queryItems = queryItems
         
         guard let url = components.url else {
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        var request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .get)
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        return try JSONDecoder.snakeCaseDecoder
-            .decode(MediaResponse.self, from: data)
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        
+        do {
+            return try JSONDecoder.snakeCaseDecoder
+                .decode(MediaResponse.self, from: data)
+        } catch {
+            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaResponse.self)
+            throw error
+        }
     }
     
     func deleteEntry(id: Int) async throws {
@@ -226,13 +266,16 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: .delete)
+        var request = APIRequest.buildRequest(url: url, httpMethod: .delete)
         var (_, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .delete)
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        
+        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
     }
 }

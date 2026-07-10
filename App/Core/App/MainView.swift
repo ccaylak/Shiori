@@ -1,4 +1,5 @@
 import SwiftUI
+import TelemetryDeck
 
 struct MainView: View {
     
@@ -9,21 +10,25 @@ struct MainView: View {
         
         TabView(selection: $selectedTab) {
             SearchView()
+                .trackNavigation(path: "search")
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }
                 .tag("search")
             SeasonView()
+                .trackNavigation(path: "season")
                 .tabItem {
                     Label("Season", systemImage: Season.current.icon)
                 }
                 .tag("season")
             LibraryView()
+                .trackNavigation(path: "library")
                 .tabItem {
                     Label("Library", systemImage: "books.vertical")
                 }
                 .tag("library")
             LoginView()
+                .trackNavigation(path: "login")
                 .tabItem {
                     Label("Profile", systemImage: "person")
                 }

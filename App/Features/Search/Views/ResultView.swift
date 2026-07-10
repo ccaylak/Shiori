@@ -18,17 +18,21 @@ struct ResultView: View {
     var body: some View {
         List {
             ForEach(mediaResponse.data, id: \.node.id) { media in
-                ZStack(alignment: .topTrailing) {
-                    NavigationLink(destination: DetailsView(media: media.node)) {
-                        MediaView(
-                            title: media.node.preferredTitle,
-                            image: media.node.mainPicture.largeUrl,
-                            releaseYear: media.node.isMangaOrAnime == .manga ? media.node.yearLabel : media.node.getStartSeason.seasonLabel,
-                            type: media.node.specificMediaType,
-                            mediaCount: media.node.resultCount,
-                            status: media.node.specificStatus
-                        )
-                    }
+                NavigationLink {
+                    DetailsView(media: media.node)
+                } label: {
+                    MediaView(
+                        title: media.node.preferredTitle,
+                        image: media.node.mainPicture.largeUrl,
+                        releaseYear: media.node.isMangaOrAnime == .manga
+                            ? media.node.yearLabel
+                            : media.node.getStartSeason.seasonLabel,
+                        type: media.node.specificMediaType,
+                        mediaCount: media.node.resultCount,
+                        status: media.node.specificStatus
+                    )
+                }
+                .overlay(alignment: .topTrailing) {
                     AnyView(media.node.getEntryStatus.libraryIcon)
                 }
             }

@@ -10,8 +10,8 @@
 		F36329482D94AD1300329F11 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = F36329472D94AD1300329F11 /* NukeUI */; };
 		F37EA6192CFFC19700CD994E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37EA6182CFFC19700CD994E /* KeychainSwift */; };
 		F381D31E2F74E13900B45D79 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = F381D30B2F74E13900B45D79 /* .gitignore */; };
-		F381D4E52F7769F100B45D79 /* secrets.json in Resources */ = {isa = PBXBuildFile; fileRef = F381D3192F74E13900B45D79 /* secrets.json */; };
 		F38579932DCB5AAF00CB4D14 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = F38579922DCB5AAF00CB4D14 /* TelemetryDeck */; };
+		F3AE49BF2FFF979000DF6D84 /* secrets.json in Resources */ = {isa = PBXBuildFile; fileRef = F3AE49BE2FFF978C00DF6D84 /* secrets.json */; };
 		F3DE62ED2CF140BC00CD77EF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F3DE62EC2CF140BC00CD77EF /* README.md */; };
 		F3E27BBB2DBF743C00BB1AE4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = F3E27BBA2DBF743C00BB1AE4 /* AlertToast */; };
 /* End PBXBuildFile section */
@@ -19,8 +19,8 @@
 /* Begin PBXFileReference section */
 		F365CCE32CE74B3F0027F040 /* Shiori.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shiori.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F381D30B2F74E13900B45D79 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		F381D3192F74E13900B45D79 /* secrets.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = secrets.json; sourceTree = "<group>"; };
 		F385798F2DC6F3A600CB4D14 /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
+		F3AE49BE2FFF978C00DF6D84 /* secrets.json */ = {isa = PBXFileReference; lastKnownFileType = text; path = secrets.json; sourceTree = "<group>"; };
 		F3DE62EC2CF140BC00CD77EF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,7 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				F381D30B2F74E13900B45D79 /* .gitignore */,
-				F381D3192F74E13900B45D79 /* secrets.json */,
+				F3AE49BE2FFF978C00DF6D84 /* secrets.json */,
 				F3ACED252DD563DB005A2A21 /* Assets */,
 				F385798E2DC6F38D00CB4D14 /* ci_scripts */,
 				F3D7A3E12DC6DCB700EB3572 /* TestFlight */,
@@ -189,8 +189,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3AE49BF2FFF979000DF6D84 /* secrets.json in Resources */,
 				F381D31E2F74E13900B45D79 /* .gitignore in Resources */,
-				F381D4E52F7769F100B45D79 /* secrets.json in Resources */,
 				F3DE62ED2CF140BC00CD77EF /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -364,7 +364,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.MALytics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -405,7 +405,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.MALytics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -508,7 +508,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = de.caylak.MALytics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
