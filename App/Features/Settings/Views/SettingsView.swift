@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct SettingsView: View {
     
@@ -16,7 +15,7 @@ struct SettingsView: View {
                     }
                 }
                 
-                Section("Preferences") {
+                Section("General") {
                     Picker("Appearance", systemImage: "circle.lefthalf.filled", selection: $settingsManager.appearance) {
                         ForEach(Appearance.allCases, id: \.self) { appearance in
                             Text(appearance.displayName).tag(appearance)
@@ -36,24 +35,28 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.navigationLink)
-                }
-                
-                Section("Content") {
-                    Toggle(isOn: $settingsManager.showNsfwContent) {
+                    
+                    HStack {
                         Label("Show NSFW Content", systemImage: "eye.trianglebadge.exclamationmark")
+                        Spacer()
+                        Button {
+                            settingsManager.showNsfwContent.toggle()
+                        }label: {
+                            ZStack(alignment: .centerFirstTextBaseline) {
+                                Image(systemName: "eye.slash")
+                                    .hidden()
+                                    .imageScale(.large)
+                                Image(systemName: settingsManager.showNsfwContent ? "eye" : "eye.slash")
+                                    .contentTransition(.symbolEffect(.replace))
+                                    .imageScale(.large)
+                            }
+                            .foregroundColor(.accentColor)
+                            .symbolRenderingMode(.hierarchical)
+                        }
+                        .sensoryFeedback(.selection, trigger: settingsManager.showNsfwContent)
+                        .buttonStyle(.borderless)
                     }
-                    .toggleStyle(.switch)
-                }
-                
-                Section("Notifications") {
-                    NavigationLink {
-                        NotificationSettingsView()
-                    } label: {
-                        Label("Anime-Notifications", systemImage: "bell.badge")
-                    }
-                }
-                
-                Section("Display & Language") {
+                    
                     NavigationLink {
                         NameSelectionView()
                     } label: {
@@ -85,13 +88,15 @@ struct SettingsView: View {
                             Image(systemName: "globe")
                         }
                     }
-                    
+                }
+                
+                Section {
                     Toggle(isOn: $settingsManager.isExtendedDataEnabled) {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Extended Data")
-                                
-                                Text("Additional data for anime, manga, characters and people.")
+
+                                Text("Shows additional data for anime, manga, characters, people, producers, and seasons.")
                                     .font(.caption)
                                     .foregroundStyle(Color.secondary)
                             }
@@ -100,51 +105,53 @@ struct SettingsView: View {
                         }
                     }
                     .toggleStyle(.switch)
-                    
+
                     if settingsManager.isExtendedDataEnabled {
                         Picker(
                             "API",
                             systemImage: "chevron.left.forwardslash.chevron.right",
                             selection: $settingsManager.extendedDataSource
                         ) {
-                            ForEach([APIService.jikan, .tenrai], id: \.self) { entry in
+                            ForEach(ExtendedDataSource.allCases, id: \.self) { entry in
                                 Text(entry.displayName)
                                     .tag(entry)
                             }
                         }
                         .pickerStyle(.automatic)
+                    } else {
+                        Label("API", systemImage: "chevron.left.forwardslash.chevron.right")
+                            .foregroundStyle(Color.secondary)
+                            .opacity(0.45)
                     }
                 }
-                
-                if tokenHandler.isAuthenticated {
-                    Section("Library") {
-                        NavigationLink {
-                            MangaProgressFormatSelectionView()
-                        } label: {
-                            Label("Manga Tracking", systemImage: SeriesType.manga.icon)
-                        }
-                        
-                        NavigationLink {
-                            AnimeFormatSelectionView()
-                        } label: {
-                            Label("Anime Tracking", systemImage: SeriesType.anime.icon)
-                        }
-                        
-                        Toggle(isOn: $settingsManager.advancedMode) {
-                            Label {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text("Advanced Mode")
-                                    
-                                    Text("Adds additional fields for tracking")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                            } icon: {
-                                Image(systemName: "gearshape.2")
-                            }
-                        }
-                        .toggleStyle(.switch)
+
+                Section("Library") {
+                    NavigationLink {
+                        MangaProgressFormatSelectionView()
+                    } label: {
+                        Label("Manga Tracking", systemImage: SeriesType.manga.icon)
                     }
+                    
+                    NavigationLink {
+                        AnimeFormatSelectionView()
+                    } label: {
+                        Label("Anime Tracking", systemImage: SeriesType.anime.icon)
+                    }
+                    
+                    Toggle(isOn: $settingsManager.advancedMode) {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Advanced Mode")
+                                
+                                Text("Adds additional fields for tracking")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "gearshape.2")
+                        }
+                    }
+                    .toggleStyle(.switch)
                 }
                 
                 Section ("Contact"){
@@ -229,16 +236,21 @@ private struct AboutView: View {
             }
             
             Section ("Third-Party Services") {
-                ForEach(APIService.allCases, id: \.self) { api in
-                    if let url = URL(string: api.website) {
-                        Link(destination: url) {
-                            Text(api.displayName)
-                        }
-                    }
+                Link(destination: URL(string: "https://myanimelist.net")!) {
+                    Text(verbatim: "MyAnimeList")
+                }
+                Link(destination: URL(string: "https://jikan.moe")!) {
+                    Text(verbatim: "Jikan")
+                }
+                Link(destination: URL(string: "https://tenrai.org")!) {
+                    Text(verbatim: "Tenrai")
                 }
             }
             
             Section ("Third-Party Libraries") {
+                Link(destination: URL(string: "https://github.com/elai950/AlertToast")!) {
+                    Text(verbatim: "AlertToast")
+                }
                 Link(destination: URL(string: "https://github.com/evgenyneu/keychain-swift")!) {
                     Text(verbatim: "KeychainSwift")
                 }

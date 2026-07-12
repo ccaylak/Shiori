@@ -4,7 +4,7 @@ import TelemetryDeck
 struct SearchView: View {
     
     @ObservedObject private var resultManager: ResultManager = .shared
-    
+    @AppStorage("extendedData") var extendedData: Bool = true
     @State private var isOn = false
     
     var body: some View {
@@ -56,7 +56,7 @@ struct SearchView: View {
     
     private var exploreGenres: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            if (resultManager.seriesType == .manga) {
+            if (resultManager.seriesType == .manga && extendedData) {
                 NavigationLink {
                     GenreListView(mode: .manga)
                         .trackNavigation(path: "genres")
@@ -66,7 +66,7 @@ struct SearchView: View {
                 }
             }
             
-            if (resultManager.seriesType == .anime) {
+            if (resultManager.seriesType == .anime && extendedData) {
                 Menu {
                     NavigationLink {
                         GenreListView(mode: .anime)

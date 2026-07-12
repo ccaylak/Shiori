@@ -1,11 +1,10 @@
 import Foundation
 
-@MainActor
-final class JikanStudioController {
+@MainActor class JikanStudioController {
     func fetchAnimeStudioById(id: Int) async throws -> JikanAnimeStudioResponse {
-        let url = JikanEndpoints.Studio(id: id).studio
+        let url = URL(string: JikanEndpoints.Studio(id: id).studio)!
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,
@@ -20,12 +19,7 @@ final class JikanStudioController {
     }
     
     func fetchAnimeStudios(searchTerm: String, order: String, sort: String, page: Int) async throws -> JikanStudio {
-        guard var components = URLComponents(
-            url: JikanEndpoints.Studio.all,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw URLError(.badURL)
-        }
+        var components = URLComponents(string: JikanEndpoints.Studio.all)!
         
         components.queryItems = [
             URLQueryItem(name: "order_by", value: order),
@@ -39,7 +33,7 @@ final class JikanStudioController {
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,
@@ -53,12 +47,7 @@ final class JikanStudioController {
     }
     
     func fetchAnimesByAnimeStudio(id: Int, page: Int) async throws -> JikanMedia {
-        guard var components = URLComponents(
-            url: JikanEndpoints.Studio.animes,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw URLError(.badURL)
-        }
+        var components = URLComponents(string: JikanEndpoints.Studio.animes)!
         
         components.queryItems = [
             URLQueryItem(name: "producers", value: "\(id)"),
@@ -70,7 +59,7 @@ final class JikanStudioController {
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,

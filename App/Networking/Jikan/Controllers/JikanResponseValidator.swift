@@ -5,7 +5,7 @@ enum JikanResponseValidator {
     static func validate(
         data: Data,
         response: URLResponse,
-        api: APIService,
+        api: ExtendedDataSource,
         endpoint: String
     ) throws {
         guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
@@ -21,9 +21,10 @@ enum JikanResponseValidator {
             .decode(JikanErrorResponse.self, from: data)
         
         Metrics.badStatusCode(
-            api: api,
+            api: api.displayName,
             httpStatusCode: statusCode,
             endpoint: endpoint,
+            error: jikanError
         )
         
         throw JikanAPIError.badStatusCode(

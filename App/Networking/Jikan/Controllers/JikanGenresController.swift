@@ -1,12 +1,11 @@
 import Foundation
 
-@MainActor
-final class JikanGenresController {
+@MainActor public class JikanGenresController {
     
     func fetchAnimeGenres() async throws -> JikanGenre {
-        let url = JikanEndpoints.Genres().anime
+        let url = URL(string: JikanEndpoints.Genres().anime)!
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,
@@ -20,12 +19,7 @@ final class JikanGenresController {
     }
     
     func fetchAnimeByGenre(id: Int, page: Int) async throws -> JikanMedia {
-        guard var components = URLComponents(
-            url: JikanEndpoints.Studio.animes,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw URLError(.badURL)
-        }
+        var components = URLComponents(string: JikanEndpoints.Studio.animes)!
         
         components.queryItems = [
             URLQueryItem(name: "genres", value: "\(id)"),
@@ -37,7 +31,7 @@ final class JikanGenresController {
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,
@@ -51,9 +45,9 @@ final class JikanGenresController {
     }
     
     func fetchMangaGenres() async throws -> JikanGenre {
-        let url = JikanEndpoints.Genres().manga
+        let url = URL(string: JikanEndpoints.Genres().manga)!
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,
@@ -74,12 +68,7 @@ final class JikanGenresController {
     }
     
     func fetchMangaByGenre(id: Int, page: Int) async throws -> JikanMedia {
-        guard var components = URLComponents(
-            url: JikanEndpoints.Manga().search,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw URLError(.badURL)
-        }
+        var components = URLComponents(string: "https://api.jikan.moe/v4/manga")!
         
         components.queryItems = [
             URLQueryItem(name: "genres", value: "\(id)"),
@@ -91,7 +80,7 @@ final class JikanGenresController {
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,

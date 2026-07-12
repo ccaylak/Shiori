@@ -1,12 +1,11 @@
 import Foundation
 
-@MainActor
-final class JikanProfileController {
+@MainActor public class JikanProfileController {
     
     func fetchProfileStatistics(username: String) async throws -> JikanResponse {
-        let url = JikanEndpoints.Profile(username: username).statistics
+        let url = URL(string: JikanEndpoints.Profile(username: username).statistics)!
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,
@@ -21,9 +20,9 @@ final class JikanProfileController {
     }
     
     func fetchProfileFavorites(username: String) async throws -> JikanFavorites {
-        let url = JikanEndpoints.Profile(username: username).favorites
+        let url = URL(string: JikanEndpoints.Profile(username: username).favorites)!
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,
@@ -38,9 +37,9 @@ final class JikanProfileController {
     }
     
     func fetchFriends(username: String) async throws -> JikanFriends {
-        let url = JikanEndpoints.Profile(username: username).friends
+        let url = URL(string: JikanEndpoints.Profile(username: username).friends)!
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         try JikanResponseValidator.validate(
                 data: data,
