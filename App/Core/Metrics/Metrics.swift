@@ -17,13 +17,19 @@ enum Metrics {
         )
     }
     
-    static func badStatusCode(api: String, statusCode: Int, endpoint: String) {
+    static func badStatusCode(
+        api: String,
+        httpStatusCode: Int,
+        endpoint: String,
+        error: JikanErrorResponse? = nil
+    ) {
         TelemetryDeck.errorOccurred(
             id: "API.badStatusCode",
             parameters: [
                 "api": api,
-                "statusCode": "\(statusCode)",
-                "endpoint": endpoint
+                "statusCode": "\(httpStatusCode)",
+                "endpoint": endpoint,
+                "errorType": error?.type ?? "unknown"
             ]
         )
     }

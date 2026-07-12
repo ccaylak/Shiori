@@ -14,5 +14,8 @@ import SwiftUI
     @AppStorage("includeFirstEpisodeInDuration") var includeFirstEpisodeInDuration = true
     @AppStorage("advancedMode") var advancedMode: Bool = false
     
+    @AppStorage("isExtendedDataEnabled") var isExtendedDataEnabled: Bool = true
+    @AppStorage("extendedDataSource") var extendedDataSource: ExtendedDataSource = ExtendedDataSource.jikan
+    
     private init() {}
 }

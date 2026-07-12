@@ -30,6 +30,7 @@ struct DetailsView: View {
     let mangaController = MangaController()
     let jikanCharacterController = JikanCharacterController()
     let jikanRelationsController = JikanRelationsController()
+    @AppStorage("extendedData") var extendedData: Bool = true
     
     var body: some View {
         NavigationStack {
@@ -658,15 +659,19 @@ struct DetailsView: View {
                     if media.isMangaOrAnime == .anime {
                         media = try await animeController.fetchDetails(id: media.id)
                         
-                        jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
-                        jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id)
+                        if extendedData {
+                            jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
+                            jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id)
+                        }
                     }
                     
                     if media.isMangaOrAnime == .manga {
                         media = try await mangaController.fetchDetails(id: media.id)
                         
-                        jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id)
-                        jikanRelations = try await jikanRelationsController.fetchMangaRelations(id: media.id)
+                        if extendedData {
+                            jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id)
+                            jikanRelations = try await jikanRelationsController.fetchMangaRelations(id: media.id)
+                        }
                     }
                     userProgress = media.getMyListStatus
                 } catch {
