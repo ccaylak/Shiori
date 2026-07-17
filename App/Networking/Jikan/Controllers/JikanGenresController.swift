@@ -4,9 +4,15 @@ import Foundation
     
     func fetchAnimeGenres() async throws -> JikanGenre {
         let url = URL(string: JikanEndpoints.Genres().anime)!
-        
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "anime.genres"
+        )
         
         return try JSONDecoder.snakeCaseDecoder
             .decode(JikanGenre.self, from: data)
@@ -25,7 +31,14 @@ import Foundation
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "anime.details.genre"
+        )
         
         return try JSONDecoder.snakeCaseDecoder
             .decode(JikanMedia.self, from: data)
@@ -33,9 +46,15 @@ import Foundation
     
     func fetchMangaGenres() async throws -> JikanGenre {
         let url = URL(string: JikanEndpoints.Genres().manga)!
-        
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "manga.genres"
+        )
         
         let decoded = try JSONDecoder
             .snakeCaseDecoder
@@ -61,7 +80,14 @@ import Foundation
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "manga.details.genre"
+        )
 
         return try JSONDecoder.snakeCaseDecoder
             .decode(JikanMedia.self, from: data)

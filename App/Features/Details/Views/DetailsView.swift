@@ -24,12 +24,13 @@ struct DetailsView: View {
     
     @ObservedObject private var tokenHandler: TokenHandler = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     let animeController = AnimeController()
     let mangaController = MangaController()
     let jikanCharacterController = JikanCharacterController()
     let jikanRelationsController = JikanRelationsController()
+    @AppStorage("extendedData") var extendedData: Bool = true
     
     var body: some View {
         NavigationStack {
@@ -53,9 +54,9 @@ struct DetailsView: View {
                                         .font(.subheadline)
                                     Text("Rating")
                                         .font(.caption)
-                                    Text("\(media.getMyListStatus.score)")
+                                    Text(media.getMyListStatus.score, format: .number)
                                         .font(.body)
-                                        .accentColor(.primary)
+                                        .foregroundStyle(.primary)
                                 }
                                 .frame(maxWidth: .infinity)
                                 Divider()
@@ -123,10 +124,10 @@ struct DetailsView: View {
                             Button {
                                 didTap.toggle()
                                 Task {
-                                    alertManager.isLoading = true
-                                    alertManager.showAddedAlert = true
+                                    toastManager.isLoading = true
+                                    toastManager.showAddedToast = true
                                     defer {
-                                        alertManager.isLoading = false
+                                        toastManager.isLoading = false
                                     }
                                     if (media.isMangaOrAnime == .anime) {
                                         try await animeController.addToWatchList(id: media.id)
@@ -174,16 +175,17 @@ struct DetailsView: View {
                 if media.getEntryStatus != .notSet {
                     ToolbarItem {
                         if #available(iOS 26.0, *) {
-                            Button(role: .close, action: {
+                            Button(role: .close) {
+                                userProgress = media.getMyListStatus
                                 isSheetPresented = true
-                            }) {
+                            } label: {
                                 Image(systemName: "pencil")
                             }
-
                         } else {
-                            Button(action: {
+                            Button {
+                                userProgress = media.getMyListStatus
                                 isSheetPresented = true
-                            }) {
+                            } label: {
                                 Text("Edit")
                             }
                         }
@@ -208,21 +210,41 @@ struct DetailsView: View {
                 NavigationStack {
                     List {
                         Section {
-                            Picker("Progress", selection: $userProgress.progressStatus) {
-                                ForEach([ProgressStatus.Manga.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
-                                    Text(mangaSelection.displayName)
-                                        .tag(mangaSelection.rawValue)
+                            if media.isMangaOrAnime == .manga {
+                                Picker("Progress", selection: $userProgress.progressStatus) {
+                                    ForEach(
+                                        [
+                                            ProgressStatus.Manga.completed,
+                                            .reading,
+                                            .dropped,
+                                            .onHold,
+                                            .planToRead
+                                        ],
+                                        id: \.self
+                                    ) { status in
+                                        Text(status.displayName)
+                                            .tag(status.rawValue)
+                                    }
                                 }
                             }
-                            .isVisible(media.isMangaOrAnime == .manga)
-                            
-                            Picker("Progress", selection: $userProgress.progressStatus) {
-                                ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch],id: \.self) { animeSelection in
-                                    Text(animeSelection.displayName)
-                                        .tag(animeSelection.rawValue)
+
+                            if media.isMangaOrAnime == .anime {
+                                Picker("Progress", selection: $userProgress.progressStatus) {
+                                    ForEach(
+                                        [
+                                            ProgressStatus.Anime.completed,
+                                            .watching,
+                                            .dropped,
+                                            .onHold,
+                                            .planToWatch
+                                        ],
+                                        id: \.self
+                                    ) { status in
+                                        Text(status.displayName)
+                                            .tag(status.rawValue)
+                                    }
                                 }
                             }
-                            .isVisible(media.isMangaOrAnime == .anime)
                             
                             Picker("Rating", selection: $userProgress.score) {
                                 ForEach(0...10, id: \.self) { rating in
@@ -552,7 +574,7 @@ struct DetailsView: View {
                                                 )
                                             media = try await animeController.fetchDetails(id: media.id)
                                         }
-                                        alertManager.showUpdatedAlert = true
+                                        toastManager.showUpdatedToast = true
                                         isSheetPresented = false
                                         Metrics.entryAction(.updated, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                     }
@@ -589,7 +611,7 @@ struct DetailsView: View {
                                                 )
                                             media = try await animeController.fetchDetails(id: media.id)
                                         }
-                                        alertManager.showUpdatedAlert = true
+                                        toastManager.showUpdatedToast = true
                                         isSheetPresented = false
                                         Metrics.entryAction(.updated, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                     }
@@ -619,12 +641,12 @@ struct DetailsView: View {
                                     Task {
                                         if (media.isMangaOrAnime == .manga) {
                                             try await mangaController.deleteEntry(id: media.id)
-                                            alertManager.showRemovedAlert = true
+                                            toastManager.showRemovedToast = true
                                             media = try await mangaController.fetchDetails(id: media.id)
                                         }
                                         if (media.isMangaOrAnime == .anime) {
                                             try await animeController.deleteEntry(id: media.id)
-                                            alertManager.showRemovedAlert = true
+                                            toastManager.showRemovedToast = true
                                             media = try await animeController.fetchDetails(id: media.id)
                                         }
                                         showAlert = false
@@ -652,23 +674,28 @@ struct DetailsView: View {
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             Task {
-                alertManager.isLoading = true
-                defer { alertManager.isLoading = false }
+                toastManager.isLoading = true
+                defer { toastManager.isLoading = false }
                 do {
                     if media.isMangaOrAnime == .anime {
                         media = try await animeController.fetchDetails(id: media.id)
                         
-                        jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
-                        jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id)
+                        if extendedData {
+                            jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
+                            jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id)
+                        }
                     }
                     
                     if media.isMangaOrAnime == .manga {
                         media = try await mangaController.fetchDetails(id: media.id)
                         
-                        jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id)
-                        jikanRelations = try await jikanRelationsController.fetchMangaRelations(id: media.id)
+                        if extendedData {
+                            jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id)
+                            jikanRelations = try await jikanRelationsController.fetchMangaRelations(id: media.id)
+                        }
                     }
                     userProgress = media.getMyListStatus
+                    dump(userProgress)
                 } catch {
                     print("Fehler beim Abrufen der Daten: \(error)")
                 }

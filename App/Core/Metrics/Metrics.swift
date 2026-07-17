@@ -5,11 +5,11 @@ enum Metrics {
         TelemetryDeck.signal(action.rawValue)
     }
     
-    static func decodingFailed<T>(_ error: Error, api: String, endpoint: String, model: T.Type) {
+    static func decodingFailed<T>(_ error: Error, api: APIService, endpoint: String, model: T.Type) {
         TelemetryDeck.errorOccurred(
             id: "API.decodingFailed",
             parameters: [
-                "api": api,
+                "api": api.displayName,
                 "endpoint": endpoint,
                 "model": String(describing: model),
                 "errorType": String(describing: type(of: error))
@@ -17,14 +17,27 @@ enum Metrics {
         )
     }
     
-    static func badStatusCode(api: String, statusCode: Int, endpoint: String) {
+    static func badStatusCode(
+        api: APIService,
+        httpStatusCode: Int,
+        endpoint: String,
+        errorType: String? = nil,
+        message: String? = nil
+    ) {
+        var parameters: [String: String] = [
+            "api": api.displayName,
+            "statusCode": "\(httpStatusCode)",
+            "endpoint": endpoint,
+            "errorType": errorType ?? "unknown"
+        ]
+
+        if let message {
+            parameters["message"] = message
+        }
+
         TelemetryDeck.errorOccurred(
             id: "API.badStatusCode",
-            parameters: [
-                "api": api,
-                "statusCode": "\(statusCode)",
-                "endpoint": endpoint
-            ]
+            parameters: parameters
         )
     }
     

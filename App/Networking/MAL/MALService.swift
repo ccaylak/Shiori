@@ -17,13 +17,13 @@ import TelemetryDeck
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
-        var requestBody = "client_id=\(Config.apiKey)&"
+        var requestBody = "client_id=\(Config.malKey)&"
         requestBody += "grant_type=refresh_token&"
         requestBody += "refresh_token=\(refreshToken)"
         request.httpBody = requestBody.data(using: .utf8)
         
         let (data, response) = try await URLSession.shared.data(for: request)
-        try APIRequest.validateResponse(response, api: "myanimelist.net", endpoint: "/v1/oauth2/token")
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: "/v1/oauth2/token")
         
         let content = try JSONDecoder
             .snakeCaseDecoder

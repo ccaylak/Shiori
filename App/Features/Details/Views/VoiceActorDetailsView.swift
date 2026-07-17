@@ -10,7 +10,7 @@ struct VoiceActorDetailsView: View {
     @State private var details: JikanPerson? = nil
     @State private var isDescriptionExpanded = false
     
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     let jikanPersonFullController = JikanPersonController()
     
@@ -142,8 +142,8 @@ struct VoiceActorDetailsView: View {
         .onAppear {
             
             Task {
-                alertManager.isLoading = true
-                defer { alertManager.isLoading = false }
+                toastManager.isLoading = true
+                defer { toastManager.isLoading = false }
                 
                 do {
                     details = try await jikanPersonFullController.fetchPersonFull(id: id)

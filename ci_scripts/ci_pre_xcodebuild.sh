@@ -7,7 +7,11 @@ echo "Stage: PRE-Xcode Build is activated .... "
 cd $CI_PRIMARY_REPOSITORY_PATH/ci_scripts || exit 1
 
 # Write a JSON File containing all the environment variables and secrets.
-printf "{\"API_KEY\":\"%s\",\"TELEMETRY_DECK\":\"%s\"}" "$API_KEY" "$TELEMETRY_DECK" > ../secrets.json
+printf '{"MAL_KEY":"%s","ANILIST_KEY":"%s","TELEMETRY_DECK":"%s"}' \
+  "$MAL_KEY" \
+  "$ANILIST_KEY" \
+  "$TELEMETRY_DECK" \
+  > ../secrets.json
 
 echo "Wrote secrets.json file."
 

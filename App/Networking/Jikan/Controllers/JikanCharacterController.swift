@@ -4,9 +4,15 @@ import Foundation
     
     func fetchAnimeCharacter(id: Int) async throws -> JikanCharacter {
         let url = URL(string: JikanEndpoints.Character(id: id).anime)!
-        
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "anime.characters"
+        )
         
         return try JSONDecoder.snakeCaseDecoder
             .decode(JikanCharacter.self, from: data)
@@ -14,9 +20,15 @@ import Foundation
     
     func fetchMangaCharacter(id: Int) async throws -> JikanCharacter {
         let url = URL(string: JikanEndpoints.Character(id: id).manga)!
-        
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "manga.characters"
+        )
         
         return try JSONDecoder.snakeCaseDecoder
             .decode(JikanCharacter.self, from: data)
@@ -26,7 +38,13 @@ import Foundation
         let url = URL(string: JikanEndpoints.Character(id: id).full)!
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
-        let (data, _) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "character.details"
+        )
         
         return try JSONDecoder.snakeCaseDecoder
             .decode(JikanCharacterFull.self, from: data)
