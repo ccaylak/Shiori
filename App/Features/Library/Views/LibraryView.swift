@@ -1,6 +1,10 @@
 import SwiftUI
+import SwiftData
 
 struct LibraryView: View {
+    
+    @AppStorage("animeScheduleLastRefresh")
+    private var animeScheduleLastRefresh: Double = 0
     
     @State private var library = MediaResponse(data: [], paging: nil)
     
@@ -23,6 +27,7 @@ struct LibraryView: View {
     
     private let mangaController = MangaController()
     private let animeController = AnimeController()
+    private let aniListController = AniListController()
     
     @StateObject private var libraryManager: LibraryManager = .shared
     @EnvironmentObject private var alertManager: AlertManager
@@ -32,6 +37,13 @@ struct LibraryView: View {
     @State private var detailMedia: MediaNode?
     @State private var pendingDetailMedia: MediaNode?
     
+    @Environment(\.modelContext)
+    private var modelContext
+    
+    @AppStorage("isNoticationSetupDismissed")
+    private var isNoticationSetupDismissed: Bool = false
+    
+    @State private var showNotificationSetupSheet: Bool = false
     
     private var filteredLibraryData: [Media] {
         if searchTerm.isEmpty {
@@ -71,6 +83,7 @@ struct LibraryView: View {
                             loadingMediaID = media.node.id
                         }) {
                             LibraryMediaView(
+                                malId: media.node.id,
                                 title: media.node.preferredTitle,
                                 image: media.node.mainPicture.largeUrl,
                                 release: media.node.isMangaOrAnime == .anime ? media.node.getStartSeason.seasonLabel : media.node.yearLabel,
@@ -767,6 +780,230 @@ struct LibraryView: View {
             }
             
         }
+        .sheet(isPresented: $showNotificationSetupSheet) {
+            VStack(spacing: 0) {
+                VStack(spacing: 0) {
+                    Image(systemName: "bell.badge.fill")
+                        .font(.system(size: 38, weight: .medium))
+                        .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                        .frame(width: 84, height: 84)
+                        .background {
+                            Circle()
+                                .fill(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.12))
+                        }
+
+                    VStack(spacing: 8) {
+                        Text("Episode Notifications")
+                            .font(.title2.bold())
+                            .multilineTextAlignment(.center)
+
+                        Text("Get notified when new episodes of anime you're watching are about to air.")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(.top, 18)
+
+                    VStack(spacing: 22) {
+                        HStack(alignment: .top, spacing: 16) {
+                            Image(systemName: "timer")
+                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .font(.system(size: 18, weight: .semibold))
+                                .frame(width: 44, height: 44)
+                                .background {
+                                    RoundedRectangle(
+                                        cornerRadius: 12,
+                                        style: .continuous
+                                    )
+                                    .fill(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.12))
+                                }
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Choose when to be notified")
+                                    .font(.body.weight(.semibold))
+
+                                Text("Get notified at airing time, 15 minutes before, or 1 hour before.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            }
+
+                            Spacer(minLength: 0)
+                        }
+
+                        HStack(alignment: .top, spacing: 16) {
+                            Image(systemName: "bookmark.fill")
+                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .font(.system(size: 18, weight: .semibold))
+                                .frame(width: 44, height: 44)
+                                .background {
+                                    RoundedRectangle(
+                                        cornerRadius: 12,
+                                        style: .continuous
+                                    )
+                                    .fill(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.12))
+                                }
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Only for anime you watch")
+                                    .font(.body.weight(.semibold))
+
+                                Text("Notifications are scheduled for currently airing anime in your Watching list.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            }
+
+                            Spacer(minLength: 0)
+                        }
+
+                        HStack(alignment: .top, spacing: 16) {
+                            Image(systemName: "gearshape.fill")
+                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .font(.system(size: 18, weight: .semibold))
+                                .frame(width: 44, height: 44)
+                                .background {
+                                    RoundedRectangle(
+                                        cornerRadius: 12,
+                                        style: .continuous
+                                    )
+                                    .fill(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.12))
+                                }
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Change it anytime")
+                                    .font(.body.weight(.semibold))
+
+                                Text("You can adjust the timing or disable notifications in Settings.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            }
+
+                            Spacer(minLength: 0)
+                        }
+                    }
+                    .padding(.top, 30)
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 28)
+
+                Spacer(minLength: 20)
+
+                VStack(spacing: 8) {
+                    Button {
+                        Task { @MainActor in
+                            do {
+                                let granted = try await AnimeNotificationManager
+                                    .requestPermission()
+
+                                guard granted else {
+                                    settingsManager.airingNotificationsEnabled = false
+                                    return
+                                }
+
+                                let schedules = try modelContext.fetch(
+                                    FetchDescriptor<AnimeSchedule>()
+                                )
+
+                                try await AnimeNotificationManager
+                                    .scheduleNotifications(
+                                        for: schedules,
+                                        notificationTime: settingsManager.airingNotificationTiming,
+                                        timeFormat: settingsManager.airingNotificationTimeFormat
+                                    )
+
+                                settingsManager.airingNotificationsEnabled = true
+                                isNoticationSetupDismissed = true
+                                showNotificationSetupSheet = false
+                            } catch {
+                                settingsManager.airingNotificationsEnabled = false
+                                isNoticationSetupDismissed = false
+
+                                print(
+                                    "Notification setup failed:",
+                                    error
+                                )
+                            }
+                        }
+                    } label: {
+                        Text("Set Up Notifications")
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.roundedRectangle(radius: 14))
+
+                    Button("Maybe Later") {
+                        isNoticationSetupDismissed = true
+                        showNotificationSetupSheet = false
+                    }
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+                    .padding(.vertical, 8)
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 12)
+            }
+            .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .presentationDetents([.fraction(0.8)])
+            .presentationDragIndicator(.hidden)
+            .interactiveDismissDisabled()
+        }
+        .safeAreaInset(edge: .bottom) {
+            if !isNoticationSetupDismissed {
+                Button {
+                    showNotificationSetupSheet = true
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "bell.badge.fill")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(.tint)
+                            .frame(width: 36, height: 36)
+                            .background {
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(Color.accentColor.opacity(0.15))
+                            }
+
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text("Schedule Episode Notifications")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(.primary)
+
+                            Text("Get notified when new episodes air")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer(minLength: 8)
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background {
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .fill(Color(uiColor: .secondarySystemBackground))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                    .fill(Color.accentColor.opacity(0.10))
+                            }
+                    }
+                    .contentShape(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    )
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 10)
+                .padding(.bottom, 8)
+            }
+        }
         .onAppear {
             fetchLibrary()
         }
@@ -787,7 +1024,7 @@ struct LibraryView: View {
                     showStartDate = true
                     startDate = Date.from(libraryEntry.startDateValue)
                 }
-                if  libraryEntry.startDateValue != "" {
+                if libraryEntry.finishDateValue != "" {
                     showFinishDate = true
                     finishDate = Date.from(libraryEntry.finishDateValue)
                 }
@@ -796,21 +1033,141 @@ struct LibraryView: View {
     }
     
     private func fetchLibrary() {
-        if (tokenHandler.isAuthenticated) {
-            Task {
-                alertManager.isLoading = true
-                
-                do {
-                    if libraryManager.mediaType == .manga {
-                        library = try await mangaController.fetchLibrary()
-                    } else if libraryManager.mediaType == .anime {
-                        library = try await animeController.fetchLibrary()
-                    }
-                }
-                
+        guard tokenHandler.isAuthenticated else { return }
+
+        Task {
+            alertManager.isLoading = true
+
+            defer {
                 alertManager.isLoading = false
             }
+
+            do {
+                switch libraryManager.mediaType {
+                case .manga:
+                    library = try await mangaController.fetchLibrary()
+
+                case .anime:
+                    let fetchedLibrary = try await animeController.fetchLibrary()
+
+                    let malIds = fetchedLibrary.data
+                        .filter {
+                            $0.node.specificStatus == .anime(.currentlyAiring)
+                        }
+                        .map(\.node.id)
+
+                    if !malIds.isEmpty {
+                        do {
+                            let scheduleCount = try modelContext.fetchCount(
+                                FetchDescriptor<AnimeSchedule>()
+                            )
+
+                            if scheduleCount == 0 || shouldRefreshAnimeSchedule {
+                                let airingAnime = try await aniListController
+                                    .fetchAiringAnime(malIds: malIds)
+
+                                let syncedSchedules = try syncAnimeSchedule(
+                                    with: airingAnime
+                                )
+
+                                if settingsManager.airingNotificationsEnabled {
+                                    try await AnimeNotificationManager
+                                        .scheduleNotifications(
+                                            for: syncedSchedules,
+                                            notificationTime: settingsManager.airingNotificationTiming,
+                                            timeFormat: settingsManager.airingNotificationTimeFormat
+                                        )
+                                }
+
+                                animeScheduleLastRefresh =
+                                    Date.now.timeIntervalSince1970
+                            }
+                        } catch {
+                            print(
+                                "Failed to sync anime schedules:",
+                                error
+                            )
+                        }
+                    }
+
+                    library = fetchedLibrary
+                }
+            } catch {
+                print("Failed to load library:", error)
+            }
         }
+    }
+    
+    private func syncAnimeSchedule(with response: AiringResponse) throws -> [AnimeSchedule] {
+        guard let mediaList = response.data?.page.media else {
+            return []
+        }
+
+        let existingSchedules = try modelContext.fetch(
+            FetchDescriptor<AnimeSchedule>()
+        )
+
+        let schedulesByMalId = Dictionary(
+            uniqueKeysWithValues: existingSchedules.map {
+                ($0.malId, $0)
+            }
+        )
+
+        var syncedSchedules: [AnimeSchedule] = []
+
+        for anime in mediaList {
+            guard
+                let malId = anime.idMal,
+                let nextEpisode = anime.nextAiringEpisode
+            else {
+                continue
+            }
+
+            let schedule: AnimeSchedule
+
+            if let existingSchedule = schedulesByMalId[malId] {
+                existingSchedule.englishTitle = anime.title.english
+                existingSchedule.romajiTitle = anime.title.romaji
+                existingSchedule.nativeTitle = anime.title.native
+                existingSchedule.episodeNumber = nextEpisode.episode
+                existingSchedule.airingAt = nextEpisode.airingDate
+
+                schedule = existingSchedule
+            } else {
+                schedule = AnimeSchedule(
+                    malId: malId,
+                    englishTitle: anime.title.english,
+                    romajiTitle: anime.title.romaji,
+                    nativeTitle: anime.title.native,
+                    episodeNumber: nextEpisode.episode,
+                    airingAt: nextEpisode.airingDate
+                )
+
+                modelContext.insert(schedule)
+            }
+
+            syncedSchedules.append(schedule)
+        }
+
+        if modelContext.hasChanges {
+            try modelContext.save()
+        }
+
+        return syncedSchedules
+    }
+    
+    private var shouldRefreshAnimeSchedule: Bool {
+        guard animeScheduleLastRefresh > 0 else {
+            return true
+        }
+
+        let lastRefresh = Date(
+            timeIntervalSince1970: animeScheduleLastRefresh
+        )
+
+        let refreshInterval: TimeInterval = 6 * 60 * 60
+
+        return Date.now.timeIntervalSince(lastRefresh) >= refreshInterval
     }
     
     var saveEntry: (Int) -> Void {

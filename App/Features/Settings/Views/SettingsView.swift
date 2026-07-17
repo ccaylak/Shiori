@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
     
@@ -15,7 +16,7 @@ struct SettingsView: View {
                     }
                 }
                 
-                Section("General") {
+                Section("Preferences") {
                     Picker("Appearance", systemImage: "circle.lefthalf.filled", selection: $settingsManager.appearance) {
                         ForEach(Appearance.allCases, id: \.self) { appearance in
                             Text(appearance.displayName).tag(appearance)
@@ -35,28 +36,16 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.navigationLink)
-                    
-                    HStack {
+                }
+                
+                Section("Content") {
+                    Toggle(isOn: $settingsManager.showNsfwContent) {
                         Label("Show NSFW Content", systemImage: "eye.trianglebadge.exclamationmark")
-                        Spacer()
-                        Button {
-                            settingsManager.showNsfwContent.toggle()
-                        }label: {
-                            ZStack(alignment: .centerFirstTextBaseline) {
-                                Image(systemName: "eye.slash")
-                                    .hidden()
-                                    .imageScale(.large)
-                                Image(systemName: settingsManager.showNsfwContent ? "eye" : "eye.slash")
-                                    .contentTransition(.symbolEffect(.replace))
-                                    .imageScale(.large)
-                            }
-                            .foregroundColor(.accentColor)
-                            .symbolRenderingMode(.hierarchical)
-                        }
-                        .sensoryFeedback(.selection, trigger: settingsManager.showNsfwContent)
-                        .buttonStyle(.borderless)
                     }
-                    
+                    .toggleStyle(.switch)
+                }
+                
+                Section("Display & Language") {
                     NavigationLink {
                         NameSelectionView()
                     } label: {
@@ -88,15 +77,13 @@ struct SettingsView: View {
                             Image(systemName: "globe")
                         }
                     }
-                }
-                
-                Section {
+                    
                     Toggle(isOn: $settingsManager.isExtendedDataEnabled) {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Extended Data")
                                 
-                                Text("Shows additional data for anime, manga, characters, people, producers, and seasons.")
+                                Text("Additional data for anime, manga, characters and people.")
                                     .font(.caption)
                                     .foregroundStyle(Color.secondary)
                             }
@@ -112,46 +99,52 @@ struct SettingsView: View {
                             systemImage: "chevron.left.forwardslash.chevron.right",
                             selection: $settingsManager.extendedDataSource
                         ) {
-                            ForEach(ExtendedDataSource.allCases, id: \.self) { entry in
+                            ForEach([APIService.jikan, .tenrai], id: \.self) { entry in
                                 Text(entry.displayName)
                                     .tag(entry)
                             }
                         }
                         .pickerStyle(.automatic)
-                    } else {
-                        Label("API", systemImage: "chevron.left.forwardslash.chevron.right")
-                            .foregroundStyle(Color.secondary)
-                            .opacity(0.45)
                     }
                 }
                 
-                Section("Library") {
-                    NavigationLink {
-                        MangaProgressFormatSelectionView()
-                    } label: {
-                        Label("Manga Tracking", systemImage: SeriesType.manga.icon)
-                    }
-                    
-                    NavigationLink {
-                        AnimeFormatSelectionView()
-                    } label: {
-                        Label("Anime Tracking", systemImage: SeriesType.anime.icon)
-                    }
-                    
-                    Toggle(isOn: $settingsManager.advancedMode) {
-                        Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Advanced Mode")
-                                
-                                Text("Adds additional fields for tracking")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                if tokenHandler.isAuthenticated {
+                    Section("Library") {
+                        NavigationLink {
+                            MangaProgressFormatSelectionView()
+                        } label: {
+                            Label("Manga Tracking", systemImage: SeriesType.manga.icon)
+                        }
+                        
+                        NavigationLink {
+                            AnimeFormatSelectionView()
+                        } label: {
+                            Label("Anime Tracking", systemImage: SeriesType.anime.icon)
+                        }
+                        
+                        Toggle(isOn: $settingsManager.advancedMode) {
+                            Label {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Advanced Mode")
+                                    
+                                    Text("Adds additional fields for tracking")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            } icon: {
+                                Image(systemName: "gearshape.2")
                             }
-                        } icon: {
-                            Image(systemName: "gearshape.2")
+                        }
+                        .toggleStyle(.switch)
+                    }
+                    
+                    Section {
+                        NavigationLink {
+                            NotificationSettingsView()
+                        } label: {
+                            Label("Notifications", systemImage: "bell")
                         }
                     }
-                    .toggleStyle(.switch)
                 }
                 
                 Section ("Contact"){
@@ -236,14 +229,12 @@ private struct AboutView: View {
             }
             
             Section ("Third-Party Services") {
-                Link(destination: URL(string: "https://myanimelist.net")!) {
-                    Text(verbatim: "MyAnimeList")
-                }
-                Link(destination: URL(string: "https://jikan.moe")!) {
-                    Text(verbatim: "Jikan")
-                }
-                Link(destination: URL(string: "https://tenrai.org")!) {
-                    Text(verbatim: "Tenrai")
+                ForEach(APIService.allCases, id: \.self) { api in
+                    if let url = URL(string: api.website) {
+                        Link(destination: url) {
+                            Text(api.displayName)
+                        }
+                    }
                 }
             }
             

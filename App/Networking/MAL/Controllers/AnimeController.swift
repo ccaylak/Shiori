@@ -39,7 +39,7 @@ import Foundation
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
@@ -73,12 +73,12 @@ import Foundation
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
         do {
             return try JSONDecoder.snakeCaseDecoder
                 .decode(MediaResponse.self, from: data)
         } catch {
-            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaResponse.self)
+            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaResponse.self)
             throw error
         }
     }
@@ -105,13 +105,13 @@ import Foundation
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
         
         do {
             return try JSONDecoder.snakeCaseDecoder
                 .decode(MediaNode.self, from: data)
         } catch {
-            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaNode.self)
+            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaNode.self)
             throw error
         }
     }
@@ -142,7 +142,7 @@ import Foundation
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func completeEntry(id: Int) async throws {
@@ -171,7 +171,7 @@ import Foundation
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func increaseEpisodes(id: Int, episode: Int) async throws {
@@ -201,7 +201,7 @@ import Foundation
             (_, response) = try await URLSession.shared.data(for: request)
         }
         
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func fetchLibrary() async throws -> MediaResponse {
@@ -248,13 +248,13 @@ import Foundation
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
         
         do {
             return try JSONDecoder.snakeCaseDecoder
                 .decode(MediaResponse.self, from: data)
         } catch {
-            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaResponse.self)
+            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaResponse.self)
             throw error
         }
     }
@@ -276,6 +276,6 @@ import Foundation
             (_, response) = try await URLSession.shared.data(for: request)
         }
         
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
 }
