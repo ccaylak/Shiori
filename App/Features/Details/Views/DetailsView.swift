@@ -54,9 +54,9 @@ struct DetailsView: View {
                                         .font(.subheadline)
                                     Text("Rating")
                                         .font(.caption)
-                                    Text("\(media.getMyListStatus.score)")
+                                    Text(media.getMyListStatus.score, format: .number)
                                         .font(.body)
-                                        .accentColor(.primary)
+                                        .foregroundStyle(.primary)
                                 }
                                 .frame(maxWidth: .infinity)
                                 Divider()

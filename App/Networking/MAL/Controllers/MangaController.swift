@@ -37,10 +37,10 @@ import Foundation
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+            
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func addToReadingList(id: Int) async throws {
@@ -66,10 +66,10 @@ import Foundation
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+            
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func completeEntry(id: Int) async throws {
@@ -95,10 +95,10 @@ import Foundation
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+            
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func increaseVolumes(id: Int, volume: Int) async throws {
@@ -122,10 +122,10 @@ import Foundation
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+            
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func increaseChapters(id: Int, chapter: Int) async throws {
@@ -149,10 +149,10 @@ import Foundation
             request = APIRequest.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+            
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func fetchDetails(id: Int) async throws -> MediaNode {
@@ -172,17 +172,17 @@ import Foundation
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
             request = APIRequest.buildRequest(url: url, httpMethod: .get)
-
+            
             (data, response) = try await URLSession.shared.data(for: request)
         }
-
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
-
+        
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        
         do {
             return try JSONDecoder.snakeCaseDecoder
                 .decode(MediaNode.self, from: data)
         } catch {
-            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaNode.self)
+            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaNode.self)
             throw error
         }
     }
@@ -213,17 +213,17 @@ import Foundation
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
             request = APIRequest.buildRequest(url: url, httpMethod: .get)
-
+            
             (data, response) = try await URLSession.shared.data(for: request)
         }
-
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
-
+        
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        
         do {
             return try JSONDecoder.snakeCaseDecoder
                 .decode(MediaResponse.self, from: data)
         } catch {
-            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaResponse.self)
+            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaResponse.self)
             throw error
         }
     }
@@ -264,20 +264,20 @@ import Foundation
         
         var request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
-
+        
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
             request = APIRequest.buildRequest(url: url, httpMethod: .get)
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
-
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        
         do {
             return try JSONDecoder.snakeCaseDecoder
                 .decode(MediaResponse.self, from: data)
         } catch {
-            Metrics.decodingFailed(error, api: url.host ?? "", endpoint: url.path, model: MediaResponse.self)
+            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaResponse.self)
             throw error
         }
     }
@@ -297,6 +297,6 @@ import Foundation
             request = APIRequest.buildRequest(url: url, httpMethod: .delete)
             (_, response) = try await URLSession.shared.data(for: request)
         }
-        try APIRequest.validateResponse(response, api: url.host ?? "", endpoint: url.path)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
 }

@@ -5,7 +5,7 @@ struct LibraryView: View {
     
     @AppStorage("animeScheduleLastRefresh")
     private var animeScheduleLastRefresh: Double = 0
-    
+
     @State private var library = MediaResponse(data: [], paging: nil)
     
     @State private var selectedMedia: Media?
@@ -28,9 +28,9 @@ struct LibraryView: View {
     private let mangaController = MangaController()
     private let animeController = AnimeController()
     private let aniListController = AniListController()
-    
+
     @StateObject private var libraryManager: LibraryManager = .shared
-    @EnvironmentObject private var toastManager: ToastManager
+    @EnvironmentObject private var alertManager: AlertManager
     @ObservedObject private var tokenHandler: TokenHandler = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
     
@@ -39,12 +39,12 @@ struct LibraryView: View {
     
     @Environment(\.modelContext)
     private var modelContext
-    
+
     @AppStorage("isNoticationSetupDismissed")
     private var isNoticationSetupDismissed: Bool = false
-    
+
     @State private var showNotificationSetupSheet: Bool = false
-    
+
     private var filteredLibraryData: [Media] {
         if searchTerm.isEmpty {
             return library.data
@@ -112,7 +112,7 @@ struct LibraryView: View {
                                 Task {
                                     try await mangaController.completeEntry(id: media.node.id)
                                     
-                                    toastManager.showUpdatedToast = true
+                                    alertManager.showUpdatedAlert = true
                                     library = try await mangaController.fetchLibrary()
                                 }
                             } label : {
@@ -125,7 +125,7 @@ struct LibraryView: View {
                                 Task {
                                     try await animeController.completeEntry(id: media.node.id)
                                     
-                                    toastManager.showUpdatedToast = true
+                                    alertManager.showUpdatedAlert = true
                                     library = try await animeController.fetchLibrary()
                                 }
                             } label: {
@@ -155,7 +155,7 @@ struct LibraryView: View {
                                     if updatedChapterValue > currentChapter {
                                         try await mangaController.increaseChapters(id: media.node.id, chapter: updatedChapterValue)
                                         
-                                        toastManager.showUpdatedToast = true
+                                        alertManager.showUpdatedAlert = true
                                         library = try await mangaController.fetchLibrary()
                                     }
                                 }
@@ -188,7 +188,7 @@ struct LibraryView: View {
                                     if updatedVolumeValue > current {
                                         try await mangaController.increaseVolumes(id: media.node.id, volume: updatedVolumeValue)
                                         
-                                        toastManager.showUpdatedToast = true
+                                        alertManager.showUpdatedAlert = true
                                         library = try await mangaController.fetchLibrary()
                                     }
                                 }
@@ -223,7 +223,7 @@ struct LibraryView: View {
                                     if updatedEpisodeValue > currentEpisode {
                                         try await animeController.increaseEpisodes(id: media.node.id, episode: updatedEpisodeValue)
                                         
-                                        toastManager.showUpdatedToast = true
+                                        alertManager.showUpdatedAlert = true
                                         library = try await animeController.fetchLibrary()
                                     }
                                 }
@@ -241,7 +241,7 @@ struct LibraryView: View {
                         }
                         
                     }
-                    if displayedLibraryData.isEmpty && !toastManager.isLoading {
+                    if displayedLibraryData.isEmpty && !alertManager.isLoading {
                         if searchTerm != "" {
                             ContentUnavailableView.search
                         } else {
@@ -797,7 +797,7 @@ struct LibraryView: View {
                             .font(.title2.bold())
                             .multilineTextAlignment(.center)
 
-                        Text("Get notified when new episodes of anime you're watching are out.")
+                        Text("Get notified when new episodes of anime you're watching are about to air.")
                         .font(.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -820,10 +820,10 @@ struct LibraryView: View {
                                 }
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Choose When to Be Notified")
+                                Text("Choose when to be notified")
                                     .font(.body.weight(.semibold))
 
-                                Text("Get notified when an episode is out, 15 minutes before, 1 hour before, or earlier that day.")
+                                Text("Get notified at airing time, 15 minutes before, or 1 hour before.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -846,10 +846,10 @@ struct LibraryView: View {
                                 }
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Only for Anime You Watch")
+                                Text("Only for anime you watch")
                                     .font(.body.weight(.semibold))
 
-                                Text("Notifications are only scheduled for currently airing anime in your library.")
+                                Text("Notifications are scheduled for currently airing anime in your Watching list.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -872,10 +872,10 @@ struct LibraryView: View {
                                 }
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Adjust It Anytime")
+                                Text("Change it anytime")
                                     .font(.body.weight(.semibold))
 
-                                Text("You can adjust the timing or turn off notifications anytime under Settings > Episode Notifications.")
+                                Text("You can adjust the timing or disable notifications in Settings.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -954,7 +954,7 @@ struct LibraryView: View {
             .interactiveDismissDisabled()
         }
         .safeAreaInset(edge: .bottom) {
-            if !isNoticationSetupDismissed && libraryManager.mediaType == .anime {
+            if !isNoticationSetupDismissed {
                 Button {
                     showNotificationSetupSheet = true
                 } label: {
@@ -969,11 +969,11 @@ struct LibraryView: View {
                             }
 
                         VStack(alignment: .leading, spacing: 3) {
-                            Text("Set Up Episode Notifications")
+                            Text("Schedule Episode Notifications")
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(.primary)
 
-                            Text("Get notified when new episodes are out.")
+                            Text("Get notified when new episodes air")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -1036,10 +1036,10 @@ struct LibraryView: View {
         guard tokenHandler.isAuthenticated else { return }
 
         Task {
-            toastManager.isLoading = true
+            alertManager.isLoading = true
 
             defer {
-                toastManager.isLoading = false
+                alertManager.isLoading = false
             }
 
             do {
@@ -1097,7 +1097,7 @@ struct LibraryView: View {
             }
         }
     }
-    
+
     private func syncAnimeSchedule(with response: AiringResponse) throws -> [AnimeSchedule] {
         guard let mediaList = response.data?.page.media else {
             return []
@@ -1155,7 +1155,7 @@ struct LibraryView: View {
 
         return syncedSchedules
     }
-    
+
     private var shouldRefreshAnimeSchedule: Bool {
         guard animeScheduleLastRefresh > 0 else {
             return true
@@ -1177,12 +1177,12 @@ struct LibraryView: View {
                     
                     try await mangaController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, chapters: libraryEntry.readChapters, volumes: libraryEntry.readVolumes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
                     
-                    toastManager.showUpdatedToast = true
+                    alertManager.showUpdatedAlert = true
                     library = try await mangaController.fetchLibrary()
                 } else if libraryManager.mediaType == .anime {
                     
                     try await animeController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, episodes: libraryEntry.watchedEpisodes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
-                    toastManager.showUpdatedToast = true
+                    alertManager.showUpdatedAlert = true
                     
                     library = try await animeController.fetchLibrary()
                 }
@@ -1198,12 +1198,12 @@ struct LibraryView: View {
             Task {
                 if(libraryManager.mediaType == .manga) {
                     try await mangaController.deleteEntry(id: id)
-                    toastManager.showRemovedToast = true
+                    alertManager.showRemovedAlert = true
                     library = try await mangaController.fetchLibrary()
                 }
                 if(libraryManager.mediaType == .anime) {
                     try await animeController.deleteEntry(id: id)
-                    toastManager.showRemovedToast = true
+                    alertManager.showRemovedAlert = true
                     library = try await animeController.fetchLibrary()
                 }
                 
@@ -1217,5 +1217,5 @@ struct LibraryView: View {
 
 #Preview {
     LibraryView()
-        .environmentObject(ToastManager.shared)
+        .environmentObject(AlertManager.shared)
 }

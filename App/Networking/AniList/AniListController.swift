@@ -1,13 +1,13 @@
 import Foundation
 
 @MainActor
-final class AniListController {
+class AniListController {
     func fetchAiringAnime(
         malIds: [Int],
         page: Int = 1
     ) async throws -> AiringResponse {
-        let url = AniListEndpoints.graphQL
-        
+        let url = URL(string: AniListEndpoints.api)!
+
         let variables = AiringVariables(
             malIds: malIds,
             page: page

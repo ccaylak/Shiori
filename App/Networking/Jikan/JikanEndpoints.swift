@@ -2,10 +2,10 @@ import Foundation
 import SwiftUI
 
 struct JikanEndpoints {
-    @AppStorage("extendedDataSource") private static var extendedDataSource: ExtendedDataSource = ExtendedDataSource.jikan
-
+    @AppStorage("extendedDataSource") private static var apiService: APIService = APIService.jikan
+    
     private static var baseURL: String {
-        extendedDataSource.baseURL
+        apiService.apiBaseUrl
     }
     
     struct Profile {

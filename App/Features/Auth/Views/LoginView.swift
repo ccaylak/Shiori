@@ -1,10 +1,14 @@
 import SwiftUI
 import AuthenticationServices
 import TelemetryDeck
+import SwiftData
 
 struct LoginView: View {
+    @AppStorage("animeScheduleLastRefresh")
+    private var animeScheduleLastRefresh: Double = 0
+    
     @AppStorage("isExtendedDataEnabled") var isExtendedDataEnabled: Bool = true
-    @AppStorage("extendedDataSource") var extendedDataSource: ExtendedDataSource = .jikan
+    @AppStorage("extendedDataSource") var apiService: APIService = .tenrai
     @Environment(\.webAuthenticationSession) private var webAuthenticationSession
     
     private var jikanProfileController = JikanProfileController()
@@ -30,6 +34,8 @@ struct LoginView: View {
     
     @EnvironmentObject private var alertManager: AlertManager
     
+    @Environment(\.modelContext)
+    private var modelContext
     
     private var friends: [JikanFriendsData] {
         jikanFriends.data
@@ -44,6 +50,20 @@ struct LoginView: View {
         mangaStats = nil
     }
     
+    private func clearAnimeSchedule() throws {
+        let schedules = try modelContext.fetch(
+            FetchDescriptor<AnimeSchedule>()
+        )
+
+        for schedule in schedules {
+            modelContext.delete(schedule)
+        }
+
+        try modelContext.save()
+
+        animeScheduleLastRefresh = 0
+    }
+    
     private func loadProfile() async {
         guard tokenHandler.isAuthenticated else { return }
 
@@ -55,7 +75,7 @@ struct LoginView: View {
             user = fetchedUser
 
             guard isExtendedDataEnabled,
-                  extendedDataSource.supportsProfileExtras else {
+                  apiService != .jikan else {
                 clearJikanProfileData()
                 return
             }
@@ -255,7 +275,7 @@ struct LoginView: View {
                         }
                         .isVisible(!friends.isEmpty)
                         
-                        if isExtendedDataEnabled && extendedDataSource.supportsProfileExtras {
+                        if isExtendedDataEnabled && apiService == .jikan  {
                             UserStatistics(
                                 title: String(localized: "Anime Statistics"),
                                 icon: "tv",
@@ -496,7 +516,17 @@ struct LoginView: View {
                             isPresented: $showLogoutConfirmationDialog,
                             titleVisibility: .visible,
                             actions: {
-                                Button("Yes", role: .destructive) { tokenHandler.revokeTokens() }
+                                Button("Yes", role: .destructive) {
+                                    Task {
+                                        do {
+                                            await AnimeNotificationManager.cancelNotifications()
+                                            try clearAnimeSchedule()
+                                            tokenHandler.revokeTokens()
+                                        } catch {
+                                            print("Failed to clear logout data:", error)
+                                        }
+                                    }
+                                }
                                 Button("Cancel", role: .cancel) {}
                             }
                         )
