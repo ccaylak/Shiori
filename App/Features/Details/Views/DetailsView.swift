@@ -24,7 +24,7 @@ struct DetailsView: View {
     
     @ObservedObject private var tokenHandler: TokenHandler = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     let animeController = AnimeController()
     let mangaController = MangaController()
@@ -124,10 +124,10 @@ struct DetailsView: View {
                             Button {
                                 didTap.toggle()
                                 Task {
-                                    alertManager.isLoading = true
-                                    alertManager.showAddedAlert = true
+                                    toastManager.isLoading = true
+                                    toastManager.showAddedToast = true
                                     defer {
-                                        alertManager.isLoading = false
+                                        toastManager.isLoading = false
                                     }
                                     if (media.isMangaOrAnime == .anime) {
                                         try await animeController.addToWatchList(id: media.id)
@@ -553,7 +553,7 @@ struct DetailsView: View {
                                                 )
                                             media = try await animeController.fetchDetails(id: media.id)
                                         }
-                                        alertManager.showUpdatedAlert = true
+                                        toastManager.showUpdatedToast = true
                                         isSheetPresented = false
                                         Metrics.entryAction(.updated, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                     }
@@ -590,7 +590,7 @@ struct DetailsView: View {
                                                 )
                                             media = try await animeController.fetchDetails(id: media.id)
                                         }
-                                        alertManager.showUpdatedAlert = true
+                                        toastManager.showUpdatedToast = true
                                         isSheetPresented = false
                                         Metrics.entryAction(.updated, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                     }
@@ -620,12 +620,12 @@ struct DetailsView: View {
                                     Task {
                                         if (media.isMangaOrAnime == .manga) {
                                             try await mangaController.deleteEntry(id: media.id)
-                                            alertManager.showRemovedAlert = true
+                                            toastManager.showRemovedToast = true
                                             media = try await mangaController.fetchDetails(id: media.id)
                                         }
                                         if (media.isMangaOrAnime == .anime) {
                                             try await animeController.deleteEntry(id: media.id)
-                                            alertManager.showRemovedAlert = true
+                                            toastManager.showRemovedToast = true
                                             media = try await animeController.fetchDetails(id: media.id)
                                         }
                                         showAlert = false
@@ -653,8 +653,8 @@ struct DetailsView: View {
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             Task {
-                alertManager.isLoading = true
-                defer { alertManager.isLoading = false }
+                toastManager.isLoading = true
+                defer { toastManager.isLoading = false }
                 do {
                     if media.isMangaOrAnime == .anime {
                         media = try await animeController.fetchDetails(id: media.id)

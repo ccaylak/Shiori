@@ -32,7 +32,7 @@ struct LoginView: View {
     
     @State private var showLogoutConfirmationDialog: Bool = false
     
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     @Environment(\.modelContext)
     private var modelContext
@@ -67,8 +67,8 @@ struct LoginView: View {
     private func loadProfile() async {
         guard tokenHandler.isAuthenticated else { return }
 
-        alertManager.isLoading = true
-        defer { alertManager.isLoading = false }
+        toastManager.isLoading = true
+        defer { toastManager.isLoading = false }
 
         do {
             let fetchedUser = try await userController.fetchUserProfile()

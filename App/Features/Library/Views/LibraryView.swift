@@ -30,7 +30,7 @@ struct LibraryView: View {
     private let aniListController = AniListController()
 
     @StateObject private var libraryManager: LibraryManager = .shared
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     @ObservedObject private var tokenHandler: TokenHandler = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
     
@@ -112,7 +112,7 @@ struct LibraryView: View {
                                 Task {
                                     try await mangaController.completeEntry(id: media.node.id)
                                     
-                                    alertManager.showUpdatedAlert = true
+                                    toastManager.showUpdatedToast = true
                                     library = try await mangaController.fetchLibrary()
                                 }
                             } label : {
@@ -125,7 +125,7 @@ struct LibraryView: View {
                                 Task {
                                     try await animeController.completeEntry(id: media.node.id)
                                     
-                                    alertManager.showUpdatedAlert = true
+                                    toastManager.showUpdatedToast = true
                                     library = try await animeController.fetchLibrary()
                                 }
                             } label: {
@@ -155,7 +155,7 @@ struct LibraryView: View {
                                     if updatedChapterValue > currentChapter {
                                         try await mangaController.increaseChapters(id: media.node.id, chapter: updatedChapterValue)
                                         
-                                        alertManager.showUpdatedAlert = true
+                                        toastManager.showUpdatedToast = true
                                         library = try await mangaController.fetchLibrary()
                                     }
                                 }
@@ -188,7 +188,7 @@ struct LibraryView: View {
                                     if updatedVolumeValue > current {
                                         try await mangaController.increaseVolumes(id: media.node.id, volume: updatedVolumeValue)
                                         
-                                        alertManager.showUpdatedAlert = true
+                                        toastManager.showUpdatedToast = true
                                         library = try await mangaController.fetchLibrary()
                                     }
                                 }
@@ -223,7 +223,7 @@ struct LibraryView: View {
                                     if updatedEpisodeValue > currentEpisode {
                                         try await animeController.increaseEpisodes(id: media.node.id, episode: updatedEpisodeValue)
                                         
-                                        alertManager.showUpdatedAlert = true
+                                        toastManager.showUpdatedToast = true
                                         library = try await animeController.fetchLibrary()
                                     }
                                 }
@@ -241,7 +241,7 @@ struct LibraryView: View {
                         }
                         
                     }
-                    if displayedLibraryData.isEmpty && !alertManager.isLoading {
+                    if displayedLibraryData.isEmpty && !toastManager.isLoading {
                         if searchTerm != "" {
                             ContentUnavailableView.search
                         } else {
@@ -1036,10 +1036,10 @@ struct LibraryView: View {
         guard tokenHandler.isAuthenticated else { return }
 
         Task {
-            alertManager.isLoading = true
+            toastManager.isLoading = true
 
             defer {
-                alertManager.isLoading = false
+                toastManager.isLoading = false
             }
 
             do {
@@ -1177,12 +1177,12 @@ struct LibraryView: View {
                     
                     try await mangaController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, chapters: libraryEntry.readChapters, volumes: libraryEntry.readVolumes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
                     
-                    alertManager.showUpdatedAlert = true
+                    toastManager.showUpdatedToast = true
                     library = try await mangaController.fetchLibrary()
                 } else if libraryManager.mediaType == .anime {
                     
                     try await animeController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, episodes: libraryEntry.watchedEpisodes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
-                    alertManager.showUpdatedAlert = true
+                    toastManager.showUpdatedToast = true
                     
                     library = try await animeController.fetchLibrary()
                 }
@@ -1198,12 +1198,12 @@ struct LibraryView: View {
             Task {
                 if(libraryManager.mediaType == .manga) {
                     try await mangaController.deleteEntry(id: id)
-                    alertManager.showRemovedAlert = true
+                    toastManager.showRemovedToast = true
                     library = try await mangaController.fetchLibrary()
                 }
                 if(libraryManager.mediaType == .anime) {
                     try await animeController.deleteEntry(id: id)
-                    alertManager.showRemovedAlert = true
+                    toastManager.showRemovedToast = true
                     library = try await animeController.fetchLibrary()
                 }
                 
@@ -1217,5 +1217,5 @@ struct LibraryView: View {
 
 #Preview {
     LibraryView()
-        .environmentObject(AlertManager.shared)
+        .environmentObject(ToastManager.shared)
 }
