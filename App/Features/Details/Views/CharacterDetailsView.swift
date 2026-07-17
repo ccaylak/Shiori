@@ -7,7 +7,7 @@ struct CharacterDetailsView: View {
     @State private var details: JikanCharacterFull? = nil
     @State private var isDescriptionExpanded = false
     
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     let jikanCharacterController = JikanCharacterController()
     
@@ -207,8 +207,8 @@ struct CharacterDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             Task {
-                alertManager.isLoading = true
-                defer { alertManager.isLoading = false }
+                toastManager.isLoading = true
+                defer { toastManager.isLoading = false }
                 
                 do {
                     details = try await jikanCharacterController.fetchCharacterDetails(id: characterData.malId)

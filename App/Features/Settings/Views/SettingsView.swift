@@ -239,9 +239,6 @@ private struct AboutView: View {
             }
             
             Section ("Third-Party Libraries") {
-                Link(destination: URL(string: "https://github.com/elai950/AlertToast")!) {
-                    Text(verbatim: "AlertToast")
-                }
                 Link(destination: URL(string: "https://github.com/evgenyneu/keychain-swift")!) {
                     Text(verbatim: "KeychainSwift")
                 }

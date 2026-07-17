@@ -13,7 +13,7 @@ struct ResultView: View {
     
     @StateObject private var resultManager: ResultManager = .shared
     @ObservedObject private var settingsManager: SettingsManager = .shared
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     var body: some View {
         List {
@@ -84,11 +84,11 @@ struct ResultView: View {
         }
         .onAppear {
             guard mediaResponse.data.isEmpty else { return }
-            alertManager.isLoading = true
+            toastManager.isLoading = true
             
             Task {
                 defer {
-                    alertManager.isLoading = false
+                    toastManager.isLoading = false
                 }
                 await loadMediaData()
             }
@@ -116,6 +116,6 @@ struct ResultView: View {
 
 #Preview {
     ResultView()
-        .environmentObject(AlertManager.shared)
+        .environmentObject(ToastManager.shared)
 }
 

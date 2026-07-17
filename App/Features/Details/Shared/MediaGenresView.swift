@@ -10,7 +10,7 @@ struct MediaGenresView: View {
     
     private let jikanGenresController = JikanGenresController()
     
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     @State var isLoading = false
     @State var page = 1
@@ -95,8 +95,8 @@ struct MediaGenresView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             Task {
-                alertManager.isLoading = true
-                defer { alertManager.isLoading = false }
+                toastManager.isLoading = true
+                defer { toastManager.isLoading = false }
                 if mode == .manga {
                     jikanMedia = try await jikanGenresController.fetchMangaByGenre(id: genreId, page: page)
                 } else {
