@@ -175,16 +175,17 @@ struct DetailsView: View {
                 if media.getEntryStatus != .notSet {
                     ToolbarItem {
                         if #available(iOS 26.0, *) {
-                            Button(role: .close, action: {
+                            Button(role: .close) {
+                                userProgress = media.getMyListStatus
                                 isSheetPresented = true
-                            }) {
+                            } label: {
                                 Image(systemName: "pencil")
                             }
-
                         } else {
-                            Button(action: {
+                            Button {
+                                userProgress = media.getMyListStatus
                                 isSheetPresented = true
-                            }) {
+                            } label: {
                                 Text("Edit")
                             }
                         }
@@ -209,21 +210,41 @@ struct DetailsView: View {
                 NavigationStack {
                     List {
                         Section {
-                            Picker("Progress", selection: $userProgress.progressStatus) {
-                                ForEach([ProgressStatus.Manga.completed, .reading, .dropped, .onHold, .planToRead], id: \.self) { mangaSelection in
-                                    Text(mangaSelection.displayName)
-                                        .tag(mangaSelection.rawValue)
+                            if media.isMangaOrAnime == .manga {
+                                Picker("Progress", selection: $userProgress.progressStatus) {
+                                    ForEach(
+                                        [
+                                            ProgressStatus.Manga.completed,
+                                            .reading,
+                                            .dropped,
+                                            .onHold,
+                                            .planToRead
+                                        ],
+                                        id: \.self
+                                    ) { status in
+                                        Text(status.displayName)
+                                            .tag(status.rawValue)
+                                    }
                                 }
                             }
-                            .isVisible(media.isMangaOrAnime == .manga)
-                            
-                            Picker("Progress", selection: $userProgress.progressStatus) {
-                                ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch],id: \.self) { animeSelection in
-                                    Text(animeSelection.displayName)
-                                        .tag(animeSelection.rawValue)
+
+                            if media.isMangaOrAnime == .anime {
+                                Picker("Progress", selection: $userProgress.progressStatus) {
+                                    ForEach(
+                                        [
+                                            ProgressStatus.Anime.completed,
+                                            .watching,
+                                            .dropped,
+                                            .onHold,
+                                            .planToWatch
+                                        ],
+                                        id: \.self
+                                    ) { status in
+                                        Text(status.displayName)
+                                            .tag(status.rawValue)
+                                    }
                                 }
                             }
-                            .isVisible(media.isMangaOrAnime == .anime)
                             
                             Picker("Rating", selection: $userProgress.score) {
                                 ForEach(0...10, id: \.self) { rating in
@@ -674,6 +695,7 @@ struct DetailsView: View {
                         }
                     }
                     userProgress = media.getMyListStatus
+                    dump(userProgress)
                 } catch {
                     print("Fehler beim Abrufen der Daten: \(error)")
                 }
