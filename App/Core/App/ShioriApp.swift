@@ -9,9 +9,11 @@ struct ShioriApp: App {
     @ObservedObject private var settingsManager: SettingsManager = .shared
     @StateObject private var alertManager: AlertManager = .shared
     private var tokenHandler: TokenHandler = .shared
+    private let notificationDelegate = NotificationDelegate()
     
     init() {
         TelemetryDeck.initialize(config: .init(appID: Config.telemetryDeck))
+        UNUserNotificationCenter.current().delegate = notificationDelegate
     }
     
     var body: some Scene {
@@ -32,5 +34,6 @@ struct ShioriApp: App {
                     }
                 }
         }
+        .modelContainer(for: AnimeSchedule.self)
     }
 }

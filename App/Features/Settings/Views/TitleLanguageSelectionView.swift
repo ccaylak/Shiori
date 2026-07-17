@@ -11,6 +11,7 @@ struct TitleLanguageSelectionView: View {
         List {
             Section("Preview") {
                 LibraryMediaView(
+                    malId: exampleAnime.id,
                     title: exampleAnime.preferredTitle,
                     image: exampleAnime.mainPicture.largeUrl,
                     release: exampleAnime.getStartSeason.seasonLabel,

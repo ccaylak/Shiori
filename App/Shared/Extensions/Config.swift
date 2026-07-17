@@ -8,8 +8,12 @@ struct Config {
             return try! JSONSerialization.jsonObject(with: data) as! [String: Any]
         }
     
-    static var apiKey: String {
-        return secrets()["API_KEY"] as! String
+    static var malKey: String {
+        return secrets()["MAL_KEY"] as! String
+    }
+    
+    static var anilistKey: String {
+        return secrets()["ANILIST_KEY"] as! String
     }
     
     static var telemetryDeck: String {
