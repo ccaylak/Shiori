@@ -75,17 +75,27 @@ struct LoginView: View {
             user = fetchedUser
 
             guard isExtendedDataEnabled,
-                  apiService != .jikan else {
+                  apiService == .jikan else {
                 clearJikanProfileData()
                 return
             }
 
             let username = fetchedUser.name
 
-            jikanFavorites = try await jikanProfileController.fetchProfileFavorites(username: username)
-            jikanFriends = try await jikanProfileController.fetchFriends(username: username)
+            async let favorites = jikanProfileController.fetchProfileFavorites(
+                username: username
+            )
+            async let friends = jikanProfileController.fetchFriends(
+                username: username
+            )
+            async let statistics = jikanProfileController.fetchProfileStatistics(
+                username: username
+            )
 
-            let response = try await jikanProfileController.fetchProfileStatistics(username: username)
+            jikanFavorites = try await favorites
+            jikanFriends = try await friends
+
+            let response = try await statistics
             animeStats = response.data.anime
             mangaStats = response.data.manga
         } catch {
