@@ -4,7 +4,7 @@ struct SeasonView: View {
     
     private let seasonController = SeasonController()
     @ObservedObject private var seasonManager: SeasonManager = .shared
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     @State private var jikanSeason = MediaResponse(data: [], paging: nil)
     
@@ -97,8 +97,8 @@ struct SeasonView: View {
     
     private func fetchSeason() {
         Task {
-            alertManager.isLoading = true
-            defer { alertManager.isLoading = false }
+            toastManager.isLoading = true
+            defer { toastManager.isLoading = false }
             
             do {
                 let season = try await seasonController.fetchSeason(
