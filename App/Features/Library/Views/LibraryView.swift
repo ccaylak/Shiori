@@ -797,7 +797,7 @@ struct LibraryView: View {
                             .font(.title2.bold())
                             .multilineTextAlignment(.center)
 
-                        Text("Get notified when new episodes of anime you're watching are about to air.")
+                        Text("Get notified when new episodes of anime you're watching are out.")
                         .font(.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -820,10 +820,10 @@ struct LibraryView: View {
                                 }
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Choose when to be notified")
+                                Text("Choose When to Be Notified")
                                     .font(.body.weight(.semibold))
 
-                                Text("Get notified at airing time, 15 minutes before, or 1 hour before.")
+                                Text("Get notified when an episode is out, 15 minutes before, 1 hour before, or earlier that day.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -846,10 +846,10 @@ struct LibraryView: View {
                                 }
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Only for anime you watch")
+                                Text("Only for Anime You Watch")
                                     .font(.body.weight(.semibold))
 
-                                Text("Notifications are scheduled for currently airing anime in your Watching list.")
+                                Text("Notifications are only scheduled for currently airing anime in your library.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -872,10 +872,10 @@ struct LibraryView: View {
                                 }
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Change it anytime")
+                                Text("Adjust It Anytime")
                                     .font(.body.weight(.semibold))
 
-                                Text("You can adjust the timing or disable notifications in Settings.")
+                                Text("You can adjust the timing or turn off notifications anytime under Settings > Episode Notifications.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -954,7 +954,7 @@ struct LibraryView: View {
             .interactiveDismissDisabled()
         }
         .safeAreaInset(edge: .bottom) {
-            if !isNoticationSetupDismissed {
+            if !isNoticationSetupDismissed && libraryManager.mediaType == .anime {
                 Button {
                     showNotificationSetupSheet = true
                 } label: {
@@ -969,11 +969,11 @@ struct LibraryView: View {
                             }
 
                         VStack(alignment: .leading, spacing: 3) {
-                            Text("Schedule Episode Notifications")
+                            Text("Set Up Episode Notifications")
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(.primary)
 
-                            Text("Get notified when new episodes air")
+                            Text("Get notified when new episodes are out.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }

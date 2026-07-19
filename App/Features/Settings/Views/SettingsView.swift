@@ -45,6 +45,14 @@ struct SettingsView: View {
                     .toggleStyle(.switch)
                 }
                 
+                Section("Notifications") {
+                    NavigationLink {
+                        NotificationSettingsView()
+                    } label: {
+                        Label("Anime-Notifications", systemImage: "bell.badge")
+                    }
+                }
+                
                 Section("Display & Language") {
                     NavigationLink {
                         NameSelectionView()
@@ -136,14 +144,6 @@ struct SettingsView: View {
                             }
                         }
                         .toggleStyle(.switch)
-                    }
-                    
-                    Section {
-                        NavigationLink {
-                            NotificationSettingsView()
-                        } label: {
-                            Label("Notifications", systemImage: "bell")
-                        }
                     }
                 }
                 
