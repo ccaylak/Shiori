@@ -7,7 +7,7 @@ struct GenreListView: View {
     
     @State private var jikanGenresResponse = JikanGenre(data: [])
     
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     private var groupedGenres: [(title: String, items: [JikanGenreData])] {
         let grouped = Dictionary(grouping: jikanGenresResponse.data) { genre in
@@ -54,8 +54,8 @@ struct GenreListView: View {
         .navigationTitle(mode == .manga ? "Manga Genres" : "Anime Genres")
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            alertManager.isLoading = true
-            defer { alertManager.isLoading = false }
+            toastManager.isLoading = true
+            defer { toastManager.isLoading = false }
             
             do {
                 if mode == .manga {

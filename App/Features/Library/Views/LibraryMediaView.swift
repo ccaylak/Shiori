@@ -1,10 +1,14 @@
 import SwiftUI
+import SwiftData
 
 struct LibraryMediaView: View {
-    
+    @Environment(\.modelContext) private var modelContext
+    @State private var upcomingSchedule: AnimeSchedule?
+
     @ObservedObject private var settingsManager: SettingsManager = .shared
     @Environment(\.colorScheme) private var colorScheme
     
+    let malId: Int
     let title: String
     let image: String
     let release: String
@@ -24,10 +28,12 @@ struct LibraryMediaView: View {
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
-                    .lineLimit(3)
+                    .lineLimit(1)
                     .font(.headline)
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.trailing, upcomingSchedule == nil ? 0 : 105)
                 
                 Text(formattedDetails(year: release))
                     .font(.subheadline)
@@ -53,32 +59,72 @@ struct LibraryMediaView: View {
                 
                 switch type {
                 case .anime(_):
-                    HStack {
-                        Label(progress.totalValue > 0
-                              ? "\(progress.currentValue)/\(progress.totalValue)"
-                              : "\(progress.currentValue)", systemImage: "tv")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .fontWeight(.semibold)
-                        
-                        if progress.totalValue > 0 {
-                            Gauge(value: Double(progress.currentValue), in: 0...Double(progress.totalValue)) {
-                                if (!completed) {
-                                    Text(leftTime(episodeDurationInMinutes: episodeDurationInMinutes, totalEpisodes: progress.totalValue, watchedEpisodes: progress.currentValue, includeFirstEpisodeInDuration: settingsManager.includeFirstEpisodeInDuration))
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Label(
+                                progress.totalValue > 0
+                                    ? "\(progress.currentValue)/\(progress.totalValue)"
+                                    : "\(progress.currentValue)",
+                                systemImage: "tv"
+                            )
+                            .font(.caption)
+                            .foregroundStyle(Color.secondary)
+                            .fontWeight(.semibold)
+
+                            if progress.totalValue > 0 {
+                                Gauge(value: Double(progress.currentValue), in: 0...Double(progress.totalValue)) {
+                                    if !completed {
+                                        Text(leftTime(episodeDurationInMinutes: episodeDurationInMinutes,
+                                                totalEpisodes: progress.totalValue,
+                                                watchedEpisodes: progress.currentValue,
+                                                includeFirstEpisodeInDuration:
+                                                    settingsManager.includeFirstEpisodeInDuration
+                                            )
+                                        )
                                         .font(.caption2)
                                         .foregroundStyle(Color.secondary)
                                         .bold()
                                         .frame(maxWidth: .infinity, alignment: .center)
-                                        .isVisible(settingsManager.animeFormat == .episodesWithDuration)
+                                        .isVisible(
+                                            settingsManager.animeFormat == .episodesWithDuration
+                                        )
+                                    }
                                 }
+                                .gaugeStyle(.accessoryLinearCapacity)
+                            } else {
+                                Gauge(value: 1, in: 0...1) { }
+                                    .gaugeStyle(.accessoryLinearCapacity)
+                                    .tint(Color.secondary)
                             }
-                                .gaugeStyle(.accessoryLinearCapacity)
-                        } else {
-                            Gauge(value: 1, in: 0...1) { }
-                                .gaugeStyle(.accessoryLinearCapacity)
-                                .tint(Color.secondary)
                         }
                     }
+//                case .anime(_):
+//                    HStack {
+//                        Label(progress.totalValue > 0
+//                              ? "\(progress.currentValue)/\(progress.totalValue)"
+//                              : "\(progress.currentValue)", systemImage: "tv")
+//                        .font(.caption)
+//                        .foregroundColor(.secondary)
+//                        .fontWeight(.semibold)
+//                        
+//                        if progress.totalValue > 0 {
+//                            Gauge(value: Double(progress.currentValue), in: 0...Double(progress.totalValue)) {
+//                                if (!completed) {
+//                                    Text(leftTime(episodeDurationInMinutes: episodeDurationInMinutes, totalEpisodes: progress.totalValue, watchedEpisodes: progress.currentValue, includeFirstEpisodeInDuration: settingsManager.includeFirstEpisodeInDuration))
+//                                        .font(.caption2)
+//                                        .foregroundStyle(Color.secondary)
+//                                        .bold()
+//                                        .frame(maxWidth: .infinity, alignment: .center)
+//                                        .isVisible(settingsManager.animeFormat == .episodesWithDuration)
+//                                }
+//                            }
+//                                .gaugeStyle(.accessoryLinearCapacity)
+//                        } else {
+//                            Gauge(value: 1, in: 0...1) { }
+//                                .gaugeStyle(.accessoryLinearCapacity)
+//                                .tint(Color.secondary)
+//                        }
+//                    }
                     
                 case .manga(_):
                     VStack(alignment: .leading, spacing: 3) {
@@ -121,9 +167,132 @@ struct LibraryMediaView: View {
                     }
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(alignment: .topTrailing) {
+            if case .anime = type,
+               let upcomingSchedule {
+
+                VStack(spacing: 0) {
+                    Text("Episode \(upcomingSchedule.episodeNumber)")
+                        .font(.caption2.weight(.medium))
+                        .foregroundStyle(.tint)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+
+                    Divider()
+                        .overlay(Color.accentColor.opacity(0.15))
+
+                    Text({
+                        let airingAt = upcomingSchedule.airingAt
+                        let calendar = Calendar.current
+
+                        let time: String = {
+                            switch settingsManager.airingNotificationTimeFormat {
+                            case .twelveHour:
+                                return airingAt.formatted(
+                                    .dateTime
+                                        .hour(
+                                            .defaultDigits(
+                                                amPM: .abbreviated
+                                            )
+                                        )
+                                        .minute(.twoDigits)
+                                        .locale(
+                                            Locale(identifier: "en_US")
+                                        )
+                                )
+
+                            case .twentyFourHour:
+                                return airingAt.formatted(
+                                    .dateTime
+                                        .hour(
+                                            .twoDigits(
+                                                amPM: .omitted
+                                            )
+                                        )
+                                        .minute(.twoDigits)
+                                        .locale(
+                                            Locale(identifier: "de_DE")
+                                        )
+                                )
+                            }
+                        }()
+
+                        if calendar.isDateInToday(airingAt) {
+                            return "Heute, \(time)"
+                        }
+
+                        if calendar.isDateInTomorrow(airingAt) {
+                            return "Morgen, \(time)"
+                        }
+
+                        let daysUntilAiring = calendar.dateComponents(
+                            [.day],
+                            from: calendar.startOfDay(for: .now),
+                            to: calendar.startOfDay(for: airingAt)
+                        ).day ?? 0
+
+                        if daysUntilAiring < 7 {
+                            let weekday = airingAt.formatted(
+                                .dateTime
+                                    .weekday(.abbreviated)
+                            )
+
+                            return "\(weekday), \(time)"
+                        }
+
+                        let date = airingAt.formatted(
+                            .dateTime
+                                .day(.twoDigits)
+                                .month(.twoDigits)
+                        )
+
+                        return "\(date), \(time)"
+                    }())
+                    .lineLimit(1)
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.tint)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                }
+                .background(
+                    Color.accentColor.opacity(0.1),
+                    in: RoundedRectangle(
+                        cornerRadius: 10,
+                        style: .continuous
+                    )
+                )
+                .clipShape(
+                    RoundedRectangle(
+                        cornerRadius: 10,
+                        style: .continuous
+                    )
+                )
+                .fixedSize()
+            }
+        }
+        .onAppear {
+            do {
+                let schedules = try modelContext.fetch(
+                    FetchDescriptor<AnimeSchedule>()
+                )
+
+                upcomingSchedule = schedules
+                    .filter {
+                        $0.malId == malId &&
+                        $0.airingAt > Date()
+                    }
+                    .sorted {
+                        $0.airingAt < $1.airingAt
+                    }
+                    .first
+            } catch {
+                print("Failed to fetch schedules:", error)
+            }
+        }
     }
     
     func formattedDetails(year: String) -> String {

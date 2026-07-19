@@ -1,19 +1,12 @@
 # Shiori
 
-A free and modern anime/manga application for iOS that uses the public MyAnimeList.net API to display content.
+Shiori is a free and modern anime and manga tracking app for iOS.
 
-Shiori is a native iOS app with a clean and intuitive interface, designed for anime and manga fans. 
-It presents data retrieved from the MyAnimeList.net API in a simplified and user-friendly way.
+[![Download on the App Store](https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83)](https://apps.apple.com/app/shiori-for-myanimelist/id6738731291)
 
-## About the App
+The app provides a native iOS experience with a clean and intuitive interface, designed for anime and manga fans. It uses the public [MyAnimeList API](https://myanimelist.net/apiconfig/references/api/v2) to display anime and manga information in a simplified and user-friendly way.
 
-Shiori is a streamlined and visually clean anime/manga tracking app for iOS. 
-It provides a native experience tailored to fans of Japanese media, with a focus on ease of use and elegant presentation.
-
-Shiori uses the public MyAnimeList.net API to fetch and display data such as anime and manga titles, descriptions, scores, and rankings. 
-The app is independently developed and not affiliated with or endorsed by MyAnimeList.net.
-
-This app is not officially affiliated with MyAnimeList.net. It leverages their publicly available API to provide data and functionality.
+Shiori is independently developed and is not affiliated with, endorsed by, or officially connected to MyAnimeList.net.
 
 ## License
 
@@ -25,28 +18,36 @@ Shiori respects your privacy and is committed to protecting your personal inform
 
 ### Data Collection
 
-**Shiori** uses the publicly available [MyAnimeList.net API](https://myanimelist.net) to fetch anime and manga data. This data includes information like titles, cover images, release dates, and other public details, which are displayed within the app. The app does not collect any personal information from its users beyond what is necessary for authentication.
+Shiori uses the public MyAnimeList API to fetch anime and manga data, such as titles, synopses, cover images, scores, rankings, genres, studios, authors, and related media information.
+
+The app collects limited, anonymized usage analytics to improve features, stability, and the overall user experience. No personal data is used for advertising.
 
 ### User Authentication
 
-Users may log in using their MyAnimeList account to access personal library features. 
-Authentication tokens (OAuth) are stored securely on your device and are only used locally to authenticate requests.
+Users may log in with their MyAnimeList account to access personal library features.
 
+Authentication is handled through OAuth. Access tokens are stored securely on your device and are only used to authenticate requests to MyAnimeList.
 
 ### Data Storage
 
-All data from the MyAnimeList API is cached locally for offline use and is not stored on any external servers. 
-Your library and preferences are also stored locally on your device. 
+Shiori does not operate its own external servers or store user data on servers controlled by the app.
+
+Your app preferences are stored locally on your device. Anime and manga data is retrieved from external APIs when needed, so most features require an active internet connection.
 
 ### Third-Party Services
 
-Shiori does not use third-party analytics or advertising tools. No personal data is tracked or shared.
+Shiori uses the official MyAnimeList API for anime and manga data, user authentication, and library-related features.
+
+In some cases, Shiori may use [Jikan](https://jikan.moe), an unofficial MyAnimeList API, to retrieve missing or additional public anime and manga information.
+
+Shiori uses [TelemetryDeck](https://telemetrydeck.com) for limited, privacy-friendly, anonymized analytics to help improve the app. No advertising tools are used.
 
 ### Data Sharing
 
-Shiori only communicates with MyAnimeList's official API to retrieve and update data. No personal data is shared with third parties.
+Shiori communicates with external anime and manga data services, such as MyAnimeList and Jikan, to retrieve app content and, when authenticated, update library-related data.
+
+Limited, anonymized usage analytics are processed through TelemetryDeck to improve the app. Shiori does not sell personal data and does not use personal data for advertising.
 
 ### Security
 
-All sensitive data is stored securely using iOS system protections.
-
+Sensitive authentication data, such as MyAnimeList access tokens, is stored securely on your device using the iOS Keychain. Shiori uses the open-source [KeychainSwift](https://github.com/evgenyneu/keychain-swift) library to access the Keychain.

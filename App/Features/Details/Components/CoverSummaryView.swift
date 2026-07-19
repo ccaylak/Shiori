@@ -88,7 +88,7 @@ private struct ScoreBadgeView: View {
     
     var body: some View {
         HStack {
-            Text("\(score.formatted())")
+            Text(verbatim: "\(score.formatted())")
                 .font(.title3)
                 .bold()
             

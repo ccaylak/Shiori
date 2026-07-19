@@ -1,11 +1,18 @@
 import Foundation
 
-@MainActor class JikanStudioController {
+@MainActor
+final class JikanStudioController {
     func fetchAnimeStudioById(id: Int) async throws -> JikanAnimeStudioResponse {
-        let url = URL(string: JikanEndpoints.Studio(id: id).studio)!
-        
+        let url = JikanEndpoints.Studio(id: id).studio
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "studio.details"
+        )
         
         return try JSONDecoder
             .snakeCaseDecoder
@@ -13,7 +20,12 @@ import Foundation
     }
     
     func fetchAnimeStudios(searchTerm: String, order: String, sort: String, page: Int) async throws -> JikanStudio {
-        var components = URLComponents(string: JikanEndpoints.Studio.all)!
+        guard var components = URLComponents(
+            url: JikanEndpoints.Studio.all,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "order_by", value: order),
@@ -27,14 +39,26 @@ import Foundation
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "anime.studios"
+        )
         
         return try JSONDecoder.snakeCaseDecoder
             .decode(JikanStudio.self, from: data)
     }
     
     func fetchAnimesByAnimeStudio(id: Int, page: Int) async throws -> JikanMedia {
-        var components = URLComponents(string: JikanEndpoints.Studio.animes)!
+        guard var components = URLComponents(
+            url: JikanEndpoints.Studio.animes,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "producers", value: "\(id)"),
@@ -46,7 +70,14 @@ import Foundation
         }
         
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
-        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try JikanResponseValidator.validate(
+                data: data,
+                response: response,
+                api: .jikan,
+                endpoint: "studio.animes"
+        )
         
         return try JSONDecoder.snakeCaseDecoder
             .decode(JikanMedia.self, from: data)

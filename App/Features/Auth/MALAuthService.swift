@@ -18,7 +18,7 @@ final class MALAuthService {
         
         components.queryItems = [
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "client_id", value: Config.apiKey),
+            URLQueryItem(name: "client_id", value: Config.malKey),
             URLQueryItem(name: "state", value: UUID().uuidString),
             URLQueryItem(name: "code_challenge", value: codeVerifier),
             URLQueryItem(name: "code_challenge_method", value: "plain")
@@ -39,7 +39,7 @@ final class MALAuthService {
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
         let body = [
-            "client_id": Config.apiKey,
+            "client_id": Config.malKey,
             "code": code,
             "code_verifier": codeVerifier,
             "grant_type": "authorization_code"

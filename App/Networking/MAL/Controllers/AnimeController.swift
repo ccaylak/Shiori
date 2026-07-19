@@ -1,7 +1,7 @@
 import Foundation
-import SwiftUI
 
-@MainActor class AnimeController {
+@MainActor
+final class AnimeController {
     
     private var malService: MALService = .shared
     
@@ -10,7 +10,7 @@ import SwiftUI
     private var resultManager: ResultManager = .shared
     
     func saveProgress(id: Int, status: String, score: Int, episodes: Int, comments: String, startDate: Date?, finishDate: Date?) async throws {
-        let url = URL(string: MALEndpoints.Anime(id: id).update)!
+        let url = MALEndpoints.Anime(id: id).update
         
         let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -34,17 +34,21 @@ import SwiftUI
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request.httpBody = formBody.data(using: .utf8)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
-        var components: URLComponents
-        if searchTerm.isEmpty {
-            components = URLComponents(string: MALEndpoints.Anime.ranking)!
-        } else {
-            components = URLComponents(string: MALEndpoints.Anime.list)!
+        guard var components = URLComponents(
+            url: searchTerm.isEmpty ? MALEndpoints.Anime.ranking : MALEndpoints.Anime.list,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
         }
         
         components.queryItems = [
@@ -59,21 +63,34 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        var request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .get)
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
-        return try JSONDecoder.snakeCaseDecoder
-            .decode(MediaResponse.self, from: data)
+        
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        do {
+            return try JSONDecoder.snakeCaseDecoder
+                .decode(MediaResponse.self, from: data)
+        } catch {
+            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaResponse.self)
+            throw error
+        }
     }
     
     func fetchDetails(id: Int) async throws -> MediaNode {
-        var components = URLComponents(string: MALEndpoints.Anime(id: id).details)!
+        guard var components = URLComponents(
+            url: MALEndpoints.Anime(id: id).details,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numEpisodes, .mediaType, .startDate, .status, .mean, .synopsis, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .numScoringUsers, .numListUsers, .averageEpisodeDuration, .myListStatus, .startSeason]))
@@ -84,21 +101,34 @@ import SwiftUI
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        var request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .get)
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        return try JSONDecoder.snakeCaseDecoder
-            .decode(MediaNode.self, from: data)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        
+        do {
+            return try JSONDecoder.snakeCaseDecoder
+                .decode(MediaNode.self, from: data)
+        } catch {
+            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaNode.self)
+            throw error
+        }
     }
     
     func addToWatchList(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
+        guard let components = URLComponents(
+            url: MALEndpoints.Anime(id: id).update,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         let parameters = ["status": ProgressStatus.Anime.planToWatch.rawValue]
         let bodyData = parameters
@@ -117,13 +147,22 @@ import SwiftUI
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request.httpBody = bodyData.data(using: .utf8)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func completeEntry(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
+        guard let components = URLComponents(
+            url: MALEndpoints.Anime(id: id).update,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         let parameters = ["status": ProgressStatus.Anime.completed.rawValue]
         let bodyData = parameters
@@ -142,13 +181,22 @@ import SwiftUI
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request.httpBody = bodyData.data(using: .utf8)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func increaseEpisodes(id: Int, episode: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
+        guard let components = URLComponents(
+            url: MALEndpoints.Anime(id: id).update,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         let parameters = ["num_watched_episodes": String(episode)]
         let bodyData = parameters
@@ -167,16 +215,26 @@ import SwiftUI
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request.httpBody = bodyData.data(using: .utf8)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
     func fetchLibrary() async throws -> MediaResponse {
-        var components = URLComponents(string: MALEndpoints.Anime.library)!
+        guard var components = URLComponents(
+            url: MALEndpoints.Anime.library,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         var queryItems: [URLQueryItem] = []
-            
+        
         if libraryManager.animeProgressStatus != .all {
             queryItems.append(
                 URLQueryItem(name: "status", value: libraryManager.animeProgressStatus.rawValue)
@@ -199,40 +257,52 @@ import SwiftUI
             URLQueryItem(name: "limit", value: "1000"),
             URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
         ]
-            
+        
         components.queryItems = queryItems
         
         guard let url = components.url else {
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        var request = APIRequest.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .get)
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
-        return try JSONDecoder.snakeCaseDecoder
-            .decode(MediaResponse.self, from: data)
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
+        
+        do {
+            return try JSONDecoder.snakeCaseDecoder
+                .decode(MediaResponse.self, from: data)
+        } catch {
+            Metrics.decodingFailed(error, api: APIService.mal, endpoint: url.path, model: MediaResponse.self)
+            throw error
+        }
     }
     
     func deleteEntry(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
-        
-        guard let url = components.url else {
+        guard let url = URLComponents(
+            url: MALEndpoints.Anime(id: id).update,
+            resolvingAgainstBaseURL: false
+        )?.url else {
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: .delete)
+        var request = APIRequest.buildRequest(url: url, httpMethod: .delete)
         var (_, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
+            request = APIRequest.buildRequest(url: url, httpMethod: .delete)
             
             (_, response) = try await URLSession.shared.data(for: request)
         }
+        
+        try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
 }

@@ -32,6 +32,8 @@ struct GenresView: View {
 }
 
 private struct GenresListView: View {
+    @AppStorage("extendedData") var extendedData: Bool = true
+    
     let genres: [MediaGenre]
     let mode: SeriesType
     
@@ -61,13 +63,17 @@ private struct GenresListView: View {
                     ForEach(group.items, id: \.self) { genre in
                         let mediaCategory = MediaCategory(name: genre.name)
                         
-                        NavigationLink(
-                            destination: MediaGenresView(
-                                genreId: genre.id,
-                                mode: mode,
-                                navigationTitle: mediaCategory.displayName
-                            )
-                        ) {
+                        if extendedData {
+                            NavigationLink(
+                                destination: MediaGenresView(
+                                    genreId: genre.id,
+                                    mode: mode,
+                                    navigationTitle: mediaCategory.displayName
+                                )
+                            ) {
+                                Text(mediaCategory.displayName)
+                            }
+                        } else {
                             Text(mediaCategory.displayName)
                         }
                     }

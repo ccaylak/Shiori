@@ -148,6 +148,8 @@ struct GeneralOverviewView: View {
 }
 
 private struct StudioInfoView: View {
+    @AppStorage("extendedData") var extendedData: Bool = true
+    
     let studios: [Studio]
     
     var body: some View {
@@ -157,7 +159,12 @@ private struct StudioInfoView: View {
                 Text("Animated by")
                     
                 ForEach(studios, id: \.id) {studio in
-                    NavigationLink(destination: StudioDetailsView(malId: studio.id, initialStudio: nil)) {
+                    if extendedData {
+                        NavigationLink(destination: StudioDetailsView(malId: studio.id, initialStudio: nil)) {
+                            Text(studio.name)
+                                .bold()
+                        }
+                    } else {
                         Text(studio.name)
                             .bold()
                     }

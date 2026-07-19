@@ -1,3 +1,7 @@
 What’s New:
-
-- Added Liquid Glass version of App Icon
+- Get notified when new episodes of anime you’re watching are about to air.
+- Enjoy a refreshed notification setup with flexible timing options.
+- New Liquid Glass toasts provide smoother and clearer in-app feedback.
+- Improved loading of profile statistics, favorites, and friends.
+- Fixed an issue where newly added entries could show the wrong progress information.
+- Various stability improvements and smaller UI refinements.

@@ -8,7 +8,7 @@ struct StudioDetailsView: View {
     @State var studio: JikanStudioData? = nil
     
     @ObservedObject private var settingsManager: SettingsManager = .shared
-    @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var toastManager: ToastManager
     
     private let jikanStudioController = JikanStudioController()
     @State var jikanAnime = JikanMedia(data: [], pagination: nil)
@@ -131,8 +131,8 @@ struct StudioDetailsView: View {
                 guard jikanAnime.data.isEmpty else { return }
                 
                 Task {
-                    alertManager.isLoading = true
-                    defer { alertManager.isLoading = false }
+                    toastManager.isLoading = true
+                    defer { toastManager.isLoading = false }
                     
                     if let initialStudio {
                         studio = initialStudio
