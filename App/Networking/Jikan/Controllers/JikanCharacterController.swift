@@ -1,9 +1,10 @@
 import Foundation
 
-@MainActor class JikanCharacterController {
+@MainActor
+final class JikanCharacterController {
     
     func fetchAnimeCharacter(id: Int) async throws -> JikanCharacter {
-        let url = URL(string: JikanEndpoints.Character(id: id).anime)!
+        let url = JikanEndpoints.Character(id: id).anime
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
 
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -19,7 +20,7 @@ import Foundation
     }
     
     func fetchMangaCharacter(id: Int) async throws -> JikanCharacter {
-        let url = URL(string: JikanEndpoints.Character(id: id).manga)!
+        let url = JikanEndpoints.Character(id: id).manga
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
 
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -35,7 +36,7 @@ import Foundation
     }
     
     func fetchCharacterDetails(id: Int) async throws -> JikanCharacterFull {
-        let url = URL(string: JikanEndpoints.Character(id: id).full)!
+        let url = JikanEndpoints.Character(id: id).full
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
         let (data, response) = try await URLSession.shared.data(for: request)
