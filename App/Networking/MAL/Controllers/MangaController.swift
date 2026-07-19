@@ -1,6 +1,7 @@
 import Foundation
 
-@MainActor class MangaController {
+@MainActor
+final class MangaController {
     
     private var malService: MALService = .shared
     
@@ -9,7 +10,7 @@ import Foundation
     private var resultManager: ResultManager = .shared
     
     func saveProgress(id: Int, status: String, score: Int, chapters: Int, volumes: Int, comments: String, startDate: Date?, finishDate: Date?) async throws {
-        let url = URL(string: MALEndpoints.Manga(id: id).update)!
+        let url = MALEndpoints.Manga(id: id).update
         
         let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -44,8 +45,10 @@ import Foundation
     }
     
     func addToReadingList(id: Int) async throws {
-        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
-        guard let url = urlComponents?.url else {
+        guard let url = URLComponents(
+            url: MALEndpoints.Manga(id: id).update,
+            resolvingAgainstBaseURL: false
+        )?.url else {
             throw URLError(.badURL)
         }
 
@@ -73,8 +76,10 @@ import Foundation
     }
     
     func completeEntry(id: Int) async throws {
-        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
-        guard let url = urlComponents?.url else {
+        guard let url = URLComponents(
+            url: MALEndpoints.Manga(id: id).update,
+            resolvingAgainstBaseURL: false
+        )?.url else {
             throw URLError(.badURL)
         }
 
@@ -102,8 +107,10 @@ import Foundation
     }
     
     func increaseVolumes(id: Int, volume: Int) async throws {
-        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
-        guard let url = urlComponents?.url else {
+        guard let url = URLComponents(
+            url: MALEndpoints.Manga(id: id).update,
+            resolvingAgainstBaseURL: false
+        )?.url else {
             throw URLError(.badURL)
         }
 
@@ -129,8 +136,10 @@ import Foundation
     }
     
     func increaseChapters(id: Int, chapter: Int) async throws {
-        let urlComponents = URLComponents(string: MALEndpoints.Manga(id: id).update)
-        guard let url = urlComponents?.url else {
+        guard let url = URLComponents(
+            url: MALEndpoints.Manga(id: id).update,
+            resolvingAgainstBaseURL: false
+        )?.url else {
             throw URLError(.badURL)
         }
 
@@ -156,7 +165,12 @@ import Foundation
     }
     
     func fetchDetails(id: Int) async throws -> MediaNode {
-        var components = URLComponents(string: MALEndpoints.Manga(id: id).details)!
+        guard var components = URLComponents(
+            url: MALEndpoints.Manga(id: id).details,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .authors, .numChapters, .numVolumes, .mediaType, .startDate, .status, .endDate, .synopsis, .mean, .rank, .popularity, .genres, .mediaType, .recommendations, .relatedManga, .myListStatus, .numScoringUsers, .numListUsers]))
@@ -188,11 +202,11 @@ import Foundation
     }
     
     func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
-        var components: URLComponents
-        if searchTerm == "" {
-            components = URLComponents(string: MALEndpoints.Manga.ranking)!
-        } else {
-            components = URLComponents(string: MALEndpoints.Manga.list)!
+        guard var components = URLComponents(
+            url: searchTerm.isEmpty ? MALEndpoints.Manga.ranking : MALEndpoints.Manga.list,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
         }
         
         components.queryItems = [
@@ -229,7 +243,12 @@ import Foundation
     }
     
     func fetchLibrary() async throws -> MediaResponse {
-        var components = URLComponents(string: MALEndpoints.Manga.library)!
+        guard var components = URLComponents(
+            url: MALEndpoints.Manga.library,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         var queryItems: [URLQueryItem] = []
 
@@ -283,9 +302,10 @@ import Foundation
     }
     
     func deleteEntry(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Manga(id:id).update)!
-        
-        guard let url = components.url else {
+        guard let url = URLComponents(
+            url: MALEndpoints.Manga(id: id).update,
+            resolvingAgainstBaseURL: false
+        )?.url else {
             throw URLError(.badURL)
         }
         

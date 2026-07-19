@@ -1,63 +1,73 @@
 import Foundation
 
 struct MALEndpoints {
-    private static let baseURL = "https://api.myanimelist.net/v2"
-    
+    private static let apiBaseUrl = APIService.mal.apiBaseUrl
+
+    private static func url(_ path: String) -> URL {
+        let urlString = "\(apiBaseUrl)/\(path)"
+
+        guard let url = URL(string: urlString) else {
+            preconditionFailure("Invalid MAL endpoint: \(urlString)")
+        }
+
+        return url
+    }
+
     struct Anime {
         let id: Int
 
-        var details: String {
-            "\(baseURL)/anime/\(id)"
+        var details: URL {
+            MALEndpoints.url("anime/\(id)")
         }
-        
-        var update: String {
-            "\(baseURL)/anime/\(id)/my_list_status"
+
+        var update: URL {
+            MALEndpoints.url("anime/\(id)/my_list_status")
         }
-        
-        static var ranking: String {
-            "\(baseURL)/anime/ranking"
+
+        static var ranking: URL {
+            MALEndpoints.url("anime/ranking")
         }
-        
-        static var list: String {
-            "\(baseURL)/anime"
+
+        static var list: URL {
+            MALEndpoints.url("anime")
         }
-        
-        static func season(year: Int, seasonName: String) -> String {
-            "\(baseURL)/anime/season/\(year)/\(seasonName)"
+
+        static func season(year: Int, seasonName: String) -> URL {
+            MALEndpoints.url("anime/season/\(year)/\(seasonName)")
         }
-        
-        static var library: String {
-            "\(baseURL)/users/@me/animelist"
+
+        static var library: URL {
+            MALEndpoints.url("users/@me/animelist")
         }
     }
-    
+
     struct Manga {
         let id: Int
-        
-        var details: String {
-            "\(baseURL)/manga/\(id)"
+
+        var details: URL {
+            MALEndpoints.url("manga/\(id)")
         }
-        
-        var update: String {
-            "\(baseURL)/manga/\(id)/my_list_status"
+
+        var update: URL {
+            MALEndpoints.url("manga/\(id)/my_list_status")
         }
-        
-        static var list: String {
-            "\(baseURL)/manga"
+
+        static var list: URL {
+            MALEndpoints.url("manga")
         }
-        
-        static var ranking: String {
-            "\(baseURL)/manga/ranking"
+
+        static var ranking: URL {
+            MALEndpoints.url("manga/ranking")
         }
-        
-        static var library: String {
-            "\(baseURL)/users/@me/mangalist"
+
+        static var library: URL {
+            MALEndpoints.url("users/@me/mangalist")
         }
     }
-    
+
     struct Profile {
-        static var information: String {
-            "\(baseURL)/users/@me"
+        static var information: URL {
+            MALEndpoints.url("users/@me")
         }
     }
 }
