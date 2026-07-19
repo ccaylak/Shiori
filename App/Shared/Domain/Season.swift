@@ -1,6 +1,6 @@
 import Foundation
 
-enum Season: String, CaseIterable {
+enum Season: String, Decodable, CaseIterable {
     case winter, spring, summer, fall
     
     var displayName: String {

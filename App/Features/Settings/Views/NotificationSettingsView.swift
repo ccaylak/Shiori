@@ -17,12 +17,12 @@ struct NotificationSettingsView: View {
                             Text("Episode Notifications")
                                 .fontWeight(.medium)
 
-                            Text("Get notified about upcoming episodes of anime you're watching.")
+                            Text("Get notified about upcoming episodes of anime you're currently watching.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                     } icon: {
-                        Image(systemName: "bell.badge")
+                        Image(systemName: "bell")
                     }
                 }
                 .onChange(of: settingsManager.airingNotificationsEnabled) { _, enabled in
@@ -46,6 +46,7 @@ struct NotificationSettingsView: View {
                                     notificationTime: settingsManager.airingNotificationTiming,
                                     timeFormat: settingsManager.airingNotificationTimeFormat
                                 )
+                                settingsManager.airingNotificationsEnabled = true
                             } catch {
                                 settingsManager.airingNotificationsEnabled = false
                                 print("Notification setup failed:", error)
@@ -61,10 +62,10 @@ struct NotificationSettingsView: View {
                 NavigationLink {
                     NotificationTimeView(notificationTime: $settingsManager.airingNotificationTiming)
                 } label: {
-                    Label("Notify Me", systemImage: "timer")
+                    Label("Notification Timing", systemImage: "timer")
                 }
             } footer: {
-                Text("Choose when you want to be notified relative to the episode airing time.")
+                Text("Choose when you want to be notified about a new episode.")
             }
             
             Section {
@@ -85,7 +86,7 @@ struct NotificationSettingsView: View {
             rescheduleAiringNotifications()
         }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle("Anime Notifications")
+        .navigationTitle("Episode Notifications")
     }
     
     private func rescheduleAiringNotifications() {
