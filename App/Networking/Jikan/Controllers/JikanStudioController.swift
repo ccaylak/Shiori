@@ -1,8 +1,9 @@
 import Foundation
 
-@MainActor class JikanStudioController {
+@MainActor
+final class JikanStudioController {
     func fetchAnimeStudioById(id: Int) async throws -> JikanAnimeStudioResponse {
-        let url = URL(string: JikanEndpoints.Studio(id: id).studio)!
+        let url = JikanEndpoints.Studio(id: id).studio
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -19,7 +20,12 @@ import Foundation
     }
     
     func fetchAnimeStudios(searchTerm: String, order: String, sort: String, page: Int) async throws -> JikanStudio {
-        var components = URLComponents(string: JikanEndpoints.Studio.all)!
+        guard var components = URLComponents(
+            url: JikanEndpoints.Studio.all,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "order_by", value: order),
@@ -47,7 +53,12 @@ import Foundation
     }
     
     func fetchAnimesByAnimeStudio(id: Int, page: Int) async throws -> JikanMedia {
-        var components = URLComponents(string: JikanEndpoints.Studio.animes)!
+        guard var components = URLComponents(
+            url: JikanEndpoints.Studio.animes,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "producers", value: "\(id)"),

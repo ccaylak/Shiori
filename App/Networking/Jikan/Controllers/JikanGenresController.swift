@@ -1,9 +1,10 @@
 import Foundation
 
-@MainActor public class JikanGenresController {
+@MainActor
+final class JikanGenresController {
     
     func fetchAnimeGenres() async throws -> JikanGenre {
-        let url = URL(string: JikanEndpoints.Genres().anime)!
+        let url = JikanEndpoints.Genres().anime
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -19,7 +20,12 @@ import Foundation
     }
     
     func fetchAnimeByGenre(id: Int, page: Int) async throws -> JikanMedia {
-        var components = URLComponents(string: JikanEndpoints.Studio.animes)!
+        guard var components = URLComponents(
+            url: JikanEndpoints.Studio.animes,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "genres", value: "\(id)"),
@@ -45,7 +51,7 @@ import Foundation
     }
     
     func fetchMangaGenres() async throws -> JikanGenre {
-        let url = URL(string: JikanEndpoints.Genres().manga)!
+        let url = JikanEndpoints.Genres().manga
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -68,7 +74,12 @@ import Foundation
     }
     
     func fetchMangaByGenre(id: Int, page: Int) async throws -> JikanMedia {
-        var components = URLComponents(string: "https://api.jikan.moe/v4/manga")!
+        guard var components = URLComponents(
+            url: JikanEndpoints.Manga().search,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "genres", value: "\(id)"),

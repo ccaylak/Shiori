@@ -1,6 +1,7 @@
 import Foundation
 
-@MainActor class AnimeController {
+@MainActor
+final class AnimeController {
     
     private var malService: MALService = .shared
     
@@ -9,7 +10,7 @@ import Foundation
     private var resultManager: ResultManager = .shared
     
     func saveProgress(id: Int, status: String, score: Int, episodes: Int, comments: String, startDate: Date?, finishDate: Date?) async throws {
-        let url = URL(string: MALEndpoints.Anime(id: id).update)!
+        let url = MALEndpoints.Anime(id: id).update
         
         let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -43,11 +44,11 @@ import Foundation
     }
     
     func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
-        var components: URLComponents
-        if searchTerm.isEmpty {
-            components = URLComponents(string: MALEndpoints.Anime.ranking)!
-        } else {
-            components = URLComponents(string: MALEndpoints.Anime.list)!
+        guard var components = URLComponents(
+            url: searchTerm.isEmpty ? MALEndpoints.Anime.ranking : MALEndpoints.Anime.list,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
         }
         
         components.queryItems = [
@@ -84,7 +85,12 @@ import Foundation
     }
     
     func fetchDetails(id: Int) async throws -> MediaNode {
-        var components = URLComponents(string: MALEndpoints.Anime(id: id).details)!
+        guard var components = URLComponents(
+            url: MALEndpoints.Anime(id: id).details,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numEpisodes, .mediaType, .startDate, .status, .mean, .synopsis, .genres, .recommendations, .endDate, .studios, .relatedAnime, .rank, .popularity, .numScoringUsers, .numListUsers, .averageEpisodeDuration, .myListStatus, .startSeason]))
@@ -117,7 +123,12 @@ import Foundation
     }
     
     func addToWatchList(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
+        guard let components = URLComponents(
+            url: MALEndpoints.Anime(id: id).update,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         let parameters = ["status": ProgressStatus.Anime.planToWatch.rawValue]
         let bodyData = parameters
@@ -146,7 +157,12 @@ import Foundation
     }
     
     func completeEntry(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
+        guard let components = URLComponents(
+            url: MALEndpoints.Anime(id: id).update,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         let parameters = ["status": ProgressStatus.Anime.completed.rawValue]
         let bodyData = parameters
@@ -175,7 +191,12 @@ import Foundation
     }
     
     func increaseEpisodes(id: Int, episode: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
+        guard let components = URLComponents(
+            url: MALEndpoints.Anime(id: id).update,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         let parameters = ["num_watched_episodes": String(episode)]
         let bodyData = parameters
@@ -205,7 +226,12 @@ import Foundation
     }
     
     func fetchLibrary() async throws -> MediaResponse {
-        var components = URLComponents(string: MALEndpoints.Anime.library)!
+        guard var components = URLComponents(
+            url: MALEndpoints.Anime.library,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         var queryItems: [URLQueryItem] = []
         
@@ -260,9 +286,10 @@ import Foundation
     }
     
     func deleteEntry(id: Int) async throws {
-        let components = URLComponents(string: MALEndpoints.Anime(id: id).update)!
-        
-        guard let url = components.url else {
+        guard let url = URLComponents(
+            url: MALEndpoints.Anime(id: id).update,
+            resolvingAgainstBaseURL: false
+        )?.url else {
             throw URLError(.badURL)
         }
         

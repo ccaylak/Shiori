@@ -1,12 +1,19 @@
 import Foundation
 import SwiftUI
 
-@MainActor class UserController {
+@MainActor
+final class UserController {
     
     private var malService: MALService = .shared
     
     func fetchUserProfile() async throws -> User {
-        var components = URLComponents(string: MALEndpoints.Profile.information)!
+        guard var components = URLComponents(
+            url: MALEndpoints.Profile.information,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
+        
         components.queryItems = [
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.name, .picture, .gender, .birthday, .location, .joinedAt, .timeZone]))
         ]

@@ -1,14 +1,28 @@
+import Foundation
+
 struct AniListEndpoints {
-    static var api: String {
-        "https://graphql.anilist.co"
+    private static let authBaseURL = "https://anilist.co/api/v2/oauth"
+
+    private static func url(_ value: String) -> URL {
+        guard let url = URL(string: value) else {
+            preconditionFailure("Invalid AniList endpoint: \(value)")
+        }
+
+        return url
     }
-    
-    static var authorize: String {
-        "https://anilist.co/api/v2/oauth/authorize"
+
+    static var graphQL: URL {
+        url(APIService.anilist.apiBaseUrl)
     }
-    
-    static var token: String {
-        "https://anilist.co/api/v2/oauth/token"
+
+    struct Auth {
+        static var authorize: URL {
+            url("\(authBaseURL)/authorize")
+        }
+
+        static var token: URL {
+            url("\(authBaseURL)/token")
+        }
     }
 }
 

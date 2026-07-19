@@ -1,13 +1,19 @@
 import Foundation
 
-@MainActor class SeasonController {
+@MainActor
+final class SeasonController {
     
     private var settingsManager: SettingsManager = .shared
     
     private var malService: MALService = .shared
     
     func fetchSeason(year: Int, season: String) async throws -> MediaResponse {
-        var components: URLComponents = URLComponents(string: MALEndpoints.Anime.season(year: year, seasonName: season))!
+        guard var components = URLComponents(
+            url: MALEndpoints.Anime.season(year: year, seasonName: season),
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw URLError(.badURL)
+        }
         
         components.queryItems = [
             URLQueryItem(name: "sort", value: "anime_num_list_users"),
