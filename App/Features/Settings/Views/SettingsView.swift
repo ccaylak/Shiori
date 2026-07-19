@@ -37,12 +37,20 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.navigationLink)
                 }
-
+                
                 Section("Content") {
                     Toggle(isOn: $settingsManager.showNsfwContent) {
                         Label("Show NSFW Content", systemImage: "eye.trianglebadge.exclamationmark")
                     }
                     .toggleStyle(.switch)
+                }
+
+                Section("Notifications") {
+                    NavigationLink {
+                        NotificationSettingsView()
+                    } label: {
+                        Label("Anime-Notifications", systemImage: "bell.badge")
+                    }
                 }
 
                 Section("Display & Language") {
@@ -77,7 +85,7 @@ struct SettingsView: View {
                             Image(systemName: "globe")
                         }
                     }
-
+                    
                     Toggle(isOn: $settingsManager.isExtendedDataEnabled) {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
@@ -115,18 +123,18 @@ struct SettingsView: View {
                         } label: {
                             Label("Manga Tracking", systemImage: SeriesType.manga.icon)
                         }
-
+                        
                         NavigationLink {
                             AnimeFormatSelectionView()
                         } label: {
                             Label("Anime Tracking", systemImage: SeriesType.anime.icon)
                         }
-
+                        
                         Toggle(isOn: $settingsManager.advancedMode) {
                             Label {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("Advanced Mode")
-
+                                    
                                     Text("Adds additional fields for tracking")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -136,14 +144,6 @@ struct SettingsView: View {
                             }
                         }
                         .toggleStyle(.switch)
-                    }
-
-                    Section {
-                        NavigationLink {
-                            NotificationSettingsView()
-                        } label: {
-                            Label("Notifications", systemImage: "bell")
-                        }
                     }
                 }
                 
