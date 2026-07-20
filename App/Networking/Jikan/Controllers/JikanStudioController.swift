@@ -2,8 +2,8 @@ import Foundation
 
 @MainActor
 final class JikanStudioController {
-    func fetchAnimeStudioById(id: Int) async throws -> JikanAnimeStudioResponse {
-        let url = JikanEndpoints.Studio(id: id).studio
+    func fetchAnimeStudioById(id: Int, apiService: APIService) async throws -> JikanAnimeStudioResponse {
+        let url = JikanEndpoints.Studio.details(id: id, apiService: apiService)
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
 
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -19,9 +19,9 @@ final class JikanStudioController {
             .decode(JikanAnimeStudioResponse.self, from: data)
     }
     
-    func fetchAnimeStudios(searchTerm: String, order: String, sort: String, page: Int) async throws -> JikanStudio {
+    func fetchAnimeStudios(searchTerm: String, order: String, sort: String, page: Int, apiService: APIService) async throws -> JikanStudio {
         guard var components = URLComponents(
-            url: JikanEndpoints.Studio.all,
+            url: JikanEndpoints.Studio.all(apiService: apiService),
             resolvingAgainstBaseURL: false
         ) else {
             throw URLError(.badURL)
@@ -52,9 +52,9 @@ final class JikanStudioController {
             .decode(JikanStudio.self, from: data)
     }
     
-    func fetchAnimesByAnimeStudio(id: Int, page: Int) async throws -> JikanMedia {
+    func fetchAnimesByAnimeStudio(id: Int, page: Int, apiService: APIService) async throws -> JikanMedia {
         guard var components = URLComponents(
-            url: JikanEndpoints.Studio.animes,
+            url: JikanEndpoints.Studio.anime(apiService: apiService),
             resolvingAgainstBaseURL: false
         ) else {
             throw URLError(.badURL)

@@ -10,7 +10,11 @@ struct MediaGenresView: View {
     
     private let jikanGenresController = JikanGenresController()
     
-    @EnvironmentObject private var toastManager: ToastManager
+    @Environment(ToastManager.self)
+    private var toastManager
+    
+    @Environment(AppSettings.self)
+    private var settings
     
     @State var isLoading = false
     @State var page = 1
@@ -55,7 +59,8 @@ struct MediaGenresView: View {
                             if mode == .anime {
                                 let newJikanMedia = try await jikanGenresController.fetchAnimeByGenre(
                                     id: genreId,
-                                    page: page
+                                    page: page,
+                                    apiService: settings.extendedDataSource
                                 )
                                 
                                 jikanMedia.append(newJikanMedia.data)
@@ -64,7 +69,8 @@ struct MediaGenresView: View {
                             } else {
                                 let newJikanMedia = try await jikanGenresController.fetchMangaByGenre(
                                     id: genreId,
-                                    page: page
+                                    page: page,
+                                    apiService: settings.extendedDataSource
                                 )
                                 
                                 jikanMedia.append(newJikanMedia.data)
@@ -98,9 +104,9 @@ struct MediaGenresView: View {
                 toastManager.isLoading = true
                 defer { toastManager.isLoading = false }
                 if mode == .manga {
-                    jikanMedia = try await jikanGenresController.fetchMangaByGenre(id: genreId, page: page)
+                    jikanMedia = try await jikanGenresController.fetchMangaByGenre(id: genreId, page: page, apiService: settings.extendedDataSource)
                 } else {
-                    jikanMedia = try await jikanGenresController.fetchAnimeByGenre(id: genreId, page: page)
+                    jikanMedia = try await jikanGenresController.fetchAnimeByGenre(id: genreId, page: page, apiService: settings.extendedDataSource)
                 }
             }
         }

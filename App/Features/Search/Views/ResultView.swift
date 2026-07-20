@@ -11,9 +11,14 @@ struct ResultView: View {
     
     @State private var isLoading = false
     
-    @StateObject private var resultManager: ResultManager = .shared
-    @ObservedObject private var settingsManager: SettingsManager = .shared
-    @EnvironmentObject private var toastManager: ToastManager
+    @Environment(ResultSettings.self)
+    private var resultSettings
+    
+    @Environment(AppSettings.self)
+    private var settings
+    
+    @Environment(ToastManager.self)
+    private var toastManager
     
     var body: some View {
         List {
@@ -93,7 +98,7 @@ struct ResultView: View {
                 await loadMediaData()
             }
         }
-        .onChange(of: resultManager.needsToLoadData) {
+        .onChange(of: resultSettings.needsToLoadData) {
             Task {
                 await loadMediaData()
             }
@@ -102,11 +107,19 @@ struct ResultView: View {
     
     private func loadMediaData() async {
         do {
-            switch resultManager.seriesType {
+            switch resultSettings.seriesType {
             case .anime:
-                mediaResponse = try await animeController.fetchPreviews(searchTerm: searchTerm)
+                mediaResponse = try await animeController.fetchPreviews(
+                    searchTerm: searchTerm,
+                    showNsfwContent: settings.showNsfwContent,
+                    rankingType: resultSettings.animeRankingType
+                )
             case .manga:
-                mediaResponse = try await mangaController.fetchPreviews(searchTerm: searchTerm)
+                mediaResponse = try await mangaController.fetchPreviews(
+                    searchTerm: searchTerm,
+                    showNsfwContent: settings.showNsfwContent,
+                    rankingType: resultSettings.mangaRankingType
+                )
             }
         } catch {
             print("Failed to load media data: \(error)")
@@ -116,6 +129,6 @@ struct ResultView: View {
 
 #Preview {
     ResultView()
-        .environmentObject(ToastManager.shared)
+        .environment(ToastManager())
 }
 

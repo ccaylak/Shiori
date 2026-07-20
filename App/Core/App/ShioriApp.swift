@@ -10,11 +10,20 @@ struct ShioriApp: App {
     @AppStorage("shouldShowOnboarding")
     private var shouldShowOnboarding: Bool = false
     
-    @ObservedObject
-    private var settingsManager: SettingsManager = .shared
+    @State
+    private var settings = AppSettings()
     
-    @StateObject
-    private var toastManager: ToastManager = .shared
+    @State
+    private var toastManager = ToastManager()
+    
+    @State
+    private var librarySettings = LibrarySettings()
+    
+    @State
+    var resultSettings = ResultSettings()
+    
+    @State
+    var seasonSettings = SeasonSettings()
     
     private var tokenHandler: TokenHandler = .shared
     private let notificationDelegate = NotificationDelegate()
@@ -30,6 +39,11 @@ struct ShioriApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
+                .environment(settings)
+                .environment(toastManager)
+                .environment(librarySettings)
+                .environment(resultSettings)
+                .environment(seasonSettings)
                 .sheet(isPresented: $shouldShowOnboarding) {
                     OnboardingFlowView(
                         isPresented: $shouldShowOnboarding
@@ -38,7 +52,6 @@ struct ShioriApp: App {
                     .presentationBackgroundInteraction(.disabled)
                     .interactiveDismissDisabled()
                 }
-                .environmentObject(toastManager)
                 
                 .toast(
                     isPresenting: $toastManager.isLoading,

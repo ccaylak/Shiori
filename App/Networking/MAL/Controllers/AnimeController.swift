@@ -5,11 +5,15 @@ final class AnimeController {
     
     private var malService: MALService = .shared
     
-    private var libraryManager: LibraryManager = .shared
-    private var settingsManager: SettingsManager = .shared
-    private var resultManager: ResultManager = .shared
-    
-    func saveProgress(id: Int, status: String, score: Int, episodes: Int, comments: String, startDate: Date?, finishDate: Date?) async throws {
+    func saveProgress(
+        id: Int,
+        status: String,
+        score: Int,
+        episodes: Int,
+        comments: String,
+        startDate: Date?,
+        finishDate: Date?
+    ) async throws {
         let url = MALEndpoints.Anime(id: id).update
         
         let dateFormatter = DateFormatter()
@@ -43,7 +47,11 @@ final class AnimeController {
         try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
-    func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
+    func fetchPreviews(
+        searchTerm: String,
+        showNsfwContent: Bool,
+        rankingType: SortType.Anime
+    ) async throws -> MediaResponse {
         guard var components = URLComponents(
             url: searchTerm.isEmpty ? MALEndpoints.Anime.ranking : MALEndpoints.Anime.list,
             resolvingAgainstBaseURL: false
@@ -52,9 +60,9 @@ final class AnimeController {
         }
         
         components.queryItems = [
-            URLQueryItem(name: "ranking_type", value: resultManager.animeRankingType.rawValue),
+            URLQueryItem(name: "ranking_type", value: rankingType.rawValue),
             URLQueryItem(name: "limit", value: "10"),
-            URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent)),
+            URLQueryItem(name: "nsfw", value: String(showNsfwContent)),
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numEpisodes, .mediaType, .startSeason, .status, .myListStatus])),
             URLQueryItem(name: "q", value: searchTerm)
         ]
@@ -225,7 +233,11 @@ final class AnimeController {
         try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)
     }
     
-    func fetchLibrary() async throws -> MediaResponse {
+    func fetchLibrary(
+        showNsfwContent: Bool,
+        progressStatus: ProgressStatus.Anime,
+        sortOrder: MediaSort.AnimeSort
+    ) async throws -> MediaResponse {
         guard var components = URLComponents(
             url: MALEndpoints.Anime.library,
             resolvingAgainstBaseURL: false
@@ -235,13 +247,13 @@ final class AnimeController {
         
         var queryItems: [URLQueryItem] = []
         
-        if libraryManager.animeProgressStatus != .all {
+        if progressStatus != .all {
             queryItems.append(
-                URLQueryItem(name: "status", value: libraryManager.animeProgressStatus.rawValue)
+                URLQueryItem(name: "status", value: progressStatus.rawValue)
             )
         }
         
-        if let sort = libraryManager.animeSortOrder.apiValue {
+        if let sort = sortOrder.apiValue {
             queryItems.append(
                 URLQueryItem(name: "sort", value: sort)
             )
@@ -255,7 +267,7 @@ final class AnimeController {
                 )
             ),
             URLQueryItem(name: "limit", value: "1000"),
-            URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
+            URLQueryItem(name: "nsfw", value: String(showNsfwContent))
         ]
         
         components.queryItems = queryItems

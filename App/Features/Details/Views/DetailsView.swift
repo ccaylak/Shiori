@@ -23,14 +23,17 @@ struct DetailsView: View {
     @State private var didTap = false
     
     @ObservedObject private var tokenHandler: TokenHandler = .shared
-    @ObservedObject private var settingsManager: SettingsManager = .shared
-    @EnvironmentObject private var toastManager: ToastManager
+    
+    @Environment(AppSettings.self)
+    private var settings
+    
+    @Environment(ToastManager.self)
+    private var toastManager
     
     let animeController = AnimeController()
     let mangaController = MangaController()
     let jikanCharacterController = JikanCharacterController()
     let jikanRelationsController = JikanRelationsController()
-    @AppStorage("extendedData") var extendedData: Bool = true
     
     var body: some View {
         NavigationStack {
@@ -279,7 +282,7 @@ struct DetailsView: View {
                                         Text(chapter, format: .number).tag(chapter)
                                     }
                                 }
-                                .isVisible(media.chapters != 0 && (settingsManager.mangaFormat == .chapter || settingsManager.mangaFormat == .both))
+                                .isVisible(media.chapters != 0 && (settings.mangaFormat == .chapter || settings.mangaFormat == .both))
                                 
                                 
                                 LabeledContent("Chapter") {
@@ -321,7 +324,7 @@ struct DetailsView: View {
                                 }
                                 .isVisible(
                                     media.chapters == 0 &&
-                                    (settingsManager.mangaFormat == .chapter || settingsManager.mangaFormat == .both)
+                                    (settings.mangaFormat == .chapter || settings.mangaFormat == .both)
                                 )
                                 
                                 Picker(selection: $userProgress.readVolumes, label:
@@ -337,7 +340,7 @@ struct DetailsView: View {
                                         Text(volume, format: .number).tag(volume)
                                     }
                                 }
-                                .isVisible(media.volumes != 0 && (settingsManager.mangaFormat == .volume || settingsManager.mangaFormat == .both))
+                                .isVisible(media.volumes != 0 && (settings.mangaFormat == .volume || settings.mangaFormat == .both))
                                 
                                 LabeledContent("Volume") {
                                     HStack(spacing: 0) {
@@ -378,7 +381,7 @@ struct DetailsView: View {
                                 }
                                 .isVisible(
                                     media.volumes == 0 &&
-                                    (settingsManager.mangaFormat == .volume || settingsManager.mangaFormat == .both)
+                                    (settings.mangaFormat == .volume || settings.mangaFormat == .both)
                                 )
                             }
                             .isVisible(media.isMangaOrAnime == .manga)
@@ -452,7 +455,7 @@ struct DetailsView: View {
                                 .labelsHidden()
                             }
                         }
-                        .isVisible(settingsManager.advancedMode)
+                        .isVisible(settings.advancedMode)
                         
                         Section {
                             Button(action: {
@@ -473,7 +476,7 @@ struct DetailsView: View {
                                 } icon: {
                                     Image(systemName: showComments ? "minus.circle.fill" : "plus.circle.fill")
                                         .symbolRenderingMode(.monochrome)
-                                        .foregroundStyle(showComments ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        .foregroundStyle(showComments ? .red : Color.getByColorString(settings.accentColor.rawValue))
                                 }
                             }
                             .buttonStyle(.plain)
@@ -488,7 +491,7 @@ struct DetailsView: View {
                                 }
                             }
                         }
-                        .isVisible(settingsManager.advancedMode)
+                        .isVisible(settings.advancedMode)
                         
                         Section {
                             Button(action: {
@@ -503,7 +506,7 @@ struct DetailsView: View {
                                     Text(showStartDate ? "Clear Start Date" : "Add Start Date")
                                 } icon: {
                                     Image(systemName: showStartDate ? "calendar.badge.minus" : "calendar.badge.plus")
-                                        .foregroundStyle(showStartDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        .foregroundStyle(showStartDate ? .red : Color.getByColorString(settings.accentColor.rawValue))
                                 }
                             }
                             .buttonStyle(.plain)
@@ -531,7 +534,7 @@ struct DetailsView: View {
                                     Text(showFinishDate ? "Clear Finish Date" : "Add Finish Date")
                                 } icon: {
                                     Image(systemName: showFinishDate ? "calendar.badge.minus" : "calendar.badge.plus")
-                                        .foregroundStyle(showFinishDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        .foregroundStyle(showFinishDate ? .red : Color.getByColorString(settings.accentColor.rawValue))
                                 }
                             }
                             .buttonStyle(.plain)
@@ -548,7 +551,7 @@ struct DetailsView: View {
                                 .transition(.opacity.combined(with: .move(edge: .top)))
                             }
                         }
-                        .isVisible(settingsManager.advancedMode)
+                        .isVisible(settings.advancedMode)
                     }
                     .scrollContentBackground(.hidden)
                     .padding(.horizontal)
@@ -590,7 +593,7 @@ struct DetailsView: View {
                                         Metrics.entryAction(.updated, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                     }
                                 }
-                                .tint(Color.getByColorString(settingsManager.accentColor.rawValue)
+                                .tint(Color.getByColorString(settings.accentColor.rawValue)
                                 )
                             } else {
                                 Button("Save") {
@@ -627,7 +630,7 @@ struct DetailsView: View {
                                         Metrics.entryAction(.updated, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                     }
                                 }
-                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .foregroundStyle(Color.getByColorString(settings.accentColor.rawValue))
                             }
                         }
                         ToolbarItem(placement: .cancellationAction) {
@@ -673,7 +676,7 @@ struct DetailsView: View {
                     }
                     .navigationTitle(media.isMangaOrAnime == .manga ? "Edit Reading Progress" : "Edit Watch Progress")
                     .navigationBarTitleDisplayMode(.inline)
-                    .presentationDetents([settingsManager.advancedMode ? .fraction(0.8) : .fraction(0.6)])
+                    .presentationDetents([settings.advancedMode ? .fraction(0.8) : .fraction(0.6)])
                     .presentationBackgroundInteraction(.disabled)
                     .presentationDragIndicator(.visible)
                     .presentationBackground(.regularMaterial)
@@ -691,18 +694,18 @@ struct DetailsView: View {
                     if media.isMangaOrAnime == .anime {
                         media = try await animeController.fetchDetails(id: media.id)
                         
-                        if extendedData {
-                            jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id)
-                            jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id)
+                        if settings.isExtendedDataEnabled {
+                            jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id, apiService: settings.extendedDataSource)
+                            jikanRelations = try await jikanRelationsController.fetchAnimeRelations(id: media.id, apiService: settings.extendedDataSource)
                         }
                     }
                     
                     if media.isMangaOrAnime == .manga {
                         media = try await mangaController.fetchDetails(id: media.id)
                         
-                        if extendedData {
-                            jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id)
-                            jikanRelations = try await jikanRelationsController.fetchMangaRelations(id: media.id)
+                        if settings.isExtendedDataEnabled {
+                            jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id, apiService: settings.extendedDataSource)
+                            jikanRelations = try await jikanRelationsController.fetchMangaRelations(id: media.id, apiService: settings.extendedDataSource)
                         }
                     }
                     userProgress = media.getMyListStatus

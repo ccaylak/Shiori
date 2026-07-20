@@ -2,8 +2,8 @@ import Foundation
 
 @MainActor 
 final class JikanRelationsController {
-    func fetchAnimeRelations(id: Int) async throws -> [RelationEntry] {
-        let url = JikanEndpoints.Relations(id: id).animeRelations
+    func fetchAnimeRelations(id: Int, apiService: APIService) async throws -> [RelationEntry] {
+        let url = JikanEndpoints.Relations.anime(id: id, apiService: apiService)
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
 
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -23,8 +23,8 @@ final class JikanRelationsController {
                     .flatMap { $0.entry }
     }
     
-    func fetchMangaRelations(id: Int) async throws -> [RelationEntry] {
-        let url = JikanEndpoints.Relations(id: id).mangaRelations
+    func fetchMangaRelations(id: Int, apiService: APIService) async throws -> [RelationEntry] {
+        let url = JikanEndpoints.Relations.manga(id: id, apiService: apiService)
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
 
         let (data, response) = try await URLSession.shared.data(for: request)

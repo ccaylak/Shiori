@@ -1,12 +1,10 @@
-import Foundation
+import Observation
 
-@MainActor final class ToastManager: ObservableObject {
-    static let shared = ToastManager()
-    
-    @Published var showUpdatedToast = false
-    @Published var showRemovedToast = false
-    @Published var showAddedToast = false
-    @Published var isLoading = false
-    
-    private init() {}
+@MainActor
+@Observable
+final class ToastManager {
+    var showUpdatedToast = false
+    var showRemovedToast = false
+    var showAddedToast = false
+    var isLoading = false
 }

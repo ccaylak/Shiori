@@ -5,11 +5,16 @@ final class MangaController {
     
     private var malService: MALService = .shared
     
-    private var settingsManager: SettingsManager = .shared
-    private var libraryManager: LibraryManager = .shared
-    private var resultManager: ResultManager = .shared
-    
-    func saveProgress(id: Int, status: String, score: Int, chapters: Int, volumes: Int, comments: String, startDate: Date?, finishDate: Date?) async throws {
+    func saveProgress(
+        id: Int,
+        status: String,
+        score: Int,
+        chapters: Int,
+        volumes: Int,
+        comments: String,
+        startDate: Date?,
+        finishDate: Date?
+    ) async throws {
         let url = MALEndpoints.Manga(id: id).update
         
         let dateFormatter = DateFormatter()
@@ -201,7 +206,11 @@ final class MangaController {
         }
     }
     
-    func fetchPreviews(searchTerm: String) async throws -> MediaResponse {
+    func fetchPreviews(
+        searchTerm: String,
+        showNsfwContent: Bool,
+        rankingType: SortType.Manga
+    ) async throws -> MediaResponse {
         guard var components = URLComponents(
             url: searchTerm.isEmpty ? MALEndpoints.Manga.ranking : MALEndpoints.Manga.list,
             resolvingAgainstBaseURL: false
@@ -210,11 +219,11 @@ final class MangaController {
         }
         
         components.queryItems = [
-            URLQueryItem(name: "ranking_type", value: resultManager.mangaRankingType.rawValue),
+            URLQueryItem(name: "ranking_type", value: rankingType.rawValue),
             URLQueryItem(name: "limit", value: "10"),
             URLQueryItem(name: "fields", value: MALApiFields.fieldsHeader(for: [.alternativeTitles, .numChapters, .numVolumes, .mediaType, .startDate, .status, .myListStatus])),
             URLQueryItem(name: "q", value: searchTerm),
-            URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent)),
+            URLQueryItem(name: "nsfw", value: String(showNsfwContent)),
         ]
         
         guard let url = components.url else {
@@ -242,7 +251,11 @@ final class MangaController {
         }
     }
     
-    func fetchLibrary() async throws -> MediaResponse {
+    func fetchLibrary(
+        showNsfwContent: Bool,
+        progressStatus: ProgressStatus.Manga,
+        sortOrder: MediaSort.MangaSort
+    ) async throws -> MediaResponse {
         guard var components = URLComponents(
             url: MALEndpoints.Manga.library,
             resolvingAgainstBaseURL: false
@@ -252,13 +265,13 @@ final class MangaController {
         
         var queryItems: [URLQueryItem] = []
 
-        if libraryManager.mangaProgressStatus != .all {
+        if progressStatus != .all {
             queryItems.append(
-                URLQueryItem(name: "status", value: libraryManager.mangaProgressStatus.rawValue)
+                URLQueryItem(name: "status", value: progressStatus.rawValue)
             )
         }
 
-        if let sort = libraryManager.mangaSortOrder.apiValue {
+        if let sort = sortOrder.apiValue {
             queryItems.append(
                 URLQueryItem(name: "sort", value: sort)
             )
@@ -272,7 +285,7 @@ final class MangaController {
                 )
             ),
             URLQueryItem(name: "limit", value: "1000"),
-            URLQueryItem(name: "nsfw", value: String(settingsManager.showNsfwContent))
+            URLQueryItem(name: "nsfw", value: String(showNsfwContent))
         ]
 
         components.queryItems = queryItems

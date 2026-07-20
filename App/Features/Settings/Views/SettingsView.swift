@@ -3,11 +3,15 @@ import SwiftData
 
 struct SettingsView: View {
     
-    @StateObject private var settingsManager: SettingsManager = .shared
+    @Environment(AppSettings.self)
+    private var settings
     
     private var tokenHandler: TokenHandler = .shared
     
     var body: some View {
+        @Bindable
+        var settings = settings
+        
         NavigationStack {
             Form {
                 Section("App Info") {
@@ -17,14 +21,14 @@ struct SettingsView: View {
                 }
                 
                 Section("Preferences") {
-                    Picker("Appearance", systemImage: "circle.lefthalf.filled", selection: $settingsManager.appearance) {
+                    Picker("Appearance", systemImage: "circle.lefthalf.filled", selection: $settings.appearance) {
                         ForEach(Appearance.allCases, id: \.self) { appearance in
                             Text(appearance.displayName).tag(appearance)
                         }
                     }
                     .pickerStyle(.navigationLink)
                     
-                    Picker("Accent Color", systemImage: "paintpalette", selection: $settingsManager.accentColor) {
+                    Picker("Accent Color", systemImage: "paintpalette", selection: $settings.accentColor) {
                         ForEach(AccentColor.allCases, id: \.self) { accentColor in
                             HStack {
                                 Image(systemName: "circle.fill")
@@ -39,7 +43,7 @@ struct SettingsView: View {
                 }
                 
                 Section("Content") {
-                    Toggle(isOn: $settingsManager.showNsfwContent) {
+                    Toggle(isOn: $settings.showNsfwContent) {
                         Label("Show NSFW Content", systemImage: "eye.trianglebadge.exclamationmark")
                     }
                     .toggleStyle(.switch)
@@ -86,7 +90,7 @@ struct SettingsView: View {
                         }
                     }
                     
-                    Toggle(isOn: $settingsManager.isExtendedDataEnabled) {
+                    Toggle(isOn: $settings.isExtendedDataEnabled) {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Extended Data")
@@ -101,11 +105,11 @@ struct SettingsView: View {
                     }
                     .toggleStyle(.switch)
                     
-                    if settingsManager.isExtendedDataEnabled {
+                    if settings.isExtendedDataEnabled {
                         Picker(
                             "API",
                             systemImage: "chevron.left.forwardslash.chevron.right",
-                            selection: $settingsManager.extendedDataSource
+                            selection: $settings.extendedDataSource
                         ) {
                             ForEach([APIService.jikan, .tenrai], id: \.self) { entry in
                                 Text(entry.displayName)
@@ -130,7 +134,7 @@ struct SettingsView: View {
                             Label("Anime Tracking", systemImage: SeriesType.anime.icon)
                         }
                         
-                        Toggle(isOn: $settingsManager.advancedMode) {
+                        Toggle(isOn: $settings.advancedMode) {
                             Label {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("Advanced Mode")

@@ -3,8 +3,8 @@ import Foundation
 @MainActor
 public class JikanPersonController {
     
-    func fetchPersonFull(id: Int) async throws -> JikanPerson {
-        let url = JikanEndpoints.Person(id: id).full
+    func fetchPersonFull(id: Int, apiService: APIService) async throws -> JikanPerson {
+        let url = JikanEndpoints.Person.full(id: id, apiService: apiService)
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
 
         let (data, response) = try await URLSession.shared.data(for: request)

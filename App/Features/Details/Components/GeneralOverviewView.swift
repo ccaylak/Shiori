@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct GeneralOverviewView: View {
+    @Environment(AppSettings.self)
+    private var settings
     
     let type: MediaType
     let episodes: Int
@@ -26,7 +28,7 @@ struct GeneralOverviewView: View {
                 Text(formattedRelease(startDate: startDate, endDate: endDate))
                     .font(.body)
                 
-                StudioInfoView(studios: studios)
+                StudioInfoView(studios: studios, isExtendedDataEnabled: settings.isExtendedDataEnabled)
                 AuthorsView(authors: authors)
             }
             .padding(.bottom, 10)
@@ -178,9 +180,8 @@ struct GeneralOverviewView: View {
 }
 
 private struct StudioInfoView: View {
-    @AppStorage("extendedData") var extendedData: Bool = true
-    
     let studios: [Studio]
+    let isExtendedDataEnabled: Bool
     
     var body: some View {
         if (!studios.isEmpty) {
@@ -189,7 +190,7 @@ private struct StudioInfoView: View {
                 Text("Animated by")
                     
                 ForEach(studios, id: \.id) {studio in
-                    if extendedData {
+                    if isExtendedDataEnabled {
                         NavigationLink(destination: StudioDetailsView(malId: studio.id, initialStudio: nil)) {
                             Text(studio.name)
                                 .bold()

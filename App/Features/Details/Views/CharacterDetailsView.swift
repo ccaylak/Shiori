@@ -7,7 +7,11 @@ struct CharacterDetailsView: View {
     @State private var details: JikanCharacterFull? = nil
     @State private var isDescriptionExpanded = false
     
-    @EnvironmentObject private var toastManager: ToastManager
+    @Environment(ToastManager.self)
+    private var toastManager
+    
+    @Environment(AppSettings.self)
+    private var settings
     
     let jikanCharacterController = JikanCharacterController()
     
@@ -81,7 +85,7 @@ struct CharacterDetailsView: View {
                                         id: voiceactor.person.malId,
                                         language: voiceactor.language,
                                         image: voiceactor.person.images.jpgImage.baseImage,
-                                        name: voiceactor.person.preferredNameFormat
+                                        name: voiceactor.person.preferredName(format: settings.nameFormat)
                                     )) {
                                         VStack {
                                             AsyncImageView(imageUrl: voiceactor.person.images.jpgImage.baseImage)
@@ -89,7 +93,7 @@ struct CharacterDetailsView: View {
                                             .cornerRadius(12)
                                             .strokedBorder()
                                             
-                                            Text(voiceactor.person.preferredNameFormat)
+                                            Text(voiceactor.person.preferredName(format: settings.nameFormat))
                                                 .font(.caption)
                                                 .frame(maxWidth: CoverSize.medium.size.width)
                                                 .lineLimit(1)
@@ -203,7 +207,7 @@ struct CharacterDetailsView: View {
             }
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle(characterData.preferredNameFormat)
+        .navigationTitle(characterData.preferredName(format: settings.nameFormat))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             Task {
@@ -211,7 +215,7 @@ struct CharacterDetailsView: View {
                 defer { toastManager.isLoading = false }
                 
                 do {
-                    details = try await jikanCharacterController.fetchCharacterDetails(id: characterData.malId)
+                    details = try await jikanCharacterController.fetchCharacterDetails(id: characterData.malId, apiService: settings.extendedDataSource)
                 } catch {
                     print("Failed to load character details:", error)
                 }

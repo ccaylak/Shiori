@@ -4,8 +4,11 @@ struct StudiosView: View {
     
     private let jikanStudioController = JikanStudioController()
     
-    @StateObject private var resultManager: ResultManager = .shared
-    @ObservedObject private var settingsManager: SettingsManager = .shared
+    @Environment(ResultSettings.self)
+    private var resultSettings
+    
+    @Environment(AppSettings.self)
+    private var settings
     
     @State var jikanStudio = JikanStudio(data: [], pagination: nil)
     @State var searchText: String = ""
@@ -14,6 +17,9 @@ struct StudiosView: View {
     @State var isLoading = false
     
     var body: some View {
+        @Bindable
+        var resultSettings = resultSettings
+        
         NavigationStack {
             List {
                 ForEach(jikanStudio.data, id: \.malId) { studio in
@@ -57,9 +63,10 @@ struct StudiosView: View {
                             do {
                                 let newJikanStudioResponse = try await jikanStudioController.fetchAnimeStudios(
                                     searchTerm: searchText,
-                                    order: resultManager.animeStudioOption.rawValue,
-                                    sort: resultManager.animeStudioSort.rawValue,
-                                    page: studioPage
+                                    order: resultSettings.animeStudioOption.rawValue,
+                                    sort: resultSettings.animeStudioSort.rawValue,
+                                    page: studioPage,
+                                    apiService: settings.extendedDataSource
                                 )
                                 
                                 jikanStudio.append(newJikanStudioResponse.data)
@@ -87,14 +94,14 @@ struct StudiosView: View {
             .toolbar {
                 ToolbarItem {
                     Menu {
-                        Picker("Choose a sort option", selection: $resultManager.animeStudioOption){
+                        Picker("Choose a sort option", selection: $resultSettings.animeStudioOption){
                             ForEach(StudioSortOption.allCases, id: \.self) { option in
                                 Label(option.displayName, systemImage: option.icon)
                                     .tag(option)
                             }
                         }
                     } label: {
-                        Image(systemName: resultManager.animeStudioOption.icon)
+                        Image(systemName: resultSettings.animeStudioOption.icon)
                             .foregroundColor(.accentColor)
                     }
                 }
@@ -105,14 +112,14 @@ struct StudiosView: View {
                 
                 ToolbarItem {
                     Menu {
-                        Picker("Choose a sort order", selection: $resultManager.animeStudioSort){
+                        Picker("Choose a sort order", selection: $resultSettings.animeStudioSort){
                             ForEach(SortDirection.allCases, id: \.self) { direction in
                                 Label(direction.displayName, systemImage: direction.icon)
                                     .tag(direction)
                             }
                         }
                     }  label: {
-                        Image(systemName: resultManager.animeStudioSort.icon)
+                        Image(systemName: resultSettings.animeStudioSort.icon)
                             .foregroundColor(.accentColor)
                     }
                 }
@@ -131,9 +138,10 @@ struct StudiosView: View {
             Task {
                 jikanStudio = try await jikanStudioController.fetchAnimeStudios(
                     searchTerm: searchText,
-                    order: resultManager.animeStudioOption.rawValue,
-                    sort: resultManager.animeStudioSort.rawValue,
-                    page: studioPage
+                    order: resultSettings.animeStudioOption.rawValue,
+                    sort: resultSettings.animeStudioSort.rawValue,
+                    page: studioPage,
+                    apiService: settings.extendedDataSource
                 )
             }
         }
@@ -141,29 +149,32 @@ struct StudiosView: View {
             Task {
                 jikanStudio = try await jikanStudioController.fetchAnimeStudios(
                     searchTerm: searchText,
-                    order: resultManager.animeStudioOption.rawValue,
-                    sort: resultManager.animeStudioSort.rawValue,
-                    page: studioPage
+                    order: resultSettings.animeStudioOption.rawValue,
+                    sort: resultSettings.animeStudioSort.rawValue,
+                    page: studioPage,
+                    apiService: settings.extendedDataSource
                 )
             }
         }
-        .onChange(of: resultManager.animeStudioOption) {
+        .onChange(of: resultSettings.animeStudioOption) {
             Task {
                 jikanStudio = try await jikanStudioController.fetchAnimeStudios(
                     searchTerm: searchText,
-                    order: resultManager.animeStudioOption.rawValue,
-                    sort: resultManager.animeStudioSort.rawValue,
-                    page: studioPage
+                    order: resultSettings.animeStudioOption.rawValue,
+                    sort: resultSettings.animeStudioSort.rawValue,
+                    page: studioPage,
+                    apiService: settings.extendedDataSource
                 )
             }
         }
-        .onChange(of: resultManager.animeStudioSort) {
+        .onChange(of: resultSettings.animeStudioSort) {
             Task {
                 jikanStudio = try await jikanStudioController.fetchAnimeStudios(
                     searchTerm: searchText,
-                    order: resultManager.animeStudioOption.rawValue,
-                    sort: resultManager.animeStudioSort.rawValue,
-                    page: studioPage
+                    order: resultSettings.animeStudioOption.rawValue,
+                    sort: resultSettings.animeStudioSort.rawValue,
+                    page: studioPage,
+                    apiService: settings.extendedDataSource
                 )
             }
         }
