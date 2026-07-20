@@ -4,11 +4,11 @@ struct GeneralOverviewView: View {
     
     let type: MediaType
     let episodes: Int
+    let minutes: Int
     let numberOfChapters: Int
     let numberOfVolumes: Int
-    let startDate: String
-    let minutes: Int
-    let endDate: String
+    let startDate: Date?
+    let endDate: Date?
     let studios: [Studio]
     let authors: [Author]
     let status: Status
@@ -43,40 +43,50 @@ struct GeneralOverviewView: View {
         }
     }
     
-    private func formattedAnimeDetails(type: MediaType.Anime, episodes: Int, minutes: Int) -> String {
-        switch (type, episodes) {
-        case (.movie, 1):
-            return String(localized: "\(type.displayName), \(episodes) part • \(minutes) minutes")
-        case (.movie, let episodes) where episodes > 1:
-            return String(localized: "\(type.displayName), \(episodes) parts • \(minutes) minutes (≈\(formattedDuration(from: episodes*minutes)))")
-        case (.tv, let episodes) where episodes > 1,
-            (.special, let episodes) where episodes > 1,
-            (.tvSpecial, let episodes) where episodes > 1,
-            (.ona, let episodes) where episodes > 1,
-            (.ova, let episodes) where episodes > 1:
-            return String(localized: "\(type.displayName), \(episodes) Episodes • \(minutes) Minutes (≈\(formattedDuration(from: episodes*minutes)))")
-        case (.tv, let episodes) where episodes == 1,
-            (.special, let episodes) where episodes == 1,
-            (.tvSpecial, let episodes) where episodes == 1,
-            (.ona, let episodes) where episodes == 1,
-            (.ova, let episodes) where episodes == 1:
-            return String(localized: "\(type.displayName), \(episodes) Episode • \(minutes) Minutes")
+    private func formattedAnimeDetails(
+        type: MediaType.Anime,
+        episodes: Int,
+        minutes: Int
+    ) -> String {
+        guard episodes > 0 else {
+            return type.displayName
+        }
+
+        let countText: String
+
+        switch type {
+        case .movie:
+            countText = String(localized: "\(episodes) Parts")
+
+        case .tv, .special, .tvSpecial, .ona, .ova:
+            countText = String(localized: "\(episodes) Episodes")
+
         default:
             return type.displayName
         }
+
+        let runtimeText = formattedDuration(from: minutes)
+        let details = "\(type.displayName), \(countText) • \(runtimeText)"
+
+        guard episodes > 1 else {
+            return details
+        }
+
+        let totalDuration = formattedDuration(
+            from: episodes * minutes
+        )
+
+        return "\(details) (≈\(totalDuration))"
     }
     
     private func formattedDuration(from totalMinutes: Int) -> String {
-        let hours = totalMinutes / 60
-        let minutes = totalMinutes % 60
-        
-        if hours > 0 && minutes > 0 {
-            return "\(hours)h \(minutes)m"
-        } else if hours > 0 {
-            return "\(hours)h"
-        } else {
-            return "\(minutes)m"
-        }
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.unitsStyle = .abbreviated
+
+        return formatter.string(
+            from: TimeInterval(totalMinutes * 60)
+        ) ?? ""
     }
     
     private func formattedMangaDetails(type: MediaType.Manga, chapters: Int, volumes: Int) -> String {
@@ -92,55 +102,75 @@ struct GeneralOverviewView: View {
         
     }
     
-    func formattedRelease(startDate: String, endDate: String) -> String {
-        var formattedReleaseDate = ""
-        let (startFormatted, endFormatted) = String.formatDates(startDate: startDate, endDate: endDate)
+    func formattedRelease(startDate: Date?, endDate: Date?) -> String {
         
         switch status {
-        case .anime(let animeStatus): formattedReleaseDate = formatReleaseRange(startFormatted: startFormatted, endFormatted: endFormatted, status: animeStatus)
-        case .manga(let mangaStatus):
-            formattedReleaseDate = formatPublishRange(startFormatted: startFormatted, endFormatted: endFormatted, status: mangaStatus)
+        case .anime(let animeStatus): return formatReleaseRange(startDate: startDate, endDate: endDate, status: animeStatus)
+        case .manga(let mangaStatus): return formatPublishRange(startDate: startDate, endDate: endDate, status: mangaStatus)
         case .unknown:
-            formattedReleaseDate = ""
+            return ""
         }
-        
-        
-        return formattedReleaseDate
     }
     
-    private func formatReleaseRange(startFormatted: String?, endFormatted: String?, status: Status.Anime) -> String {
-        
-        switch status {
-        case .finishedAiring where startFormatted != nil && endFormatted != nil && startFormatted == endFormatted:
-            return String(localized: "Aired in \(startFormatted!)")
-        case .finishedAiring where startFormatted != nil && endFormatted != nil:
-            return String(localized: "Aired from \(startFormatted!) - \(endFormatted!)")
-        case .currentlyAiring where startFormatted != nil:
-            return String(localized: "Airing since \(startFormatted!)")
-        case .notYetAired where startFormatted != nil:
-            return String(localized: "Will air in \(startFormatted!)")
-        case .notYetAired where startFormatted == nil && endFormatted == nil:
-            return String(localized: "Unknown airing date")
+    private func formatReleaseRange(startDate: Date?, endDate: Date?, status: Status.Anime) -> String {
+        let monthYearFormat = Date.FormatStyle()
+            .month(.wide)
+            .year()
+
+        switch (status, startDate, endDate) {
+        case (.finishedAiring, let start?, let end?)
+            where Calendar.current.isDate(start, equalTo: end, toGranularity: .month):
+
+            return String(localized: "Aired in \(start.formatted(monthYearFormat))")
+
+        case (.finishedAiring, let start?, let end?):
+            return String(localized: "Aired from \(start.formatted(monthYearFormat)) – \(end.formatted(monthYearFormat))")
+
+        case (.currentlyAiring, let start?, _):
+            return String(localized: "Airing since \(start.formatted(monthYearFormat))")
+
+        case (.notYetAired, let start?, _):
+            return String(localized: "Will air in \(start.formatted(monthYearFormat))")
+
         default:
             return String(localized: "Unknown airing date")
         }
     }
     
-    private func formatPublishRange(startFormatted: String?, endFormatted: String?, status: Status.Manga) -> String {
-        
-        switch status {
-        case .finished where startFormatted != nil && endFormatted != nil && startFormatted == endFormatted:
-            return String(localized: "Published in \(startFormatted!)")
-        case .finished where startFormatted != nil && endFormatted != nil:
-            return String(localized: "Published from \(startFormatted!) - \(endFormatted!)")
-        case .currentlyPublishing where startFormatted != nil:
-            return String(localized: "Publishing since \(startFormatted!)")
-        case .notYetPublished where startFormatted != nil:
-            return String(localized: "Will publish in \(startFormatted!)")
-        case .notYetPublished where startFormatted == nil && endFormatted == nil:
-            return String(localized: "Unknown publishing date")
-        case .discontinued, .onHiatus:
-            return String(localized: "Published from \(startFormatted!) - \(endFormatted ?? "Unknown")")
+    private func formatPublishRange(startDate: Date?, endDate: Date?, status: Status.Manga) -> String {
+        let monthYearFormat = Date.FormatStyle()
+            .month(.wide)
+            .year()
+
+        switch (status, startDate, endDate) {
+        case (.finished, let start?, let end?)
+            where Calendar.current.isDate(
+                start,
+                equalTo: end,
+                toGranularity: .month
+            ):
+
+            return String(localized: "Published in \(start.formatted(monthYearFormat))")
+
+        case (.finished, let start?, let end?):
+            return String(localized: "Published from \(start.formatted(monthYearFormat)) - \(end.formatted(monthYearFormat))")
+
+        case (.currentlyPublishing, let start?, _):
+            return String(localized: "Publishing since \(start.formatted(monthYearFormat))")
+
+        case (.notYetPublished, let start?, _):
+            return String(localized: "Will publish in \(start.formatted(monthYearFormat))")
+
+        case (.discontinued, let start?, let end?),
+             (.onHiatus, let start?, let end?):
+
+            return String(localized: "Published from \(start.formatted(monthYearFormat)) - \(end.formatted(monthYearFormat))")
+
+        case (.discontinued, let start?, nil),
+             (.onHiatus, let start?, nil):
+
+            return String(localized: "Published from \(start.formatted(monthYearFormat)) - \(String(localized: "Unknown"))")
+
         default:
             return String(localized: "Unknown publishing date")
         }
@@ -165,7 +195,7 @@ private struct StudioInfoView: View {
                                 .bold()
                         }
                     } else {
-                        Text(studio.name)
+                        Text(studios.map(\.name), format: .list(type: .and))
                             .bold()
                     }
                 }
@@ -176,20 +206,13 @@ private struct StudioInfoView: View {
 
 private struct AuthorsView: View {
     let authors: [Author]
-    
+
     var body: some View {
-        if(!authors.isEmpty) {
+        if !authors.isEmpty {
             Spacer()
             Text("Created by")
-            
-            VStack (alignment: .leading) {
-                ForEach(authors, id: \.self) { author in
-                    HStack(spacing: 3) {
-                        Text(author.node.fullName)
-                        Text("(\(author.role))")
-                    }
-                }
-            }
+
+            Text(authors.map {"\($0.node.fullName) (\($0.role))"}, format: .list(type: .and))
         }
     }
 }

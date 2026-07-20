@@ -486,7 +486,11 @@ struct LoginView: View {
             }
             .noScrollEdgeEffect()
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .navigationTitle(tokenHandler.isAuthenticated ? "" : "Login")
+            .navigationTitle(
+                tokenHandler.isAuthenticated
+                    ? Text(verbatim: "")
+                    : Text("Login")
+            )
             .navigationBarTitleDisplayMode(tokenHandler.isAuthenticated ? .inline : .large)
             .toolbar {
                 ToolbarItem {
@@ -572,7 +576,7 @@ struct LoginView: View {
             
             var body: some View {
                 LabeledContent {
-                    Text("\(value)")
+                    Text(value, format: .number)
                 } label: {
                     Label {
                         Text(title)

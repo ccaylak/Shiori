@@ -102,12 +102,28 @@ extension MediaNode {
         myListStatus ?? MyListStatus()
     }
     
-    var releaseStartDate: String {
-        startDate ?? ""
+    var releaseStartDate: Date? {
+        startDate.flatMap {
+            try? Date(
+                $0,
+                strategy: Date.ISO8601FormatStyle()
+                    .year()
+                    .month()
+                    .day()
+            )
+        }
     }
     
-    var releaseEndDate: String {
-        endDate ?? ""
+    var releaseEndDate: Date? {
+        endDate.flatMap {
+            try? Date(
+                $0,
+                strategy: Date.ISO8601FormatStyle()
+                    .year()
+                    .month()
+                    .day()
+            )
+        }
     }
     
     var getStartSeason: StartSeason {

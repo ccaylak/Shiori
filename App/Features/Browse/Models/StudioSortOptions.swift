@@ -6,7 +6,7 @@ enum StudioSortOption: String, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .malId: String(localized: "Id")
+        case .malId: String("ID")
         case .count: String(localized: "Anime")
         case .favorites: String(localized: "Favorites")
         case .established: String(localized: "Established")
