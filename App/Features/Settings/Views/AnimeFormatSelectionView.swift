@@ -1,9 +1,12 @@
 import SwiftUI
 
 struct AnimeFormatSelectionView: View {
-    @ObservedObject private var settingsManager: SettingsManager = .shared
+    @Environment(AppSettings.self)
+    private var settings
     
     var body: some View {
+        @Bindable var settings = settings
+        
         List {
             Section(
                 header: Text("Preview"),
@@ -13,18 +16,18 @@ struct AnimeFormatSelectionView: View {
             }
             
             Section {
-                Picker("Format", systemImage: SeriesType.anime.icon, selection: $settingsManager.animeFormat) {
+                Picker("Format", systemImage: SeriesType.anime.icon, selection: $settings.animeFormat) {
                    ForEach(AnimeFormat.allCases, id: \.self) { mode in
                        Text(mode.displayName)
                            .tag(mode)
                    }
                 }
                 .pickerStyle(.navigationLink)
-                Toggle("First episode counts toward duration", isOn: $settingsManager.includeFirstEpisodeInDuration)
+                Toggle("First episode counts toward duration", isOn: $settings.includeFirstEpisodeInDuration)
                     .toggleStyle(.switch)
-                    .isVisible(settingsManager.animeFormat == .episodesWithDuration)
+                    .isVisible(settings.animeFormat == .episodesWithDuration)
             } footer: {
-                Text(settingsManager.animeFormat.description)
+                Text(settings.animeFormat.description)
             }
         }
         .navigationTitle("Anime Progress Format")

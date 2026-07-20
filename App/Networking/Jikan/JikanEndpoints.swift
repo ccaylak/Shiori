@@ -1,122 +1,159 @@
 import Foundation
-import SwiftUI
 
-struct JikanEndpoints {
-    @AppStorage("extendedDataSource") private static var apiService: APIService = APIService.jikan
-    
-    private static var apiBaseUrl: String {
-        apiService.apiBaseUrl
-    }
-    
-    private static func url(_ path: String) -> URL {
-        let urlString = "\(apiBaseUrl)\(path)"
-        
+enum JikanEndpoints {
+    private static func url(_ path: String, apiService: APIService) -> URL {
+        let urlString = "\(apiService.apiBaseUrl)\(path)"
+
         guard let url = URL(string: urlString) else {
-            preconditionFailure("Invalid Jikan endpoint URL: \(urlString)")
+            preconditionFailure(
+                "Invalid Jikan endpoint URL: \(urlString)"
+            )
         }
-        
+
         return url
     }
-    
-    struct Manga {
-        var search: URL {
-            JikanEndpoints.url("/manga")
+
+    enum Manga {
+        static func search(apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/manga",
+                apiService: apiService
+            )
         }
     }
-    
-    struct Anime {
-        var search: URL {
-            JikanEndpoints.url("/anime")
+
+    enum Anime {
+        static func search(apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/anime",
+                apiService: apiService
+            )
         }
     }
-    
-    struct Profile {
-        let username: String
-        
-        var statistics: URL {
-            JikanEndpoints.url("/users/\(username)/statistics")
+
+    enum Profile {
+        static func statistics(username: String, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/users/\(username)/statistics",
+                apiService: apiService
+            )
         }
-        
-        var favorites: URL {
-            JikanEndpoints.url("/users/\(username)/favorites")
+
+        static func favorites(username: String, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/users/\(username)/favorites",
+                apiService: apiService
+            )
         }
-        
-        var friends: URL {
-            JikanEndpoints.url("/users/\(username)/friends")
-        }
-    }
-    
-    struct Character {
-        let id: Int
-        
-        var anime: URL {
-            JikanEndpoints.url("/anime/\(id)/characters")
-        }
-        
-        var manga: URL {
-            JikanEndpoints.url("/manga/\(id)/characters")
-        }
-        
-        var full: URL {
-            JikanEndpoints.url("/characters/\(id)/full")
+
+        static func friends(username: String, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/users/\(username)/friends",
+                apiService: apiService
+            )
         }
     }
-    
-    struct Relations {
-        let id: Int
-        
-        var animeRelations: URL {
-            JikanEndpoints.url("/anime/\(id)/relations")
+
+    enum Character {
+        static func anime(id: Int, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/anime/\(id)/characters",
+                apiService: apiService
+            )
         }
-        
-        var mangaRelations: URL {
-            JikanEndpoints.url("/manga/\(id)/relations")
+
+        static func manga(id: Int, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/manga/\(id)/characters",
+                apiService: apiService
+            )
         }
-    }
-    
-    struct Pictures {
-        let id: Int
-        
-        var mangaPictures: URL {
-            JikanEndpoints.url("/manga/\(id)/pictures")
-        }
-        
-        var animePictures: URL {
-            JikanEndpoints.url("/anime/\(id)/pictures")
-        }
-    }
-    
-    struct Person {
-        let id: Int
-        
-        var full: URL {
-            JikanEndpoints.url("/people/\(id)/full")
+
+        static func full(id: Int, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/characters/\(id)/full",
+                apiService: apiService
+            )
         }
     }
-    
-    struct Studio {
-        let id: Int
-        
-        var studio: URL {
-            JikanEndpoints.url("/producers/\(id)")
+
+    enum Relations {
+        static func anime(id: Int, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/anime/\(id)/relations",
+                apiService: apiService
+            )
         }
-        
-        static var all: URL {
-            JikanEndpoints.url("/producers")
-        }
-        
-        static var animes: URL {
-            JikanEndpoints.url("/anime")
+
+        static func manga(id: Int, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/manga/\(id)/relations",
+                apiService: apiService
+            )
         }
     }
-    
-    struct Genres {
-        var anime: URL {
-            JikanEndpoints.url("/genres/anime")
+
+    enum Pictures {
+        static func manga(id: Int, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/manga/\(id)/pictures",
+                apiService: apiService
+            )
         }
-        
-        var manga: URL {
-            JikanEndpoints.url("/genres/manga")
+
+        static func anime(id: Int, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/anime/\(id)/pictures",
+                apiService: apiService
+            )
+        }
+    }
+
+    enum Person {
+        static func full(id: Int, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/people/\(id)/full",
+                apiService: apiService
+            )
+        }
+    }
+
+    enum Studio {
+        static func details(id: Int, apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/producers/\(id)",
+                apiService: apiService
+            )
+        }
+
+        static func all(apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/producers",
+                apiService: apiService
+            )
+        }
+
+        static func anime(apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/anime",
+                apiService: apiService
+            )
+        }
+    }
+
+    enum Genres {
+        static func anime(apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/genres/anime",
+                apiService: apiService
+            )
+        }
+
+        static func manga(apiService: APIService) -> URL {
+            JikanEndpoints.url(
+                "/genres/manga",
+                apiService: apiService
+            )
         }
     }
 }

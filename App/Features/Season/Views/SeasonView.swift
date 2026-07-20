@@ -1,16 +1,25 @@
 import SwiftUI
 
 struct SeasonView: View {
-    
     private let seasonController = SeasonController()
-    @ObservedObject private var seasonManager: SeasonManager = .shared
-    @EnvironmentObject private var toastManager: ToastManager
+    
+    @Environment(SeasonSettings.self)
+    private var seasonSettings
+    
+    @Environment(AppSettings.self)
+    private var settings
+    
+    @Environment(ToastManager.self)
+    private var toastManager
     
     @State private var jikanSeason = MediaResponse(data: [], paging: nil)
     
     @State private var groupedMedia: [MediaType.Anime: [Media]] = [:]
     
     var body: some View {
+        @Bindable
+        var seasonSettings = seasonSettings
+        
         NavigationStack {
             Form {
                 ForEach(MediaType.Anime.allCases, id: \.self) { animeType in
@@ -51,23 +60,23 @@ struct SeasonView: View {
             .onAppear {
                 fetchSeason()
             }
-            .onChange(of: seasonManager.selectedYear) {
+            .onChange(of: seasonSettings.selectedYear) {
                 fetchSeason()
             }
-            .onChange(of: seasonManager.selectedSeason) {
+            .onChange(of: seasonSettings.selectedSeason) {
                 fetchSeason()
             }
             .toolbar {
                 ToolbarItem {
                     Menu {
-                        Picker("Select season", selection: $seasonManager.selectedSeason) {
+                        Picker("Select season", selection: $seasonSettings.selectedSeason) {
                             ForEach(Season.allCases, id: \.self) { season in
                                 Label(season.displayName, systemImage: season.icon)
                                     .tag(season)
                             }
                         }
                     } label: {
-                        Image(systemName: seasonManager.selectedSeason.icon)
+                        Image(systemName: seasonSettings.selectedSeason.icon)
                             .foregroundColor(.accentColor)
                     }
                 }
@@ -76,7 +85,7 @@ struct SeasonView: View {
                 }
                 ToolbarItem {
                     Menu {
-                        Picker("Select year",selection: $seasonManager.selectedYear) {
+                        Picker("Select year",selection: $seasonSettings.selectedYear) {
                             ForEach(
                                 (1980...Calendar.current.component(.year, from: Date()) + 1).reversed(),
                                 id: \.self
@@ -85,7 +94,7 @@ struct SeasonView: View {
                             }
                         }
                     } label : {
-                        Text(String(seasonManager.selectedYear))
+                        Text(String(seasonSettings.selectedYear))
                             .foregroundColor(.accentColor)
                     }
                 }
@@ -102,8 +111,9 @@ struct SeasonView: View {
             
             do {
                 let season = try await seasonController.fetchSeason(
-                    year: seasonManager.selectedYear,
-                    season: seasonManager.selectedSeason.rawValue
+                    year: seasonSettings.selectedYear,
+                    season: seasonSettings.selectedSeason.rawValue,
+                    showNsfwContent: settings.showNsfwContent
                 )
                 jikanSeason = season
                 

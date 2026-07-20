@@ -29,10 +29,16 @@ struct LibraryView: View {
     private let animeController = AnimeController()
     private let aniListController = AniListController()
     
-    @StateObject private var libraryManager: LibraryManager = .shared
-    @EnvironmentObject private var toastManager: ToastManager
     @ObservedObject private var tokenHandler: TokenHandler = .shared
-    @ObservedObject private var settingsManager: SettingsManager = .shared
+    
+    @Environment(AppSettings.self)
+    private var settings
+    
+    @Environment(ToastManager.self)
+    private var toastManager
+    
+    @Environment(LibrarySettings.self)
+    private var librarySettings
     
     @State private var detailMedia: MediaNode?
     @State private var pendingDetailMedia: MediaNode?
@@ -56,12 +62,12 @@ struct LibraryView: View {
     }
     
     private var shouldReverseResultLocally: Bool {
-        switch libraryManager.mediaType {
+        switch librarySettings.mediaType {
         case .manga:
-            return libraryManager.mangaSortOrder.apiDirection != libraryManager.sortDirection
+            return librarySettings.mangaSortOrder.apiDirection != librarySettings.sortDirection
             
         case .anime:
-            return libraryManager.animeSortOrder.apiDirection != libraryManager.sortDirection
+            return librarySettings.animeSortOrder.apiDirection != librarySettings.sortDirection
         }
     }
 
@@ -74,6 +80,9 @@ struct LibraryView: View {
     }
     
     var body: some View {
+        @Bindable
+        var librarySettings = librarySettings
+        
         NavigationStack {
             List {
                 if tokenHandler.isAuthenticated {
@@ -113,7 +122,11 @@ struct LibraryView: View {
                                     try await mangaController.completeEntry(id: media.node.id)
                                     
                                     toastManager.showUpdatedToast = true
-                                    library = try await mangaController.fetchLibrary()
+                                    library = try await mangaController.fetchLibrary(
+                                        showNsfwContent: settings.showNsfwContent,
+                                        progressStatus: librarySettings.mangaProgressStatus,
+                                        sortOrder: librarySettings.mangaSortOrder
+                                    )
                                 }
                             } label : {
                                 Label("Completed", systemImage: "checkmark")
@@ -126,7 +139,11 @@ struct LibraryView: View {
                                     try await animeController.completeEntry(id: media.node.id)
                                     
                                     toastManager.showUpdatedToast = true
-                                    library = try await animeController.fetchLibrary()
+                                    library = try await animeController.fetchLibrary(
+                                        showNsfwContent: settings.showNsfwContent,
+                                        progressStatus: librarySettings.animeProgressStatus,
+                                        sortOrder: librarySettings.animeSortOrder
+                                    )
                                 }
                             } label: {
                                 Label("Completed", systemImage: "checkmark")
@@ -156,7 +173,11 @@ struct LibraryView: View {
                                         try await mangaController.increaseChapters(id: media.node.id, chapter: updatedChapterValue)
                                         
                                         toastManager.showUpdatedToast = true
-                                        library = try await mangaController.fetchLibrary()
+                                        library = try await mangaController.fetchLibrary(
+                                            showNsfwContent: settings.showNsfwContent,
+                                            progressStatus: librarySettings.mangaProgressStatus,
+                                            sortOrder: librarySettings.mangaSortOrder
+                                        )
                                     }
                                 }
                             } label: {
@@ -167,8 +188,8 @@ struct LibraryView: View {
                                 media.node.isMangaOrAnime == .manga &&
                                 (
                                     totalChapters == 0 ||
-                                    (currentChapter != totalChapters && settingsManager.mangaFormat == .chapter) ||
-                                    settingsManager.mangaFormat == .both
+                                    (currentChapter != totalChapters && settings.mangaFormat == .chapter) ||
+                                    settings.mangaFormat == .both
                                 )
                             )
                                 
@@ -189,7 +210,11 @@ struct LibraryView: View {
                                         try await mangaController.increaseVolumes(id: media.node.id, volume: updatedVolumeValue)
                                         
                                         toastManager.showUpdatedToast = true
-                                        library = try await mangaController.fetchLibrary()
+                                        library = try await mangaController.fetchLibrary(
+                                            showNsfwContent: settings.showNsfwContent,
+                                            progressStatus: librarySettings.mangaProgressStatus,
+                                            sortOrder: librarySettings.mangaSortOrder
+                                        )
                                     }
                                 }
                                 
@@ -201,8 +226,8 @@ struct LibraryView: View {
                                 media.node.isMangaOrAnime == .manga &&
                                 (
                                     totalVolumes == 0 ||
-                                    (currentVolume != totalVolumes && settingsManager.mangaFormat == .volume) ||
-                                    settingsManager.mangaFormat == .both
+                                    (currentVolume != totalVolumes && settings.mangaFormat == .volume) ||
+                                    settings.mangaFormat == .both
                                 )
                             )
                         }
@@ -224,7 +249,11 @@ struct LibraryView: View {
                                         try await animeController.increaseEpisodes(id: media.node.id, episode: updatedEpisodeValue)
                                         
                                         toastManager.showUpdatedToast = true
-                                        library = try await animeController.fetchLibrary()
+                                        library = try await animeController.fetchLibrary(
+                                            showNsfwContent: settings.showNsfwContent,
+                                            progressStatus: librarySettings.animeProgressStatus,
+                                            sortOrder: librarySettings.animeSortOrder
+                                        )
                                     }
                                 }
                             } label: {
@@ -246,7 +275,7 @@ struct LibraryView: View {
                             ContentUnavailableView.search
                         } else {
                             ContentUnavailableView {
-                                Label("No entries found", systemImage: libraryManager.mediaType.icon)
+                                Label("No entries found", systemImage: librarySettings.mediaType.icon)
                             } description: {
                                 Text("Try a selection a different category.")
                             }
@@ -273,7 +302,7 @@ struct LibraryView: View {
                 if tokenHandler.isAuthenticated {
                     PillPicker(
                         options: ProgressStatus.Manga.allCases,
-                        selectedOption: $libraryManager.mangaProgressStatus,
+                        selectedOption: $librarySettings.mangaProgressStatus,
                         displayName: { $0.displayName },
                         icon: { AnyView($0.libraryIcon) }
                     )
@@ -286,11 +315,11 @@ struct LibraryView: View {
                             Color.clear.background(.ultraThinMaterial)
                         }
                     }
-                    .isVisible(libraryManager.mediaType == .manga)
+                    .isVisible(librarySettings.mediaType == .manga)
                     
                     PillPicker(
                         options: ProgressStatus.Anime.allCases,
-                        selectedOption: $libraryManager.animeProgressStatus,
+                        selectedOption: $librarySettings.animeProgressStatus,
                         displayName: { $0.displayName },
                         icon: { AnyView($0.libraryIcon) }
                     )
@@ -303,7 +332,7 @@ struct LibraryView: View {
                             Color.clear.background(.ultraThinMaterial)
                         }
                     }
-                    .isVisible(libraryManager.mediaType == .anime)
+                    .isVisible(librarySettings.mediaType == .anime)
                 }
             }
             .listStyle(.automatic)
@@ -315,56 +344,56 @@ struct LibraryView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
-                        libraryManager.mediaType = (libraryManager.mediaType == .manga) ? .anime : .manga
+                        librarySettings.mediaType = (librarySettings.mediaType == .manga) ? .anime : .manga
                     } label: {
-                        Image(systemName: libraryManager.mediaType.icon)
+                        Image(systemName: librarySettings.mediaType.icon)
                             .contentTransition(.symbolEffect(.replace))
                             .foregroundColor(.accentColor)
                             .symbolRenderingMode(.monochrome)
                     }
-                    .sensoryFeedback(.selection, trigger: libraryManager.mediaType)
+                    .sensoryFeedback(.selection, trigger: librarySettings.mediaType)
                     .buttonStyle(.borderless)
                 }
                 
                 ToolbarItem {
                     Menu {
-                        Picker("Sort by", selection: $libraryManager.animeSortOrder) {
+                        Picker("Sort by", selection: $librarySettings.animeSortOrder) {
                             ForEach(MediaSort.AnimeSort.allCases, id: \.self) { sortOrder in
                                 Label(sortOrder.displayName, systemImage: sortOrder.icon)
-                                    .tag(sortOrder.rawValue)
+                                    .tag(sortOrder)
                             }
                         }
-                        .isVisible(libraryManager.mediaType == .anime)
+                        .isVisible(librarySettings.mediaType == .anime)
                         
-                        Picker("Sort by", selection: $libraryManager.mangaSortOrder) {
+                        Picker("Sort by", selection: $librarySettings.mangaSortOrder) {
                             ForEach(MediaSort.MangaSort.allCases, id: \.self) { sortOrder in
                                 Label(sortOrder.displayName, systemImage: sortOrder.icon)
-                                    .tag(sortOrder.rawValue)
+                                    .tag(sortOrder)
                             }
                         }
-                        .isVisible(libraryManager.mediaType == .manga)
+                        .isVisible(librarySettings.mediaType == .manga)
                     } label: {
-                        Image(systemName: libraryManager.mediaType == .anime ? libraryManager.animeSortOrder.icon : libraryManager.mangaSortOrder.icon)
+                        Image(systemName: librarySettings.mediaType == .anime ? librarySettings.animeSortOrder.icon : librarySettings.mangaSortOrder.icon)
                             .fontWeight(.regular)
                             .foregroundColor(.accentColor)
                     }
                 }
                 ToolbarItem {
                     Menu {
-                        Picker("Order", selection: $libraryManager.sortDirection) {
+                        Picker("Order", selection: $librarySettings.sortDirection) {
                             
                             ForEach(SortDirection.allCases, id: \.self) { sortDirection in
                                 Label(sortDirection.displayName, systemImage: sortDirection.icon).tag(sortDirection)
                             }
                         }
                     } label: {
-                        Image(systemName: libraryManager.sortDirection.icon)
+                        Image(systemName: librarySettings.sortDirection.icon)
                             .fontWeight(.regular)
                             .foregroundColor(.accentColor)
                     }
                 }
             }
-            .navigationTitle("\(libraryManager.mediaType.displayName) Library")
+            .navigationTitle("\(librarySettings.mediaType.displayName) Library")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(item: $selectedMedia, onDismiss: {
                 showComments = false
@@ -417,7 +446,7 @@ struct LibraryView: View {
                                         .tag(mangaSelection.rawValue)
                                 }
                             }
-                            .isVisible(libraryManager.mediaType == .manga)
+                            .isVisible(librarySettings.mediaType == .manga)
                             
                             Picker("Progress", selection: $libraryEntry.progressStatus) {
                                 ForEach([ProgressStatus.Anime.completed, .watching, .dropped, .onHold, .planToWatch], id: \.self) { animeSelection in
@@ -425,7 +454,7 @@ struct LibraryView: View {
                                         .tag(animeSelection.rawValue)
                                 }
                             }
-                            .isVisible(libraryManager.mediaType == .anime)
+                            .isVisible(librarySettings.mediaType == .anime)
                             
                             Picker("Rating", selection: $libraryEntry.score) {
                                 ForEach(0...10, id: \.self) { rating in
@@ -449,7 +478,7 @@ struct LibraryView: View {
                                             Text(chapter, format: .number).tag(chapter)
                                         }
                                     }
-                                    .isVisible(media.node.chapters != 0 && (settingsManager.mangaFormat == .chapter || settingsManager.mangaFormat == .both))
+                                    .isVisible(media.node.chapters != 0 && (settings.mangaFormat == .chapter || settings.mangaFormat == .both))
                                 
                                 LabeledContent("Chapter") {
                                     HStack(spacing: 0) {
@@ -490,7 +519,7 @@ struct LibraryView: View {
                                 }
                                 .isVisible(
                                     media.node.chapters == 0 &&
-                                    (settingsManager.mangaFormat == .chapter || settingsManager.mangaFormat == .both)
+                                    (settings.mangaFormat == .chapter || settings.mangaFormat == .both)
                                 )
                                 
                                 Picker(selection: $libraryEntry.readVolumes, label:
@@ -506,7 +535,7 @@ struct LibraryView: View {
                                         Text(volume, format: .number).tag(volume)
                                     }
                                 }
-                                .isVisible(media.node.volumes != 0 && (settingsManager.mangaFormat == .volume || settingsManager.mangaFormat == .both))
+                                .isVisible(media.node.volumes != 0 && (settings.mangaFormat == .volume || settings.mangaFormat == .both))
                               
                                 
                                 LabeledContent("Volume") {
@@ -548,7 +577,7 @@ struct LibraryView: View {
                                 }
                                 .isVisible(
                                     media.node.volumes == 0 &&
-                                    (settingsManager.mangaFormat == .volume || settingsManager.mangaFormat == .both)
+                                    (settings.mangaFormat == .volume || settings.mangaFormat == .both)
                                 )
                             }
                             .isVisible(media.node.isMangaOrAnime == .manga)
@@ -623,14 +652,14 @@ struct LibraryView: View {
                                     .labelsHidden()
                                 }
                         }
-                        .isVisible(settingsManager.advancedMode)
+                        .isVisible(settings.advancedMode)
                         
                         Section {
                             Button(action: {
                                 withAnimation {
                                     showComments.toggle()
                                     if !showComments {
-                                        if libraryManager.mediaType == .anime {
+                                        if librarySettings.mediaType == .anime {
                                             libraryEntry.userComments = ""
                                         } else {
                                             libraryEntry.userComments = ""
@@ -644,13 +673,13 @@ struct LibraryView: View {
                                 } icon: {
                                     Image(systemName: showComments ? "minus.circle.fill" : "plus.circle.fill")
                                         .symbolRenderingMode(.monochrome)
-                                        .foregroundStyle(showComments ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        .foregroundStyle(showComments ? .red : Color.getByColorString(settings.accentColor.rawValue))
                                 }
                             }
                             .buttonStyle(.plain)
                             
                             if showComments {
-                                if (libraryManager.mediaType == .anime) {
+                                if (librarySettings.mediaType == .anime) {
                                     TextField("Comments", text: $libraryEntry.userComments)
                                         .transition(.opacity.combined(with: .move(edge: .top)))
                                 } else {
@@ -659,7 +688,7 @@ struct LibraryView: View {
                                 }
                             }
                         }
-                        .isVisible(settingsManager.advancedMode)
+                        .isVisible(settings.advancedMode)
                         
                         Section {
                             Button(action: {
@@ -674,7 +703,7 @@ struct LibraryView: View {
                                     Text(showStartDate ? "Clear Start Date" : "Add Start Date")
                                 } icon: {
                                     Image(systemName: showStartDate ? "calendar.badge.minus" : "calendar.badge.plus")
-                                        .foregroundStyle(showStartDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        .foregroundStyle(showStartDate ? .red : Color.getByColorString(settings.accentColor.rawValue))
                                 }
                             }
                             .buttonStyle(.plain)
@@ -702,7 +731,7 @@ struct LibraryView: View {
                                     Text(showFinishDate ? "Clear Finish Date" : "Add Finish Date")
                                 } icon: {
                                     Image(systemName: showFinishDate ? "calendar.badge.minus" : "calendar.badge.plus")
-                                        .foregroundStyle(showFinishDate ? .red : Color.getByColorString(settingsManager.accentColor.rawValue))
+                                        .foregroundStyle(showFinishDate ? .red : Color.getByColorString(settings.accentColor.rawValue))
                                 }
                             }
                             .buttonStyle(.plain)
@@ -719,7 +748,7 @@ struct LibraryView: View {
                                 .transition(.opacity.combined(with: .move(edge: .top)))
                             }
                         }
-                        .isVisible(settingsManager.advancedMode)
+                        .isVisible(settings.advancedMode)
                     }
                     .scrollContentBackground(.hidden)
                     .contentMargins(.top, 0)
@@ -731,13 +760,13 @@ struct LibraryView: View {
                                 Button(role: .confirm) {
                                     saveEntry(media.node.id)
                                 }
-                                .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .tint(Color.getByColorString(settings.accentColor.rawValue))
                                 
                             } else {
                                 Button("Save") {
                                     saveEntry(media.node.id)
                                 }
-                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .foregroundStyle(Color.getByColorString(settings.accentColor.rawValue))
                             }
                         }
                         
@@ -771,7 +800,7 @@ struct LibraryView: View {
                     .navigationTitle(media.node.preferredTitle)
                     .navigationBarTitleDisplayMode(.inline)
                     .presentationDragIndicator(.visible)
-                    .presentationDetents([settingsManager.advancedMode ? .fraction(0.8) : .medium])
+                    .presentationDetents([settings.advancedMode ? .fraction(0.8) : .medium])
                     .presentationBackgroundInteraction(.disabled)
                     .presentationBackground(.regularMaterial)
                     .onAppear {
@@ -786,11 +815,11 @@ struct LibraryView: View {
                 VStack(spacing: 0) {
                     Image(systemName: "bell.badge.fill")
                         .font(.system(size: 38, weight: .medium))
-                        .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                        .foregroundStyle(Color.getByColorString(settings.accentColor.rawValue))
                         .frame(width: 84, height: 84)
                         .background {
                             Circle()
-                                .fill(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.12))
+                                .fill(Color.getByColorString(settings.accentColor.rawValue).opacity(0.12))
                         }
 
                     VStack(spacing: 8) {
@@ -809,7 +838,7 @@ struct LibraryView: View {
                     VStack(spacing: 22) {
                         HStack(alignment: .top, spacing: 16) {
                             Image(systemName: "timer")
-                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .foregroundStyle(Color.getByColorString(settings.accentColor.rawValue))
                                 .font(.system(size: 18, weight: .semibold))
                                 .frame(width: 44, height: 44)
                                 .background {
@@ -817,7 +846,7 @@ struct LibraryView: View {
                                         cornerRadius: 12,
                                         style: .continuous
                                     )
-                                    .fill(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.12))
+                                    .fill(Color.getByColorString(settings.accentColor.rawValue).opacity(0.12))
                                 }
 
                             VStack(alignment: .leading, spacing: 4) {
@@ -835,7 +864,7 @@ struct LibraryView: View {
 
                         HStack(alignment: .top, spacing: 16) {
                             Image(systemName: "bookmark.fill")
-                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .foregroundStyle(Color.getByColorString(settings.accentColor.rawValue))
                                 .font(.system(size: 18, weight: .semibold))
                                 .frame(width: 44, height: 44)
                                 .background {
@@ -843,7 +872,7 @@ struct LibraryView: View {
                                         cornerRadius: 12,
                                         style: .continuous
                                     )
-                                    .fill(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.12))
+                                    .fill(Color.getByColorString(settings.accentColor.rawValue).opacity(0.12))
                                 }
 
                             VStack(alignment: .leading, spacing: 4) {
@@ -861,7 +890,7 @@ struct LibraryView: View {
 
                         HStack(alignment: .top, spacing: 16) {
                             Image(systemName: "gearshape.fill")
-                                .foregroundStyle(Color.getByColorString(settingsManager.accentColor.rawValue))
+                                .foregroundStyle(Color.getByColorString(settings.accentColor.rawValue))
                                 .font(.system(size: 18, weight: .semibold))
                                 .frame(width: 44, height: 44)
                                 .background {
@@ -869,7 +898,7 @@ struct LibraryView: View {
                                         cornerRadius: 12,
                                         style: .continuous
                                     )
-                                    .fill(Color.getByColorString(settingsManager.accentColor.rawValue).opacity(0.12))
+                                    .fill(Color.getByColorString(settings.accentColor.rawValue).opacity(0.12))
                                 }
 
                             VStack(alignment: .leading, spacing: 4) {
@@ -900,7 +929,7 @@ struct LibraryView: View {
                                     .requestPermission()
 
                                 guard granted else {
-                                    settingsManager.airingNotificationsEnabled = false
+                                    settings.airingNotificationsEnabled = false
                                     return
                                 }
 
@@ -911,15 +940,15 @@ struct LibraryView: View {
                                 try await AnimeNotificationManager
                                     .scheduleNotifications(
                                         for: schedules,
-                                        notificationTime: settingsManager.airingNotificationTiming,
-                                        timeFormat: settingsManager.airingNotificationTimeFormat
+                                        notificationTime: settings.airingNotificationTiming,
+                                        timeFormat: settings.airingNotificationTimeFormat
                                     )
 
-                                settingsManager.airingNotificationsEnabled = true
+                                settings.airingNotificationsEnabled = true
                                 isNoticationSetupDismissed = true
                                 showNotificationSetupSheet = false
                             } catch {
-                                settingsManager.airingNotificationsEnabled = false
+                                settings.airingNotificationsEnabled = false
                                 isNoticationSetupDismissed = false
 
                                 print(
@@ -948,14 +977,14 @@ struct LibraryView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 12)
             }
-            .tint(Color.getByColorString(settingsManager.accentColor.rawValue))
+            .tint(Color.getByColorString(settings.accentColor.rawValue))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .presentationDetents([.fraction(0.8)])
             .presentationDragIndicator(.hidden)
             .interactiveDismissDisabled()
         }
         .safeAreaInset(edge: .bottom) {
-            if !isNoticationSetupDismissed && libraryManager.mediaType == .anime {
+            if !isNoticationSetupDismissed && librarySettings.mediaType == .anime {
                 Button {
                     showNotificationSetupSheet = true
                 } label: {
@@ -1008,7 +1037,7 @@ struct LibraryView: View {
         .onAppear {
             fetchLibrary()
         }
-        .onChange(of: libraryManager.needToLoadData) {
+        .onChange(of: librarySettings.needToLoadData) {
             fetchLibrary()
         }
         .onChange(of: selectedMedia) {
@@ -1044,12 +1073,20 @@ struct LibraryView: View {
             }
 
             do {
-                switch libraryManager.mediaType {
+                switch librarySettings.mediaType {
                 case .manga:
-                    library = try await mangaController.fetchLibrary()
+                    library = try await mangaController.fetchLibrary(
+                        showNsfwContent: settings.showNsfwContent,
+                        progressStatus: librarySettings.mangaProgressStatus,
+                        sortOrder: librarySettings.mangaSortOrder
+                    )
 
                 case .anime:
-                    let fetchedLibrary = try await animeController.fetchLibrary()
+                    let fetchedLibrary = try await animeController.fetchLibrary(
+                        showNsfwContent: settings.showNsfwContent,
+                        progressStatus: librarySettings.animeProgressStatus,
+                        sortOrder: librarySettings.animeSortOrder
+                    )
 
                     let malIds = fetchedLibrary.data
                         .filter {
@@ -1071,12 +1108,12 @@ struct LibraryView: View {
                                     with: airingAnime
                                 )
 
-                                if settingsManager.airingNotificationsEnabled {
+                                if settings.airingNotificationsEnabled {
                                     try await AnimeNotificationManager
                                         .scheduleNotifications(
                                             for: syncedSchedules,
-                                            notificationTime: settingsManager.airingNotificationTiming,
-                                            timeFormat: settingsManager.airingNotificationTimeFormat
+                                            notificationTime: settings.airingNotificationTiming,
+                                            timeFormat: settings.airingNotificationTimeFormat
                                         )
                                 }
 
@@ -1174,18 +1211,26 @@ struct LibraryView: View {
     var saveEntry: (Int) -> Void {
         return { id in
             Task {
-                if libraryManager.mediaType == .manga {
+                if librarySettings.mediaType == .manga {
                     
                     try await mangaController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, chapters: libraryEntry.readChapters, volumes: libraryEntry.readVolumes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
                     
                     toastManager.showUpdatedToast = true
-                    library = try await mangaController.fetchLibrary()
-                } else if libraryManager.mediaType == .anime {
+                    library = try await mangaController.fetchLibrary(
+                        showNsfwContent: settings.showNsfwContent,
+                        progressStatus: librarySettings.mangaProgressStatus,
+                        sortOrder: librarySettings.mangaSortOrder
+                    )
+                } else if librarySettings.mediaType == .anime {
                     
                     try await animeController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, episodes: libraryEntry.watchedEpisodes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
                     toastManager.showUpdatedToast = true
                     
-                    library = try await animeController.fetchLibrary()
+                    library = try await animeController.fetchLibrary(
+                        showNsfwContent: settings.showNsfwContent,
+                        progressStatus: librarySettings.animeProgressStatus,
+                        sortOrder: librarySettings.animeSortOrder
+                    )
                 }
                 loadingMediaID = nil
                 selectedMedia = nil
@@ -1197,15 +1242,23 @@ struct LibraryView: View {
     var deleteEntry: (Int) -> Void {
         return { id in
             Task {
-                if(libraryManager.mediaType == .manga) {
+                if(librarySettings.mediaType == .manga) {
                     try await mangaController.deleteEntry(id: id)
                     toastManager.showRemovedToast = true
-                    library = try await mangaController.fetchLibrary()
+                    library = try await mangaController.fetchLibrary(
+                        showNsfwContent: settings.showNsfwContent,
+                        progressStatus: librarySettings.mangaProgressStatus,
+                        sortOrder: librarySettings.mangaSortOrder
+                    )
                 }
-                if(libraryManager.mediaType == .anime) {
+                if(librarySettings.mediaType == .anime) {
                     try await animeController.deleteEntry(id: id)
                     toastManager.showRemovedToast = true
-                    library = try await animeController.fetchLibrary()
+                    library = try await animeController.fetchLibrary(
+                        showNsfwContent: settings.showNsfwContent,
+                        progressStatus: librarySettings.animeProgressStatus,
+                        sortOrder: librarySettings.animeSortOrder
+                    )
                 }
                 
                 showAlert = false
@@ -1218,5 +1271,7 @@ struct LibraryView: View {
 
 #Preview {
     LibraryView()
-        .environmentObject(ToastManager.shared)
+        .environment(AppSettings())
+        .environment(ToastManager())
+        .environment(LibrarySettings())
 }

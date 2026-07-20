@@ -2,16 +2,19 @@ import SwiftUI
 import SwiftData
 
 struct NotificationSettingsView: View {
-    @ObservedObject
-    private var settingsManager: SettingsManager = .shared
+    @Environment(AppSettings.self)
+    private var settings
     
     @Environment(\.modelContext)
     private var modelContext
     
     var body: some View {
+        @Bindable
+        var settings = settings
+        
         Form {
             Section {
-                Toggle(isOn: $settingsManager.airingNotificationsEnabled) {
+                Toggle(isOn: $settings.airingNotificationsEnabled) {
                     Label {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Episode Notifications")
@@ -25,7 +28,7 @@ struct NotificationSettingsView: View {
                         Image(systemName: "bell")
                     }
                 }
-                .onChange(of: settingsManager.airingNotificationsEnabled) { _, enabled in
+                .onChange(of: settings.airingNotificationsEnabled) { _, enabled in
                     Task {
                         if enabled {
                             do {
@@ -33,7 +36,7 @@ struct NotificationSettingsView: View {
                                     .requestPermission()
 
                                 guard granted else {
-                                    settingsManager.airingNotificationsEnabled = false
+                                    settings.airingNotificationsEnabled = false
                                     return
                                 }
 
@@ -43,12 +46,12 @@ struct NotificationSettingsView: View {
 
                                 try await AnimeNotificationManager.scheduleNotifications(
                                     for: schedules,
-                                    notificationTime: settingsManager.airingNotificationTiming,
-                                    timeFormat: settingsManager.airingNotificationTimeFormat
+                                    notificationTime: settings.airingNotificationTiming,
+                                    timeFormat: settings.airingNotificationTimeFormat
                                 )
-                                settingsManager.airingNotificationsEnabled = true
+                                settings.airingNotificationsEnabled = true
                             } catch {
-                                settingsManager.airingNotificationsEnabled = false
+                                settings.airingNotificationsEnabled = false
                                 print("Notification setup failed:", error)
                             }
                         } else {
@@ -60,7 +63,7 @@ struct NotificationSettingsView: View {
             
             Section {
                 NavigationLink {
-                    NotificationTimeView(notificationTime: $settingsManager.airingNotificationTiming)
+                    NotificationTimeView(notificationTime: $settings.airingNotificationTiming)
                 } label: {
                     Label("Notification Timing", systemImage: "timer")
                 }
@@ -69,7 +72,7 @@ struct NotificationSettingsView: View {
             }
             
             Section {
-                Picker("Time Format", systemImage: "clock", selection: $settingsManager.airingNotificationTimeFormat) {
+                Picker("Time Format", systemImage: "clock", selection: $settings.airingNotificationTimeFormat) {
                     ForEach(AiringTimeFormat.allCases, id: \.self) { timeFormat in
                         Text(timeFormat.displayName)
                             .tag(timeFormat)
@@ -78,11 +81,11 @@ struct NotificationSettingsView: View {
                 .pickerStyle(.automatic)
             }
         }
-        .onChange(of: settingsManager.airingNotificationTiming) {
+        .onChange(of: settings.airingNotificationTiming) {
             rescheduleAiringNotifications()
         }
 
-        .onChange(of: settingsManager.airingNotificationTimeFormat) {
+        .onChange(of: settings.airingNotificationTimeFormat) {
             rescheduleAiringNotifications()
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -90,7 +93,7 @@ struct NotificationSettingsView: View {
     }
     
     private func rescheduleAiringNotifications() {
-        guard settingsManager.airingNotificationsEnabled else {
+        guard settings.airingNotificationsEnabled else {
             return
         }
 
@@ -102,8 +105,8 @@ struct NotificationSettingsView: View {
 
                 try await AnimeNotificationManager.scheduleNotifications(
                     for: schedules,
-                    notificationTime: settingsManager.airingNotificationTiming,
-                    timeFormat: settingsManager.airingNotificationTimeFormat
+                    notificationTime: settings.airingNotificationTiming,
+                    timeFormat: settings.airingNotificationTimeFormat
                 )
             } catch {
                 print("Failed to reschedule notifications:", error)

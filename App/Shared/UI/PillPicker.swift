@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct PillPicker<T: Hashable>: View {
-    @ObservedObject private var settingsManager: SettingsManager = .shared
-    @Environment(\.colorScheme) private var colorScheme
     let options: [T]
-    @Binding var selectedOption: T
+    
+    @Binding
+    var selectedOption: T
+    
     let displayName: (T) -> String
     let icon: (T) -> AnyView
     

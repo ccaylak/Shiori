@@ -2,12 +2,17 @@ import SwiftUI
 
 struct TitleLanguageSelectionView: View {
     
-    @ObservedObject private var settingsManager: SettingsManager = .shared
+    @Environment(AppSettings.self)
+    private var settings
+    
     let animeController = AnimeController()
     
     @State var exampleAnime: MediaNode = MediaNode(id: 0, title: "", mainPicture: Picture(medium: ""))
     
     var body: some View {
+        @Bindable
+        var settings = settings
+        
         List {
             Section("Preview") {
                 LibraryMediaView(
@@ -23,7 +28,7 @@ struct TitleLanguageSelectionView: View {
                 )
             }
             Section {
-                Picker("Title Language", systemImage: "circle.lefthalf.filled", selection: $settingsManager.titleLanguage) {
+                Picker("Title Language", systemImage: "circle.lefthalf.filled", selection: $settings.titleLanguage) {
                     ForEach(TitleLanguage.allCases, id: \.self) { language in
                         Text(language.displayName).tag(language)
                     }

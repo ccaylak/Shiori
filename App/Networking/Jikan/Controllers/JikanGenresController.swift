@@ -3,8 +3,8 @@ import Foundation
 @MainActor
 final class JikanGenresController {
     
-    func fetchAnimeGenres() async throws -> JikanGenre {
-        let url = JikanEndpoints.Genres().anime
+    func fetchAnimeGenres(apiService: APIService) async throws -> JikanGenre {
+        let url = JikanEndpoints.Genres.anime(apiService: apiService)
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -19,9 +19,9 @@ final class JikanGenresController {
             .decode(JikanGenre.self, from: data)
     }
     
-    func fetchAnimeByGenre(id: Int, page: Int) async throws -> JikanMedia {
+    func fetchAnimeByGenre(id: Int, page: Int, apiService: APIService) async throws -> JikanMedia {
         guard var components = URLComponents(
-            url: JikanEndpoints.Studio.animes,
+            url: JikanEndpoints.Studio.anime(apiService: apiService),
             resolvingAgainstBaseURL: false
         ) else {
             throw URLError(.badURL)
@@ -50,8 +50,8 @@ final class JikanGenresController {
             .decode(JikanMedia.self, from: data)
     }
     
-    func fetchMangaGenres() async throws -> JikanGenre {
-        let url = JikanEndpoints.Genres().manga
+    func fetchMangaGenres(apiService: APIService) async throws -> JikanGenre {
+        let url = JikanEndpoints.Genres.manga(apiService: apiService)
         let request = APIRequest.buildRequest(url: url, httpMethod: .get)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -73,9 +73,9 @@ final class JikanGenresController {
         return JikanGenre(data: uniqueGenres)
     }
     
-    func fetchMangaByGenre(id: Int, page: Int) async throws -> JikanMedia {
+    func fetchMangaByGenre(id: Int, page: Int, apiService: APIService) async throws -> JikanMedia {
         guard var components = URLComponents(
-            url: JikanEndpoints.Manga().search,
+            url: JikanEndpoints.Manga.search(apiService: apiService),
             resolvingAgainstBaseURL: false
         ) else {
             throw URLError(.badURL)

@@ -7,8 +7,6 @@ struct LoginView: View {
     @AppStorage("animeScheduleLastRefresh")
     private var animeScheduleLastRefresh: Double = 0
     
-    @AppStorage("isExtendedDataEnabled") var isExtendedDataEnabled: Bool = true
-    @AppStorage("extendedDataSource") var apiService: APIService = .tenrai
     @Environment(\.webAuthenticationSession) private var webAuthenticationSession
     
     private var jikanProfileController = JikanProfileController()
@@ -32,7 +30,11 @@ struct LoginView: View {
     
     @State private var showLogoutConfirmationDialog: Bool = false
     
-    @EnvironmentObject private var toastManager: ToastManager
+    @Environment(ToastManager.self)
+    private var toastManager
+    
+    @Environment(AppSettings.self)
+    private var settings
     
     @Environment(\.modelContext)
     private var modelContext
@@ -74,23 +76,17 @@ struct LoginView: View {
             let fetchedUser = try await userController.fetchUserProfile()
             user = fetchedUser
 
-            guard isExtendedDataEnabled,
-                  apiService == .jikan else {
+            guard settings.isExtendedDataEnabled,
+                  settings.extendedDataSource == .jikan else {
                 clearJikanProfileData()
                 return
             }
 
             let username = fetchedUser.name
 
-            async let favorites = jikanProfileController.fetchProfileFavorites(
-                username: username
-            )
-            async let friends = jikanProfileController.fetchFriends(
-                username: username
-            )
-            async let statistics = jikanProfileController.fetchProfileStatistics(
-                username: username
-            )
+            async let favorites = jikanProfileController.fetchProfileFavorites(username: username, apiService: settings.extendedDataSource)
+            async let friends = jikanProfileController.fetchFriends(username: username, apiService: settings.extendedDataSource)
+            async let statistics = jikanProfileController.fetchProfileStatistics(username: username, apiService: settings.extendedDataSource)
 
             jikanFavorites = try await favorites
             jikanFriends = try await friends
@@ -285,7 +281,7 @@ struct LoginView: View {
                         }
                         .isVisible(!friends.isEmpty)
                         
-                        if isExtendedDataEnabled && apiService == .jikan  {
+                        if settings.isExtendedDataEnabled && settings.extendedDataSource == .jikan  {
                             UserStatistics(
                                 title: String(localized: "Anime Statistics"),
                                 icon: "tv",
@@ -398,7 +394,7 @@ struct LoginView: View {
                                                     .cornerRadius(12)
                                                     .strokedBorder()
                                                 
-                                                Text(character.preferredNameFormat)
+                                                Text(character.preferredName(format: settings.nameFormat))
                                                     .font(.caption)
                                                     .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
                                                     .lineLimit(1)

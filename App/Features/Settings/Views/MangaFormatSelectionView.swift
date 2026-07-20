@@ -2,9 +2,13 @@ import SwiftUI
 
 struct MangaProgressFormatSelectionView: View {
     
-    @ObservedObject private var settingsManager: SettingsManager = .shared
+    @Environment(AppSettings.self)
+    private var settings
     
     var body: some View {
+        @Bindable
+        var settings = settings
+        
         List {
             Section(
                 header: Text("Preview"),
@@ -14,9 +18,9 @@ struct MangaProgressFormatSelectionView: View {
             }
             
             Section(
-                footer: Text(settingsManager.mangaFormat.description)
+                footer: Text(settings.mangaFormat.description)
             ) {
-                Picker("Format", systemImage: SeriesType.manga.icon, selection: $settingsManager.mangaFormat) {
+                Picker("Format", systemImage: SeriesType.manga.icon, selection: $settings.mangaFormat) {
                    ForEach(MangaFormat.allCases, id: \.self) { mode in
                        Text(mode.displayName)
                            .tag(mode)
