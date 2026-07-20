@@ -30,11 +30,15 @@ struct StudiosView: View {
                                 
                                 Spacer()
                                 
-                                Label("\(studio.favorites) favorites", systemImage: "heart")
+                                Label("\(studio.favorites) Favorites", systemImage: "heart")
                                     .font(.caption)
                                 
-                                Label("\(studio.count) anime", systemImage: "film.stack")
-                                    .font(.caption)
+                                Label {
+                                    Text(verbatim: "\(studio.count) Anime")
+                                } icon: {
+                                    Image(systemName: "film.stack")
+                                }
+                                .font(.caption)
                             }
                         }
                     }

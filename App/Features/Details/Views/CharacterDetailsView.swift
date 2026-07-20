@@ -33,7 +33,7 @@ struct CharacterDetailsView: View {
                                         .foregroundStyle(Color.red)
                                         .font(.caption)
                                     
-                                    Text("\(favorites) favorites")
+                                    Text("\(favorites) Favorites")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }

@@ -50,7 +50,7 @@ struct VoiceActorDetailsView: View {
                                         .foregroundStyle(.secondary)
                                         .font(.caption)
                                     
-                                    Text("\(favorites) favorites")
+                                    Text("\(favorites) Favorites")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }

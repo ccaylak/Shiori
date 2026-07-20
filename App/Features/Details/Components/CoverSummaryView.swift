@@ -136,20 +136,10 @@ private struct CountBadgeView: View {
         switch type {
         case .anime(let animeType):
             switch animeType {
-            case .movie where episodes == 1:
-                return String(localized: "\(episodes) Part")
-            case .movie where episodes > 1:
+            case .movie:
                 return String(localized: "\(episodes) Parts")
-            case .tv where episodes > 1,
-                    .ova where episodes > 1,
-                    .tvSpecial where episodes > 1,
-                    .special where episodes > 1:
+            case .tv, .ova, .tvSpecial, .special:
                 return String(localized: "\(episodes) Episodes")
-            case .tv where episodes == 1,
-                    .ova where episodes == 1,
-                    .tvSpecial where episodes == 1,
-                    .special where episodes == 1:
-                return String(localized: "\(episodes) Episode")
             default:
                 return nil
             }

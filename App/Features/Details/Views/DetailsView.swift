@@ -78,7 +78,11 @@ struct DetailsView: View {
                                             .font(.subheadline)
                                         Text("Episode")
                                             .font(.caption)
-                                        Text("\(media.getMyListStatus.watchedEpisodes)\(media.episodes != 0 ? "/\(media.episodes)" : "")")
+                                        Text(
+                                            verbatim: media.episodes > 0
+                                                ? "\(media.getMyListStatus.watchedEpisodes)/\(media.episodes)"
+                                                : String(media.getMyListStatus.watchedEpisodes)
+                                        )
                                         .font(.body)
                                         .accentColor(.primary)
                                     }
@@ -93,7 +97,11 @@ struct DetailsView: View {
                                         .font(.subheadline)
                                         Text("Volume")
                                             .font(.caption)
-                                        Text("\(media.getMyListStatus.readVolumes)\(media.volumes != 0 ? "/\(media.volumes)" : "")")
+                                        Text(
+                                            verbatim: media.volumes > 0
+                                                ? "\(media.getMyListStatus.readVolumes)/\(media.volumes)"
+                                                : String(media.getMyListStatus.readVolumes)
+                                        )
                                         .font(.body)
                                         .accentColor(.primary)
                                     }
@@ -107,7 +115,9 @@ struct DetailsView: View {
                                         Text("Chapter")
                                             .font(.caption)
                                         Text(
-                                            "\(media.getMyListStatus.readChapters)\(media.chapters != 0 ? "/\(media.chapters)" : "")"
+                                            verbatim: media.chapters > 0
+                                                ? "\(media.getMyListStatus.readChapters)/\(media.chapters)"
+                                                : String(media.getMyListStatus.readChapters)
                                         )
                                         .font(.body)
                                         .accentColor(.primary)
@@ -140,7 +150,7 @@ struct DetailsView: View {
                                     Metrics.entryAction(.added, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                 }
                             } label : {
-                                Label("Add to library",systemImage: "plus.circle.fill")
+                                Label("Add to Library",systemImage: "plus.circle.fill")
                                     .foregroundStyle(.primary)
                                     .frame(maxWidth: .infinity)
                                     .font(.title3)
@@ -259,20 +269,20 @@ struct DetailsView: View {
                                 Picker(selection: $userProgress.readChapters, label:
                                         VStack(alignment: .leading, spacing: 4) {
                                     Text("Chapter")
-                                    Text("\(userProgress.readChapters)/\(media.chapters)")
+                                    Text(verbatim: "\(userProgress.readChapters)/\(media.chapters)")
                                         .foregroundStyle(.secondary)
                                         .font(.caption)
                                         .fontWeight(.bold)
                                 }
                                 ) {
                                     ForEach(0...media.chapters, id: \.self) { chapter in
-                                        Text("\(chapter)").tag(chapter)
+                                        Text(chapter, format: .number).tag(chapter)
                                     }
                                 }
                                 .isVisible(media.chapters != 0 && (settingsManager.mangaFormat == .chapter || settingsManager.mangaFormat == .both))
                                 
                                 
-                                LabeledContent("Chapters") {
+                                LabeledContent("Chapter") {
                                     HStack(spacing: 0) {
                                         Button {
                                             userProgress.readChapters -= 1
@@ -285,7 +295,7 @@ struct DetailsView: View {
                                         
                                         Divider()
                                         
-                                        TextField("", value: $userProgress.readChapters, format: .number)
+                                        TextField("Chapter", value: $userProgress.readChapters, format: .number)
                                             .keyboardType(.numberPad)
                                             .multilineTextAlignment(.center)
                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -317,14 +327,14 @@ struct DetailsView: View {
                                 Picker(selection: $userProgress.readVolumes, label:
                                         VStack(alignment: .leading, spacing: 4) {
                                     Text("Volume")
-                                    Text("\(userProgress.readVolumes)/\(media.volumes)")
+                                    Text(verbatim: "\(userProgress.readVolumes)/\(media.volumes)")
                                         .foregroundStyle(.secondary)
                                         .font(.caption)
                                         .fontWeight(.bold)
                                 }
                                 ) {
                                     ForEach(0...media.volumes, id: \.self) { volume in
-                                        Text("\(volume)").tag(volume)
+                                        Text(volume, format: .number).tag(volume)
                                     }
                                 }
                                 .isVisible(media.volumes != 0 && (settingsManager.mangaFormat == .volume || settingsManager.mangaFormat == .both))
@@ -342,7 +352,7 @@ struct DetailsView: View {
                                         
                                         Divider()
                                         
-                                        TextField("", value: $userProgress.readVolumes, format: .number)
+                                        TextField("Volume", value: $userProgress.readVolumes, format: .number)
                                             .keyboardType(.numberPad)
                                             .multilineTextAlignment(.center)
                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -376,14 +386,14 @@ struct DetailsView: View {
                             Picker(selection: $userProgress.watchedEpisodes, label:
                                     VStack(alignment: .leading, spacing: 4) {
                                 Text("Episode")
-                                Text("\(userProgress.watchedEpisodes)/\(media.episodes)")
+                                Text(verbatim: "\(userProgress.watchedEpisodes)/\(media.episodes)")
                                     .foregroundStyle(.secondary)
                                     .font(.caption)
                                     .fontWeight(.bold)
                             }
                             ) {
                                 ForEach(0...media.episodes, id: \.self) { episode in
-                                    Text("\(episode)").tag(episode)
+                                    Text(episode, format: .number).tag(episode)
                                 }
                             }
                             .isVisible(media.isMangaOrAnime == .anime && media.episodes != 0)
@@ -401,10 +411,11 @@ struct DetailsView: View {
                                     
                                     Divider()
                                     
-                                    TextField("", value: $userProgress.watchedEpisodes, format: .number)
+                                    TextField("Episode", value: $userProgress.watchedEpisodes, format: .number)
                                         .keyboardType(.numberPad)
                                         .multilineTextAlignment(.center)
                                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .labelsHidden()
                                     
                                     Divider()
                                     
@@ -431,7 +442,7 @@ struct DetailsView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Priority")
                                 
-                                Picker("", selection: $userProgress.priority) {
+                                Picker("Priority", selection: $userProgress.priority) {
                                     ForEach(PriorityValues.allCases, id: \.self) { priority in
                                         Text(priority.displayName)
                                             .tag(priority.rawValue)
@@ -527,7 +538,7 @@ struct DetailsView: View {
                             
                             if showFinishDate {
                                 DatePicker(
-                                    "Finish date",
+                                    "Finish Date",
                                     selection: Binding(
                                         get: { finishDate ?? Date() },
                                         set: { finishDate = $0 }
@@ -635,7 +646,7 @@ struct DetailsView: View {
                                     }
                                 }
                             }
-                            .alert("Remove entry",isPresented: $showAlert) {
+                            .alert("Remove Entry",isPresented: $showAlert) {
                                 Button("Delete", role: .destructive) {
                                     didTap.toggle()
                                     Task {
@@ -695,7 +706,6 @@ struct DetailsView: View {
                         }
                     }
                     userProgress = media.getMyListStatus
-                    dump(userProgress)
                 } catch {
                     print("Fehler beim Abrufen der Daten: \(error)")
                 }
@@ -713,10 +723,10 @@ private struct Sections: View {
         GeneralOverviewView(
             type: media.specificMediaType,
             episodes: media.episodes,
+            minutes: media.averageEpisodeDurationInMinutes,
             numberOfChapters: media.chapters,
             numberOfVolumes: media.volumes,
             startDate: media.releaseStartDate,
-            minutes: media.averageEpisodeDurationInMinutes,
             endDate: media.releaseEndDate,
             studios: media.studiosList,
             authors: media.authorsList,

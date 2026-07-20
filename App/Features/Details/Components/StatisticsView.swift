@@ -10,7 +10,7 @@ struct StatisticsView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
             if users != 0 {
-                Text("Based on \(users.formatted()) user ratings")
+                Text("Based on \(users, format: .number.notation(.compactName).precision(.fractionLength(0...2))) user ratings")
                     .font(.caption2)
                     .bold()
             }

@@ -248,7 +248,7 @@ struct LibraryView: View {
                             ContentUnavailableView {
                                 Label("No entries found", systemImage: libraryManager.mediaType.icon)
                             } description: {
-                                Text("Try a different category.")
+                                Text("Try a selection a different category.")
                             }
                         }
                     }
@@ -364,7 +364,7 @@ struct LibraryView: View {
                     }
                 }
             }
-            .navigationTitle("\(libraryManager.mediaType.rawValue.capitalized) Library")
+            .navigationTitle("\(libraryManager.mediaType.displayName) Library")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(item: $selectedMedia, onDismiss: {
                 showComments = false
@@ -439,19 +439,19 @@ struct LibraryView: View {
                                 Picker(selection: $libraryEntry.readChapters, label:
                                             VStack(alignment: .leading, spacing: 4) {
                                         Text("Chapter")
-                                        Text("\(libraryEntry.readChapters)/\(media.node.chapters)")
+                                        Text(verbatim: "\(libraryEntry.readChapters)/\(media.node.chapters)")
                                             .foregroundStyle(.secondary)
                                             .font(.caption)
                                             .fontWeight(.bold)
                                     }
                                     ) {
                                         ForEach(0...media.node.chapters, id: \.self) { chapter in
-                                            Text("\(chapter)").tag(chapter)
+                                            Text(chapter, format: .number).tag(chapter)
                                         }
                                     }
                                     .isVisible(media.node.chapters != 0 && (settingsManager.mangaFormat == .chapter || settingsManager.mangaFormat == .both))
                                 
-                                LabeledContent("Chapters") {
+                                LabeledContent("Chapter") {
                                     HStack(spacing: 0) {
                                         Button {
                                             libraryEntry.readChapters -= 1
@@ -464,7 +464,7 @@ struct LibraryView: View {
 
                                         Divider()
 
-                                        TextField("", value: $libraryEntry.readChapters, format: .number)
+                                        TextField("Chapter", value: $libraryEntry.readChapters, format: .number)
                                             .keyboardType(.numberPad)
                                             .multilineTextAlignment(.center)
                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -496,14 +496,14 @@ struct LibraryView: View {
                                 Picker(selection: $libraryEntry.readVolumes, label:
                                         VStack(alignment: .leading, spacing: 4) {
                                     Text("Volume")
-                                    Text("\(libraryEntry.readVolumes)/\(media.node.volumes)")
+                                    Text(verbatim: "\(libraryEntry.readVolumes)/\(media.node.volumes)")
                                         .foregroundStyle(.secondary)
                                         .font(.caption)
                                         .fontWeight(.bold)
                                 }
                                 ) {
                                     ForEach(0...media.node.volumes, id: \.self) { volume in
-                                        Text("\(volume)").tag(volume)
+                                        Text(volume, format: .number).tag(volume)
                                     }
                                 }
                                 .isVisible(media.node.volumes != 0 && (settingsManager.mangaFormat == .volume || settingsManager.mangaFormat == .both))
@@ -522,7 +522,7 @@ struct LibraryView: View {
 
                                         Divider()
 
-                                        TextField("", value: $libraryEntry.readVolumes, format: .number)
+                                        TextField("Volume", value: $libraryEntry.readVolumes, format: .number)
                                             .keyboardType(.numberPad)
                                             .multilineTextAlignment(.center)
                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -556,14 +556,14 @@ struct LibraryView: View {
                             Picker(selection: $libraryEntry.watchedEpisodes, label:
                                     VStack(alignment: .leading, spacing: 4) {
                                 Text("Episode")
-                                Text("\(libraryEntry.watchedEpisodes)/\(media.node.episodes)")
+                                Text(verbatim: "\(libraryEntry.watchedEpisodes)/\(media.node.episodes)")
                                     .foregroundStyle(.secondary)
                                     .font(.caption)
                                     .fontWeight(.bold)
                             }
                             ) {
                                 ForEach(0...media.node.episodes, id: \.self) { episode in
-                                    Text("\(episode)").tag(episode)
+                                    Text(episode, format: .number).tag(episode)
                                 }
                             }
                             .isVisible(media.node.isMangaOrAnime == .anime && media.node.episodes != 0)
@@ -581,10 +581,11 @@ struct LibraryView: View {
 
                                     Divider()
 
-                                    TextField("", value: $libraryEntry.watchedEpisodes, format: .number)
+                                    TextField("Episode", value: $libraryEntry.watchedEpisodes, format: .number)
                                         .keyboardType(.numberPad)
                                         .multilineTextAlignment(.center)
                                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .labelsHidden()
 
                                     Divider()
 
@@ -612,7 +613,7 @@ struct LibraryView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                     Text("Priority")
 
-                                    Picker("", selection: $libraryEntry.priority) {
+                                    Picker("Priority", selection: $libraryEntry.priority) {
                                         ForEach(PriorityValues.allCases, id: \.self) { priority in
                                             Text(priority.displayName)
                                                 .tag(priority.rawValue)
@@ -708,7 +709,7 @@ struct LibraryView: View {
                             
                             if showFinishDate {
                                 DatePicker(
-                                    "Finish date",
+                                    "Finish Date",
                                     selection: Binding(
                                         get: { finishDate ?? Date() },
                                         set: { finishDate = $0 }
