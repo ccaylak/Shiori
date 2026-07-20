@@ -10,7 +10,11 @@ struct VoiceActorDetailsView: View {
     @State private var details: JikanPerson? = nil
     @State private var isDescriptionExpanded = false
     
-    @EnvironmentObject private var toastManager: ToastManager
+    @Environment(ToastManager.self)
+    private var toastManager
+    
+    @Environment(AppSettings.self)
+    private var settings
     
     let jikanPersonFullController = JikanPersonController()
     
@@ -146,7 +150,7 @@ struct VoiceActorDetailsView: View {
                 defer { toastManager.isLoading = false }
                 
                 do {
-                    details = try await jikanPersonFullController.fetchPersonFull(id: id)
+                    details = try await jikanPersonFullController.fetchPersonFull(id: id, apiService: settings.extendedDataSource)
                 } catch {
                     print("Failed to load voice actor details:", error)
                 }

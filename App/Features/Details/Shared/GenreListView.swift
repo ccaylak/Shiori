@@ -7,7 +7,11 @@ struct GenreListView: View {
     
     @State private var jikanGenresResponse = JikanGenre(data: [])
     
-    @EnvironmentObject private var toastManager: ToastManager
+    @Environment(ToastManager.self)
+    private var toastManager
+    
+    @Environment(AppSettings.self)
+    private var settings
     
     private var groupedGenres: [(title: String, items: [JikanGenreData])] {
         let grouped = Dictionary(grouping: jikanGenresResponse.data) { genre in
@@ -59,9 +63,9 @@ struct GenreListView: View {
             
             do {
                 if mode == .manga {
-                    jikanGenresResponse = try await jikanGenresController.fetchMangaGenres()
+                    jikanGenresResponse = try await jikanGenresController.fetchMangaGenres(apiService: settings.extendedDataSource)
                 } else {
-                    jikanGenresResponse = try await jikanGenresController.fetchAnimeGenres()
+                    jikanGenresResponse = try await jikanGenresController.fetchAnimeGenres(apiService: settings.extendedDataSource)
                 }
             } catch {
                 print(error)

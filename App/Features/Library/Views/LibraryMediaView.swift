@@ -5,7 +5,9 @@ struct LibraryMediaView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var upcomingSchedule: AnimeSchedule?
 
-    @ObservedObject private var settingsManager: SettingsManager = .shared
+    @Environment(AppSettings.self)
+    private var settings
+    
     @Environment(\.colorScheme) private var colorScheme
     
     let malId: Int
@@ -61,7 +63,7 @@ struct LibraryMediaView: View {
                 .padding(.vertical, 4)
                 
                 Spacer()
-                    .isVisible(settingsManager.mangaFormat != .both)
+                    .isVisible(settings.mangaFormat != .both)
                 
                 switch type {
                 case .anime(_):
@@ -86,7 +88,7 @@ struct LibraryMediaView: View {
                                                 totalEpisodes: progress.totalValue,
                                                 watchedEpisodes: progress.currentValue,
                                                 includeFirstEpisodeInDuration:
-                                                    settingsManager.includeFirstEpisodeInDuration
+                                                    settings.includeFirstEpisodeInDuration
                                             )
                                         )
                                         .font(.caption2)
@@ -94,7 +96,7 @@ struct LibraryMediaView: View {
                                         .bold()
                                         .frame(maxWidth: .infinity, alignment: .center)
                                         .isVisible(
-                                            settingsManager.animeFormat == .episodesWithDuration
+                                            settings.animeFormat == .episodesWithDuration
                                         )
                                     }
                                 }
@@ -118,12 +120,12 @@ struct LibraryMediaView: View {
 //                        if progress.totalValue > 0 {
 //                            Gauge(value: Double(progress.currentValue), in: 0...Double(progress.totalValue)) {
 //                                if (!completed) {
-//                                    Text(leftTime(episodeDurationInMinutes: episodeDurationInMinutes, totalEpisodes: progress.totalValue, watchedEpisodes: progress.currentValue, includeFirstEpisodeInDuration: settingsManager.includeFirstEpisodeInDuration))
+//                                    Text(leftTime(episodeDurationInMinutes: episodeDurationInMinutes, totalEpisodes: progress.totalValue, watchedEpisodes: progress.currentValue, includeFirstEpisodeInDuration: settings.includeFirstEpisodeInDuration))
 //                                        .font(.caption2)
 //                                        .foregroundStyle(Color.secondary)
 //                                        .bold()
 //                                        .frame(maxWidth: .infinity, alignment: .center)
-//                                        .isVisible(settingsManager.animeFormat == .episodesWithDuration)
+//                                        .isVisible(settings.animeFormat == .episodesWithDuration)
 //                                }
 //                            }
 //                                .gaugeStyle(.accessoryLinearCapacity)
@@ -158,7 +160,7 @@ struct LibraryMediaView: View {
                                 .tint(progress.secondaryTotalValue > 0 ? .accentColor : .secondary)
                                 .frame(maxWidth: 160)
                         }
-                        .isVisible(settingsManager.mangaFormat == .both || settingsManager.mangaFormat == .volume)
+                        .isVisible(settings.mangaFormat == .both || settings.mangaFormat == .volume)
                         
                         HStack {
                             Label {
@@ -183,7 +185,7 @@ struct LibraryMediaView: View {
                                 .tint(progress.totalValue > 0 ? .accentColor : .secondary)
                                 .frame(maxWidth: 160)
                         }
-                        .isVisible(settingsManager.mangaFormat == .both || settingsManager.mangaFormat == .chapter)
+                        .isVisible(settings.mangaFormat == .both || settings.mangaFormat == .chapter)
                     }
                 }
             }
@@ -210,7 +212,7 @@ struct LibraryMediaView: View {
                         let calendar = Calendar.current
 
                         let time: String = {
-                            switch settingsManager.airingNotificationTimeFormat {
+                            switch settings.airingNotificationTimeFormat {
                             case .twelveHour:
                                 airingAt.formatted(
                                     .dateTime

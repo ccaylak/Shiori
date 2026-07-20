@@ -34,39 +34,35 @@ struct Person: Decodable {
     private(set) var images: JikanImages
 }
 
-@MainActor
 extension Person {
-    var preferredNameFormat: String {
-        let nameFormat = SettingsManager.shared.nameFormat
-        
-        switch nameFormat {
-        case .lastFirst:
-            return name
-            
-        case .firstLast:
-            let parts = name.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
-            guard parts.count == 2 else {
-                return name
-            }
-            return "\(parts[1]) \(parts[0])"
-        }
+    func preferredName(format: NameFormat) -> String {
+        format.format(name)
     }
 }
 
-@MainActor
 extension MetaData {
-    var preferredNameFormat: String {
-        let nameFormat = SettingsManager.shared.nameFormat
-        
-        switch nameFormat {
+    func preferredName(format: NameFormat) -> String {
+        format.format(name)
+    }
+}
+
+extension NameFormat {
+    func format(_ name: String) -> String {
+        switch self {
         case .lastFirst:
             return name
-            
+
         case .firstLast:
-            let parts = name.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+            let parts = name
+                .split(separator: ",", maxSplits: 1)
+                .map {
+                    $0.trimmingCharacters(in: .whitespaces)
+                }
+
             guard parts.count == 2 else {
                 return name
             }
+
             return "\(parts[1]) \(parts[0])"
         }
     }

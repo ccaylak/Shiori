@@ -7,8 +7,11 @@ struct StudioDetailsView: View {
     
     @State var studio: JikanStudioData? = nil
     
-    @ObservedObject private var settingsManager: SettingsManager = .shared
-    @EnvironmentObject private var toastManager: ToastManager
+    @Environment(ToastManager.self)
+    private var toastManager
+    
+    @Environment(AppSettings.self)
+    private var settings
     
     private let jikanStudioController = JikanStudioController()
     @State var jikanAnime = JikanMedia(data: [], pagination: nil)
@@ -101,7 +104,7 @@ struct StudioDetailsView: View {
                                 isLoading = true
                                 page+=1
                                 do {
-                                    let newJikanAnimeResponse = try await jikanStudioController.fetchAnimesByAnimeStudio(id: malId,page: page)
+                                    let newJikanAnimeResponse = try await jikanStudioController.fetchAnimesByAnimeStudio(id: malId, page: page, apiService: settings.extendedDataSource)
                                     
                                     jikanAnime.append(newJikanAnimeResponse.data)
                                 }
@@ -137,10 +140,10 @@ struct StudioDetailsView: View {
                     if let initialStudio {
                         studio = initialStudio
                     } else {
-                        studio = try await jikanStudioController.fetchAnimeStudioById(id: malId).data
+                        studio = try await jikanStudioController.fetchAnimeStudioById(id: malId, apiService: settings.extendedDataSource).data
                     }
                     
-                    jikanAnime = try await jikanStudioController.fetchAnimesByAnimeStudio(id: malId, page: page)
+                    jikanAnime = try await jikanStudioController.fetchAnimesByAnimeStudio(id: malId, page: page, apiService: settings.extendedDataSource)
                 }
             }
             .navigationTitle(studio?.englishTitle ?? "") // hier

@@ -2,9 +2,6 @@ import SwiftUI
 
 struct MediaView: View {
     
-    @ObservedObject private var settingsManager: SettingsManager = .shared
-    @Environment(\.colorScheme) private var colorScheme
-    
     let title: String
     let image: String
     let releaseYear: String

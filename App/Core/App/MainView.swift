@@ -4,7 +4,9 @@ import TelemetryDeck
 struct MainView: View {
     
     @AppStorage("selectedTab") private var selectedTab = "search"
-    @ObservedObject private var settingsManager: SettingsManager = .shared
+    
+    @Environment(AppSettings.self)
+    private var settings
     
     var body: some View {
         
@@ -34,8 +36,8 @@ struct MainView: View {
                 }
                 .tag("login")
         }
-        .preferredColorScheme(ColorScheme.getByColorSchemeString(settingsManager.appearance.rawValue))
-        .accentColor(Color.getByColorString(settingsManager.accentColor.rawValue))
+        .preferredColorScheme(ColorScheme.getByColorSchemeString(settings.appearance.rawValue))
+        .accentColor(Color.getByColorString(settings.accentColor.rawValue))
     }
 }
 

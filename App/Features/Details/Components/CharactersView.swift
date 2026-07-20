@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct CharactersView: View {
+    @Environment(AppSettings.self)
+    private var settings
+    
     let characters: [CharacterData]
     let seriesType: SeriesType
     
@@ -23,10 +26,10 @@ struct CharactersView: View {
                                 AsyncImageView(imageUrl: character.character.images.jpgImage.baseImage)
                                     .frame(width: CoverSize.medium.size.width, height: CoverSize.medium.size.height)
                                     .cornerRadius(12)
-                                    .showFullTitleContextMenu(character.character.preferredNameFormat)
+                                    .showFullTitleContextMenu(character.character.preferredName(format: settings.nameFormat))
                                     .strokedBorder()
                                 
-                                Text(character.character.preferredNameFormat)
+                                Text(character.character.preferredName(format: settings.nameFormat))
                                     .font(.caption)
                                     .frame(maxWidth: CoverSize.medium.size.width, alignment: .leading)
                                     .lineLimit(1)

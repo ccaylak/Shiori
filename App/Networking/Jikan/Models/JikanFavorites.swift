@@ -21,26 +21,12 @@ struct FavoriteEntry: Decodable {
     private(set) var images: JikanImages
 }
 
-@MainActor
 extension FavoriteEntry {
-    var getName: String {
+    var displayName: String {
         name ?? "?"
     }
-    
-    var preferredNameFormat: String {
-        let nameFormat = SettingsManager.shared.nameFormat
-        
-        switch nameFormat {
-        case .lastFirst:
-            return getName
-            
-        case .firstLast:
-            
-            let parts = getName.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
-            guard parts.count == 2 else {
-                return getName
-            }
-            return "\(parts[1]) \(parts[0])"
-        }
+
+    func preferredName(format: NameFormat) -> String {
+        format.format(displayName)
     }
 }

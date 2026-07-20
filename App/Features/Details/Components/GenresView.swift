@@ -1,13 +1,16 @@
 import SwiftUI
 
 struct GenresView: View {
+    @Environment(AppSettings.self)
+    private var settings
+    
     
     let genres: [MediaGenre]
     let mode: SeriesType
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
-            NavigationLink(destination: GenresListView(genres: genres, mode: mode)) {
+            NavigationLink(destination: GenresListView(genres: genres, mode: mode, isExtendedDataEnabled: settings.isExtendedDataEnabled)) {
                 LabelWithChevron(text: "Genres")
             }
             .buttonStyle(.plain)
@@ -32,10 +35,10 @@ struct GenresView: View {
 }
 
 private struct GenresListView: View {
-    @AppStorage("extendedData") var extendedData: Bool = true
     
     let genres: [MediaGenre]
     let mode: SeriesType
+    let isExtendedDataEnabled: Bool
     
     private var groupedGenres: [(title: String, items: [MediaGenre])] {
         let grouped = Dictionary(grouping: genres) { genre in
@@ -63,7 +66,7 @@ private struct GenresListView: View {
                     ForEach(group.items, id: \.self) { genre in
                         let mediaCategory = MediaCategory(name: genre.name)
                         
-                        if extendedData {
+                        if isExtendedDataEnabled {
                             NavigationLink(
                                 destination: MediaGenresView(
                                     genreId: genre.id,
