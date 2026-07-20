@@ -26,7 +26,7 @@ enum Related: String {
         case .adaptation: return String(localized: "Adaptation", comment: "Relation type of detailview")
         case .character: return String(localized: "Character", comment: "Relation type of detailview")
         case .alternativeSetting: return String(localized: "Alternative Setting", comment: "Relation type of detailview")
-        case .unknown: return String(localized: "Unknown relationtype", comment: "Relation type of detailview")
+        case .unknown: return String(localized: "Unknown Relation Type", comment: "Relation type of detailview")
         case .summary: return String(localized: "Summary", comment: "Relation type of detailview")
         case .parentStory: return String(localized: "Parent Story", comment: "Relation type of detailview")
         case .novel: return String(localized: "Novel", comment: "Relation type of detailview")

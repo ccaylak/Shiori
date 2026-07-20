@@ -1,31 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-      "shouldTranslate" : false
-    },
-    "?" : {
-
-    },
-    "(%@)" : {
-
-    },
     "%@ Library" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ Bibliothek"
-          }
-        }
-      }
-    },
-    "%@, %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@, %2$@"
           }
         }
       }
@@ -62,89 +43,42 @@
         }
       }
     },
-    "%@, %lld Episode • %lld Minutes" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@, %2$lld Folge • %3$lld Minuten"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@, %2$lld Episode • %3$lld Minutes"
-          }
-        }
-      }
-    },
-    "%@, %lld Episodes • %lld Minutes (≈%@)" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@, %2$lld Folgen • %3$lld Minuten (≈%4$@)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@, %2$lld Episodes • %3$lld Minutes (≈%4$@)"
-          }
-        }
-      }
-    },
-    "%@, %lld part • %lld minutes" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@, %2$lld Teil • %3$lld Minuten"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@, %2$lld part • %3$lld minutes"
-          }
-        }
-      }
-    },
-    "%@, %lld parts • %lld minutes (≈%@)" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@, %2$lld Teile • %3$lld Minuten (≈%4$@)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@, %2$lld parts • %3$lld minutes (≈%4$@)"
-          }
-        }
-      }
-    },
-    "%lld" : {
-      "shouldTranslate" : false
-    },
-    "%lld anime" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Anime"
-          }
-        }
-      }
-    },
     "%lld Chapters" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Kapitel"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Kapitel"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Kapitel"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Chapter"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Chapters"
+                }
+              }
+            }
           }
         }
       }
@@ -165,22 +99,42 @@
         }
       }
     },
-    "%lld Episode" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Folge"
-          }
-        }
-      }
-    },
     "%lld Episodes" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Folgen"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Folge"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Folgen"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Episode"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Episodes"
+                }
+              }
+            }
           }
         }
       }
@@ -201,22 +155,44 @@
         }
       }
     },
-    "%lld favorites" : {
+    "%lld Favorites" : {
+      "comment" : "A label displaying the number of favorites a studio has. The argument is the number of favorites the studio has.",
+      "isCommentAutoGenerated" : true,
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Favoriten"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Favoriten"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Favoriten"
+                }
+              }
+            }
           }
-        }
-      }
-    },
-    "%lld Part" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Teil"
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Favorite"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Favorites"
+                }
+              }
+            }
           }
         }
       }
@@ -224,9 +200,39 @@
     "%lld Parts" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Teile"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Teil"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Teile"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Part"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Parts"
+                }
+              }
+            }
           }
         }
       }
@@ -234,30 +240,39 @@
     "%lld Volumes" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Bände"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Band"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Bände"
+                }
+              }
+            }
           }
-        }
-      }
-    },
-    "%lld/%lld" : {
-      "localizations" : {
+        },
         "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld/%2$lld"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
-    "%lld%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld%2$@"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Volume"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Volumes"
+                }
+              }
+            }
           }
         }
       }
@@ -458,17 +473,6 @@
         }
       }
     },
-    "Adaption" : {
-      "comment" : "Relation type of detailview",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adaption"
-          }
-        }
-      }
-    },
     "Add Finish Date" : {
       "localizations" : {
         "de" : {
@@ -499,7 +503,7 @@
         }
       }
     },
-    "Add to library" : {
+    "Add to Library" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -509,9 +513,17 @@
         }
       }
     },
-    "Added to library" : {
-      "comment" : "Text displayed in a toast when an item is added to the library.",
-      "isCommentAutoGenerated" : true
+    "Added to Library" : {
+      "comment" : "Text displayed in a toast when a show is added to the library.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zur Bibliothek hinzugefügt"
+          }
+        }
+      }
     },
     "Additional data for anime, manga, characters and people." : {
       "localizations" : {
@@ -575,18 +587,20 @@
         }
       }
     },
-    "Aired from %@ - %@" : {
+    "Aired from %@ – %@" : {
+      "comment" : "A sentence that indicates the airing dates of a media. The argument is the start date, and the second argument is the end date.",
+      "isCommentAutoGenerated" : true,
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ausgestrahlt von %1$@ - %2$@"
+            "value" : "Ausgestrahlt vom %1$@ bis %1$@"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Aired from %1$@ - %2$@"
+            "value" : "Aired from %1$@ – %2$@"
           }
         }
       }
@@ -632,7 +646,7 @@
         }
       }
     },
-    "Airing soon" : {
+    "Airing Soon" : {
       "comment" : "Status",
       "localizations" : {
         "de" : {
@@ -716,19 +730,6 @@
         }
       }
     },
-    "Anime Notifications" : {
-      "comment" : "The title of the notification settings view.",
-      "extractionState" : "stale",
-      "isCommentAutoGenerated" : true,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anime-Benachrichtigungen"
-          }
-        }
-      }
-    },
     "Anime Progress Format" : {
       "localizations" : {
         "de" : {
@@ -801,7 +802,14 @@
       }
     },
     "API" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API"
+          }
+        }
+      }
     },
     "App Info" : {
       "localizations" : {
@@ -976,16 +984,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kapitel +1"
-          }
-        }
-      }
-    },
-    "Chapters" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kapitel"
           }
         }
       }
@@ -1248,7 +1246,7 @@
         }
       }
     },
-    "Currently publishing" : {
+    "Currently Publishing" : {
       "comment" : "Status",
       "localizations" : {
         "de" : {
@@ -1373,9 +1371,6 @@
         }
       }
     },
-    "Doe, John" : {
-      "shouldTranslate" : false
-    },
     "Doujinshi" : {
       "comment" : "Manga type",
       "localizations" : {
@@ -1483,7 +1478,14 @@
       }
     },
     "Episode %lld" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folge %lld"
+          }
+        }
+      }
     },
     "Episode %lld airs in 1 hour." : {
       "comment" : "A notification body that appears in a notification when an anime episode airs in one hour. The argument is the episode number.",
@@ -1748,7 +1750,7 @@
         }
       }
     },
-    "Finish date" : {
+    "Finish Date" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1999,9 +2001,6 @@
         }
       }
     },
-    "Heute, %@" : {
-
-    },
     "High" : {
       "comment" : "Priority",
       "localizations" : {
@@ -2055,9 +2054,6 @@
           }
         }
       }
-    },
-    "Id" : {
-      "shouldTranslate" : false
     },
     "Idols (Female)" : {
       "comment" : "Theme",
@@ -2142,9 +2138,6 @@
           }
         }
       }
-    },
-    "John Doe" : {
-      "shouldTranslate" : false
     },
     "Join date" : {
       "localizations" : {
@@ -2282,7 +2275,15 @@
     },
     "Loading..." : {
       "comment" : "Title of a toast that appears when loading.",
-      "isCommentAutoGenerated" : true
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laden…"
+          }
+        }
+      }
     },
     "Location" : {
       "localizations" : {
@@ -2589,9 +2590,6 @@
         }
       }
     },
-    "Morgen, %@" : {
-
-    },
     "Most Favorited" : {
       "comment" : "Sort by",
       "localizations" : {
@@ -2797,7 +2795,7 @@
         }
       }
     },
-    "On hiatus" : {
+    "On Hiatus" : {
       "comment" : "Status",
       "localizations" : {
         "de" : {
@@ -3116,9 +3114,17 @@
         }
       }
     },
-    "Progress updated" : {
-      "comment" : "Text displayed in a toast when the progress of a watched episode is updated.",
-      "isCommentAutoGenerated" : true
+    "Progress Updated" : {
+      "comment" : "Text displayed in a toast when the user has updated their progress on a show.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortschritt aktualisiert"
+          }
+        }
+      }
     },
     "Psychological" : {
       "comment" : "Theme",
@@ -3167,13 +3173,13 @@
         }
       }
     },
-    "Publishing soon" : {
+    "Publishing Soon" : {
       "comment" : "Status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erscheint bald"
+            "value" : "Erscheint demnächst"
           }
         }
       }
@@ -3273,9 +3279,27 @@
         }
       }
     },
-    "Removed from library" : {
+    "Remove Entry" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eintrag entfernen"
+          }
+        }
+      }
+    },
+    "Removed from Library" : {
       "comment" : "Text displayed in a toast when an item is removed from the library.",
-      "isCommentAutoGenerated" : true
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Bibliothek entfernt"
+          }
+        }
+      }
     },
     "Reverse Harem" : {
       "comment" : "Theme",
@@ -3575,16 +3599,6 @@
     "Sort manga" : {
 
     },
-    "Source" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorlage"
-          }
-        }
-      }
-    },
     "Space" : {
       "comment" : "Theme",
       "localizations" : {
@@ -3880,6 +3894,26 @@
         }
       }
     },
+    "Today" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute"
+          }
+        }
+      }
+    },
+    "Tomorrow" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morgen"
+          }
+        }
+      }
+    },
     "Top Airing Anime" : {
       "comment" : "Sort by",
       "localizations" : {
@@ -4075,12 +4109,12 @@
         }
       }
     },
-    "Try a different category." : {
+    "Try a selection a different category." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Probiere einen anderen Filter aus."
+            "value" : "Probiere eine andere Kategorie aus."
           }
         }
       }
@@ -4159,24 +4193,24 @@
         }
       }
     },
-    "Unknown relationtype" : {
+    "Unknown Relation Type" : {
       "comment" : "Relation type of detailview",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unbekannt"
+            "value" : "Unbekannte Verknüpfungsart"
           }
         }
       }
     },
-    "Unknown status" : {
+    "Unknown Status" : {
       "comment" : "Status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unbekannter Fortschritt"
+            "value" : "Unbekannter Status"
           }
         }
       }

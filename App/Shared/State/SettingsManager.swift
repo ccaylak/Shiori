@@ -1,6 +1,7 @@
 import SwiftUI
 
-@MainActor final class SettingsManager: ObservableObject {
+@MainActor
+final class SettingsManager: ObservableObject {
     static let shared = SettingsManager()
     
     @AppStorage("appearance") var appearance = Appearance.system

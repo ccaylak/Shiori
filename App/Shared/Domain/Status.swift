@@ -15,8 +15,8 @@ enum Status: Equatable {
             switch self {
             case .finishedAiring: return String(localized: "Finished", comment: "Status")
             case .currentlyAiring: return String(localized: "Airing", comment: "Status")
-            case .notYetAired: return String(localized: "Airing soon", comment: "Status")
-            case .unknown: return String(localized: "Unknown status", comment: "Status")
+            case .notYetAired: return String(localized: "Airing Soon", comment: "Status")
+            case .unknown: return String(localized: "Unknown Status", comment: "Status")
             }
         }
     }
@@ -30,11 +30,11 @@ enum Status: Equatable {
         var displayName: String {
             switch self {
             case .finished: return String(localized: "Finished", comment: "Status")
-            case .currentlyPublishing: return String(localized: "Currently publishing", comment: "Status")
-            case .notYetPublished: return String(localized: "Publishing soon", comment: "Status")
-            case .onHiatus: return String(localized: "On hiatus", comment: "Status")
+            case .currentlyPublishing: return String(localized: "Currently Publishing", comment: "Status")
+            case .notYetPublished: return String(localized: "Publishing Soon", comment: "Status")
+            case .onHiatus: return String(localized: "On Hiatus", comment: "Status")
             case .discontinued: return String(localized: "Discontinued", comment: "Status")
-            case .unknown: return String(localized: "Unknown status", comment: "Status")
+            case .unknown: return String(localized: "Unknown Status", comment: "Status")
             }
         }
     }
@@ -43,7 +43,7 @@ enum Status: Equatable {
         switch self {
         case .anime(let status): return status.displayName
         case .manga(let status): return status.displayName
-        case .unknown: return String("Unknown status")
+        case .unknown: return String("Unknown Status")
         }
     }
 }

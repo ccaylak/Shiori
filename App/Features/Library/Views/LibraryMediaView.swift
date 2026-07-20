@@ -47,9 +47,15 @@ struct LibraryMediaView: View {
                             .foregroundColor(isRated ? .yellow : .secondary)
                             .font(.system(size: 14, weight: .bold))
 
-                        Text(isRated ? "\(score)" : "?")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(isRated ? .primary : .secondary)
+                        Group {
+                            if isRated {
+                                Text(score,format: .number)
+                            } else {
+                                Text(verbatim: "?")
+                            }
+                        }
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundStyle(isRated ? Color.primary : Color.secondary)
                     }
                 }
                 .padding(.vertical, 4)
@@ -61,13 +67,15 @@ struct LibraryMediaView: View {
                 case .anime(_):
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
-                            Label(
-                                progress.totalValue > 0
-                                    ? "\(progress.currentValue)/\(progress.totalValue)"
-                                    : "\(progress.currentValue)",
-                                systemImage: "tv"
-                            )
-                            .font(.caption)
+                            Label {
+                                Text(
+                                    verbatim: progress.totalValue > 0
+                                        ? "\(progress.currentValue)/\(progress.totalValue)"
+                                        : "\(progress.currentValue)"
+                                )
+                            } icon: {
+                                Image(systemName: "tv")
+                            }                            .font(.caption)
                             .foregroundStyle(Color.secondary)
                             .fontWeight(.semibold)
 
@@ -129,9 +137,15 @@ struct LibraryMediaView: View {
                 case .manga(_):
                     VStack(alignment: .leading, spacing: 3) {
                         HStack {
-                            Label(progress.secondaryTotalValue > 0
-                                  ? "\(progress.secondaryCurrentValue)/\(progress.secondaryTotalValue)"
-                                  : "\(progress.secondaryCurrentValue)", systemImage: "character.book.closed.fill.ja")
+                            Label {
+                                Text(
+                                    verbatim: progress.secondaryTotalValue > 0
+                                        ? "\(progress.secondaryCurrentValue)/\(progress.secondaryTotalValue)"
+                                        : "\(progress.secondaryCurrentValue)"
+                                )
+                            } icon: {
+                                Image(systemName: "character.book.closed.fill.ja")
+                            }
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .fontWeight(.semibold)
@@ -147,9 +161,15 @@ struct LibraryMediaView: View {
                         .isVisible(settingsManager.mangaFormat == .both || settingsManager.mangaFormat == .volume)
                         
                         HStack {
-                            Label(progress.totalValue > 0
-                                  ? "\(progress.currentValue)/\(progress.totalValue)"
-                                  : "\(progress.currentValue)", systemImage: "book.pages.fill")
+                            Label {
+                                Text(
+                                    verbatim: progress.totalValue > 0
+                                        ? "\(progress.currentValue)/\(progress.totalValue)"
+                                        : "\(progress.currentValue)"
+                                )
+                            } icon: {
+                                Image(systemName: "book.pages.fill")
+                            }
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .fontWeight(.semibold)
@@ -185,48 +205,36 @@ struct LibraryMediaView: View {
                     Divider()
                         .overlay(Color.accentColor.opacity(0.15))
 
-                    Text({
+                    Text(verbatim: {
                         let airingAt = upcomingSchedule.airingAt
                         let calendar = Calendar.current
 
                         let time: String = {
                             switch settingsManager.airingNotificationTimeFormat {
                             case .twelveHour:
-                                return airingAt.formatted(
+                                airingAt.formatted(
                                     .dateTime
-                                        .hour(
-                                            .defaultDigits(
-                                                amPM: .abbreviated
-                                            )
-                                        )
+                                        .hour(.defaultDigits(amPM: .abbreviated))
                                         .minute(.twoDigits)
-                                        .locale(
-                                            Locale(identifier: "en_US")
-                                        )
+                                        .locale(Locale(identifier: "en_US"))
                                 )
 
                             case .twentyFourHour:
-                                return airingAt.formatted(
+                                airingAt.formatted(
                                     .dateTime
-                                        .hour(
-                                            .twoDigits(
-                                                amPM: .omitted
-                                            )
-                                        )
+                                        .hour(.twoDigits(amPM: .omitted))
                                         .minute(.twoDigits)
-                                        .locale(
-                                            Locale(identifier: "de_DE")
-                                        )
+                                        .locale(Locale(identifier: "de_DE"))
                                 )
                             }
                         }()
 
                         if calendar.isDateInToday(airingAt) {
-                            return "Heute, \(time)"
+                            return "\(String(localized: "Today")), \(time)"
                         }
 
                         if calendar.isDateInTomorrow(airingAt) {
-                            return "Morgen, \(time)"
+                            return "\(String(localized: "Tomorrow")), \(time)"
                         }
 
                         let daysUntilAiring = calendar.dateComponents(
@@ -237,8 +245,7 @@ struct LibraryMediaView: View {
 
                         if daysUntilAiring < 7 {
                             let weekday = airingAt.formatted(
-                                .dateTime
-                                    .weekday(.abbreviated)
+                                .dateTime.weekday(.abbreviated)
                             )
 
                             return "\(weekday), \(time)"

@@ -33,7 +33,7 @@ struct StudioDetailsView: View {
                                         .foregroundStyle(.secondary)
                                         .font(.caption)
                                     
-                                    Text("\(studio.count) anime")
+                                    Text(verbatim: "\(studio.count) Anime")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -44,7 +44,7 @@ struct StudioDetailsView: View {
                                         .foregroundStyle(Color.red)
                                         .font(.caption)
                                     
-                                    Text("\(studio.favorites) favorites")
+                                    Text("\(studio.favorites) Favorites")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }

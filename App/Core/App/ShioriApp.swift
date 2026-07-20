@@ -60,7 +60,7 @@ struct ShioriApp: App {
                             .accentColor
                         ),
                         title: String(
-                            localized: "Added to library"
+                            localized: "Added to Library"
                         )
                     )
                 }
@@ -75,7 +75,7 @@ struct ShioriApp: App {
                             .red
                         ),
                         title: String(
-                            localized: "Removed from library"
+                            localized: "Removed from Library"
                         )
                     )
                 }
@@ -90,7 +90,7 @@ struct ShioriApp: App {
                             .accentColor
                         ),
                         title: String(
-                            localized: "Progress updated"
+                            localized: "Progress Updated"
                         )
                     )
                 }

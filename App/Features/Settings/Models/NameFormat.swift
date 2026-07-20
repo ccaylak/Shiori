@@ -6,9 +6,9 @@ enum NameFormat: String, CaseIterable {
     var displayName: String {
         switch self {
         case .firstLast:
-            return String(localized: "John Doe")
+            return "John Doe"
         case .lastFirst:
-            return String(localized: "Doe, John")
+            return "Doe, John"
         }
     }
     

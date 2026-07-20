@@ -12,7 +12,7 @@ struct OriginView: View {
     var body: some View {
         if !relations.isEmpty {
             VStack(alignment: .leading) {
-                Text(relations[0].type == "anime" ? "Adaption" : "Source")
+                Text(relations[0].type == "anime" ? "Anime" : "Manga")
                     .font(.title2)
                     .bold()
                     .padding(.horizontal)
