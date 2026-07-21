@@ -25,6 +25,9 @@ struct ShioriApp: App {
     @State
     var seasonSettings = SeasonSettings()
     
+    @State
+    private var networkMonitor = NetworkMonitor()
+    
     private var tokenHandler: TokenHandler = .shared
     private let notificationDelegate = NotificationDelegate()
     
@@ -52,7 +55,6 @@ struct ShioriApp: App {
                     .presentationBackgroundInteraction(.disabled)
                     .interactiveDismissDisabled()
                 }
-                
                 .toast(
                     isPresenting: $toastManager.isLoading,
                     tapToDismiss: false
@@ -107,6 +109,36 @@ struct ShioriApp: App {
                         )
                     )
                 }
+            
+                .toast(
+                    isPresenting: $toastManager.showNoConnectionToast
+                ) {
+                    GlassToast(
+                        displayMode: .hud,
+                        type: .systemImage(
+                            "wifi.slash",
+                            .red
+                        ),
+                        title: String(
+                            localized: "No Connection"
+                        )
+                    )
+                }
+            
+                .toast(
+                    isPresenting: $toastManager.showWeakConnectionToast
+                ) {
+                    GlassToast(
+                        displayMode: .hud,
+                        type: .systemImage(
+                            "wifi.exclamationmark",
+                            .orange
+                        ),
+                        title: String(
+                            localized: "Weak Connection"
+                        )
+                    )
+                }
                 
                 .onAppear {
                     if isFirstLaunch {
@@ -114,6 +146,27 @@ struct ShioriApp: App {
                         shouldShowOnboarding = true
                         isFirstLaunch = false
                     }
+                }
+            
+                .onChange(of: networkMonitor.status) { oldStatus, newStatus in
+                    guard oldStatus != .checking,
+                          newStatus == .disconnected else {
+                        return
+                    }
+
+                    toastManager.showNoConnectionToast = true
+                    TelemetryDeck.signal("Network.connectionLost")
+                }
+                .onChange(of: networkMonitor.quality) { oldQuality, newQuality in
+                    guard networkMonitor.status == .connected,
+                          oldQuality != .unknown,
+                          oldQuality != .weak,
+                          newQuality == .weak else {
+                        return
+                    }
+
+                    toastManager.showWeakConnectionToast = true
+                    TelemetryDeck.signal("Network.connectionWeak")
                 }
         }
         .modelContainer(for: AnimeSchedule.self)
