@@ -8,7 +8,7 @@ struct RecommendationsView: View {
         if !recommendations.isEmpty {
             VStack(alignment: .leading, spacing: 5) {
                 NavigationLink(destination: RecommendationsListView(recommendations: recommendations)) {
-                    LabelWithChevron(text: "Recommendations")
+                    LabelWithChevron("Recommendations")
                         .padding(.horizontal)
                 }
                 .buttonStyle(.plain)

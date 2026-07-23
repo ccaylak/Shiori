@@ -62,7 +62,7 @@ struct StudioDetailsView: View {
                     .padding(.bottom)
                 }
                 VStack(spacing: 5) {
-                    LabelWithChevron(text: "Anime")
+                    LabelWithChevron("Anime")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
 

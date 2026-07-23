@@ -11,7 +11,7 @@ struct GenresView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             NavigationLink(destination: GenresListView(genres: genres, mode: mode, isExtendedDataEnabled: settings.isExtendedDataEnabled)) {
-                LabelWithChevron(text: "Genres")
+                LabelWithChevron("Genres")
             }
             .buttonStyle(.plain)
             

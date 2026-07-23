@@ -74,9 +74,7 @@ struct CharacterDetailsView: View {
                 
                 if let voices = details?.data.voices, !voices.isEmpty {
                     VStack(alignment: .leading, spacing: 5) {
-                        LabelWithChevron(
-                            text: String(localized: "Voice Actors")
-                        )
+                        LabelWithChevron("Voice Actors")
                         .padding(.horizontal)
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 10) {
@@ -118,7 +116,7 @@ struct CharacterDetailsView: View {
                 
                 if let animeAppearances = details?.data.anime, !animeAppearances.isEmpty {
                     VStack(alignment: .leading, spacing: 5) {
-                        LabelWithChevron(text: String(localized: "Anime Appearances"))
+                        LabelWithChevron("Anime Appearances")
                         .padding(.horizontal)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -157,7 +155,7 @@ struct CharacterDetailsView: View {
                 
                 if let mangaAppearances = details?.data.manga, !mangaAppearances.isEmpty {
                     VStack(alignment: .leading, spacing: 5) {
-                        LabelWithChevron(text: String(localized: "Manga Appearances"))
+                        LabelWithChevron("Manga Appearances")
                         .padding(.horizontal)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
