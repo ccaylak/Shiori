@@ -8,6 +8,9 @@ struct SettingsView: View {
     
     private var tokenHandler: TokenHandler = .shared
     
+    @State
+    private var isResetConfirmationPresented = false
+    
     var body: some View {
         @Bindable
         var settings = settings
@@ -199,6 +202,31 @@ struct SettingsView: View {
                         Text("You’ll be redirected to MyAnimeList.net to complete the deletion.")
                     }
                 }
+                
+                Section {
+                    Button(role: .destructive) {
+                        isResetConfirmationPresented = true
+                    } label: {
+                        Label("Reset Settings", systemImage: "arrow.trianglehead.2.clockwise.rotate.90.icloud")
+                    }
+                } header: {
+                    Text(verbatim: "iCloud")
+                } footer: {
+                    Text("Resets all synced app settings to their defaults across your devices.")
+                }
+            }
+            .alert("Reset Settings?", isPresented: $isResetConfirmationPresented) {
+                Button("Reset", role: .destructive) {
+                    Task {
+                        await AnimeNotificationManager.cancelNotifications()
+                        settings.resetToDefaults()
+                    }
+                }
+
+                Button("Cancel", role: .cancel
+                ) {}
+            } message: {
+                Text("Your app settings will be reset to their defaults. This change will sync to your other devices through iCloud.")
             }
         }
         .navigationTitle("Settings")

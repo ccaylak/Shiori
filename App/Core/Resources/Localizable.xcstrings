@@ -3349,6 +3349,46 @@
         }
       }
     },
+    "Reset" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurücksetzen"
+          }
+        }
+      }
+    },
+    "Reset Settings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen zurücksetzen"
+          }
+        }
+      }
+    },
+    "Reset Settings?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen zurücksetzen?"
+          }
+        }
+      }
+    },
+    "Resets all synced app settings to their defaults across your devices." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine App-Einstellungen werden auf die Standardwerte zurückgesetzt. Diese Änderung wird über iCloud mit deinen anderen Geräten synchronisiert."
+          }
+        }
+      }
+    },
     "Reverse Harem" : {
       "comment" : "Theme",
       "localizations" : {
@@ -4479,6 +4519,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zur vollständigen Löschung wirst du zu MyAnimeList.net weitergeleitet."
+          }
+        }
+      }
+    },
+    "Your app settings will be reset to their defaults. This change will sync to your other devices through iCloud." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine App-Einstellungen werden auf die Standardwerte zurückgesetzt und über iCloud auf deinen anderen Geräten aktualisiert."
           }
         }
       }

@@ -1,7 +1,10 @@
 import Foundation
 
 extension UserDefaults {
-    func boolValue(forKey key: String, default defaultValue: Bool) -> Bool {
+    func boolValue(
+        forKey key: String,
+        default defaultValue: Bool
+    ) -> Bool {
         guard object(forKey: key) != nil else {
             return defaultValue
         }
@@ -9,7 +12,10 @@ extension UserDefaults {
         return bool(forKey: key)
     }
 
-    func enumValue<Value: RawRepresentable>(forKey key: String, default defaultValue: Value) -> Value {
+    func enumValue<Value: RawRepresentable>(
+        forKey key: String,
+        default defaultValue: Value
+    ) -> Value {
         guard
             let rawValue = object(forKey: key) as? Value.RawValue,
             let value = Value(rawValue: rawValue)
@@ -19,8 +25,11 @@ extension UserDefaults {
 
         return value
     }
-    
-    func intValue(forKey key: String, default defaultValue: Int) -> Int {
+
+    func intValue(
+        forKey key: String,
+        default defaultValue: Int
+    ) -> Int {
         guard object(forKey: key) != nil else {
             return defaultValue
         }
