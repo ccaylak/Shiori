@@ -8,6 +8,9 @@ struct SettingsView: View {
     
     private var tokenHandler: TokenHandler = .shared
     
+    @State
+    private var isResetConfirmationPresented = false
+    
     var body: some View {
         @Bindable
         var settings = settings
@@ -151,41 +154,6 @@ struct SettingsView: View {
                     }
                 }
                 
-                Section ("Contact"){
-                    Link(destination: URL(string: "mailto:shiori.app@icloud.com")!) {
-                        Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Mail")
-                                    .foregroundStyle(Color.primary)
-                                
-                                Text("Feedback and Support")
-                                    .font(.caption)
-                                    .foregroundStyle(Color.secondary)
-                            }
-                        } icon: {
-                            Image(systemName: "envelope")
-                        }
-                    }
-                    Link(destination: URL(string: "https://discord.gg/4ajqv3aMdd")!) {
-                        Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(verbatim: "Discord")
-                                    .foregroundStyle(Color.primary)
-                                
-                                Text("Updates and More")
-                                    .font(.caption)
-                                    .foregroundStyle(Color.secondary)
-                            }
-                        } icon: {
-                            Image("discord_icon")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-                }
-                
                 if tokenHandler.isAuthenticated {
                     Section {
                         Button(role: .destructive) {
@@ -195,10 +163,37 @@ struct SettingsView: View {
                         } label: {
                             Label("Delete MyAnimeList Account", systemImage: "trash")
                         }
+                    } header: {
+                        Text(verbatim: "MyAnimeList")
                     } footer: {
                         Text("You’ll be redirected to MyAnimeList.net to complete the deletion.")
                     }
                 }
+                
+                Section {
+                    Button(role: .destructive) {
+                        isResetConfirmationPresented = true
+                    } label: {
+                        Label("Reset Settings", systemImage: "arrow.trianglehead.2.clockwise.rotate.90.icloud")
+                    }
+                } header: {
+                    Text(verbatim: "iCloud")
+                } footer: {
+                    Text("Resets all synced app settings to their defaults across your devices.")
+                }
+            }
+            .alert("Reset Settings?", isPresented: $isResetConfirmationPresented) {
+                Button("Reset", role: .destructive) {
+                    Task {
+                        await AnimeNotificationManager.cancelNotifications()
+                        settings.resetToDefaults()
+                    }
+                }
+
+                Button("Cancel", role: .cancel
+                ) {}
+            } message: {
+                Text("Your app settings will be reset to their defaults. This change will sync to your other devices through iCloud.")
             }
         }
         .navigationTitle("Settings")
@@ -230,6 +225,41 @@ private struct AboutView: View {
             Section {
                 LabeledContent("App Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
                 LabeledContent("Build Number", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
+            }
+            
+            Section ("Contact"){
+                Link(destination: URL(string: "mailto:shiori.app@icloud.com")!) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Mail")
+                                .foregroundStyle(Color.primary)
+                            
+                            Text("Feedback and Support")
+                                .font(.caption)
+                                .foregroundStyle(Color.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "envelope")
+                    }
+                }
+                Link(destination: URL(string: "https://discord.gg/4ajqv3aMdd")!) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(verbatim: "Discord")
+                                .foregroundStyle(Color.primary)
+                            
+                            Text("Updates and More")
+                                .font(.caption)
+                                .foregroundStyle(Color.secondary)
+                        }
+                    } icon: {
+                        Image("discord_icon")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(.accentColor)
+                    }
+                }
             }
             
             Section ("Third-Party Services") {

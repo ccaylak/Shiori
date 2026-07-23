@@ -27,12 +27,23 @@ final class JikanStudioController {
             throw URLError(.badURL)
         }
         
-        components.queryItems = [
+        var queryItems = [
             URLQueryItem(name: "order_by", value: order),
-            URLQueryItem(name: "q", value: searchTerm),
             URLQueryItem(name: "sort", value: sort),
             URLQueryItem(name: "page", value: "\(page)")
         ]
+
+        if !searchTerm.isEmpty {
+            let query = searchTerm.count < 3
+                ? searchTerm + String(repeating: " ", count: 3 - searchTerm.count)
+                : searchTerm
+
+            queryItems.append(
+                URLQueryItem(name: "q", value: query)
+            )
+        }
+
+        components.queryItems = queryItems
         
         guard let url = components.url else {
             throw URLError(.badURL)

@@ -103,7 +103,7 @@ struct VoiceActorDetailsView: View {
                 .padding(.horizontal)
                 
                 VStack(alignment: .leading) {
-                    LabelWithChevron(text: String(localized: "Characters"))
+                    LabelWithChevron("Characters")
                         .padding(.horizontal)
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(spacing: 10) {

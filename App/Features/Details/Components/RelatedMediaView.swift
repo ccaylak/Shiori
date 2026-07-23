@@ -33,7 +33,7 @@ struct RelatedMediaView: View {
     var body: some View {
         if !relevantItems.isEmpty {
             VStack(alignment: .leading, spacing: 5) {
-                LabelWithChevron(text: "Related")
+                LabelWithChevron("Related")
                     .padding(.horizontal)
                 
                 ScrollView(.horizontal, showsIndicators: false) {

@@ -39,7 +39,7 @@ struct StatisticsView: View {
         .padding(.horizontal)
     }
 
-    private func statSection(icon: String, label: String, value: String) -> some View {
+    private func statSection(icon: String, label: LocalizedStringResource, value: String) -> some View {
         VStack(spacing: 3) {
             Image(systemName: icon)
                 .font(.subheadline)

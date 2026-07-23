@@ -10,7 +10,7 @@ struct CharactersView: View {
     var body: some View {
         
         VStack (alignment: .leading, spacing: 5) {
-            LabelWithChevron(text: "Characters")
+            LabelWithChevron("Characters")
             .padding(.horizontal)
             
             ScrollView(.horizontal, showsIndicators: false) {
