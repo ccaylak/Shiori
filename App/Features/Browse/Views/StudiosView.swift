@@ -12,6 +12,7 @@ struct StudiosView: View {
     
     @State var jikanStudio = JikanStudio(data: [], pagination: nil)
     @State var searchText: String = ""
+    @State private var isSearchPresented = false
     
     @State var studioPage = 1
     @State var isLoading = false
@@ -124,7 +125,11 @@ struct StudiosView: View {
                     }
                 }
             }
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+            .searchable(
+                text: $searchText,
+                isPresented: $isSearchPresented,
+                placement: .navigationBarDrawer(displayMode: .always)
+            )
             
         }
         .listRowSpacing(10)
@@ -149,6 +154,21 @@ struct StudiosView: View {
             Task {
                 jikanStudio = try await jikanStudioController.fetchAnimeStudios(
                     searchTerm: searchText,
+                    order: resultSettings.animeStudioOption.rawValue,
+                    sort: resultSettings.animeStudioSort.rawValue,
+                    page: studioPage,
+                    apiService: settings.extendedDataSource
+                )
+            }
+        }
+        .onChange(of: isSearchPresented) { oldValue, newValue in
+            guard oldValue, !newValue else { return }
+            searchText = ""
+            studioPage = 1
+
+            Task {
+                jikanStudio = try await jikanStudioController.fetchAnimeStudios(
+                    searchTerm: "",
                     order: resultSettings.animeStudioOption.rawValue,
                     sort: resultSettings.animeStudioSort.rawValue,
                     page: studioPage,
