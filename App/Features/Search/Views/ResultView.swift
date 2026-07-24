@@ -1,10 +1,8 @@
 import SwiftUI
 
 struct ResultView: View {
-    
-    private let mangaController = MangaController()
-    private let animeController = AnimeController()
-    private let userController = UserController()
+    @Environment(MALDependencies.self)
+    private var malDependencies
     
     @State var mediaResponse = MediaResponse(data: [], paging: nil)
     @State private var searchTerm: String = ""
@@ -49,7 +47,7 @@ struct ResultView: View {
                         defer { isLoading = false }
                         
                         do {
-                            let newMediaResponse = try await userController.fetchNextPage(nextPage)
+                            let newMediaResponse = try await malDependencies.userController.fetchNextPage(nextPage)
                             mediaResponse.append(newMediaResponse.data)
                             mediaResponse.updatePaging(newMediaResponse.paging)
                         } catch {
@@ -109,13 +107,13 @@ struct ResultView: View {
         do {
             switch resultSettings.seriesType {
             case .anime:
-                mediaResponse = try await animeController.fetchPreviews(
+                mediaResponse = try await malDependencies.animeController.fetchPreviews(
                     searchTerm: searchTerm,
                     showNsfwContent: settings.showNsfwContent,
                     rankingType: resultSettings.animeRankingType
                 )
             case .manga:
-                mediaResponse = try await mangaController.fetchPreviews(
+                mediaResponse = try await malDependencies.mangaController.fetchPreviews(
                     searchTerm: searchTerm,
                     showNsfwContent: settings.showNsfwContent,
                     rankingType: resultSettings.mangaRankingType

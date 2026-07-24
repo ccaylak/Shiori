@@ -22,16 +22,22 @@ struct DetailsView: View {
     
     @State private var didTap = false
     
-    @ObservedObject private var tokenHandler: TokenHandler = .shared
-    
     @Environment(AppSettings.self)
     private var settings
     
     @Environment(ToastManager.self)
     private var toastManager
     
-    let animeController = AnimeController()
-    let mangaController = MangaController()
+    @Environment(AccountSession.self)
+    private var accountSession
+
+    @Environment(MALDependencies.self)
+    private var malDependencies
+
+    private var isMALAuthenticated: Bool {
+        accountSession.activeProvider == .myAnimeList
+    }
+    
     let jikanCharacterController = JikanCharacterController()
     let jikanRelationsController = JikanRelationsController()
     
@@ -49,7 +55,7 @@ struct DetailsView: View {
                         summary: media.synopsisText,
                         type: media.specificMediaType
                     )
-                    if tokenHandler.isAuthenticated {
+                    if isMALAuthenticated {
                         if media.getEntryStatus != .notSet {
                             HStack(alignment: .center) {
                                 VStack(spacing: 3) {
@@ -143,12 +149,12 @@ struct DetailsView: View {
                                         toastManager.isLoading = false
                                     }
                                     if (media.isMangaOrAnime == .anime) {
-                                        try await animeController.addToWatchList(id: media.id)
-                                        media = try await animeController.fetchDetails(id: media.id)
+                                        try await malDependencies.animeController.addToWatchList(id: media.id)
+                                        media = try await malDependencies.animeController.fetchDetails(id: media.id)
                                     }
                                     if (media.isMangaOrAnime == .manga) {
-                                        try await mangaController.addToReadingList(id: media.id)
-                                        media = try await mangaController.fetchDetails(id: media.id)
+                                        try await malDependencies.mangaController.addToReadingList(id: media.id)
+                                        media = try await malDependencies.mangaController.fetchDetails(id: media.id)
                                     }
                                     Metrics.entryAction(.added, format: media.isMangaOrAnime, mediaType: media.specificMediaType)
                                 }
@@ -562,7 +568,7 @@ struct DetailsView: View {
                                 Button(role: .confirm) {
                                     Task {
                                         if (media.isMangaOrAnime == .manga) {
-                                            try await mangaController
+                                            try await malDependencies.mangaController
                                                 .saveProgress(
                                                     id: media.id,
                                                     status: userProgress.progressStatus,
@@ -573,10 +579,10 @@ struct DetailsView: View {
                                                     startDate: startDate,
                                                     finishDate: finishDate
                                                 )
-                                            media = try await mangaController.fetchDetails(id: media.id)
+                                            media = try await malDependencies.mangaController.fetchDetails(id: media.id)
                                         }
                                         if (media.isMangaOrAnime == .anime) {
-                                            try await animeController
+                                            try await malDependencies.animeController
                                                 .saveProgress(
                                                     id: media.id,
                                                     status: userProgress.progressStatus,
@@ -586,7 +592,7 @@ struct DetailsView: View {
                                                     startDate: startDate,
                                                     finishDate: finishDate
                                                 )
-                                            media = try await animeController.fetchDetails(id: media.id)
+                                            media = try await malDependencies.animeController.fetchDetails(id: media.id)
                                         }
                                         toastManager.showUpdatedToast = true
                                         isSheetPresented = false
@@ -599,7 +605,7 @@ struct DetailsView: View {
                                 Button("Save") {
                                     Task {
                                         if (media.isMangaOrAnime == .manga) {
-                                            try await mangaController
+                                            try await malDependencies.mangaController
                                                 .saveProgress(
                                                     id: media.id,
                                                     status: userProgress.progressStatus,
@@ -610,10 +616,10 @@ struct DetailsView: View {
                                                     startDate: startDate,
                                                     finishDate: finishDate
                                                 )
-                                            media = try await mangaController.fetchDetails(id: media.id)
+                                            media = try await malDependencies.mangaController.fetchDetails(id: media.id)
                                         }
                                         if (media.isMangaOrAnime == .anime) {
-                                            try await animeController
+                                            try await malDependencies.animeController
                                                 .saveProgress(
                                                     id: media.id,
                                                     status: userProgress.progressStatus,
@@ -623,7 +629,7 @@ struct DetailsView: View {
                                                     startDate: startDate,
                                                     finishDate: finishDate
                                                 )
-                                            media = try await animeController.fetchDetails(id: media.id)
+                                            media = try await malDependencies.animeController.fetchDetails(id: media.id)
                                         }
                                         toastManager.showUpdatedToast = true
                                         isSheetPresented = false
@@ -654,14 +660,14 @@ struct DetailsView: View {
                                     didTap.toggle()
                                     Task {
                                         if (media.isMangaOrAnime == .manga) {
-                                            try await mangaController.deleteEntry(id: media.id)
+                                            try await malDependencies.mangaController.deleteEntry(id: media.id)
                                             toastManager.showRemovedToast = true
-                                            media = try await mangaController.fetchDetails(id: media.id)
+                                            media = try await malDependencies.mangaController.fetchDetails(id: media.id)
                                         }
                                         if (media.isMangaOrAnime == .anime) {
-                                            try await animeController.deleteEntry(id: media.id)
+                                            try await malDependencies.animeController.deleteEntry(id: media.id)
                                             toastManager.showRemovedToast = true
-                                            media = try await animeController.fetchDetails(id: media.id)
+                                            media = try await malDependencies.animeController.fetchDetails(id: media.id)
                                         }
                                         showAlert = false
                                         isSheetPresented = false
@@ -692,7 +698,7 @@ struct DetailsView: View {
                 defer { toastManager.isLoading = false }
                 do {
                     if media.isMangaOrAnime == .anime {
-                        media = try await animeController.fetchDetails(id: media.id)
+                        media = try await malDependencies.animeController.fetchDetails(id: media.id)
                         
                         if settings.isExtendedDataEnabled {
                             jikanCharacters = try await jikanCharacterController.fetchAnimeCharacter(id: media.id, apiService: settings.extendedDataSource)
@@ -701,7 +707,7 @@ struct DetailsView: View {
                     }
                     
                     if media.isMangaOrAnime == .manga {
-                        media = try await mangaController.fetchDetails(id: media.id)
+                        media = try await malDependencies.mangaController.fetchDetails(id: media.id)
                         
                         if settings.isExtendedDataEnabled {
                             jikanCharacters = try await jikanCharacterController.fetchMangaCharacter(id: media.id, apiService: settings.extendedDataSource)

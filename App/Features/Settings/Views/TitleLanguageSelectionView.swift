@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct TitleLanguageSelectionView: View {
+    @Environment(MALDependencies.self)
+    private var malDependencies
     
     @Environment(AppSettings.self)
     private var settings
-    
-    let animeController = AnimeController()
     
     @State var exampleAnime: MediaNode = MediaNode(id: 0, title: "", mainPicture: Picture(medium: ""))
     
@@ -40,9 +40,12 @@ struct TitleLanguageSelectionView: View {
         }
         .navigationTitle("Title Language")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            Task {
-                exampleAnime = try await animeController.fetchDetails(id: 53065)
+        .task {
+            do {
+                exampleAnime = try await malDependencies.animeController
+                    .fetchDetails(id: 53065)
+            } catch {
+                print("Failed to load example anime:", error)
             }
         }
     }

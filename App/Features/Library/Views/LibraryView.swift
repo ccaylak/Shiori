@@ -3,6 +3,16 @@ import SwiftData
 
 struct LibraryView: View {
     
+    @Environment(AccountSession.self)
+    private var accountSession
+
+    @Environment(MALDependencies.self)
+    private var malDependencies
+
+    private var isMALAuthenticated: Bool {
+        accountSession.activeProvider == .myAnimeList
+    }
+    
     @AppStorage("animeScheduleLastRefresh")
     private var animeScheduleLastRefresh: Double = 0
     
@@ -25,11 +35,7 @@ struct LibraryView: View {
     
     @State private var loadingMediaID: Int?
     
-    private let mangaController = MangaController()
-    private let animeController = AnimeController()
     private let aniListController = AniListController()
-    
-    @ObservedObject private var tokenHandler: TokenHandler = .shared
     
     @Environment(AppSettings.self)
     private var settings
@@ -85,7 +91,7 @@ struct LibraryView: View {
         
         NavigationStack {
             List {
-                if tokenHandler.isAuthenticated {
+                if isMALAuthenticated {
                     ForEach(displayedLibraryData) { media in
                         Button(action: {
                             selectedMedia = media
@@ -119,10 +125,10 @@ struct LibraryView: View {
                         .swipeActions(edge: .leading, allowsFullSwipe: false) {
                             Button {
                                 Task {
-                                    try await mangaController.completeEntry(id: media.node.id)
+                                    try await malDependencies.mangaController.completeEntry(id: media.node.id)
                                     
                                     toastManager.showUpdatedToast = true
-                                    library = try await mangaController.fetchLibrary(
+                                    library = try await malDependencies.mangaController.fetchLibrary(
                                         showNsfwContent: settings.showNsfwContent,
                                         progressStatus: librarySettings.mangaProgressStatus,
                                         sortOrder: librarySettings.mangaSortOrder
@@ -136,10 +142,10 @@ struct LibraryView: View {
                             
                             Button {
                                 Task {
-                                    try await animeController.completeEntry(id: media.node.id)
+                                    try await malDependencies.animeController.completeEntry(id: media.node.id)
                                     
                                     toastManager.showUpdatedToast = true
-                                    library = try await animeController.fetchLibrary(
+                                    library = try await malDependencies.animeController.fetchLibrary(
                                         showNsfwContent: settings.showNsfwContent,
                                         progressStatus: librarySettings.animeProgressStatus,
                                         sortOrder: librarySettings.animeSortOrder
@@ -170,10 +176,10 @@ struct LibraryView: View {
                                     }()
                                     
                                     if updatedChapterValue > currentChapter {
-                                        try await mangaController.increaseChapters(id: media.node.id, chapter: updatedChapterValue)
+                                        try await malDependencies.mangaController.increaseChapters(id: media.node.id, chapter: updatedChapterValue)
                                         
                                         toastManager.showUpdatedToast = true
-                                        library = try await mangaController.fetchLibrary(
+                                        library = try await malDependencies.mangaController.fetchLibrary(
                                             showNsfwContent: settings.showNsfwContent,
                                             progressStatus: librarySettings.mangaProgressStatus,
                                             sortOrder: librarySettings.mangaSortOrder
@@ -207,10 +213,10 @@ struct LibraryView: View {
                                     }()
                                     
                                     if updatedVolumeValue > current {
-                                        try await mangaController.increaseVolumes(id: media.node.id, volume: updatedVolumeValue)
+                                        try await malDependencies.mangaController.increaseVolumes(id: media.node.id, volume: updatedVolumeValue)
                                         
                                         toastManager.showUpdatedToast = true
-                                        library = try await mangaController.fetchLibrary(
+                                        library = try await malDependencies.mangaController.fetchLibrary(
                                             showNsfwContent: settings.showNsfwContent,
                                             progressStatus: librarySettings.mangaProgressStatus,
                                             sortOrder: librarySettings.mangaSortOrder
@@ -246,10 +252,10 @@ struct LibraryView: View {
                                     }()
                                     
                                     if updatedEpisodeValue > currentEpisode {
-                                        try await animeController.increaseEpisodes(id: media.node.id, episode: updatedEpisodeValue)
+                                        try await malDependencies.animeController.increaseEpisodes(id: media.node.id, episode: updatedEpisodeValue)
                                         
                                         toastManager.showUpdatedToast = true
-                                        library = try await animeController.fetchLibrary(
+                                        library = try await malDependencies.animeController.fetchLibrary(
                                             showNsfwContent: settings.showNsfwContent,
                                             progressStatus: librarySettings.animeProgressStatus,
                                             sortOrder: librarySettings.animeSortOrder
@@ -299,7 +305,7 @@ struct LibraryView: View {
                     DetailsView(media: media)
                 }
             .safeAreaInset(edge: .top) {
-                if tokenHandler.isAuthenticated {
+                if isMALAuthenticated {
                     PillPicker(
                         options: ProgressStatus.Manga.allCases,
                         selectedOption: $librarySettings.mangaProgressStatus,
@@ -984,7 +990,7 @@ struct LibraryView: View {
             .interactiveDismissDisabled()
         }
         .safeAreaInset(edge: .bottom) {
-            if !isNoticationSetupDismissed && librarySettings.mediaType == .anime {
+            if isMALAuthenticated && !isNoticationSetupDismissed && librarySettings.mediaType == .anime {
                 Button {
                     showNotificationSetupSheet = true
                 } label: {
@@ -1034,7 +1040,7 @@ struct LibraryView: View {
                 .padding(.bottom, 8)
             }
         }
-        .onAppear {
+        .task(id: accountSession.activeProvider) {
             fetchLibrary()
         }
         .onChange(of: librarySettings.needToLoadData) {
@@ -1063,7 +1069,13 @@ struct LibraryView: View {
     }
     
     private func fetchLibrary() {
-        guard tokenHandler.isAuthenticated else { return }
+        guard isMALAuthenticated else {
+            library = MediaResponse(
+                data: [],
+                paging: nil
+            )
+            return
+        }
 
         Task {
             toastManager.isLoading = true
@@ -1075,14 +1087,14 @@ struct LibraryView: View {
             do {
                 switch librarySettings.mediaType {
                 case .manga:
-                    library = try await mangaController.fetchLibrary(
+                    library = try await malDependencies.mangaController.fetchLibrary(
                         showNsfwContent: settings.showNsfwContent,
                         progressStatus: librarySettings.mangaProgressStatus,
                         sortOrder: librarySettings.mangaSortOrder
                     )
 
                 case .anime:
-                    let fetchedLibrary = try await animeController.fetchLibrary(
+                    let fetchedLibrary = try await malDependencies.animeController.fetchLibrary(
                         showNsfwContent: settings.showNsfwContent,
                         progressStatus: librarySettings.animeProgressStatus,
                         sortOrder: librarySettings.animeSortOrder
@@ -1213,20 +1225,20 @@ struct LibraryView: View {
             Task {
                 if librarySettings.mediaType == .manga {
                     
-                    try await mangaController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, chapters: libraryEntry.readChapters, volumes: libraryEntry.readVolumes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
+                    try await malDependencies.mangaController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, chapters: libraryEntry.readChapters, volumes: libraryEntry.readVolumes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
                     
                     toastManager.showUpdatedToast = true
-                    library = try await mangaController.fetchLibrary(
+                    library = try await malDependencies.mangaController.fetchLibrary(
                         showNsfwContent: settings.showNsfwContent,
                         progressStatus: librarySettings.mangaProgressStatus,
                         sortOrder: librarySettings.mangaSortOrder
                     )
                 } else if librarySettings.mediaType == .anime {
                     
-                    try await animeController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, episodes: libraryEntry.watchedEpisodes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
+                    try await malDependencies.animeController.saveProgress(id: id, status: libraryEntry.progressStatus, score: libraryEntry.score, episodes: libraryEntry.watchedEpisodes, comments: libraryEntry.userComments, startDate: startDate, finishDate: finishDate)
                     toastManager.showUpdatedToast = true
                     
-                    library = try await animeController.fetchLibrary(
+                    library = try await malDependencies.animeController.fetchLibrary(
                         showNsfwContent: settings.showNsfwContent,
                         progressStatus: librarySettings.animeProgressStatus,
                         sortOrder: librarySettings.animeSortOrder
@@ -1243,18 +1255,18 @@ struct LibraryView: View {
         return { id in
             Task {
                 if(librarySettings.mediaType == .manga) {
-                    try await mangaController.deleteEntry(id: id)
+                    try await malDependencies.mangaController.deleteEntry(id: id)
                     toastManager.showRemovedToast = true
-                    library = try await mangaController.fetchLibrary(
+                    library = try await malDependencies.mangaController.fetchLibrary(
                         showNsfwContent: settings.showNsfwContent,
                         progressStatus: librarySettings.mangaProgressStatus,
                         sortOrder: librarySettings.mangaSortOrder
                     )
                 }
                 if(librarySettings.mediaType == .anime) {
-                    try await animeController.deleteEntry(id: id)
+                    try await malDependencies.animeController.deleteEntry(id: id)
                     toastManager.showRemovedToast = true
-                    library = try await animeController.fetchLibrary(
+                    library = try await malDependencies.animeController.fetchLibrary(
                         showNsfwContent: settings.showNsfwContent,
                         progressStatus: librarySettings.animeProgressStatus,
                         sortOrder: librarySettings.animeSortOrder
@@ -1270,8 +1282,16 @@ struct LibraryView: View {
 }
 
 #Preview {
-    LibraryView()
+    let dependencies = MALDependencies()
+
+    ResultView()
+        .environment(dependencies)
+        .environment(
+            AccountSession(
+                malDependencies: dependencies
+            )
+        )
         .environment(AppSettings())
+        .environment(ResultSettings())
         .environment(ToastManager())
-        .environment(LibrarySettings())
 }

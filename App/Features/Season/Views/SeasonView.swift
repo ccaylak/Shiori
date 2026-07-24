@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct SeasonView: View {
-    private let seasonController = SeasonController()
+    @Environment(MALDependencies.self)
+    private var malDependencies
     
     @Environment(SeasonSettings.self)
     private var seasonSettings
@@ -110,7 +111,7 @@ struct SeasonView: View {
             defer { toastManager.isLoading = false }
             
             do {
-                let season = try await seasonController.fetchSeason(
+                let season = try await malDependencies.seasonController.fetchSeason(
                     year: seasonSettings.selectedYear,
                     season: seasonSettings.selectedSeason.rawValue,
                     showNsfwContent: settings.showNsfwContent

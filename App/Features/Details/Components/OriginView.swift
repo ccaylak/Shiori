@@ -1,9 +1,8 @@
 import SwiftUI
 
 struct OriginView: View {
-    
-    let mangaController = MangaController()
-    let animeController = AnimeController()
+    @Environment(MALDependencies.self)
+    private var malDependencies
     
     let relations: [RelationEntry]
     
@@ -49,9 +48,9 @@ struct OriginView: View {
                         do {
                             let fetched: MediaNode
                             if relation.type == "manga" {
-                                fetched = try await mangaController.fetchDetails(id: relation.malId)
+                                fetched = try await malDependencies.mangaController.fetchDetails(id: relation.malId)
                             } else {
-                                fetched = try await animeController.fetchDetails(id: relation.malId)
+                                fetched = try await malDependencies.animeController.fetchDetails(id: relation.malId)
                             }
                             
                             results.append(fetched)
