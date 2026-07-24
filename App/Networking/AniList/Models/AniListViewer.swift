@@ -6,6 +6,10 @@ struct AniListViewerResponse: Decodable {
 
 struct AniListViewerData: Decodable {
     let viewer: AniListViewer
+
+    enum CodingKeys: String, CodingKey {
+        case viewer = "Viewer"
+    }
 }
 
 struct AniListViewer: Decodable {
