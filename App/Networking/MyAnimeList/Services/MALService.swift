@@ -1,15 +1,22 @@
 import Foundation
 import TelemetryDeck
 
-@MainActor class MALService {
-    static let shared = MALService()
+@MainActor
+final class MALService {
+    static let shared = MALService(
+        tokenStore: .shared
+    )
     
-    private var tokenHandler: TokenHandler = .shared
+    private let tokenStore: TokenHandler
+    
+    init(tokenStore: TokenHandler) {
+        self.tokenStore = tokenStore
+    }
     
     func refreshToken() async throws {
         Metrics.authToken(.expired)
         
-        guard let refreshToken = tokenHandler.refreshToken else {
+        guard let refreshToken = tokenStore.refreshToken else {
             throw URLError(.userAuthenticationRequired)
         }
         
@@ -29,7 +36,7 @@ import TelemetryDeck
             .snakeCaseDecoder
             .decode(TokenResponse.self, from: data)
         
-        tokenHandler.setTokens(from: content)
+        tokenStore.setTokens(from: content)
         Metrics.authToken(.refreshed)
     }
 }

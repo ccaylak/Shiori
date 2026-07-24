@@ -4,7 +4,7 @@ final class MALAuthService {
     
     static let shared = MALAuthService()
     
-    private init() {}
+    init() {}
     
     private var codeVerifier: String = ""
     
