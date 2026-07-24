@@ -2,9 +2,9 @@ import Foundation
 
 @MainActor
 final class MALRequestBuilder {
-    private let tokenStore: TokenHandler
+    private let tokenStore: MALTokenStore
 
-    init(tokenStore: TokenHandler) {
+    init(tokenStore: MALTokenStore) {
         self.tokenStore = tokenStore
     }
 

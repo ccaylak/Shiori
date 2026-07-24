@@ -10,15 +10,6 @@ final class MangaController {
         self.malService = malService
     }
     
-    convenience init() {
-        self.init(
-            requestBuilder: MALRequestBuilder(
-                tokenStore: .shared
-            ),
-            malService: .shared
-        )
-    }
-    
     func saveProgress(
         id: Int,
         status: String,

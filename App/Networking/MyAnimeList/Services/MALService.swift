@@ -3,13 +3,9 @@ import TelemetryDeck
 
 @MainActor
 final class MALService {
-    static let shared = MALService(
-        tokenStore: .shared
-    )
+    private let tokenStore: MALTokenStore
     
-    private let tokenStore: TokenHandler
-    
-    init(tokenStore: TokenHandler) {
+    init(tokenStore: MALTokenStore) {
         self.tokenStore = tokenStore
     }
     

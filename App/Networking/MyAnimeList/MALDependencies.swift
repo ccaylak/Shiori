@@ -4,7 +4,7 @@ import Observation
 @Observable
 final class MALDependencies {
     @ObservationIgnored
-    let tokenStore: TokenHandler
+    let tokenStore: MALTokenStore
 
     @ObservationIgnored
     let requestBuilder: MALRequestBuilder
@@ -24,7 +24,9 @@ final class MALDependencies {
     @ObservationIgnored
     let seasonController: SeasonController
 
-    init(tokenStore: TokenHandler) {
+    init() {
+        let tokenStore = MALTokenStore()
+        
         let requestBuilder = MALRequestBuilder(
             tokenStore: tokenStore
         )
@@ -55,12 +57,6 @@ final class MALDependencies {
         self.seasonController = SeasonController(
             requestBuilder: requestBuilder,
             malService: service
-        )
-    }
-
-    convenience init() {
-        self.init(
-            tokenStore: TokenHandler.shared
         )
     }
 }

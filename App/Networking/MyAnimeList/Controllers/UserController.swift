@@ -11,15 +11,6 @@ final class UserController {
         self.malService = malService
     }
     
-    convenience init() {
-        self.init(
-            requestBuilder: MALRequestBuilder(
-                tokenStore: .shared
-            ),
-            malService: .shared
-        )
-    }
-    
     func fetchUserProfile() async throws -> User {
         guard var components = URLComponents(
             url: MALEndpoints.Profile.information,

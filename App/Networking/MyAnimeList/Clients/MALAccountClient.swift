@@ -6,12 +6,12 @@ final class MALAccountClient: AccountClient {
 
     private let authService: MALAuthService
     private let userController: UserController
-    private let tokenStore: TokenHandler
+    private let tokenStore: MALTokenStore
 
     init(
         authService: MALAuthService,
         userController: UserController,
-        tokenStore: TokenHandler
+        tokenStore: MALTokenStore
     ) {
         self.authService = authService
         self.userController = userController
