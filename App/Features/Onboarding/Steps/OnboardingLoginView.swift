@@ -3,11 +3,13 @@ import AuthenticationServices
 
 struct OnboardingLoginView: View {
     
-    @Environment(\.webAuthenticationSession) private var webAuthenticationSession
-    @StateObject private var tokenHandler: TokenHandler = .shared
+    @Environment(\.webAuthenticationSession)
+    private var webAuthenticationSession
     
-    @State private var isAuthenticating = false
-    private let authService = MALAuthService.shared
+    @Environment(AccountSession.self)
+    private var accountSession
+    
+    @State private var viewModel = LoginViewModel()
     
     let onNext: () -> Void
     
@@ -31,7 +33,7 @@ struct OnboardingLoginView: View {
             VStack(spacing: 16) {
                 Button {
                     Task {
-                        await loginWithMAL()
+                        await login(with: .myAnimeList)
                     }
                 } label: {
                     HStack(alignment: .center) {
@@ -43,6 +45,22 @@ struct OnboardingLoginView: View {
                             .scaledToFit()
                             .foregroundStyle(Color.white)
                             .frame(height: 16)
+                    }
+                }
+                .controlSize(.large)
+                .borderedProminentOrGlassProminent()
+                
+                Button {
+                    Task {
+                        await login(with: .aniList)
+                    }
+                } label: {
+                    HStack(alignment: .center) {
+                        Text("Continue with")
+                        .fontWeight(.semibold)
+                        
+                        Text("AniList")
+                            .fontWeight(.bold)
                     }
                 }
                 .controlSize(.large)
@@ -62,47 +80,43 @@ struct OnboardingLoginView: View {
                         .frame(height: 1)
                 }
                 .padding(.vertical, 8)
-
-                VStack(spacing: 8) {
-                    Button {
-                        onNext()
-                    } label: {
-                        Text("Skip for now")
-                    }
-                    .controlSize(.regular)
-                    .buttonStyle(.bordered)
-                    .tint(.secondary)
-                    .glassEffectOrMaterial()
-
-                    Text("You can still connect your account later.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+            
+                Button("Skip for now") {
+                    onNext()
                 }
+                .buttonStyle(.bordered)
+                .tint(.secondary)
+
+                Text("You can still connect your account later.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
             .padding()
         }
     }
     
-    private func loginWithMAL() async {
-            isAuthenticating = true
-            defer { isAuthenticating = false }
-            
-            do {
-                guard let loginURL = authService.generateLoginURL() else { return }
-                
-                let callbackURL = try await webAuthenticationSession.authenticate(
-                    using: loginURL,
-                    callbackURLScheme: "yourapp",
-                    preferredBrowserSession: .shared
-                )
-                
-                let tokenResponse = try await authService.exchangeCode(from: callbackURL)
-                tokenHandler.setTokens(from: tokenResponse)
-                
-                onNext()
-            } catch {
-                print("Authentication failed: \(error)")
+    private func login(with provider: AccountProvider) async {
+            await viewModel.login(
+                with: provider,
+                session: accountSession,
+                authenticate: authenticate
+            )
+
+            guard accountSession.isAuthenticated else {
+                return
             }
+
+            onNext()
         }
+
+    private func authenticate(
+        loginURL: URL,
+        callbackScheme: String
+    ) async throws -> URL {
+        try await webAuthenticationSession.authenticate(
+            using: loginURL,
+            callbackURLScheme: callbackScheme,
+            preferredBrowserSession: .shared
+        )
+    }
 }

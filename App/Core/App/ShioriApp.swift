@@ -1,5 +1,6 @@
 import SwiftUI
 import TelemetryDeck
+import UserNotifications
 
 @main
 struct ShioriApp: App {
@@ -20,28 +21,48 @@ struct ShioriApp: App {
     private var librarySettings = LibrarySettings()
     
     @State
-    var resultSettings = ResultSettings()
+    private var resultSettings = ResultSettings()
     
     @State
-    var seasonSettings = SeasonSettings()
+    private var seasonSettings = SeasonSettings()
     
     @State
     private var networkMonitor = NetworkMonitor()
     
-    private var tokenHandler: TokenHandler = .shared
+    @State
+    private var malDependencies: MALDependencies
+    
+    @State
+    private var accountSession: AccountSession
+    
     private let notificationDelegate = NotificationDelegate()
     
     init() {
+        let malDependencies = MALDependencies()
+
+        _malDependencies = State(
+            initialValue: malDependencies
+        )
+
+        _accountSession = State(
+            initialValue: AccountSession(
+                malDependencies: malDependencies
+            )
+        )
+
         TelemetryDeck.initialize(
             config: .init(appID: Config.telemetryDeck)
         )
-        
-        UNUserNotificationCenter.current().delegate = notificationDelegate
+
+        UNUserNotificationCenter.current().delegate =
+            notificationDelegate
     }
     
     var body: some Scene {
         WindowGroup {
             MainView()
+                .environment(malDependencies)
+                .environment(accountSession)
                 .environment(settings)
                 .environment(toastManager)
                 .environment(librarySettings)
@@ -141,11 +162,12 @@ struct ShioriApp: App {
                 }
                 
                 .onAppear {
-                    if isFirstLaunch {
-                        tokenHandler.revokeTokens()
-                        shouldShowOnboarding = true
-                        isFirstLaunch = false
+                    guard isFirstLaunch else {
+                        return
                     }
+                    
+                    shouldShowOnboarding = true
+                    isFirstLaunch = false
                 }
             
                 .onChange(of: networkMonitor.status) { oldStatus, newStatus in

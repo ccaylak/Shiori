@@ -2,8 +2,13 @@ import Foundation
 
 @MainActor
 final class SeasonController {
+    private let requestBuilder: MALRequestBuilder
+    private let malService: MALService
     
-    private var malService: MALService = .shared
+    init(requestBuilder: MALRequestBuilder, malService: MALService) {
+        self.requestBuilder = requestBuilder
+        self.malService = malService
+    }
     
     func fetchSeason(
         year: Int,
@@ -28,7 +33,7 @@ final class SeasonController {
             throw URLError(.badURL)
         }
         
-        let request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        let request = requestBuilder.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {

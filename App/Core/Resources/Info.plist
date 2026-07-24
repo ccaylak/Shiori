@@ -12,6 +12,14 @@
 				<string>yourapp</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>shiori</string>
+			</array>
+		</dict>
 	</array>
 </dict>
 </plist>

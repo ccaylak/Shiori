@@ -2,8 +2,13 @@ import Foundation
 
 @MainActor
 final class MangaController {
+    private let requestBuilder: MALRequestBuilder
+    private let malService: MALService
     
-    private var malService: MALService = .shared
+    init(requestBuilder: MALRequestBuilder, malService: MALService) {
+        self.requestBuilder = requestBuilder
+        self.malService = malService
+    }
     
     func saveProgress(
         id: Int,
@@ -32,7 +37,7 @@ final class MangaController {
         let formBody = parameters.map { "\($0.key)=\($0.value)" }
                                  .joined(separator: "&")
         
-        var request = APIRequest.buildRequest(url: url, httpMethod: .put)
+        var request = requestBuilder.buildRequest(url: url, httpMethod: .put)
         request.httpBody = formBody.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
@@ -40,7 +45,7 @@ final class MangaController {
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
-            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request = requestBuilder.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
@@ -63,7 +68,7 @@ final class MangaController {
         let formBody = parameters.map { "\($0.key)=\($0.value)" }
                                  .joined(separator: "&")
 
-        var request = APIRequest.buildRequest(url: url, httpMethod: .put)
+        var request = requestBuilder.buildRequest(url: url, httpMethod: .put)
         request.httpBody = formBody.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
@@ -71,7 +76,7 @@ final class MangaController {
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
-            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request = requestBuilder.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
@@ -94,7 +99,7 @@ final class MangaController {
         let formBody = parameters.map { "\($0.key)=\($0.value)" }
                                  .joined(separator: "&")
 
-        var request = APIRequest.buildRequest(url: url, httpMethod: .put)
+        var request = requestBuilder.buildRequest(url: url, httpMethod: .put)
         request.httpBody = formBody.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
@@ -102,7 +107,7 @@ final class MangaController {
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
-            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request = requestBuilder.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
@@ -123,7 +128,7 @@ final class MangaController {
         let formBody = parameters.map { "\($0.key)=\($0.value)" }
                                  .joined(separator: "&")
 
-        var request = APIRequest.buildRequest(url: url, httpMethod: .put)
+        var request = requestBuilder.buildRequest(url: url, httpMethod: .put)
         request.httpBody = formBody.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
@@ -131,7 +136,7 @@ final class MangaController {
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
-            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request = requestBuilder.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
@@ -152,7 +157,7 @@ final class MangaController {
         let formBody = parameters.map { "\($0.key)=\($0.value)" }
                                  .joined(separator: "&")
 
-        var request = APIRequest.buildRequest(url: url, httpMethod: .put)
+        var request = requestBuilder.buildRequest(url: url, httpMethod: .put)
         request.httpBody = formBody.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
@@ -160,7 +165,7 @@ final class MangaController {
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
-            request = APIRequest.buildRequest(url: url, httpMethod: .put)
+            request = requestBuilder.buildRequest(url: url, httpMethod: .put)
             request.httpBody = formBody.data(using: .utf8)
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
@@ -185,12 +190,12 @@ final class MangaController {
             throw URLError(.badURL)
         }
         
-        var request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        var request = requestBuilder.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
-            request = APIRequest.buildRequest(url: url, httpMethod: .get)
+            request = requestBuilder.buildRequest(url: url, httpMethod: .get)
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
@@ -230,12 +235,12 @@ final class MangaController {
             throw URLError(.badURL)
         }
         
-        var request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        var request = requestBuilder.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
-            request = APIRequest.buildRequest(url: url, httpMethod: .get)
+            request = requestBuilder.buildRequest(url: url, httpMethod: .get)
             
             (data, response) = try await URLSession.shared.data(for: request)
         }
@@ -294,12 +299,12 @@ final class MangaController {
             throw URLError(.badURL)
         }
         
-        var request = APIRequest.buildRequest(url: url, httpMethod: .get)
+        var request = requestBuilder.buildRequest(url: url, httpMethod: .get)
         var (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
-            request = APIRequest.buildRequest(url: url, httpMethod: .get)
+            request = requestBuilder.buildRequest(url: url, httpMethod: .get)
             (data, response) = try await URLSession.shared.data(for: request)
         }
         
@@ -322,12 +327,12 @@ final class MangaController {
             throw URLError(.badURL)
         }
         
-        var request = APIRequest.buildRequest(url: url, httpMethod: .delete)
+        var request = requestBuilder.buildRequest(url: url, httpMethod: .delete)
         
         var (_, response) = try await URLSession.shared.data(for: request)
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
             try await malService.refreshToken()
-            request = APIRequest.buildRequest(url: url, httpMethod: .delete)
+            request = requestBuilder.buildRequest(url: url, httpMethod: .delete)
             (_, response) = try await URLSession.shared.data(for: request)
         }
         try APIRequest.validateResponse(response, api: APIService.mal, endpoint: url.path)

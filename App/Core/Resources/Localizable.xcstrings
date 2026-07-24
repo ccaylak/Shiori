@@ -690,6 +690,9 @@
         }
       }
     },
+    "AniList" : {
+
+    },
     "Animated by" : {
       "localizations" : {
         "de" : {
@@ -2326,6 +2329,7 @@
       }
     },
     "Log in with your MyAnimeList account to track your Anime and Manga progress, rate titles, and access personalized features." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2334,6 +2338,9 @@
           }
         }
       }
+    },
+    "Log in with your MyAnimeList or AniList account to track your Anime and Manga progress, rate titles, and access personalized features." : {
+
     },
     "Login" : {
       "localizations" : {
@@ -3973,6 +3980,7 @@
       }
     },
     "To use these features, you can create an account at MyAnimeList.net." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4492,6 +4500,9 @@
           }
         }
       }
+    },
+    "You can create an account on MyAnimeList.net or AniList.co." : {
+
     },
     "You can join anytime later from Settings." : {
       "localizations" : {

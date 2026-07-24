@@ -7,26 +7,20 @@ struct LoginView: View {
     @AppStorage("animeScheduleLastRefresh")
     private var animeScheduleLastRefresh: Double = 0
     
-    @Environment(\.webAuthenticationSession) private var webAuthenticationSession
+    @Environment(\.webAuthenticationSession)
+    private var webAuthenticationSession
     
-    private var jikanProfileController = JikanProfileController()
-    private var userController = UserController()
-    private var malService: MALService = .shared
-    private let authService = MALAuthService.shared
+    @Environment(AccountSession.self)
+    private var accountSession
     
-    @StateObject private var tokenHandler: TokenHandler = .shared
+    @State private var viewModel = LoginViewModel()
     
-    @State private var code: String = ""
-    @State private var codeChallenge: String = ""
-    
-    @State private var user: User?
+    private let jikanProfileController = JikanProfileController()
     
     @State private var animeStats: JikanResponse.AnimeManga.AnimeStatistics?
     @State private var mangaStats: JikanResponse.AnimeManga.MangaStatistics?
     @State private var jikanFavorites: JikanFavorites = JikanFavorites(data: FavoriteData(anime: [], manga: [], characters: []))
     @State private var jikanFriends: JikanFriends = JikanFriends(data: [])
-    
-    @State private var isAuthenticating: Bool = false
     
     @State private var showLogoutConfirmationDialog: Bool = false
     
@@ -38,6 +32,10 @@ struct LoginView: View {
     
     @Environment(\.modelContext)
     private var modelContext
+    
+    private var profile: AccountProfile? {
+        accountSession.profile
+    }
     
     private var friends: [JikanFriendsData] {
         jikanFriends.data
@@ -67,26 +65,47 @@ struct LoginView: View {
     }
     
     private func loadProfile() async {
-        guard tokenHandler.isAuthenticated else { return }
+        guard accountSession.isAuthenticated else {
+            return
+        }
 
         toastManager.isLoading = true
         defer { toastManager.isLoading = false }
 
+        if accountSession.profile == nil {
+            await viewModel.loadProfile(
+                session: accountSession
+            )
+        }
+
+        guard
+            accountSession.activeProvider == .myAnimeList,
+            let username = accountSession.profile?.username,
+            settings.isExtendedDataEnabled,
+            settings.extendedDataSource == .jikan
+        else {
+            clearJikanProfileData()
+            return
+        }
+
         do {
-            let fetchedUser = try await userController.fetchUserProfile()
-            user = fetchedUser
+            async let favorites =
+                jikanProfileController.fetchProfileFavorites(
+                    username: username,
+                    apiService: settings.extendedDataSource
+                )
 
-            guard settings.isExtendedDataEnabled,
-                  settings.extendedDataSource == .jikan else {
-                clearJikanProfileData()
-                return
-            }
+            async let friends =
+                jikanProfileController.fetchFriends(
+                    username: username,
+                    apiService: settings.extendedDataSource
+                )
 
-            let username = fetchedUser.name
-
-            async let favorites = jikanProfileController.fetchProfileFavorites(username: username, apiService: settings.extendedDataSource)
-            async let friends = jikanProfileController.fetchFriends(username: username, apiService: settings.extendedDataSource)
-            async let statistics = jikanProfileController.fetchProfileStatistics(username: username, apiService: settings.extendedDataSource)
+            async let statistics =
+                jikanProfileController.fetchProfileStatistics(
+                    username: username,
+                    apiService: settings.extendedDataSource
+                )
 
             jikanFavorites = try await favorites
             jikanFriends = try await friends
@@ -98,6 +117,17 @@ struct LoginView: View {
             print("Failed to load profile data:", error)
             clearJikanProfileData()
         }
+    }
+    
+    private func authenticate(
+        loginURL: URL,
+        callbackScheme: String
+    ) async throws -> URL {
+        try await webAuthenticationSession.authenticate(
+            using: loginURL,
+            callbackURLScheme: callbackScheme,
+            preferredBrowserSession: .shared
+        )
     }
 
     private var favoriteMangas: [FavoriteEntry] { jikanFavorites.data.manga }
@@ -164,28 +194,14 @@ struct LoginView: View {
         ]
     }
     
-    private var birthdateText: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let date = formatter.date(from: user?.birthday ?? "")
-        return date?.formatted(.dateTime.day().month().year()) ?? "–"
-    }
-
-    private var joinDateText: String {
-        let iso = ISO8601DateFormatter()
-        guard let date = iso.date(from: user?.joinedAt ?? "") else { return "–" }
-        return date.formatted(.dateTime.day().month().year())
-    }
-
-    
     var body: some View {
         NavigationStack {
             VStack (alignment: .leading, spacing: 30) {
-                if tokenHandler.isAuthenticated {
+                if accountSession.isAuthenticated {
                     Form {
-                        if let username = user?.name {
+                        if let username = profile?.username {
                            VStack {
-                               AsyncImageView(imageUrl: user?.pictureUrl ?? "")
+                               AsyncImageView(imageUrl: profile?.avatarURL ?? "")
                                    .frame(
                                     width: CoverSize.medium.size.width,
                                           height: CoverSize.small.size.height
@@ -203,7 +219,7 @@ struct LoginView: View {
                         }
                         Section {
                             LabeledContent {
-                                Text(birthdateText)
+                                Text(profile?.birthday?.formatted(date: .numeric, time: .omitted) ?? "–")
                                 .foregroundStyle(.primary)
                             } label: {
                                 Label {
@@ -214,23 +230,26 @@ struct LoginView: View {
                             }
                             .foregroundStyle(.secondary)
                             
-                            if let gender = user?.gender {
-                                LabeledContent {
-                                    Text(Gender(rawValue: gender)?.displayName ?? String(localized: "Not specified"))
-                                        .foregroundStyle(.primary)
-                                } label: {
-                                    Label {
-                                        Text("Gender")
-                                    } icon: {
-                                        Image(systemName: "person.fill")
-                                    }
+                            LabeledContent {
+                                Text(
+                                    profile?.gender
+                                        .flatMap { Gender(rawValue: $0) }?
+                                        .displayName
+                                    ?? String(localized: "Not specified")
+                                )
+                                .foregroundStyle(.primary)
+                            } label: {
+                                Label {
+                                    Text("Gender")
+                                } icon: {
+                                    Image(systemName: "person.fill")
                                 }
-                                .foregroundStyle(.secondary)
                             }
+                            .foregroundStyle(.secondary)
                             
                             LabeledContent {
-                                Text(joinDateText)
-                                .foregroundStyle(.primary)
+                                Text(profile?.joinedAt?.formatted(date: .numeric, time: .omitted) ?? "–")
+                                    .foregroundStyle(.primary)
                             } label: {
                                 Label {
                                     Text("Join date")
@@ -240,19 +259,17 @@ struct LoginView: View {
                             }
                             .foregroundStyle(.secondary)
                             
-                            if let location = user?.location, !location.isEmpty {
-                                LabeledContent {
-                                    Text(location)
-                                        .foregroundStyle(.primary)
-                                } label: {
-                                    Label {
-                                        Text("Location")
-                                    } icon: {
-                                        Image(systemName: "mappin.and.ellipse")
-                                    }
+                            LabeledContent {
+                                Text(profile?.location?.capitalized ?? "–")
+                                    .foregroundStyle(.primary)
+                            } label: {
+                                Label {
+                                    Text("Location")
+                                } icon: {
+                                    Image(systemName: "mappin.and.ellipse")
                                 }
-                                .foregroundStyle(.secondary)
                             }
+                            .foregroundStyle(.secondary)
                         }
                         
                         Section(header: Label("Friends", systemImage: "person.3")) {
@@ -410,72 +427,91 @@ struct LoginView: View {
                         .isVisible(!favoriteCharacters.isEmpty)
                         
                     }
-                    .onAppear {
-                        Task {
-                            await loadProfile()
+                    .task(id: accountSession.activeProvider) {
+                        guard accountSession.isAuthenticated else {
+                            clearJikanProfileData()
+                            return
                         }
+
+                        await loadProfile()
                     }
                 }
                 
-                if !tokenHandler.isAuthenticated {
+                if !accountSession.isAuthenticated {
                     VStack(spacing: 20) {
                         GroupBox {
-                            Text("Log in with your MyAnimeList account to track your Anime and Manga progress, rate titles, and access personalized features.")
-                                .font(.body)
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.leading)
+                            Text(
+                                "Log in with your MyAnimeList or AniList account to track your Anime and Manga progress, rate titles, and access personalized features."
+                            )
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.leading)
                         } label: {
                             Label("Info", systemImage: "info.circle")
                                 .font(.headline)
                         }
-                        
-                        Button {
-                            Task {
-                                isAuthenticating = true
-                                defer { isAuthenticating = false }
-                                
-                                do {
-                                    guard let loginURL = authService.generateLoginURL() else { return }
-                                    
-                                    let callbackURL = try await webAuthenticationSession.authenticate(
-                                        using: loginURL,
-                                        callbackURLScheme: "yourapp",
-                                        preferredBrowserSession: .shared
+
+                        VStack(spacing: 12) {
+                            Button {
+                                Task {
+                                    await viewModel.login(
+                                        with: .myAnimeList,
+                                        session: accountSession,
+                                        authenticate: authenticate
                                     )
-                                    
-                                    let tokenResponse = try await authService.exchangeCode(from: callbackURL)
-                                    tokenHandler.setTokens(from: tokenResponse)
-                                } catch {
-                                    print("Authentication failed: \(error)")
                                 }
+                            } label: {
+                                HStack {
+                                    Text("Log in with")
+                                        .fontWeight(.semibold)
+
+                                    Image("mal_logo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundStyle(.white)
+                                        .frame(height: 16)
+                                }
+                                .frame(maxWidth: .infinity)
                             }
-                        } label: {
-                            HStack(alignment: .center) {
-                                Text("Log in with")
-                                    .fontWeight(.semibold)
-                                
-                                Image("mal_logo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundStyle(Color.white)
-                                    .frame(height: 16)
+                            .borderedProminentOrGlassProminent()
+
+                            Button {
+                                Task {
+                                    await viewModel.login(
+                                        with: .aniList,
+                                        session: accountSession,
+                                        authenticate: authenticate
+                                    )
+                                }
+                            } label: {
+                                HStack {
+                                    Text("Log in with")
+                                        .fontWeight(.semibold)
+
+                                    Text("AniList")
+                                        .fontWeight(.bold)
+                                }
+                                .frame(maxWidth: .infinity)
                             }
+                            .borderedProminentOrGlassProminent()
                         }
-                        .borderedProminentOrGlassProminent()
-                        .disabled(isAuthenticating)
+                        .disabled(viewModel.isAuthenticating)
                         .overlay {
-                            if isAuthenticating {
+                            if viewModel.isAuthenticating {
                                 ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle())
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        maxHeight: .infinity
+                                    )
                             }
                         }
-                        
-                        Text("To use these features, you can create an account at MyAnimeList.net.")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal)
+
+                        Text(
+                            "You can create an account on MyAnimeList.net or AniList.co."
+                        )
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
                     }
                     .padding()
                 }
@@ -483,18 +519,19 @@ struct LoginView: View {
             .noScrollEdgeEffect()
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .navigationTitle(
-                tokenHandler.isAuthenticated
+                accountSession.isAuthenticated
                     ? Text(verbatim: "")
                     : Text("Login")
             )
-            .navigationBarTitleDisplayMode(tokenHandler.isAuthenticated ? .inline : .large)
+            .navigationBarTitleDisplayMode(accountSession.isAuthenticated ? .inline : .large)
             .toolbar {
                 ToolbarItem {
-                    if tokenHandler.isAuthenticated, let profileName = user?.name,
-                       let url = URL(string: "https://myanimelist.net/profile/\(profileName)") {
+                    if
+                        let profileURL = accountSession.profile?.profileURL,
+                        let url = URL(string: profileURL)
+                    {
                         ShareLink(item: url) {
                             Image(systemName: "square.and.arrow.up")
-                                .foregroundColor(.accentColor)
                         }
                     }
                 }
@@ -513,7 +550,7 @@ struct LoginView: View {
                     }
                 }
                 
-                if tokenHandler.isAuthenticated {
+                if accountSession.isAuthenticated {
                     ToolbarItem(placement: .cancellationAction) {
                         Button {
                             showLogoutConfirmationDialog = true
@@ -528,13 +565,23 @@ struct LoginView: View {
                             actions: {
                                 Button("Yes", role: .destructive) {
                                     Task {
+                                        await AnimeNotificationManager
+                                            .cancelNotifications()
+
                                         do {
-                                            await AnimeNotificationManager.cancelNotifications()
                                             try clearAnimeSchedule()
-                                            tokenHandler.revokeTokens()
                                         } catch {
-                                            print("Failed to clear logout data:", error)
+                                            print(
+                                                "Failed to clear anime schedule:",
+                                                error
+                                            )
                                         }
+
+                                        clearJikanProfileData()
+
+                                        await viewModel.logout(
+                                            session: accountSession
+                                        )
                                     }
                                 }
                                 Button("Cancel", role: .cancel) {}
@@ -587,5 +634,19 @@ struct LoginView: View {
 }
 
 #Preview {
+    let malDependencies = MALDependencies()
+
     LoginView()
+        .environment(malDependencies)
+        .environment(
+            AccountSession(
+                malDependencies: malDependencies
+            )
+        )
+        .environment(AppSettings())
+        .environment(ToastManager())
+        .modelContainer(
+            for: AnimeSchedule.self,
+            inMemory: true
+        )
 }

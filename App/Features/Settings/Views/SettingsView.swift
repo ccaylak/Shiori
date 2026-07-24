@@ -6,7 +6,12 @@ struct SettingsView: View {
     @Environment(AppSettings.self)
     private var settings
     
-    private var tokenHandler: TokenHandler = .shared
+    @Environment(AccountSession.self)
+    private var accountSession
+
+    private var isMALAuthenticated: Bool {
+        accountSession.activeProvider == .myAnimeList
+    }
     
     @State
     private var isResetConfirmationPresented = false
@@ -123,7 +128,7 @@ struct SettingsView: View {
                     }
                 }
                 
-                if tokenHandler.isAuthenticated {
+                if isMALAuthenticated {
                     Section("Library") {
                         NavigationLink {
                             MangaProgressFormatSelectionView()
@@ -154,7 +159,7 @@ struct SettingsView: View {
                     }
                 }
                 
-                if tokenHandler.isAuthenticated {
+                if isMALAuthenticated {
                     Section {
                         Button(role: .destructive) {
                             if let url = URL(string: "https://myanimelist.net/account_deletion") {
@@ -292,6 +297,15 @@ private struct AboutView: View {
 }
 
 #Preview {
+    let malDependencies = MALDependencies()
+
     SettingsView()
+        .environment(AppSettings())
+        .environment(malDependencies)
+        .environment(
+            AccountSession(
+                malDependencies: malDependencies
+            )
+        )
 }
 
